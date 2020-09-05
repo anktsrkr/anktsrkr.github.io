@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Azure architecture on Ankit Sarkar</title>
-    <link>https://anktsrkr.github.com/categories/azure-architecture/</link>
+    <link>https://anktsrkr.github.io/categories/azure-architecture/</link>
     <description>Recent content in Azure architecture on Ankit Sarkar</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
     <lastBuildDate>Sat, 05 Sep 2020 01:00:00 +0530</lastBuildDate>
     
-	<atom:link href="https://anktsrkr.github.com/categories/azure-architecture/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://anktsrkr.github.io/categories/azure-architecture/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Implementing Hub-Spoke network topology in Azure - Part 1</title>
-      <link>https://anktsrkr.github.com/post/implementing-hub-spoke-network-topology-in-azure-part1/</link>
+      <link>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part1/</link>
       <pubDate>Sat, 05 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.com/post/implementing-hub-spoke-network-topology-in-azure-part1/</guid>
+      <guid>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part1/</guid>
       <description>Hi Everyone!
 With this post, I&amp;rsquo;ll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
 This Post - Implementing Hub-Spoke network topology in Azure - Part 1

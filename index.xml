@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ankit Sarkar</title>
-    <link>https://anktsrkr.github.com/</link>
+    <link>https://anktsrkr.github.io/</link>
     <description>Recent content on Ankit Sarkar</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
     <lastBuildDate>Sat, 05 Sep 2020 01:00:00 +0530</lastBuildDate>
     
-	<atom:link href="https://anktsrkr.github.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://anktsrkr.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>About</title>
-      <link>https://anktsrkr.github.com/about/</link>
+      <link>https://anktsrkr.github.io/about/</link>
       <pubDate>Sat, 05 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://anktsrkr.github.com/about/</guid>
+      <guid>https://anktsrkr.github.io/about/</guid>
       <description>My name is Ankit Sarkar, Software Engineer by profession. I&amp;rsquo;m based in Kolkata, India.
 I have a Bachelor&amp;rsquo;s degree in Electronics and Communication and around 7+ years of experience working on .NET technologies.
 In my day job at Tata Consultancy Services (TCS), mainly focused on cloud migration and modernization of legacy applications. This allows me to give various application specific solutions based on Microsoft Azure services for business critical applications.</description>
@@ -24,10 +24,10 @@ In my day job at Tata Consultancy Services (TCS), mainly focused on cloud migrat
     
     <item>
       <title>Implementing Hub-Spoke network topology in Azure - Part 1</title>
-      <link>https://anktsrkr.github.com/post/implementing-hub-spoke-network-topology-in-azure-part1/</link>
+      <link>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part1/</link>
       <pubDate>Sat, 05 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.com/post/implementing-hub-spoke-network-topology-in-azure-part1/</guid>
+      <guid>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part1/</guid>
       <description>Hi Everyone!
 With this post, I&amp;rsquo;ll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
 This Post - Implementing Hub-Spoke network topology in Azure - Part 1
