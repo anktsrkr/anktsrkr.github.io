@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://anktsrkr.github.com/about/</loc>
+    <lastmod>2020-09-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/tags/azure/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/categories/azure-architecture/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/categories/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/categories/cloud/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/post/implementing-hub-spoke-network-topology-in-azure-part1/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/tags/networking/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/post/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.com/tags/</loc>
+    <lastmod>2020-09-05T01:00:00+05:30</lastmod>
+  </url>
+  
+</urlset>

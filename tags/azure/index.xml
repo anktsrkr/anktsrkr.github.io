@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Azure on Ankit Sarkar</title>
+    <link>https://anktsrkr.github.com/tags/azure/</link>
+    <description>Recent content in Azure on Ankit Sarkar</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
+    <lastBuildDate>Sat, 05 Sep 2020 01:00:00 +0530</lastBuildDate>
+    
+	<atom:link href="https://anktsrkr.github.com/tags/azure/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Implementing Hub-Spoke network topology in Azure - Part 1</title>
+      <link>https://anktsrkr.github.com/post/implementing-hub-spoke-network-topology-in-azure-part1/</link>
+      <pubDate>Sat, 05 Sep 2020 01:00:00 +0530</pubDate>
+      
+      <guid>https://anktsrkr.github.com/post/implementing-hub-spoke-network-topology-in-azure-part1/</guid>
+      <description>Hi Everyone!
+With this post, I&amp;rsquo;ll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
+This Post - Implementing Hub-Spoke network topology in Azure - Part 1
+Coming Soon - Implementing Hub-Spoke network topology in Azure - Part 2
+Coming Soon - Introducing Azure Firewall in Hub-spoke network topology in Azure
+Coming Soon - Connect your Hub with your On-Prem</description>
+    </item>
+    
+  </channel>
+</rss>
