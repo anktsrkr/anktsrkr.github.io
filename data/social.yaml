@@ -1,0 +1,9 @@
+- item: "github"
+  url: "https://github.com/anktsrkr"
+- item: "twitter"
+  url: "https://twitter.com/ankt_srkr"
+- item: "linkedin"
+  url: "https://www.linkedin.com/in/ankit-sarkar/"
+- item: "rss"
+  url: "index.xml"
+  internal:  true
