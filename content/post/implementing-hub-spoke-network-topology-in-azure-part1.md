@@ -26,7 +26,7 @@ With this post, I'll start a new how to series about Hub-Spoke network topology 
 
 _This Post - Implementing Hub-Spoke network topology in Azure - Part 1_
 
-[Coming Soon - Implementing Hub-Spoke network topology in Azure - Part 2](#) 
+[Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part2) 
 
 [Coming Soon - Introducing Azure Firewall in Hub-spoke network topology in Azure](#) 
 
@@ -62,6 +62,6 @@ The architecture consists of the following components.
 
 In the above diagram, though I have shown all virtual networks are in same subscription and same region but please note it is absolutely possible to connect virtual networks from different subscription or different azure region.
 
-In my next post, I will start to implement the architecture.
+In my next [post](/post/implementing-hub-spoke-network-topology-in-azure-part2) , I will start to implement the architecture.
 
 [^1]:  [Azure Architecture Reference](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke)
