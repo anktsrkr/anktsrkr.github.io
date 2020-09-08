@@ -11,7 +11,7 @@ shareImage: "/images/path/share.png" # Designate a separate image for social med
 codeMaxLines: 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers: false # Override global value for showing of line numbers within code block.
 figurePositionShow: true # Override global value for showing the figure label.
-series : "Themes Guide"
+series : "Hub-Spoke network topology in Azure"
 categories:
   - Cloud
   - Azure architecture
@@ -28,7 +28,9 @@ This post is continuation of how to series about Hub-Spoke network topology in A
 
 _This Post - Implementing Hub-Spoke network topology in Azure - Part 2_ 
 
-[Coming Soon - Introducing Azure Firewall in Hub-spoke network topology in Azure](#) 
+[Introducing Azure Firewall in Hub-Spoke network topology in Azure](/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure) 
+
+[Coming Soon - Implementing Azure Firewall in Hub-Spoke network topology in Azure](#) 
 
 [Coming Soon - Connect your Hub with your On-Prem](#) 
 
@@ -68,6 +70,7 @@ The interesting part is I have created peering between hub and spokes but not be
 Now for testing purpose, we are going to create JumpBox with IIS enabled in 3 different virtual networks. Out of which Hub JumpBox will only have pubic ip along with private ip and other two JumpBox will only have private ip. Below single script will be used to create different virtual machines. 
 
 {{< highlight powershell >}}
+# Create Virtual Machine
 $LocationName = Read-Host `
                     -Prompt 'Enter Location'
 $ResourceGroupName = Read-Host `
@@ -220,7 +223,8 @@ Hub is also reachable from both spokes.
 ![Hub vnet is reachable from Spoke 2 vnet](/images/hub-spoke/spoke2-to-hub-reachable.jpg)
 
 #### Spoke To Spoke
-Interesting! if you see the above screenshot, communication between spokes are not working. Why?  Let's discuss it in next post!
+Interesting! if you see the above screenshot, communication between spokes are not working. Why?  Let's discuss it in the [next post](/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/) 
+!
 
 Here is the updated architecture, we just implemented - 
 

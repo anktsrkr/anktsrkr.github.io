@@ -11,7 +11,7 @@ shareImage: "/images/path/share.png" # Designate a separate image for social med
 codeMaxLines: 10 # Override global value for how many lines within a code block before auto-collapsing.
 codeLineNumbers: false # Override global value for showing of line numbers within code block.
 figurePositionShow: true # Override global value for showing the figure label.
-series : "Themes Guide"
+series : "Hub-Spoke network topology in Azure"
 categories:
   - Cloud
   - Azure architecture
@@ -28,7 +28,9 @@ _This Post - Implementing Hub-Spoke network topology in Azure - Part 1_
 
 [Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part2) 
 
-[Coming Soon - Introducing Azure Firewall in Hub-spoke network topology in Azure](#) 
+[Introducing Azure Firewall in Hub-Spoke network topology in Azure](/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure) 
+
+[Coming Soon - Implementing Azure Firewall in Hub-Spoke network topology in Azure](#) 
 
 [Coming Soon - Connect your Hub with your On-Prem](#) 
 
