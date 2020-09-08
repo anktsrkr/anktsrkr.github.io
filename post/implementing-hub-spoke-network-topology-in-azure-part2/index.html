@@ -155,7 +155,8 @@
 <p>This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :</p>
 <p><a href="/post/implementing-hub-spoke-network-topology-in-azure-part1">Implementing Hub-Spoke network topology in Azure - Part 1</a></p>
 <p><em>This Post - Implementing Hub-Spoke network topology in Azure - Part 2</em></p>
-<p><a href="#">Coming Soon - Introducing Azure Firewall in Hub-spoke network topology in Azure</a></p>
+<p><a href="/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a></p>
+<p><a href="#">Coming Soon - Implementing Azure Firewall in Hub-Spoke network topology in Azure</a></p>
 <p><a href="#">Coming Soon - Connect your Hub with your On-Prem</a></p>
 <p>Now, we know the context of this topology and architecture let&rsquo;s start to implement it. In this post, I am going to use <strong>azure portal</strong> for creating the virtual networks and azure powershell module to create JumpBox in different virtual networks.</p>
 <p>We will start by creating Hub Virtual Network(<code>hub-vnet</code>), with address space <code>10.10.0.0/19</code>. We will also create a subnet <code>ManagementSubnet</code> under hub virtual network with address space <code>10.10.1.0/24</code></p>
@@ -176,137 +177,138 @@
 <p><img src="/images/hub-spoke/hub-to-spoke1-peering-connected.jpg" alt="hub-vnet to spoke1-vnet peering connected"></p>
 <p>The interesting part is I have created peering between hub and spokes but not between spoke1 and spoke2, so spoke1 and spoke2 can not communicate with each other. you can ask me, can&rsquo;t we create peering between them? Yes! you can but you should not, I will try to explain the reason in next part and will show you how communication will be done between spokes if needed.</p>
 <p>Now for testing purpose, we are going to create JumpBox with IIS enabled in 3 different virtual networks. Out of which Hub JumpBox will only have pubic ip along with private ip and other two JumpBox will only have private ip. Below single script will be used to create different virtual machines.</p>
-<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="ln">  1</span><span class="nv">$LocationName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
-<span class="ln">  2</span>                    <span class="n">-Prompt</span> <span class="s1">&#39;Enter Location&#39;</span>
-<span class="ln">  3</span><span class="nv">$ResourceGroupName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
-<span class="ln">  4</span>                         <span class="n">-Prompt</span> <span class="s1">&#39;Enter Resource Group Name&#39;</span>
-<span class="ln">  5</span>
-<span class="ln">  6</span><span class="nv">$VMName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
-<span class="ln">  7</span>              <span class="n">-Prompt</span> <span class="s1">&#39;Enter Virtual Machine Name&#39;</span>
-<span class="ln">  8</span><span class="nv">$ComputerName</span> <span class="p">=</span> <span class="nv">$VMName</span>
-<span class="ln">  9</span><span class="nv">$VMSize</span> <span class="p">=</span> <span class="s2">&#34;Standard_B1ms&#34;</span>
-<span class="ln"> 10</span>
-<span class="ln"> 11</span><span class="nv">$NetworkName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
-<span class="ln"> 12</span>                   <span class="n">-Prompt</span> <span class="s1">&#39;Enter Virtual Network Name&#39;</span>
-<span class="ln"> 13</span><span class="nv">$SubnetName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
-<span class="ln"> 14</span>                  <span class="n">-Prompt</span> <span class="s1">&#39;Enter Subnet Name&#39;</span>
-<span class="ln"> 15</span> 
-<span class="ln"> 16</span><span class="nv">$NICName</span> <span class="p">=</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-Nic&#34;</span>
-<span class="ln"> 17</span>
-<span class="ln"> 18</span><span class="nv">$rdpRule</span> <span class="p">=</span> <span class="nb">New-AzNetworkSecurityRuleConfig</span> <span class="p">`</span>
-<span class="ln"> 19</span>              <span class="n">-Name</span> <span class="n">Rdp-Rule</span> <span class="p">`</span>
-<span class="ln"> 20</span>              <span class="n">-Description</span> <span class="s2">&#34;Allow RDP&#34;</span> <span class="p">`</span>
-<span class="ln"> 21</span>              <span class="n">-Access</span> <span class="n">Allow</span> <span class="p">`</span>
-<span class="ln"> 22</span>              <span class="n">-Protocol</span> <span class="n">Tcp</span> <span class="p">`</span>
-<span class="ln"> 23</span>              <span class="n">-Direction</span> <span class="n">Inbound</span> <span class="p">`</span>
-<span class="ln"> 24</span>              <span class="n">-Priority</span> <span class="n">1000</span> <span class="p">`</span>
-<span class="ln"> 25</span>              <span class="n">-SourceAddressPrefix</span> <span class="n">Internet</span> <span class="p">`</span>
-<span class="ln"> 26</span>              <span class="n">-SourcePortRange</span> <span class="p">*</span> <span class="p">`</span>
-<span class="ln"> 27</span>              <span class="n">-DestinationAddressPrefix</span> <span class="p">*</span> <span class="p">`</span>
-<span class="ln"> 28</span>              <span class="n">-DestinationPortRange</span> <span class="n">3389</span>
-<span class="ln"> 29</span>
-<span class="ln"> 30</span><span class="nv">$networkSecurityGroup</span> <span class="p">=</span> <span class="nb">New-AzNetworkSecurityGroup</span> <span class="p">`</span>
-<span class="ln"> 31</span>                           <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
-<span class="ln"> 32</span>                           <span class="n">-Location</span> <span class="nv">$LocationName</span> <span class="p">`</span>
-<span class="ln"> 33</span>                           <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-Nsg&#34;</span> <span class="p">`</span>
-<span class="ln"> 34</span>                           <span class="n">-SecurityRules</span> <span class="nv">$rdpRule</span>
-<span class="ln"> 35</span>
-<span class="ln"> 36</span><span class="nv">$Vnet</span> <span class="p">=</span> <span class="nb">Get-AzVirtualNetwork</span> <span class="p">`</span>
-<span class="ln"> 37</span>            <span class="n">-Name</span> <span class="nv">$NetworkName</span>
-<span class="ln"> 38</span><span class="nv">$SingleSubnet</span> <span class="p">=</span> <span class="nb">Set-AzVirtualNetworkSubnetConfig</span> <span class="p">`</span>
-<span class="ln"> 39</span>                   <span class="n">-VirtualNetwork</span> <span class="nv">$Vnet</span> <span class="p">`</span>
-<span class="ln"> 40</span>                   <span class="n">-Name</span> <span class="nv">$SubnetName</span> <span class="p">`</span>
-<span class="ln"> 41</span>                   <span class="n">-NetworkSecurityGroup</span> <span class="nv">$networkSecurityGroup</span>
-<span class="ln"> 42</span>
-<span class="ln"> 43</span><span class="nv">$Vnet</span> <span class="p">=</span> <span class="nb">Set-AzVirtualNetwork</span> <span class="p">`</span>
-<span class="ln"> 44</span>           <span class="n">-VirtualNetwork</span> <span class="nv">$VNET</span>
-<span class="ln"> 45</span>
-<span class="ln"> 46</span><span class="nv">$SingleSubnet</span> <span class="p">=</span> <span class="nb">Get-AzVirtualNetworkSubnetConfig</span> <span class="p">`</span>
-<span class="ln"> 47</span>                   <span class="n">-VirtualNetwork</span> <span class="nv">$Vnet</span> <span class="p">`</span>
-<span class="ln"> 48</span>                   <span class="n">-Name</span> <span class="nv">$SubnetName</span> <span class="p">`</span>
-<span class="ln"> 49</span>
-<span class="ln"> 50</span><span class="nv">$NIC</span> <span class="p">=</span> <span class="nb">Get-AzNetworkInterface</span> <span class="p">`</span>
-<span class="ln"> 51</span>          <span class="n">-Name</span> <span class="nv">$NICName</span>
-<span class="ln"> 52</span><span class="nv">$PipRequired</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
-<span class="ln"> 53</span>                   <span class="n">-Prompt</span> <span class="s1">&#39;Do you want to enable public ip for this virtual machine? (Press Y to Yes)&#39;</span>
-<span class="ln"> 54</span>
-<span class="ln"> 55</span><span class="k">if</span><span class="p">(</span><span class="nv">$PipRequired</span> <span class="o">-eq</span> <span class="s2">&#34;Y&#34;</span><span class="p">){</span>
-<span class="ln"> 56</span>    <span class="nv">$Pip</span> <span class="p">=</span> <span class="nb">New-AzPublicIpAddress</span> <span class="p">`</span>
-<span class="ln"> 57</span>              <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
-<span class="ln"> 58</span>              <span class="n">-Location</span> <span class="nv">$LocationName</span> <span class="p">`</span>
-<span class="ln"> 59</span>              <span class="n">-AllocationMethod</span> <span class="n">Dynamic</span> <span class="p">`</span>
-<span class="ln"> 60</span>              <span class="n">-Sku</span> <span class="n">Basic</span> <span class="p">`</span>
-<span class="ln"> 61</span>              <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-PublicIp&#34;</span>
-<span class="ln"> 62</span>
-<span class="ln"> 63</span><span class="nv">$ipconfig</span> <span class="p">=</span> <span class="nb">New-AzNetworkInterfaceIpConfig</span> <span class="p">`</span>
-<span class="ln"> 64</span>               <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-IpConfig&#34;</span> <span class="p">`</span>
-<span class="ln"> 65</span>               <span class="n">-Subnet</span> <span class="nv">$SingleSubnet</span> <span class="n">-PublicIpAddress</span> <span class="nv">$Pip</span>
-<span class="ln"> 66</span><span class="p">}</span>
-<span class="ln"> 67</span><span class="k">else</span> <span class="p">{</span>
-<span class="ln"> 68</span><span class="nv">$ipconfig</span> <span class="p">=</span> <span class="nb">New-AzNetworkInterfaceIpConfig</span> <span class="p">`</span>
-<span class="ln"> 69</span>               <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-IpConfig&#34;</span> <span class="p">`</span>
-<span class="ln"> 70</span>               <span class="n">-Subnet</span> <span class="nv">$SingleSubnet</span>
-<span class="ln"> 71</span><span class="p">}</span>
-<span class="ln"> 72</span>
-<span class="ln"> 73</span><span class="nv">$NIC</span> <span class="p">=</span> <span class="nb">New-AzNetworkInterface</span> <span class="p">`</span>
-<span class="ln"> 74</span>          <span class="n">-Name</span> <span class="nv">$NICName</span> <span class="p">`</span>
-<span class="ln"> 75</span>          <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
-<span class="ln"> 76</span>          <span class="n">-Location</span> <span class="nv">$LocationName</span> <span class="p">`</span>
-<span class="ln"> 77</span>          <span class="n">-IpConfiguration</span> <span class="nv">$ipconfig</span>
-<span class="ln"> 78</span>
-<span class="ln"> 79</span><span class="nv">$Credential</span> <span class="p">=</span> <span class="nb">Get-Credential</span> <span class="p">`</span>
-<span class="ln"> 80</span>                 <span class="n">-Message</span> <span class="s2">&#34;Enter a username and password for the virtual machine&#34;</span>
-<span class="ln"> 81</span>
-<span class="ln"> 82</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">New-AzVMConfig</span> <span class="p">`</span>
-<span class="ln"> 83</span>                     <span class="n">-VMName</span> <span class="nv">$VMName</span> <span class="p">`</span>
-<span class="ln"> 84</span>                     <span class="n">-VMSize</span> <span class="nv">$VMSize</span>
-<span class="ln"> 85</span>
-<span class="ln"> 86</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Set-AzVMBootDiagnostic</span> <span class="p">`</span>
-<span class="ln"> 87</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
-<span class="ln"> 88</span>                     <span class="n">-Disable</span>
-<span class="ln"> 89</span>
-<span class="ln"> 90</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Set-AzVMOperatingSystem</span> <span class="p">`</span>
-<span class="ln"> 91</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
-<span class="ln"> 92</span>                     <span class="n">-Windows</span> <span class="p">`</span>
-<span class="ln"> 93</span>                     <span class="n">-ComputerName</span> <span class="nv">$ComputerName</span> <span class="p">`</span>
-<span class="ln"> 94</span>                     <span class="n">-Credential</span> <span class="nv">$Credential</span> <span class="p">`</span>
-<span class="ln"> 95</span>                     <span class="n">-ProvisionVMAgent</span> <span class="p">`</span>
-<span class="ln"> 96</span>                     <span class="n">-EnableAutoUpdate</span>
-<span class="ln"> 97</span>
-<span class="ln"> 98</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Add-AzVMNetworkInterface</span> <span class="p">`</span>
-<span class="ln"> 99</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
-<span class="ln">100</span>                     <span class="n">-Id</span> <span class="nv">$NIC</span><span class="p">.</span><span class="n">Id</span>
-<span class="ln">101</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Set-AzVMSourceImage</span> <span class="p">`</span>
-<span class="ln">102</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
-<span class="ln">103</span>                     <span class="n">-PublisherName</span> <span class="s1">&#39;MicrosoftWindowsServer&#39;</span> <span class="p">`</span>
-<span class="ln">104</span>                     <span class="n">-Offer</span> <span class="s1">&#39;WindowsServer&#39;</span> <span class="p">`</span>
-<span class="ln">105</span>                     <span class="n">-Skus</span> <span class="s1">&#39;2019-Datacenter&#39;</span> <span class="p">`</span>
-<span class="ln">106</span>                     <span class="n">-Version</span> <span class="n">latest</span>
-<span class="ln">107</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Set-AzVMOSDisk</span> <span class="p">`</span>
-<span class="ln">108</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
-<span class="ln">109</span>                     <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-OsDisk&#34;</span> <span class="p">`</span>
-<span class="ln">110</span>                     <span class="n">-StorageAccountType</span> <span class="s2">&#34;Standard_LRS&#34;</span> <span class="p">`</span>
-<span class="ln">111</span>                     <span class="n">-Windows</span> <span class="p">`</span>
-<span class="ln">112</span>                     <span class="n">-DiskSizeInGB</span> <span class="n">127</span> <span class="p">`</span>
-<span class="ln">113</span>                     <span class="n">-CreateOption</span> <span class="n">FromImage</span> 
-<span class="ln">114</span>
-<span class="ln">115</span><span class="nb">New-AzVM</span> <span class="p">`</span>
-<span class="ln">116</span>   <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
-<span class="ln">117</span>   <span class="n">-Location</span> <span class="nv">$LocationName</span> <span class="p">`</span>
-<span class="ln">118</span>   <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
-<span class="ln">119</span>   <span class="n">-Verbose</span>
-<span class="ln">120</span>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="ln">  1</span><span class="c"># Create Virtual Machine</span>
+<span class="ln">  2</span><span class="nv">$LocationName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
+<span class="ln">  3</span>                    <span class="n">-Prompt</span> <span class="s1">&#39;Enter Location&#39;</span>
+<span class="ln">  4</span><span class="nv">$ResourceGroupName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
+<span class="ln">  5</span>                         <span class="n">-Prompt</span> <span class="s1">&#39;Enter Resource Group Name&#39;</span>
+<span class="ln">  6</span>
+<span class="ln">  7</span><span class="nv">$VMName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
+<span class="ln">  8</span>              <span class="n">-Prompt</span> <span class="s1">&#39;Enter Virtual Machine Name&#39;</span>
+<span class="ln">  9</span><span class="nv">$ComputerName</span> <span class="p">=</span> <span class="nv">$VMName</span>
+<span class="ln"> 10</span><span class="nv">$VMSize</span> <span class="p">=</span> <span class="s2">&#34;Standard_B1ms&#34;</span>
+<span class="ln"> 11</span>
+<span class="ln"> 12</span><span class="nv">$NetworkName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
+<span class="ln"> 13</span>                   <span class="n">-Prompt</span> <span class="s1">&#39;Enter Virtual Network Name&#39;</span>
+<span class="ln"> 14</span><span class="nv">$SubnetName</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
+<span class="ln"> 15</span>                  <span class="n">-Prompt</span> <span class="s1">&#39;Enter Subnet Name&#39;</span>
+<span class="ln"> 16</span> 
+<span class="ln"> 17</span><span class="nv">$NICName</span> <span class="p">=</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-Nic&#34;</span>
+<span class="ln"> 18</span>
+<span class="ln"> 19</span><span class="nv">$rdpRule</span> <span class="p">=</span> <span class="nb">New-AzNetworkSecurityRuleConfig</span> <span class="p">`</span>
+<span class="ln"> 20</span>              <span class="n">-Name</span> <span class="n">Rdp-Rule</span> <span class="p">`</span>
+<span class="ln"> 21</span>              <span class="n">-Description</span> <span class="s2">&#34;Allow RDP&#34;</span> <span class="p">`</span>
+<span class="ln"> 22</span>              <span class="n">-Access</span> <span class="n">Allow</span> <span class="p">`</span>
+<span class="ln"> 23</span>              <span class="n">-Protocol</span> <span class="n">Tcp</span> <span class="p">`</span>
+<span class="ln"> 24</span>              <span class="n">-Direction</span> <span class="n">Inbound</span> <span class="p">`</span>
+<span class="ln"> 25</span>              <span class="n">-Priority</span> <span class="n">1000</span> <span class="p">`</span>
+<span class="ln"> 26</span>              <span class="n">-SourceAddressPrefix</span> <span class="n">Internet</span> <span class="p">`</span>
+<span class="ln"> 27</span>              <span class="n">-SourcePortRange</span> <span class="p">*</span> <span class="p">`</span>
+<span class="ln"> 28</span>              <span class="n">-DestinationAddressPrefix</span> <span class="p">*</span> <span class="p">`</span>
+<span class="ln"> 29</span>              <span class="n">-DestinationPortRange</span> <span class="n">3389</span>
+<span class="ln"> 30</span>
+<span class="ln"> 31</span><span class="nv">$networkSecurityGroup</span> <span class="p">=</span> <span class="nb">New-AzNetworkSecurityGroup</span> <span class="p">`</span>
+<span class="ln"> 32</span>                           <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
+<span class="ln"> 33</span>                           <span class="n">-Location</span> <span class="nv">$LocationName</span> <span class="p">`</span>
+<span class="ln"> 34</span>                           <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-Nsg&#34;</span> <span class="p">`</span>
+<span class="ln"> 35</span>                           <span class="n">-SecurityRules</span> <span class="nv">$rdpRule</span>
+<span class="ln"> 36</span>
+<span class="ln"> 37</span><span class="nv">$Vnet</span> <span class="p">=</span> <span class="nb">Get-AzVirtualNetwork</span> <span class="p">`</span>
+<span class="ln"> 38</span>            <span class="n">-Name</span> <span class="nv">$NetworkName</span>
+<span class="ln"> 39</span><span class="nv">$SingleSubnet</span> <span class="p">=</span> <span class="nb">Set-AzVirtualNetworkSubnetConfig</span> <span class="p">`</span>
+<span class="ln"> 40</span>                   <span class="n">-VirtualNetwork</span> <span class="nv">$Vnet</span> <span class="p">`</span>
+<span class="ln"> 41</span>                   <span class="n">-Name</span> <span class="nv">$SubnetName</span> <span class="p">`</span>
+<span class="ln"> 42</span>                   <span class="n">-NetworkSecurityGroup</span> <span class="nv">$networkSecurityGroup</span>
+<span class="ln"> 43</span>
+<span class="ln"> 44</span><span class="nv">$Vnet</span> <span class="p">=</span> <span class="nb">Set-AzVirtualNetwork</span> <span class="p">`</span>
+<span class="ln"> 45</span>           <span class="n">-VirtualNetwork</span> <span class="nv">$VNET</span>
+<span class="ln"> 46</span>
+<span class="ln"> 47</span><span class="nv">$SingleSubnet</span> <span class="p">=</span> <span class="nb">Get-AzVirtualNetworkSubnetConfig</span> <span class="p">`</span>
+<span class="ln"> 48</span>                   <span class="n">-VirtualNetwork</span> <span class="nv">$Vnet</span> <span class="p">`</span>
+<span class="ln"> 49</span>                   <span class="n">-Name</span> <span class="nv">$SubnetName</span> <span class="p">`</span>
+<span class="ln"> 50</span>
+<span class="ln"> 51</span><span class="nv">$NIC</span> <span class="p">=</span> <span class="nb">Get-AzNetworkInterface</span> <span class="p">`</span>
+<span class="ln"> 52</span>          <span class="n">-Name</span> <span class="nv">$NICName</span>
+<span class="ln"> 53</span><span class="nv">$PipRequired</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="p">`</span>
+<span class="ln"> 54</span>                   <span class="n">-Prompt</span> <span class="s1">&#39;Do you want to enable public ip for this virtual machine? (Press Y to Yes)&#39;</span>
+<span class="ln"> 55</span>
+<span class="ln"> 56</span><span class="k">if</span><span class="p">(</span><span class="nv">$PipRequired</span> <span class="o">-eq</span> <span class="s2">&#34;Y&#34;</span><span class="p">){</span>
+<span class="ln"> 57</span>    <span class="nv">$Pip</span> <span class="p">=</span> <span class="nb">New-AzPublicIpAddress</span> <span class="p">`</span>
+<span class="ln"> 58</span>              <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
+<span class="ln"> 59</span>              <span class="n">-Location</span> <span class="nv">$LocationName</span> <span class="p">`</span>
+<span class="ln"> 60</span>              <span class="n">-AllocationMethod</span> <span class="n">Dynamic</span> <span class="p">`</span>
+<span class="ln"> 61</span>              <span class="n">-Sku</span> <span class="n">Basic</span> <span class="p">`</span>
+<span class="ln"> 62</span>              <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-PublicIp&#34;</span>
+<span class="ln"> 63</span>
+<span class="ln"> 64</span><span class="nv">$ipconfig</span> <span class="p">=</span> <span class="nb">New-AzNetworkInterfaceIpConfig</span> <span class="p">`</span>
+<span class="ln"> 65</span>               <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-IpConfig&#34;</span> <span class="p">`</span>
+<span class="ln"> 66</span>               <span class="n">-Subnet</span> <span class="nv">$SingleSubnet</span> <span class="n">-PublicIpAddress</span> <span class="nv">$Pip</span>
+<span class="ln"> 67</span><span class="p">}</span>
+<span class="ln"> 68</span><span class="k">else</span> <span class="p">{</span>
+<span class="ln"> 69</span><span class="nv">$ipconfig</span> <span class="p">=</span> <span class="nb">New-AzNetworkInterfaceIpConfig</span> <span class="p">`</span>
+<span class="ln"> 70</span>               <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-IpConfig&#34;</span> <span class="p">`</span>
+<span class="ln"> 71</span>               <span class="n">-Subnet</span> <span class="nv">$SingleSubnet</span>
+<span class="ln"> 72</span><span class="p">}</span>
+<span class="ln"> 73</span>
+<span class="ln"> 74</span><span class="nv">$NIC</span> <span class="p">=</span> <span class="nb">New-AzNetworkInterface</span> <span class="p">`</span>
+<span class="ln"> 75</span>          <span class="n">-Name</span> <span class="nv">$NICName</span> <span class="p">`</span>
+<span class="ln"> 76</span>          <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
+<span class="ln"> 77</span>          <span class="n">-Location</span> <span class="nv">$LocationName</span> <span class="p">`</span>
+<span class="ln"> 78</span>          <span class="n">-IpConfiguration</span> <span class="nv">$ipconfig</span>
+<span class="ln"> 79</span>
+<span class="ln"> 80</span><span class="nv">$Credential</span> <span class="p">=</span> <span class="nb">Get-Credential</span> <span class="p">`</span>
+<span class="ln"> 81</span>                 <span class="n">-Message</span> <span class="s2">&#34;Enter a username and password for the virtual machine&#34;</span>
+<span class="ln"> 82</span>
+<span class="ln"> 83</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">New-AzVMConfig</span> <span class="p">`</span>
+<span class="ln"> 84</span>                     <span class="n">-VMName</span> <span class="nv">$VMName</span> <span class="p">`</span>
+<span class="ln"> 85</span>                     <span class="n">-VMSize</span> <span class="nv">$VMSize</span>
+<span class="ln"> 86</span>
+<span class="ln"> 87</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Set-AzVMBootDiagnostic</span> <span class="p">`</span>
+<span class="ln"> 88</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
+<span class="ln"> 89</span>                     <span class="n">-Disable</span>
+<span class="ln"> 90</span>
+<span class="ln"> 91</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Set-AzVMOperatingSystem</span> <span class="p">`</span>
+<span class="ln"> 92</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
+<span class="ln"> 93</span>                     <span class="n">-Windows</span> <span class="p">`</span>
+<span class="ln"> 94</span>                     <span class="n">-ComputerName</span> <span class="nv">$ComputerName</span> <span class="p">`</span>
+<span class="ln"> 95</span>                     <span class="n">-Credential</span> <span class="nv">$Credential</span> <span class="p">`</span>
+<span class="ln"> 96</span>                     <span class="n">-ProvisionVMAgent</span> <span class="p">`</span>
+<span class="ln"> 97</span>                     <span class="n">-EnableAutoUpdate</span>
+<span class="ln"> 98</span>
+<span class="ln"> 99</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Add-AzVMNetworkInterface</span> <span class="p">`</span>
+<span class="ln">100</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
+<span class="ln">101</span>                     <span class="n">-Id</span> <span class="nv">$NIC</span><span class="p">.</span><span class="n">Id</span>
+<span class="ln">102</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Set-AzVMSourceImage</span> <span class="p">`</span>
+<span class="ln">103</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
+<span class="ln">104</span>                     <span class="n">-PublisherName</span> <span class="s1">&#39;MicrosoftWindowsServer&#39;</span> <span class="p">`</span>
+<span class="ln">105</span>                     <span class="n">-Offer</span> <span class="s1">&#39;WindowsServer&#39;</span> <span class="p">`</span>
+<span class="ln">106</span>                     <span class="n">-Skus</span> <span class="s1">&#39;2019-Datacenter&#39;</span> <span class="p">`</span>
+<span class="ln">107</span>                     <span class="n">-Version</span> <span class="n">latest</span>
+<span class="ln">108</span><span class="nv">$VirtualMachine</span> <span class="p">=</span> <span class="nb">Set-AzVMOSDisk</span> <span class="p">`</span>
+<span class="ln">109</span>                     <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
+<span class="ln">110</span>                     <span class="n">-Name</span> <span class="s2">&#34;</span><span class="p">$(</span><span class="nv">$VMName</span><span class="p">)</span><span class="s2">-OsDisk&#34;</span> <span class="p">`</span>
+<span class="ln">111</span>                     <span class="n">-StorageAccountType</span> <span class="s2">&#34;Standard_LRS&#34;</span> <span class="p">`</span>
+<span class="ln">112</span>                     <span class="n">-Windows</span> <span class="p">`</span>
+<span class="ln">113</span>                     <span class="n">-DiskSizeInGB</span> <span class="n">127</span> <span class="p">`</span>
+<span class="ln">114</span>                     <span class="n">-CreateOption</span> <span class="n">FromImage</span> 
+<span class="ln">115</span>
+<span class="ln">116</span><span class="nb">New-AzVM</span> <span class="p">`</span>
+<span class="ln">117</span>   <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
+<span class="ln">118</span>   <span class="n">-Location</span> <span class="nv">$LocationName</span> <span class="p">`</span>
+<span class="ln">119</span>   <span class="n">-VM</span> <span class="nv">$VirtualMachine</span> <span class="p">`</span>
+<span class="ln">120</span>   <span class="n">-Verbose</span>
 <span class="ln">121</span>
-<span class="ln">122</span><span class="c"># Install IIS</span>
-<span class="ln">123</span><span class="nv">$PublicSettings</span> <span class="p">=</span> <span class="s1">&#39;{&#34;commandToExecute&#34;:&#34;powershell Add-WindowsFeature Web-Server&#34;}&#39;</span>
-<span class="ln">124</span>
-<span class="ln">125</span><span class="nb">Set-AzVMExtension</span> <span class="p">`</span>
-<span class="ln">126</span>        <span class="n">-ExtensionName</span> <span class="s2">&#34;IIS&#34;</span> <span class="p">`</span>
-<span class="ln">127</span>        <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
-<span class="ln">128</span>        <span class="n">-VMName</span> <span class="nv">$VMName</span> <span class="p">`</span>
-<span class="ln">129</span>        <span class="n">-Publisher</span> <span class="s2">&#34;Microsoft.Compute&#34;</span> <span class="p">`</span>
-<span class="ln">130</span>        <span class="n">-ExtensionType</span> <span class="s2">&#34;CustomScriptExtension&#34;</span> <span class="n">-TypeHandlerVersion</span> <span class="n">1</span><span class="p">.</span><span class="n">4</span> <span class="p">`</span>
-<span class="ln">131</span>        <span class="n">-SettingString</span> <span class="nv">$PublicSettings</span> <span class="n">-Location</span> <span class="nv">$LocationName</span></code></pre></div>
+<span class="ln">122</span>
+<span class="ln">123</span><span class="c"># Install IIS</span>
+<span class="ln">124</span><span class="nv">$PublicSettings</span> <span class="p">=</span> <span class="s1">&#39;{&#34;commandToExecute&#34;:&#34;powershell Add-WindowsFeature Web-Server&#34;}&#39;</span>
+<span class="ln">125</span>
+<span class="ln">126</span><span class="nb">Set-AzVMExtension</span> <span class="p">`</span>
+<span class="ln">127</span>        <span class="n">-ExtensionName</span> <span class="s2">&#34;IIS&#34;</span> <span class="p">`</span>
+<span class="ln">128</span>        <span class="n">-ResourceGroupName</span> <span class="nv">$ResourceGroupName</span> <span class="p">`</span>
+<span class="ln">129</span>        <span class="n">-VMName</span> <span class="nv">$VMName</span> <span class="p">`</span>
+<span class="ln">130</span>        <span class="n">-Publisher</span> <span class="s2">&#34;Microsoft.Compute&#34;</span> <span class="p">`</span>
+<span class="ln">131</span>        <span class="n">-ExtensionType</span> <span class="s2">&#34;CustomScriptExtension&#34;</span> <span class="n">-TypeHandlerVersion</span> <span class="n">1</span><span class="p">.</span><span class="n">4</span> <span class="p">`</span>
+<span class="ln">132</span>        <span class="n">-SettingString</span> <span class="nv">$PublicSettings</span> <span class="n">-Location</span> <span class="nv">$LocationName</span></code></pre></div>
 <p>Once completed, let&rsquo;s see how data flows between hub to spokes.</p>
 <h4 id="hub-to-spokes">Hub To Spokes</h4>
 <p>Since, we have established the peering between Hub and spokes, these spokes are reachable from hub.</p>
@@ -316,7 +318,8 @@
 <p><img src="/images/hub-spoke/spoke1-to-hub-reachable.jpg" alt="Hub vnet is reachable from Spoke 1 vnet"></p>
 <p><img src="/images/hub-spoke/spoke2-to-hub-reachable.jpg" alt="Hub vnet is reachable from Spoke 2 vnet"></p>
 <h4 id="spoke-to-spoke">Spoke To Spoke</h4>
-<p>Interesting! if you see the above screenshot, communication between spokes are not working. Why?  Let&rsquo;s discuss it in next post!</p>
+<p>Interesting! if you see the above screenshot, communication between spokes are not working. Why?  Let&rsquo;s discuss it in the <a href="/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/">next post</a>
+!</p>
 <p>Here is the updated architecture, we just implemented -</p>
 <p><img src="/images/hub-spoke/implemented-hub-spoke-topology.jpg" alt="Updated architecture"></p>
 
@@ -352,6 +355,10 @@
     <ul>
     
       <li>
+        <a href="https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" class="nav-link">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a>
+      </li>
+    
+      <li>
         <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
       </li>
     
@@ -359,6 +366,9 @@
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       
+      <li>
+        <a href="https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" class="nav-link">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a>
+      </li>
       <li>
         <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
       </li>
@@ -369,12 +379,12 @@
       <nav class="tags_nav">
         <a href='https://anktsrkr.github.io/categories/azure-architecture/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-ARCHITECTURE
-          <span class='button_tally'>2</span>
+          <span class='button_tally'>3</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/cloud/' class=" post_tag post_tagcloud button button_translucent">
           CLOUD
-          <span class='button_tally'>2</span>
+          <span class='button_tally'>3</span>
         </a>
         
         
@@ -386,12 +396,12 @@
       <nav class="tags_nav">
         <a href='https://anktsrkr.github.io/tags/azure/' class=" post_tag post_tagcloud button button_translucent">
           AZURE
-          <span class='button_tally'>2</span>
+          <span class='button_tally'>3</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/networking/' class=" post_tag post_tagcloud button button_translucent">
           NETWORKING
-          <span class='button_tally'>2</span>
+          <span class='button_tally'>3</span>
         </a>
         
         
