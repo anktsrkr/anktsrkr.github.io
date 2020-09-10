@@ -1,7 +1,7 @@
 ---
 title: "Introducing Azure Firewall in Hub-Spoke network topology in Azure" # Title of the blog post.
-date: 2020-09-08T01:00:00+05:30 # Date of post creation.
-description: "Article description." # Description used for search engine.
+date: 2020-09-09T01:00:00+05:30 # Date of post creation.
+description: "Introducing Azure Firewall in Hub-Spoke network topology in Azure" # Description used for search engine.
 featured: true # Sets if post is a featured post, making appear on the home page side bar.
 draft: false # Sets whether to render this page. Draft of true will not be rendered.
 toc: false # Controls if a table of contents should be generated for first-level links automatically.
@@ -24,15 +24,17 @@ Hi Everyone!
 
 This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts : 
 
-[Implementing Hub-Spoke network topology in Azure - Part 1](/post/implementing-hub-spoke-network-topology-in-azure-part1) 
+[Connect an on-premises network to a Microsoft Azure - Part 1](/post/connect-azure-with-your-on-prem-network-part-1)
 
-[Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part2) 
+[Connect an on-premises network to a Microsoft Azure - Part 2](/post/connect-azure-with-your-on-prem-network-part-2)
+
+[Implementing Hub-Spoke network topology in Azure - Part 1](/post/implementing-hub-spoke-network-topology-in-azure-part-1)
+
+[Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part-2)
 
 _This Post - Introducing Azure Firewall in Hub-Spoke network topology in Azure_
 
-[Coming Soon - Implementing Azure Firewall in Hub-Spoke network topology in Azure](#) 
-
-[Coming Soon - Connect your Hub with your On-Prem](#) 
+[Implementing Azure Firewall in Hub-Spoke network topology in Azure](/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure)
 
 Now we are able to connect between Hub and Spokes but there is no communication between Spokes. In this post we are going to see how Intra-Region Spokes VNET routing works. 
 
@@ -41,7 +43,7 @@ Now we are able to connect between Hub and Spokes but there is no communication 
 There are three ways Spokes can talk to each other. All has it's own pros and cons.
 
 #### 1. Leveraging ExpressRoute <cite>[^1]</cite>
-  Thought we have not talked about the connectivity between On-Prem and Azure, but please note, if ExpressRoute is in use to allow connectivity from on-prem locations, we can leverage the ExpressRoute circuit to provide native spoke to spoke communication. Either a default route (0.0.0.0/0) or a summary route comprising all the networks for the region VNETs can be injected via BGP across ExpressRoute.
+ If ExpressRoute is in use to allow connectivity from on-prem locations, we can leverage the ExpressRoute circuit to provide native spoke to spoke communication. Either a default route (0.0.0.0/0) or a summary route comprising all the networks for the region VNETs can be injected via BGP across ExpressRoute.
 
 [^1]:  [Leveraging Expressroute](https://github.com/microsoft/Common-Design-Principles-for-a-Hub-and-Spoke-VNET-Archiecture#option-1-leveraging-expressroute)
 
@@ -92,7 +94,7 @@ Azure Firewall is a cloud native network security service. It offers fully state
 
 
 #### Why Azure Firewall?
-* Cost! As always No upfront cost, No termination fees, Pay only for what you use. Azure Firewall pricing includes a fixed hourly cost ($1.25/firewall/hour) and a variable per GB processed cost to support auto scaling. As per Microsft's observation, most customers save 30% – 50% in comparison to an NVA deployment model.
+* Cost! As always No upfront cost, No termination fees, Pay only for what you use. Azure Firewall pricing includes a fixed hourly cost ($1.25/firewall/hour) and a variable per GB processed cost to support auto scaling. As per Microsoft's observation, most customers save 30% – 50% in comparison to an NVA deployment model.
 * You can use Azure Monitor to centrally log all events. You can archive the logs to a storage account, stream events to your Event Hub, or send them to Log Analytics or your security information and event management (SIEM) product of your choice.
 
-In my next post, I will start to implement azure firewall and how it fits in Spoke to Spoke routing by user defined routing or UDR.
+In my [next post](/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure), I will start to implement azure firewall and how it fits in Spoke to Spoke routing by user defined routing or UDR.
