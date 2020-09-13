@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Azure Firewall on Ankit Sarkar</title>
+    <link>https://anktsrkr.github.io/tags/azure-firewall/</link>
+    <description>Recent content in Azure Firewall on Ankit Sarkar</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
+    <lastBuildDate>Thu, 10 Sep 2020 01:00:00 +0530</lastBuildDate>
+    
+	<atom:link href="https://anktsrkr.github.io/tags/azure-firewall/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Implementing Azure Firewall in Hub-Spoke network topology in Azure</title>
+      <link>https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</link>
+      <pubDate>Thu, 10 Sep 2020 01:00:00 +0530</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</guid>
+      <description>Hi Everyone!
+This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
+Connect an on-premises network to a Microsoft Azure - Part 1
+Connect an on-premises network to a Microsoft Azure - Part 2
+Implementing Hub-Spoke network topology in Azure - Part 1
+Implementing Hub-Spoke network topology in Azure - Part 2</description>
+    </item>
+    
+    <item>
+      <title>Introducing Azure Firewall in Hub-Spoke network topology in Azure</title>
+      <link>https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</link>
+      <pubDate>Wed, 09 Sep 2020 01:00:00 +0530</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</guid>
+      <description>Hi Everyone!
+This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
+Connect an on-premises network to a Microsoft Azure - Part 1
+Connect an on-premises network to a Microsoft Azure - Part 2
+Implementing Hub-Spoke network topology in Azure - Part 1
+Implementing Hub-Spoke network topology in Azure - Part 2</description>
+    </item>
+    
+  </channel>
+</rss>

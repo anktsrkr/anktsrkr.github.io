@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Azure Private DNS Zone on Ankit Sarkar</title>
+    <link>https://anktsrkr.github.io/tags/azure-private-dns-zone/</link>
+    <description>Recent content in Azure Private DNS Zone on Ankit Sarkar</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
+    <lastBuildDate>Sun, 13 Sep 2020 01:00:00 +0530</lastBuildDate>
+    
+	<atom:link href="https://anktsrkr.github.io/tags/azure-private-dns-zone/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Resolve Azure Internal DNS from your on prem network and Spokes vnet</title>
+      <link>https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/</link>
+      <pubDate>Sun, 13 Sep 2020 01:00:00 +0530</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/</guid>
+      <description>Hi Everyone!
+We have already implemented Hub-Spoke topology, and we are able to connect all the resources using IP from on premises network. But it is easier to use domain name instead ip directly from your virtual network. Also, If you want to use Azure Private Link, you need something which will resolve private link dns to respective ip. Other example is you have ASE v2 which comes with own domain but for your internal use you want some custom domain name which is easy to remember and also satisfy business need.</description>
+    </item>
+    
+  </channel>
+</rss>
