@@ -18,6 +18,7 @@ categories:
 tags:
   - Azure
   - Networking
+  - Azure Firewall
 ---
 
 Hi Everyone!
