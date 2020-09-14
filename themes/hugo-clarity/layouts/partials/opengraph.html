@@ -27,6 +27,10 @@
 {{- else }}
 <meta property="og:type" content="article">
 {{- end }}
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+{{ with .Keywords }}<meta name="keywords" content="{{ range $i, $e := . }}{{ if $i }} {{ end }}{{ $e }}{{ end }}">{{ end }}
 <meta name="description" content="{{ $summary }}">
 <meta name = "twitter:card" content = "{{ if $params.largeTwitterCard }}summary_large_image{{ else }}summary{{ end }}" />
 <meta name = "twitter:creator" content = "{{ $params.twitter }}">

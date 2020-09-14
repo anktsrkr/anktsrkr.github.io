@@ -19,6 +19,8 @@ tags:
   - Azure
   - Networking 
   - Azure Private DNS Zone
+keywords: "hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology
+,azure private dns zone, resolve azure internal DNS from your on prem,hub spoke dns forwarder,dns forwarder in hub spoke,dns forwarder in hub spoke network topology,dns forwarder,azure powershell,Point to Site, Site to Site,VPN"
 ---
 
 Hi Everyone!

@@ -19,6 +19,8 @@ tags:
   - Azure
   - Networking
   - Azure Firewall
+keywords: "hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology
+,azure firewall,connectivity between spoke,connectivity between spoke vnet using azure firewall,azure powershell,azure Firewall in Hub-Spoke network topology in azure,Point to Site, Site to Site,VPN"
 ---
 
 Hi Everyone!

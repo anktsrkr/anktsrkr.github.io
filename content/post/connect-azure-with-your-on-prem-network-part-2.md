@@ -18,6 +18,8 @@ categories:
 tags:
   - Azure
   - Networking
+keywords: "hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology
+,azure firewall,connectivity between spoke,connectivity between spoke vnet using azure firewall,azure powershell,Point to Site, Site to Site,VPN"
 ---
 
 Hi Everyone!
