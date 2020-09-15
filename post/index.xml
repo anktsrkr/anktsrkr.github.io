@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Ankit Sarkar</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
-    <lastBuildDate>Sun, 13 Sep 2020 01:00:00 +0530</lastBuildDate>
+    <lastBuildDate>Tue, 15 Sep 2020 01:00:00 +0530</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</title>
+      <link>https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</link>
+      <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</guid>
+      <description>Hi Everyone!
+In this post we are are going to explore different ways to connect Azure PaaS resources from On-premise network privately and securely. While deploying Azure PaaS service such as Azure SQL, Azure Storage etc. it always come with public facing endpoint many customer was not happy with that because of security concerns. So Microsoft introduces Virtual Network Service Endpoints. This will allow customers to secure and direct connectivity to Azure services over an optimized route over the Azure backbone network.</description>
+    </item>
     
     <item>
       <title>Resolve Azure Internal DNS from your on prem network and Spokes vnet</title>

@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Ankit Sarkar</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
-    <lastBuildDate>Sun, 13 Sep 2020 01:00:00 +0530</lastBuildDate>
+    <lastBuildDate>Tue, 15 Sep 2020 01:00:00 +0530</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>Azure</title>
       <link>https://anktsrkr.github.io/tags/azure/</link>
-      <pubDate>Sun, 13 Sep 2020 01:00:00 +0530</pubDate>
+      <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
       
       <guid>https://anktsrkr.github.io/tags/azure/</guid>
       <description></description>
@@ -23,16 +23,25 @@
     <item>
       <title>Azure Private DNS Zone</title>
       <link>https://anktsrkr.github.io/tags/azure-private-dns-zone/</link>
-      <pubDate>Sun, 13 Sep 2020 01:00:00 +0530</pubDate>
+      <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
       
       <guid>https://anktsrkr.github.io/tags/azure-private-dns-zone/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>Azure Private link</title>
+      <link>https://anktsrkr.github.io/tags/azure-private-link/</link>
+      <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
+      
+      <guid>https://anktsrkr.github.io/tags/azure-private-link/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Networking</title>
       <link>https://anktsrkr.github.io/tags/networking/</link>
-      <pubDate>Sun, 13 Sep 2020 01:00:00 +0530</pubDate>
+      <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
       
       <guid>https://anktsrkr.github.io/tags/networking/</guid>
       <description></description>
