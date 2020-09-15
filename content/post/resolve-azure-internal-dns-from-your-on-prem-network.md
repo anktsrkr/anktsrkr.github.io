@@ -15,6 +15,7 @@ series : "Azure Internal DNS"
 categories:
   - Cloud
   - Azure architecture
+  - Hub-Spoke Topology
 tags:
   - Azure
   - Networking 

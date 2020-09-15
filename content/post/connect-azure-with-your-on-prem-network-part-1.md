@@ -15,6 +15,7 @@ series : "Hub-Spoke network topology in Azure"
 categories:
   - Cloud
   - Azure architecture
+  - Hub-Spoke Topology
 tags:
   - Azure
   - Networking
