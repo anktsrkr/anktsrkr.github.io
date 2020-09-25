@@ -2,41 +2,41 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ankit Sarkar</title>
-    <link>https://anktsrkr.github.io/</link>
+    <link>https://blog.sarkaran.ml/</link>
     <description>Recent content on Ankit Sarkar</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
     <lastBuildDate>Tue, 15 Sep 2020 01:00:00 +0530</lastBuildDate>
     
-	<atom:link href="https://anktsrkr.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.sarkaran.ml/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</title>
-      <link>https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</link>
+      <link>https://blog.sarkaran.ml/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</link>
       <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</guid>
+      <guid>https://blog.sarkaran.ml/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</guid>
       <description>Hi Everyone!
 In this post we are are going to explore different ways to connect Azure PaaS resources from On-premise network privately and securely. While deploying Azure PaaS service such as Azure SQL, Azure Storage etc. it always come with public facing endpoint many customer was not happy with that because of security concerns. So Microsoft introduces Virtual Network Service Endpoints. This will allow customers to secure and direct connectivity to Azure services over an optimized route over the Azure backbone network.</description>
     </item>
     
     <item>
       <title>Resolve Azure Internal DNS from your on prem network and Spokes vnet</title>
-      <link>https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/</link>
+      <link>https://blog.sarkaran.ml/post/resolve-azure-internal-dns-from-your-on-prem-network/</link>
       <pubDate>Sun, 13 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/</guid>
+      <guid>https://blog.sarkaran.ml/post/resolve-azure-internal-dns-from-your-on-prem-network/</guid>
       <description>Hi Everyone!
 We have already implemented Hub-Spoke topology, and we are able to connect all the resources using IP from on premises network. But it is easier to use domain name instead ip directly from your virtual network. Also, If you want to use Azure Private Link, you need something which will resolve private link dns to respective ip. Other example is you have ASE v2 which comes with own domain but for your internal use you want some custom domain name which is easy to remember and also satisfy business need.</description>
     </item>
     
     <item>
       <title>Implementing Azure Firewall in Hub-Spoke network topology in Azure</title>
-      <link>https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</link>
+      <link>https://blog.sarkaran.ml/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</link>
       <pubDate>Thu, 10 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</guid>
+      <guid>https://blog.sarkaran.ml/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</guid>
       <description>Hi Everyone!
 This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
 Connect an on-premises network to a Microsoft Azure - Part 1
@@ -47,10 +47,10 @@ Implementing Hub-Spoke network topology in Azure - Part 2</description>
     
     <item>
       <title>Introducing Azure Firewall in Hub-Spoke network topology in Azure</title>
-      <link>https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</link>
+      <link>https://blog.sarkaran.ml/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</link>
       <pubDate>Wed, 09 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</guid>
+      <guid>https://blog.sarkaran.ml/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</guid>
       <description>Hi Everyone!
 This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
 Connect an on-premises network to a Microsoft Azure - Part 1
@@ -61,10 +61,10 @@ Implementing Hub-Spoke network topology in Azure - Part 2</description>
     
     <item>
       <title>Implementing Hub-Spoke network topology in Azure - Part 2</title>
-      <link>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/</link>
+      <link>https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-2/</link>
       <pubDate>Tue, 08 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/</guid>
+      <guid>https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-2/</guid>
       <description>Hi Everyone!
 This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
 Connect an on-premises network to a Microsoft Azure - Part 1
@@ -75,10 +75,10 @@ This Post - Implementing Hub-Spoke network topology in Azure - Part 2</descripti
     
     <item>
       <title>Implementing Hub-Spoke network topology in Azure - Part 1</title>
-      <link>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/</link>
+      <link>https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-1/</link>
       <pubDate>Mon, 07 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/</guid>
+      <guid>https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-1/</guid>
       <description>Hi Everyone!
 This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
 Connect an on-premises network to a Microsoft Azure - Part 1
@@ -89,10 +89,10 @@ Implementing Hub-Spoke network topology in Azure - Part 2</description>
     
     <item>
       <title>Connect an on-premises network to a Microsoft Azure - Part 2</title>
-      <link>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/</link>
+      <link>https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-2/</link>
       <pubDate>Sun, 06 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/</guid>
+      <guid>https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-2/</guid>
       <description>Hi Everyone!
 This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
 Connect an on-premises network to a Microsoft Azure - Part 1
@@ -103,10 +103,10 @@ Implementing Hub-Spoke network topology in Azure - Part 2</description>
     
     <item>
       <title>About</title>
-      <link>https://anktsrkr.github.io/about/</link>
+      <link>https://blog.sarkaran.ml/about/</link>
       <pubDate>Sat, 05 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://anktsrkr.github.io/about/</guid>
+      <guid>https://blog.sarkaran.ml/about/</guid>
       <description>My name is Ankit Sarkar, Software Engineer by profession. I&amp;rsquo;m based in Kolkata, India.
 I have a Bachelor&amp;rsquo;s degree in Electronics and Communication and around 7+ years of experience working on .NET technologies.
 In my day job at Tata Consultancy Services (TCS), mainly focused on cloud migration and modernization of legacy applications. This allows me to give various application specific solutions based on Microsoft Azure services for business critical applications.</description>
@@ -114,10 +114,10 @@ In my day job at Tata Consultancy Services (TCS), mainly focused on cloud migrat
     
     <item>
       <title>Connect an on-premises network to a Microsoft Azure - Part 1</title>
-      <link>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/</link>
+      <link>https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-1/</link>
       <pubDate>Sat, 05 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/</guid>
+      <guid>https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-1/</guid>
       <description>Hi Everyone!
 With this post, I&amp;rsquo;ll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts :
 This Post - Connect an on-premises network to a Microsoft Azure - Part 1

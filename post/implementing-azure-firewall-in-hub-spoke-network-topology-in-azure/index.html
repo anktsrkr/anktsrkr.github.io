@@ -22,28 +22,28 @@
 <meta name = "twitter:card" content = "summary" />
 <meta name = "twitter:creator" content = "@anktsrkr">
 <meta name = "twitter:title" content = "Implementing Azure Firewall in Hub-Spoke network topology in Azure" />
-<meta property = "og:url" content = "https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/" />
+<meta property = "og:url" content = "https://blog.sarkaran.ml/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/" />
 <meta property = "og:title" content = "Implementing Azure Firewall in Hub-Spoke network topology in Azure" />
 <meta property = "og:description" content = "Implementing Azure Firewall in Hub-Spoke network topology in Azure" />
-<meta property = "og:image" content = "https://anktsrkr.github.io/images/path/share.png" />
-<link rel='apple-touch-icon' sizes='180x180' href='https://anktsrkr.github.io/icons/apple-touch-icon.png'>
-<link rel='icon' type='image/png' sizes='32x32' href='https://anktsrkr.github.io/icons/favicon-32x32.png'>
-<link rel='icon' type='image/png' sizes='16x16' href='https://anktsrkr.github.io/icons/favicon-16x16.png'>
-<link rel='manifest' href='https://anktsrkr.github.io/icons/site.webmanifest'>
-<link rel="mask-icon" href= 'https://anktsrkr.github.io/safari-pinned-tab.svg' color="#002538">
+<meta property = "og:image" content = "https://blog.sarkaran.ml/images/path/share.png" />
+<link rel='apple-touch-icon' sizes='180x180' href='https://blog.sarkaran.ml/icons/apple-touch-icon.png'>
+<link rel='icon' type='image/png' sizes='32x32' href='https://blog.sarkaran.ml/icons/favicon-32x32.png'>
+<link rel='icon' type='image/png' sizes='16x16' href='https://blog.sarkaran.ml/icons/favicon-16x16.png'>
+<link rel='manifest' href='https://blog.sarkaran.ml/icons/site.webmanifest'>
+<link rel="mask-icon" href= 'https://blog.sarkaran.ml/safari-pinned-tab.svg' color="#002538">
 <meta name="msapplication-TileColor" content="#002538">
 <meta name="theme-color" content="#002538">
 
-  <link rel='canonical' href='https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/'>
+  <link rel='canonical' href='https://blog.sarkaran.ml/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/'>
 
     
 
     
-    <link rel="preload" href="https://anktsrkr.github.io/css/styles.8c77cda9454d30afb96a03bf232ee1089eb4b0da2a7c6e7f2b2a09d6cfcf2fe97836d9edfca70365fb630563fff409fd484299df18ca05a2950108d46da3cf1e.css" as="style" crossorigin="anonymous">
-    <link rel="preload" href="https://anktsrkr.github.io/js/bundle.f81b9177f5138dfaf49f6ec9ac8b0d3491c727d60b1eee627698357a9d73283620da56384d7e817a62020a5986877fae86c088bf9f88dc003803ace1e5fcea63.js" as="script" crossorigin="anonymous">
+    <link rel="preload" href="https://blog.sarkaran.ml/css/styles.8c77cda9454d30afb96a03bf232ee1089eb4b0da2a7c6e7f2b2a09d6cfcf2fe97836d9edfca70365fb630563fff409fd484299df18ca05a2950108d46da3cf1e.css" as="style" crossorigin="anonymous">
+    <link rel="preload" href="https://blog.sarkaran.ml/js/bundle.e49fbe3c90786d511b100064578a5b11402d1155929be416fdb72bc8ce9d5be78845fd91d26d2cc1c903a4430881d91cfa7d39869fdc2a7269a7494c61f577f9.js" as="script" crossorigin="anonymous">
 
     
-    <link rel="stylesheet" type="text/css" href="https://anktsrkr.github.io/css/styles.8c77cda9454d30afb96a03bf232ee1089eb4b0da2a7c6e7f2b2a09d6cfcf2fe97836d9edfca70365fb630563fff409fd484299df18ca05a2950108d46da3cf1e.css"  crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://blog.sarkaran.ml/css/styles.8c77cda9454d30afb96a03bf232ee1089eb4b0da2a7c6e7f2b2a09d6cfcf2fe97836d9edfca70365fb630563fff409fd484299df18ca05a2950108d46da3cf1e.css"  crossorigin="anonymous">
 	  
   </head>
   
@@ -55,7 +55,7 @@
 
 <header class = 'nav_header' >
   <nav class = 'nav'>
-    <a href='https://anktsrkr.github.io/' class = 'nav_brand nav_item'>
+    <a href='https://blog.sarkaran.ml/' class = 'nav_brand nav_item'>
         Ankit Sarkar
       <div class = 'nav_close'>
         <div>
@@ -70,10 +70,10 @@
     </a>
     <div class = 'nav_body nav_body_left'>
       <div class = 'nav_parent'>
-        <a href = 'https://anktsrkr.github.io/' class = 'nav_item'>Home </a>
+        <a href = 'https://blog.sarkaran.ml/' class = 'nav_item'>Home </a>
       </div>
       <div class = 'nav_parent'>
-        <a href = 'https://anktsrkr.github.io/about/' class = 'nav_item'>About </a>
+        <a href = 'https://blog.sarkaran.ml/about/' class = 'nav_item'>About </a>
       </div>
 <div class='follow'>
   <a href='https://github.com/anktsrkr'>
@@ -92,7 +92,7 @@
     </svg>
   </a>
   
-  <a href='https://anktsrkr.github.io/index.xml'>
+  <a href='https://blog.sarkaran.ml/index.xml'>
     <svg class="icon">
       <use xlink:href="#rss"></use>
     </svg>
@@ -117,29 +117,29 @@
   </svg>
   <span class="post_date">
     Sep 10, 2020</span>
-  <a href = 'https://anktsrkr.github.io/tags/azure' class = 'post_tag button button_translucent'>Azure
+  <a href = 'https://blog.sarkaran.ml/tags/azure' class = 'post_tag button button_translucent'>Azure
   </a>
-  <a href = 'https://anktsrkr.github.io/tags/networking' class = 'post_tag button button_translucent'>Networking
+  <a href = 'https://blog.sarkaran.ml/tags/networking' class = 'post_tag button button_translucent'>Networking
   </a>
-  <a href = 'https://anktsrkr.github.io/tags/azure-firewall' class = 'post_tag button button_translucent'>Azure Firewall
+  <a href = 'https://blog.sarkaran.ml/tags/azure-firewall' class = 'post_tag button button_translucent'>Azure Firewall
   </a>
   
   <div class='post_share'>
   Share on:
-  <a href="https://twitter.com/intent/tweet?text=Implementing%20Azure%20Firewall%20in%20Hub-Spoke%20network%20topology%20in%20Azure&url=https%3a%2f%2fanktsrkr.github.io%2fpost%2fimplementing-azure-firewall-in-hub-spoke-network-topology-in-azure%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+  <a href="https://twitter.com/intent/tweet?text=Implementing%20Azure%20Firewall%20in%20Hub-Spoke%20network%20topology%20in%20Azure&url=https%3a%2f%2fblog.sarkaran.ml%2fpost%2fimplementing-azure-firewall-in-hub-spoke-network-topology-in-azure%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
     <svg class="icon">
       <use xlink:href="#twitter"></use>
     </svg>
   </a>
   
-  <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fanktsrkr.github.io%2fpost%2fimplementing-azure-firewall-in-hub-spoke-network-topology-in-azure%2f&t=Implementing%20Azure%20Firewall%20in%20Hub-Spoke%20network%20topology%20in%20Azure" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+  <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fblog.sarkaran.ml%2fpost%2fimplementing-azure-firewall-in-hub-spoke-network-topology-in-azure%2f&t=Implementing%20Azure%20Firewall%20in%20Hub-Spoke%20network%20topology%20in%20Azure" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
     <svg class="icon">
       <use xlink:href="#facebook"></use>
     </svg>
   </a>
   <script>
     function shareViaLinkedin() {
-      window.open('http://www.linkedin.com/shareArticle?mini=true&url='+encodeURIComponent("https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/"), '', 'left=0,top=0,width=650,height=420,personalbar=0,toolbar=0,scrollbars=0,resizable=0');
+      window.open('http://www.linkedin.com/shareArticle?mini=true&url='+encodeURIComponent("https://blog.sarkaran.ml/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/"), '', 'left=0,top=0,width=650,height=420,personalbar=0,toolbar=0,scrollbars=0,resizable=0');
     }
   </script>
   <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow" onclick="shareViaLinkedin()">
@@ -147,7 +147,7 @@
       <use xlink:href="#linkedin"></use>
     </svg>
   </a>
-  <a href="https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/" title="Copy Link" class="link link_yank">
+  <a href="https://blog.sarkaran.ml/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/" title="Copy Link" class="link link_yank">
     <svg class="icon">
       <use xlink:href="#yank"></use>
     </svg>
@@ -338,28 +338,28 @@ Here is the final architecture, we just implemented -</p>
     <div>
       Software Engineer By Profession
     </div>
-    <a href = 'https://anktsrkr.github.io/about/' class="button mt-1" role="button">Read More</a>
+    <a href = 'https://blog.sarkaran.ml/about/' class="button mt-1" role="button">Read More</a>
     <h2 class="mt-4">Featured Posts</h2>
     <ul>
     
       <li>
-        <a href="https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" class="nav-link">Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</a>
+        <a href="https://blog.sarkaran.ml/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" class="nav-link">Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</a>
       </li>
     
       <li>
-        <a href="https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/" class="nav-link">Resolve Azure Internal DNS from your on prem network and Spokes vnet</a>
+        <a href="https://blog.sarkaran.ml/post/resolve-azure-internal-dns-from-your-on-prem-network/" class="nav-link">Resolve Azure Internal DNS from your on prem network and Spokes vnet</a>
       </li>
     
       <li>
-        <a href="https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" class="nav-link">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a>
+        <a href="https://blog.sarkaran.ml/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" class="nav-link">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a>
       </li>
     
       <li>
-        <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
+        <a href="https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
       </li>
     
       <li>
-        <a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 1</a>
+        <a href="https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-1/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 1</a>
       </li>
     
     </ul>
@@ -367,42 +367,42 @@ Here is the final architecture, we just implemented -</p>
     <ul class="flex-column">
       
       <li>
-        <a href="https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" class="nav-link">Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</a>
+        <a href="https://blog.sarkaran.ml/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" class="nav-link">Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</a>
       </li>
       <li>
-        <a href="https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/" class="nav-link">Resolve Azure Internal DNS from your on prem network and Spokes vnet</a>
+        <a href="https://blog.sarkaran.ml/post/resolve-azure-internal-dns-from-your-on-prem-network/" class="nav-link">Resolve Azure Internal DNS from your on prem network and Spokes vnet</a>
       </li>
       <li>
-        <a href="https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" class="nav-link">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a>
+        <a href="https://blog.sarkaran.ml/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" class="nav-link">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a>
       </li>
       <li>
-        <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 2</a>
+        <a href="https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-2/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 2</a>
       </li>
       <li>
-        <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
+        <a href="https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
       </li>
       <li>
-        <a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 2</a>
+        <a href="https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-2/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 2</a>
       </li>
       <li>
-        <a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 1</a>
+        <a href="https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-1/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 1</a>
       </li>
     </ul> 
     
     <div>
       <h2 class="mt-4 taxonomy" id="categories-section">categories</h2>
       <nav class="tags_nav">
-        <a href='https://anktsrkr.github.io/categories/hub-spoke-topology/' class=" post_tag post_tagcloud button button_translucent">
+        <a href='https://blog.sarkaran.ml/categories/hub-spoke-topology/' class=" post_tag post_tagcloud button button_translucent">
           HUB-SPOKE-TOPOLOGY
           <span class='button_tally'>8</span>
         </a>
         
-        <a href='https://anktsrkr.github.io/categories/azure-architecture/' class=" post_tag post_tagcloud button button_translucent">
+        <a href='https://blog.sarkaran.ml/categories/azure-architecture/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-ARCHITECTURE
           <span class='button_tally'>7</span>
         </a>
         
-        <a href='https://anktsrkr.github.io/categories/cloud/' class=" post_tag post_tagcloud button button_translucent">
+        <a href='https://blog.sarkaran.ml/categories/cloud/' class=" post_tag post_tagcloud button button_translucent">
           CLOUD
           <span class='button_tally'>7</span>
         </a>
@@ -414,27 +414,27 @@ Here is the final architecture, we just implemented -</p>
     <div>
       <h2 class="mt-4 taxonomy" id="tags-section">tags</h2>
       <nav class="tags_nav">
-        <a href='https://anktsrkr.github.io/tags/azure/' class=" post_tag post_tagcloud button button_translucent">
+        <a href='https://blog.sarkaran.ml/tags/azure/' class=" post_tag post_tagcloud button button_translucent">
           AZURE
           <span class='button_tally'>8</span>
         </a>
         
-        <a href='https://anktsrkr.github.io/tags/networking/' class=" post_tag post_tagcloud button button_translucent">
+        <a href='https://blog.sarkaran.ml/tags/networking/' class=" post_tag post_tagcloud button button_translucent">
           NETWORKING
           <span class='button_tally'>8</span>
         </a>
         
-        <a href='https://anktsrkr.github.io/tags/azure-firewall/' class=" post_tag post_tagcloud button button_translucent">
+        <a href='https://blog.sarkaran.ml/tags/azure-firewall/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-FIREWALL
           <span class='button_tally'>2</span>
         </a>
         
-        <a href='https://anktsrkr.github.io/tags/azure-private-dns-zone/' class=" post_tag post_tagcloud button button_translucent">
+        <a href='https://blog.sarkaran.ml/tags/azure-private-dns-zone/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-PRIVATE-DNS-ZONE
           <span class='button_tally'>2</span>
         </a>
         
-        <a href='https://anktsrkr.github.io/tags/azure-private-link/' class=" post_tag post_tagcloud button button_translucent">
+        <a href='https://blog.sarkaran.ml/tags/azure-private-link/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-PRIVATE-LINK
           <span class='button_tally'>1</span>
         </a>
@@ -526,6 +526,6 @@ Here is the final architecture, we just implemented -</p>
 
   </div>
 </footer>
-    <script type="text/javascript" src = "https://anktsrkr.github.io/js/bundle.f81b9177f5138dfaf49f6ec9ac8b0d3491c727d60b1eee627698357a9d73283620da56384d7e817a62020a5986877fae86c088bf9f88dc003803ace1e5fcea63.js"crossorigin="anonymous"></script>
+    <script type="text/javascript" src = "https://blog.sarkaran.ml/js/bundle.e49fbe3c90786d511b100064578a5b11402d1155929be416fdb72bc8ce9d5be78845fd91d26d2cc1c903a4430881d91cfa7d39869fdc2a7269a7494c61f577f9.js"crossorigin="anonymous"></script>
   </body>
 </html>

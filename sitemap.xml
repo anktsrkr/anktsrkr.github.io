@@ -3,107 +3,107 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://anktsrkr.github.io/</loc>
+    <loc>https://blog.sarkaran.ml/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/azure/</loc>
+    <loc>https://blog.sarkaran.ml/tags/azure/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/azure-private-dns-zone/</loc>
+    <loc>https://blog.sarkaran.ml/tags/azure-private-dns-zone/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/azure-private-link/</loc>
+    <loc>https://blog.sarkaran.ml/tags/azure-private-link/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/categories/</loc>
+    <loc>https://blog.sarkaran.ml/categories/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</loc>
+    <loc>https://blog.sarkaran.ml/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/categories/hub-spoke-topology/</loc>
+    <loc>https://blog.sarkaran.ml/categories/hub-spoke-topology/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/networking/</loc>
+    <loc>https://blog.sarkaran.ml/tags/networking/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/</loc>
+    <loc>https://blog.sarkaran.ml/post/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/</loc>
+    <loc>https://blog.sarkaran.ml/tags/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/categories/azure-architecture/</loc>
+    <loc>https://blog.sarkaran.ml/categories/azure-architecture/</loc>
     <lastmod>2020-09-13T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/categories/cloud/</loc>
+    <loc>https://blog.sarkaran.ml/categories/cloud/</loc>
     <lastmod>2020-09-13T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/</loc>
+    <loc>https://blog.sarkaran.ml/post/resolve-azure-internal-dns-from-your-on-prem-network/</loc>
     <lastmod>2020-09-13T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/azure-firewall/</loc>
+    <loc>https://blog.sarkaran.ml/tags/azure-firewall/</loc>
     <lastmod>2020-09-10T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</loc>
+    <loc>https://blog.sarkaran.ml/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</loc>
     <lastmod>2020-09-10T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</loc>
+    <loc>https://blog.sarkaran.ml/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</loc>
     <lastmod>2020-09-09T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/</loc>
+    <loc>https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-2/</loc>
     <lastmod>2020-09-08T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/</loc>
+    <loc>https://blog.sarkaran.ml/post/implementing-hub-spoke-network-topology-in-azure-part-1/</loc>
     <lastmod>2020-09-07T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/</loc>
+    <loc>https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-2/</loc>
     <lastmod>2020-09-06T01:00:00+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/about/</loc>
+    <loc>https://blog.sarkaran.ml/about/</loc>
     <lastmod>2020-09-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/</loc>
+    <loc>https://blog.sarkaran.ml/post/connect-azure-with-your-on-prem-network-part-1/</loc>
     <lastmod>2020-09-05T01:00:00+05:30</lastmod>
   </url>
   
