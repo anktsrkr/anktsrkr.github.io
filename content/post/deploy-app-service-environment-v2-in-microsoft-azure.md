@@ -121,14 +121,14 @@ Once the deployment is complete, click on __ASE Health__, everything should show
 ![ASE Health](/images/ase/ASE_Health.jpg)
 Okay, everything looks good here. let's click on __Properties__
 ![ASE Properties](/images/ase/ASE_Properties.jpg)
-Here we can see two VIPs, one is Pubic VIP and another is Private. Let's see what are the use cases of these VIPs.
+Here we can see two VIPs, one is Public VIP and another is Private. Let's see what are the use cases of these VIPs.
 
  __Public VIP__  -- It is used for inbound management traffic and as the from address when making calls from the ASE to the internet. The calls from an ASE that go to the internet leave the VNet through the VIP assigned for the ASE. The public IP of this VIP is the source IP for all calls from the ASE that go to the internet.
 
 __Private VIP__  -- If the apps in your ASE make calls to resources in your VNet or across a VPN, the source IP is one of the IPs in the subnet used by your ASE. Because the ASE is within the VNet, it can also access resources within the VNet without any additional configuration. If the VNet is connected to your on-premises network, apps in your ASE also have access to resources there without additional configuration.
 
 
-Okay, now we have the ASE ready, in my next post we will deploy a Web App  with Azure SQL in this environment.
+Okay, now we have the ASE ready, in my next post we will deploy a sample Web App in this environment.
 
 [^1]:  [Introduction to the App Service Environments](https://docs.microsoft.com/en-us/azure/app-service/environment/intro)
 
