@@ -2,57 +2,57 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Ankit Sarkar</title>
-    <link>https://blog.sarkaran.ml/tags/</link>
+    <link>https://anktsrkr.github.io/tags/</link>
     <description>Recent content in Tags on Ankit Sarkar</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
     <lastBuildDate>Tue, 15 Sep 2020 01:00:00 +0530</lastBuildDate>
     
-	<atom:link href="https://blog.sarkaran.ml/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://anktsrkr.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Azure</title>
-      <link>https://blog.sarkaran.ml/tags/azure/</link>
+      <link>https://anktsrkr.github.io/tags/azure/</link>
       <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://blog.sarkaran.ml/tags/azure/</guid>
+      <guid>https://anktsrkr.github.io/tags/azure/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Azure Private DNS Zone</title>
-      <link>https://blog.sarkaran.ml/tags/azure-private-dns-zone/</link>
+      <link>https://anktsrkr.github.io/tags/azure-private-dns-zone/</link>
       <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://blog.sarkaran.ml/tags/azure-private-dns-zone/</guid>
+      <guid>https://anktsrkr.github.io/tags/azure-private-dns-zone/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Azure Private link</title>
-      <link>https://blog.sarkaran.ml/tags/azure-private-link/</link>
+      <link>https://anktsrkr.github.io/tags/azure-private-link/</link>
       <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://blog.sarkaran.ml/tags/azure-private-link/</guid>
+      <guid>https://anktsrkr.github.io/tags/azure-private-link/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Networking</title>
-      <link>https://blog.sarkaran.ml/tags/networking/</link>
+      <link>https://anktsrkr.github.io/tags/networking/</link>
       <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://blog.sarkaran.ml/tags/networking/</guid>
+      <guid>https://anktsrkr.github.io/tags/networking/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Azure Firewall</title>
-      <link>https://blog.sarkaran.ml/tags/azure-firewall/</link>
+      <link>https://anktsrkr.github.io/tags/azure-firewall/</link>
       <pubDate>Thu, 10 Sep 2020 01:00:00 +0530</pubDate>
       
-      <guid>https://blog.sarkaran.ml/tags/azure-firewall/</guid>
+      <guid>https://anktsrkr.github.io/tags/azure-firewall/</guid>
       <description></description>
     </item>
     
