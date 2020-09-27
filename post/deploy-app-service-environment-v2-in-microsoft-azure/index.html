@@ -228,10 +228,10 @@ Something to note, though we are selecting Windows as OS support but you can add
 <img src="/images/ase/ASE_Health.jpg" alt="ASE Health">
 Okay, everything looks good here. let&rsquo;s click on <strong>Properties</strong>
 <img src="/images/ase/ASE_Properties.jpg" alt="ASE Properties">
-Here we can see two VIPs, one is Pubic VIP and another is Private. Let&rsquo;s see what are the use cases of these VIPs.</p>
+Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s see what are the use cases of these VIPs.</p>
 <p><strong>Public VIP</strong>  &ndash; It is used for inbound management traffic and as the from address when making calls from the ASE to the internet. The calls from an ASE that go to the internet leave the VNet through the VIP assigned for the ASE. The public IP of this VIP is the source IP for all calls from the ASE that go to the internet.</p>
 <p><strong>Private VIP</strong>  &ndash; If the apps in your ASE make calls to resources in your VNet or across a VPN, the source IP is one of the IPs in the subnet used by your ASE. Because the ASE is within the VNet, it can also access resources within the VNet without any additional configuration. If the VNet is connected to your on-premises network, apps in your ASE also have access to resources there without additional configuration.</p>
-<p>Okay, now we have the ASE ready, in my next post we will deploy a Web App  with Azure SQL in this environment.</p>
+<p>Okay, now we have the ASE ready, in my next post we will deploy a sample Web App in this environment.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
