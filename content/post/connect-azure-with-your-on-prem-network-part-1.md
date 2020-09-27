@@ -25,7 +25,7 @@ keywords: "hub spoke,hub spoke network,hub spoke network topology,azure hub spok
 
 Hi Everyone!
 
-With this post, I'll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will updated this page with links to individual posts : 
+With this post, I'll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts : 
 
 _This Post - Connect an on-premises network to a Microsoft Azure - Part 1_
 

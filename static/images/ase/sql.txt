@@ -1,0 +1,35 @@
+CREATE USER sandbox FROM EXTERNAL PROVIDER;
+ALTER ROLE db_datareader ADD MEMBER sandbox;
+ALTER ROLE db_datawriter ADD MEMBER sandbox;
+ALTER ROLE db_ddladmin ADD MEMBER sandbox;
+GO
+
+
+ $params = @{
+>>   DnsName = "Corp Internal Root Cert"
+>>   KeyLength = 2048
+>>   KeyAlgorithm = 'RSA'
+>>   HashAlgorithm = 'SHA256'
+>>   KeyExportPolicy = 'Exportable'
+>>   NotAfter = (Get-Date).AddYears(5)
+>>   CertStoreLocation = 'Cert:\CurrentUser\My'
+>>   KeyUsage = 'CertSign','CRLSign' #fixes invalid cert error
+>> }
+
+
+$rootCA = New-SelfSignedCertificate @params
+
+ $params = @{
+>>   DnsName = "demoapp.internal.xyz"
+>>   Signer = $rootCA
+>>   KeyLength = 2048
+>>   KeyAlgorithm = 'RSA'
+>>   HashAlgorithm = 'SHA256'
+>>   KeyExportPolicy = 'Exportable'
+>>   NotAfter = (Get-date).AddYears(2)
+>>   CertStoreLocation = 'Cert:\CurrentUser\My'
+>> }
+
+
+$vpnCert = New-SelfSignedCertificate @params
+Export-PfxCertificate -Cert $vpnCert -FilePath 'C:\certs\demoapp.pfx' -Password (ConvertTo-SecureString -AsPlainText 'securepw' -Force)
