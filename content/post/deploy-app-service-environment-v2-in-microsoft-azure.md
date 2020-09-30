@@ -22,8 +22,7 @@ tags:
   - App Service Environment
   - Azure Private DNS Zone
   - Azure Private link
-keywords: "ase,app service, app service env, app service env v2,app service environment,app service environment v2,deploy application in app service environment,app service environment and private link, ase in hub spoke,hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology,app service environment and private endpoint,azure sql, azure sql and private endpoint
-,azure private dns zone, resolve azure internal DNS from your on prem,hub spoke dns forwarder,dns forwarder in hub spoke,dns forwarder in hub spoke network topology,dns forwarder"
+keywords: "ase,app service, app service env, app service env v2,app service environment,app service environment v2,deploy application in app service environment,app service environment and private link, ase in hub spoke,hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology,app service environment and private endpoint,azure sql, azure sql and private endpoint,azure private dns zone, resolve azure internal DNS from your on prem,hub spoke dns forwarder,dns forwarder in hub spoke,dns forwarder in hub spoke network topology,dns forwarder"
 ---
 
 Hi Everyone!
@@ -32,7 +31,7 @@ With this post, I'll start a new series about Azure App Service Environment (ASE
 
 _This Post - Deploy App Service Environment in Microsoft Azure_
 
-[Coming Soon - Create a WebApp in App Service Environment](#)
+[Create a WebApp in App Service Environment](/post/create-a-webapp-in-app-service-environment)
 
 [Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](#)
 
@@ -81,7 +80,7 @@ There are two types of ASE provided by Microsoft Azure :
 
 __Something to note here, I will assume you already have Hub-Spoke network topology in place and connection is already established with your on-premise over VPN. I will also assume, you do not have any on-premise DNS server and you have a DNS Forwarder setup in `hub-vnet`. If you are not sure about all of this I will suggest to go though my previous [posts.](/categories/hub-spoke-topology/)__
 
-First Step is to Login into your account and on the top search bar, type App Service Environments and from the dropdown select "App Service Environments".
+First Step is to login into your account and on the top search bar, type App Service Environments and from the dropdown select "App Service Environments".
 ![Select App Service Environment](/images/ase/Select_ASE.jpg)
 
 Now, click on __Create app service environment__
@@ -101,7 +100,7 @@ Something to note, though we are selecting Windows as OS support but you can add
 
 Click on _Next_ to configure vnet for your ASE.
 
-ASE needs a dedicated Subnet and you can not change it later once ASE is deployed. So we need to choose it wisely. ILB ASE with no App Service plans at all will use 13 addresses (In case of External ASE, it is 12) before you create an app. When you scale up or down, new roles of the appropriate size are added and then your workloads are migrated from the current size to the target size. The original VMs removed only after the workloads have been migrated. If you had an ASE with 100 ASP instances, there would be a period where you need double the number of VMs. It is for this reason that it is recommend the use of a `/24` to accommodate any changes you might require.<cite>[^2]</cite>
+>ASE needs a dedicated Subnet and you can not change it later once ASE is deployed. So we need to choose it wisely. ILB ASE with no App Service plans at all will use 13 addresses (In case of External ASE, it is 12) before you create an app. When you scale up or down, new roles of the appropriate size are added and then your workloads are migrated from the current size to the target size. The original VMs removed only after the workloads have been migrated. If you had an ASE with 100 ASP instances, there would be a period where you need double the number of VMs. It is for this reason that it is recommend the use of a `/24` to accommodate any changes you might require.<cite>[^2]</cite>
 
 Our plan is to deploy ASE in `spoke1-vnet`. As, ASE required dedicated subnet, let's create it with below details: 
 
@@ -128,7 +127,8 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let's see wh
 __Private VIP__  -- If the apps in your ASE make calls to resources in your VNet or across a VPN, the source IP is one of the IPs in the subnet used by your ASE. Because the ASE is within the VNet, it can also access resources within the VNet without any additional configuration. If the VNet is connected to your on-premises network, apps in your ASE also have access to resources there without additional configuration.
 
 
-Okay, now we have the ASE ready, in my next post we will deploy a sample Web App in this environment.
+Okay, now we have the ASE ready, in my [next post](/post/create-a-webapp-in-app-service-environment)
+ we will deploy a sample Web App in this environment.
 
 [^1]:  [Introduction to the App Service Environments](https://docs.microsoft.com/en-us/azure/app-service/environment/intro)
 

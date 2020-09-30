@@ -173,7 +173,7 @@ $updatedFirewall = Set-AzFirewall -AzureFirewall $azFirewall
 {{< /highlight >}}
 Once applied, We are able to reach Google! Yay!! 
 ![Filtered internet access](/images/hub-spoke/filtered-internet-access.jpg)
-You can also control inbound internet traffic with Azure Firewall DNAT. Assume, your VPN is not working but you have to access HubJumpBox which only have private it. So how to access it? One of the way to access it by creating a DNAT rule.
+You can also control inbound internet traffic with Azure Firewall DNAT. Assume, your VPN is not working but you have to access HubJumpBox which only have private ip. So how to access it? One of the way to access it by creating a DNAT rule.
 {{< highlight powershell >}}
 $rdpToHubJumpbox =  New-AzFirewallNatRule `
                        -Name "RDP To HubJumpBox" `
