@@ -17,7 +17,7 @@
 <meta name="robots" content="index, follow" />
 <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-<meta name="keywords" content="ase,app service, app service env, app service env v2,app service environment,app service environment v2,deploy application in app service environment,app service environment and private link, ase in hub spoke,hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology,app service environment and private endpoint,azure sql, azure sql and private endpoint ,azure private dns zone, resolve azure internal DNS from your on prem,hub spoke dns forwarder,dns forwarder in hub spoke,dns forwarder in hub spoke network topology,dns forwarder">
+<meta name="keywords" content="ase,app service, app service env, app service env v2,app service environment,app service environment v2,deploy application in app service environment,app service environment and private link, ase in hub spoke,hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology,app service environment and private endpoint,azure sql, azure sql and private endpoint,azure private dns zone, resolve azure internal DNS from your on prem,hub spoke dns forwarder,dns forwarder in hub spoke,dns forwarder in hub spoke network topology,dns forwarder">
 <meta name="description" content="Deploy App Service Environment in Microsoft Azure">
 <meta name = "twitter:card" content = "summary" />
 <meta name = "twitter:creator" content = "@anktsrkr">
@@ -162,7 +162,7 @@
     <p>Hi Everyone!</p>
 <p>With this post, I&rsquo;ll start a new series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :</p>
 <p><em>This Post - Deploy App Service Environment in Microsoft Azure</em></p>
-<p><a href="#">Coming Soon - Create a WebApp in App Service Environment</a></p>
+<p><a href="/post/create-a-webapp-in-app-service-environment">Create a WebApp in App Service Environment</a></p>
 <p><a href="#">Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</a></p>
 <p><a href="#">Coming Soon - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</a></p>
 <p><a href="#">Coming Soon - Add Custom Domain for App Service Environment Hosted WebApp</a></p>
@@ -203,7 +203,7 @@
 </ul>
 <p>In this series, we will only focus on <em>Internal ASE</em>. We will deploy internal ASE using Azure Portal but you can use ARM Template, Azure Cli. At the time of writing this post, I guess there are some restrictions with CLI you can not select VNET while creating an ASE. So, choose to go with Azure Portal for this entire series.</p>
 <p><strong>Something to note here, I will assume you already have Hub-Spoke network topology in place and connection is already established with your on-premise over VPN. I will also assume, you do not have any on-premise DNS server and you have a DNS Forwarder setup in <code>hub-vnet</code>. If you are not sure about all of this I will suggest to go though my previous <a href="/categories/hub-spoke-topology/">posts.</a></strong></p>
-<p>First Step is to Login into your account and on the top search bar, type App Service Environments and from the dropdown select &ldquo;App Service Environments&rdquo;.
+<p>First Step is to login into your account and on the top search bar, type App Service Environments and from the dropdown select &ldquo;App Service Environments&rdquo;.
 <img src="/images/ase/Select_ASE.jpg" alt="Select App Service Environment"></p>
 <p>Now, click on <strong>Create app service environment</strong>
 <img src="/images/ase/Create_ASE.jpg" alt="Create App Service Environment"></p>
@@ -215,7 +215,9 @@
 <img src="/images/ase/Create_ASE_Basic.jpg" alt="Create App Service Environment">
 Something to note, though we are selecting Windows as OS support but you can add Linux apps later, but this will trigger an upgrade to the environment and will take time.</p>
 <p>Click on <em>Next</em> to configure vnet for your ASE.</p>
+<blockquote>
 <p>ASE needs a dedicated Subnet and you can not change it later once ASE is deployed. So we need to choose it wisely. ILB ASE with no App Service plans at all will use 13 addresses (In case of External ASE, it is 12) before you create an app. When you scale up or down, new roles of the appropriate size are added and then your workloads are migrated from the current size to the target size. The original VMs removed only after the workloads have been migrated. If you had an ASE with 100 ASP instances, there would be a period where you need double the number of VMs. It is for this reason that it is recommend the use of a <code>/24</code> to accommodate any changes you might require.<!-- raw HTML omitted --><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup><!-- raw HTML omitted --></p>
+</blockquote>
 <p>Our plan is to deploy ASE in <code>spoke1-vnet</code>. As, ASE required dedicated subnet, let&rsquo;s create it with below details:</p>
 <p><em>Subnet Name</em> : <code>AseSubnet</code></p>
 <p><em>Virtual Network Address Block</em> : <code>10.20.0.0/19</code></p>
@@ -231,7 +233,8 @@ Okay, everything looks good here. let&rsquo;s click on <strong>Properties</stron
 Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s see what are the use cases of these VIPs.</p>
 <p><strong>Public VIP</strong>  &ndash; It is used for inbound management traffic and as the from address when making calls from the ASE to the internet. The calls from an ASE that go to the internet leave the VNet through the VIP assigned for the ASE. The public IP of this VIP is the source IP for all calls from the ASE that go to the internet.</p>
 <p><strong>Private VIP</strong>  &ndash; If the apps in your ASE make calls to resources in your VNet or across a VPN, the source IP is one of the IPs in the subnet used by your ASE. Because the ASE is within the VNet, it can also access resources within the VNet without any additional configuration. If the VNet is connected to your on-premises network, apps in your ASE also have access to resources there without additional configuration.</p>
-<p>Okay, now we have the ASE ready, in my next post we will deploy a sample Web App in this environment.</p>
+<p>Okay, now we have the ASE ready, in my <a href="/post/create-a-webapp-in-app-service-environment">next post</a>
+we will deploy a sample Web App in this environment.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
@@ -275,6 +278,10 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
     <h2 class="mt-4">Featured Posts</h2>
     <ul>
     
+      <li>
+        <a href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/" class="nav-link">Create a WebApp in App Service Environment</a>
+      </li>
+    
     
       <li>
         <a href="https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" class="nav-link">Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</a>
@@ -301,6 +308,9 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
     <ul class="flex-column">
       
       <li>
+        <a href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/" class="nav-link">Create a WebApp in App Service Environment</a>
+      </li>
+      <li>
         <a href="https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" class="nav-link">Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</a>
       </li>
       <li>
@@ -318,9 +328,6 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
       <li>
         <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
       </li>
-      <li>
-        <a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 2</a>
-      </li>
     </ul> 
     
     <div>
@@ -328,12 +335,12 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
       <nav class="tags_nav">
         <a href='https://anktsrkr.github.io/categories/hub-spoke-topology/' class=" post_tag post_tagcloud button button_translucent">
           HUB-SPOKE-TOPOLOGY
-          <span class='button_tally'>9</span>
+          <span class='button_tally'>10</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/cloud/' class=" post_tag post_tagcloud button button_translucent">
           CLOUD
-          <span class='button_tally'>8</span>
+          <span class='button_tally'>9</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/azure-architecture/' class=" post_tag post_tagcloud button button_translucent">
@@ -343,12 +350,12 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
         
         <a href='https://anktsrkr.github.io/categories/app-service-environment/' class=" post_tag post_tagcloud button button_translucent">
           APP-SERVICE-ENVIRONMENT
-          <span class='button_tally'>1</span>
+          <span class='button_tally'>2</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/azure-sql/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-SQL
-          <span class='button_tally'>1</span>
+          <span class='button_tally'>2</span>
         </a>
         
         
@@ -360,7 +367,7 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
       <nav class="tags_nav">
         <a href='https://anktsrkr.github.io/tags/azure/' class=" post_tag post_tagcloud button button_translucent">
           AZURE
-          <span class='button_tally'>9</span>
+          <span class='button_tally'>10</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/networking/' class=" post_tag post_tagcloud button button_translucent">
@@ -370,7 +377,17 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
         
         <a href='https://anktsrkr.github.io/tags/azure-private-dns-zone/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-PRIVATE-DNS-ZONE
+          <span class='button_tally'>4</span>
+        </a>
+        
+        <a href='https://anktsrkr.github.io/tags/azure-private-link/' class=" post_tag post_tagcloud button button_translucent">
+          AZURE-PRIVATE-LINK
           <span class='button_tally'>3</span>
+        </a>
+        
+        <a href='https://anktsrkr.github.io/tags/app-service-environment/' class=" post_tag post_tagcloud button button_translucent">
+          APP-SERVICE-ENVIRONMENT
+          <span class='button_tally'>2</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/azure-firewall/' class=" post_tag post_tagcloud button button_translucent">
@@ -378,13 +395,8 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
           <span class='button_tally'>2</span>
         </a>
         
-        <a href='https://anktsrkr.github.io/tags/azure-private-link/' class=" post_tag post_tagcloud button button_translucent">
-          AZURE-PRIVATE-LINK
-          <span class='button_tally'>2</span>
-        </a>
-        
-        <a href='https://anktsrkr.github.io/tags/app-service-environment/' class=" post_tag post_tagcloud button button_translucent">
-          APP-SERVICE-ENVIRONMENT
+        <a href='https://anktsrkr.github.io/tags/azure-app-services/' class=" post_tag post_tagcloud button button_translucent">
+          AZURE-APP-SERVICES
           <span class='button_tally'>1</span>
         </a>
         

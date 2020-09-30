@@ -285,7 +285,7 @@ Let&rsquo;s go to <a href="https://www.microsoft.com/">https://www.microsoft.com
 <span class="ln">14</span><span class="nv">$updatedFirewall</span> <span class="p">=</span> <span class="nb">Set-AzFirewall</span> <span class="n">-AzureFirewall</span> <span class="nv">$azFirewall</span></code></pre></div>
 Once applied, We are able to reach Google! Yay!!
 <img src="/images/hub-spoke/filtered-internet-access.jpg" alt="Filtered internet access">
-You can also control inbound internet traffic with Azure Firewall DNAT. Assume, your VPN is not working but you have to access HubJumpBox which only have private it. So how to access it? One of the way to access it by creating a DNAT rule.
+You can also control inbound internet traffic with Azure Firewall DNAT. Assume, your VPN is not working but you have to access HubJumpBox which only have private ip. So how to access it? One of the way to access it by creating a DNAT rule.
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="ln"> 1</span><span class="nv">$rdpToHubJumpbox</span> <span class="p">=</span>  <span class="nb">New-AzFirewallNatRule</span> <span class="p">`</span>
 <span class="ln"> 2</span>                       <span class="n">-Name</span> <span class="s2">&#34;RDP To HubJumpBox&#34;</span> <span class="p">`</span>
 <span class="ln"> 3</span>                       <span class="n">-Protocol</span> <span class="s2">&#34;TCP&#34;</span> <span class="p">`</span>
@@ -343,6 +343,10 @@ Here is the final architecture, we just implemented -</p>
     <ul>
     
       <li>
+        <a href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/" class="nav-link">Create a WebApp in App Service Environment</a>
+      </li>
+    
+      <li>
         <a href="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" class="nav-link">Deploy App Service Environment (ASE v2) in Microsoft Azure</a>
       </li>
     
@@ -371,6 +375,9 @@ Here is the final architecture, we just implemented -</p>
     <ul class="flex-column">
       
       <li>
+        <a href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/" class="nav-link">Create a WebApp in App Service Environment</a>
+      </li>
+      <li>
         <a href="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" class="nav-link">Deploy App Service Environment (ASE v2) in Microsoft Azure</a>
       </li>
       <li>
@@ -388,9 +395,6 @@ Here is the final architecture, we just implemented -</p>
       <li>
         <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
       </li>
-      <li>
-        <a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 2</a>
-      </li>
     </ul> 
     
     <div>
@@ -398,12 +402,12 @@ Here is the final architecture, we just implemented -</p>
       <nav class="tags_nav">
         <a href='https://anktsrkr.github.io/categories/hub-spoke-topology/' class=" post_tag post_tagcloud button button_translucent">
           HUB-SPOKE-TOPOLOGY
-          <span class='button_tally'>9</span>
+          <span class='button_tally'>10</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/cloud/' class=" post_tag post_tagcloud button button_translucent">
           CLOUD
-          <span class='button_tally'>8</span>
+          <span class='button_tally'>9</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/azure-architecture/' class=" post_tag post_tagcloud button button_translucent">
@@ -413,12 +417,12 @@ Here is the final architecture, we just implemented -</p>
         
         <a href='https://anktsrkr.github.io/categories/app-service-environment/' class=" post_tag post_tagcloud button button_translucent">
           APP-SERVICE-ENVIRONMENT
-          <span class='button_tally'>1</span>
+          <span class='button_tally'>2</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/azure-sql/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-SQL
-          <span class='button_tally'>1</span>
+          <span class='button_tally'>2</span>
         </a>
         
         
@@ -430,7 +434,7 @@ Here is the final architecture, we just implemented -</p>
       <nav class="tags_nav">
         <a href='https://anktsrkr.github.io/tags/azure/' class=" post_tag post_tagcloud button button_translucent">
           AZURE
-          <span class='button_tally'>9</span>
+          <span class='button_tally'>10</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/networking/' class=" post_tag post_tagcloud button button_translucent">
@@ -440,7 +444,17 @@ Here is the final architecture, we just implemented -</p>
         
         <a href='https://anktsrkr.github.io/tags/azure-private-dns-zone/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-PRIVATE-DNS-ZONE
+          <span class='button_tally'>4</span>
+        </a>
+        
+        <a href='https://anktsrkr.github.io/tags/azure-private-link/' class=" post_tag post_tagcloud button button_translucent">
+          AZURE-PRIVATE-LINK
           <span class='button_tally'>3</span>
+        </a>
+        
+        <a href='https://anktsrkr.github.io/tags/app-service-environment/' class=" post_tag post_tagcloud button button_translucent">
+          APP-SERVICE-ENVIRONMENT
+          <span class='button_tally'>2</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/azure-firewall/' class=" post_tag post_tagcloud button button_translucent">
@@ -448,13 +462,8 @@ Here is the final architecture, we just implemented -</p>
           <span class='button_tally'>2</span>
         </a>
         
-        <a href='https://anktsrkr.github.io/tags/azure-private-link/' class=" post_tag post_tagcloud button button_translucent">
-          AZURE-PRIVATE-LINK
-          <span class='button_tally'>2</span>
-        </a>
-        
-        <a href='https://anktsrkr.github.io/tags/app-service-environment/' class=" post_tag post_tagcloud button button_translucent">
-          APP-SERVICE-ENVIRONMENT
+        <a href='https://anktsrkr.github.io/tags/azure-app-services/' class=" post_tag post_tagcloud button button_translucent">
+          AZURE-APP-SERVICES
           <span class='button_tally'>1</span>
         </a>
         
