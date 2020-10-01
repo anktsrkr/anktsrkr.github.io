@@ -1,8 +1,8 @@
 ---
 title: "Create a WebApp in App Service Environment" # Title of the blog post.
 date: 2020-09-30T01:00:00+05:30 # Date of post creation.
-description: "Deploy App Service Environment in Microsoft Azure" # Description used for search engine.
-featured: true # Sets if post is a featured post, making appear on the home page side bar.
+description: "Create a WebApp in App Service Environment" # Description used for search engine.
+featured: false # Sets if post is a featured post, making appear on the home page side bar.
 draft: false # Sets whether to render this page. Draft of true will not be rendered.
 toc: false # Controls if a table of contents should be generated for first-level links automatically.
 # menu: main
@@ -34,7 +34,7 @@ This post is continuation of a series about Azure App Service Environment (ASE v
 
 _This Post - Create a WebApp in App Service Environment_
 
-[Coming Soon - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](#)
+[Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem)
 
 [Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](#)
 
@@ -91,6 +91,6 @@ Let's go to any virtual machine hosted in any vnet and hit the URL - http://sand
 
 Try the same from On-premise, Hmm! it is also not working. 
 
-In the next post, we will try to resolve this DNS issue.
+In the [next post](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem), we will try to resolve this DNS issue.
 
 

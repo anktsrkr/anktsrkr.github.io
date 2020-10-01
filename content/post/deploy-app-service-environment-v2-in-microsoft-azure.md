@@ -1,7 +1,7 @@
 ---
 title: "Deploy App Service Environment (ASE v2) in Microsoft Azure" # Title of the blog post.
 date: 2020-09-26T01:00:00+05:30 # Date of post creation.
-description: "Deploy App Service Environment in Microsoft Azure" # Description used for search engine.
+description: "Deploy App Service Environment (ASE v2) in Microsoft Azure" # Description used for search engine.
 featured: true # Sets if post is a featured post, making appear on the home page side bar.
 draft: false # Sets whether to render this page. Draft of true will not be rendered.
 toc: false # Controls if a table of contents should be generated for first-level links automatically.
@@ -33,9 +33,9 @@ _This Post - Deploy App Service Environment in Microsoft Azure_
 
 [Create a WebApp in App Service Environment](/post/create-a-webapp-in-app-service-environment)
 
-[Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](#)
+[Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem)
 
-[Coming Soon - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](#)
+[Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](#)
 
 [Coming Soon - Add Custom Domain for App Service Environment Hosted WebApp](#)
 
