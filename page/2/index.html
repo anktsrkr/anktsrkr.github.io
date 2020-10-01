@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" data-figures="true" class="page">
-  <head>  <title>Connect an on-premises network to a Microsoft Azure - Part 1 | Ankit Sarkar</title>
+<html lang="en" data-figures="">
+  <head>  <title>Ankit Sarkar</title>
   <meta charset='utf-8'>
   <meta name="generator" content="Hugo 0.74.3" />
   <meta name = 'viewport' content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'>
@@ -12,20 +12,21 @@
   gtag('js', new Date());
   gtag('config', 'UA-176781214-1');
 </script>
+  
 <meta property = "og:locale" content = "en_US" />
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta name="robots" content="index, follow" />
 <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-<meta name="keywords" content="hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology ,azure firewall,connectivity between spoke,connectivity between spoke vnet using azure firewall,azure powershell,Point to Site, Site to Site,VPN">
-<meta name="description" content="Connect an on-premises network to a Microsoft Azure">
+
+<meta name="description" content="">
 <meta name = "twitter:card" content = "summary" />
 <meta name = "twitter:creator" content = "@anktsrkr">
-<meta name = "twitter:title" content = "Connect an on-premises network to a Microsoft Azure - Part 1" />
-<meta property = "og:url" content = "https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/" />
-<meta property = "og:title" content = "Connect an on-premises network to a Microsoft Azure - Part 1" />
-<meta property = "og:description" content = "Connect an on-premises network to a Microsoft Azure" />
-<meta property = "og:image" content = "https://anktsrkr.github.io/images/path/share.png" />
+<meta name = "twitter:title" content = "" />
+<meta property = "og:url" content = "https://anktsrkr.github.io/" />
+<meta property = "og:title" content = "" />
+<meta property = "og:description" content = "" />
+<meta property = "og:image" content = "https://anktsrkr.github.io/images/thumbnail.png" />
 <link rel='apple-touch-icon' sizes='180x180' href='https://anktsrkr.github.io/icons/apple-touch-icon.png'>
 <link rel='icon' type='image/png' sizes='32x32' href='https://anktsrkr.github.io/icons/favicon-32x32.png'>
 <link rel='icon' type='image/png' sizes='16x16' href='https://anktsrkr.github.io/icons/favicon-16x16.png'>
@@ -34,7 +35,7 @@
 <meta name="msapplication-TileColor" content="#002538">
 <meta name="theme-color" content="#002538">
 
-  <link rel='canonical' href='https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/'>
+  <link rel='canonical' href='https://anktsrkr.github.io/'>
 
     
 
@@ -49,9 +50,8 @@
   
   
     
-    
   
-  <body data-code="10" data-lines="false" id="documentTop">
+  <body data-code="7" data-lines="false" id="documentTop">
 
 <header class = 'nav_header' >
   <nav class = 'nav'>
@@ -69,7 +69,7 @@
       </div>
     </a>
     <div class = 'nav_body nav_body_left'>
-      <div class = 'nav_parent'>
+      <div class = 'nav_parent nav_active'>
         <a href = 'https://anktsrkr.github.io/' class = 'nav_item'>Home </a>
       </div>
       <div class = 'nav_parent'>
@@ -108,10 +108,19 @@
 </header>
 
     <main>
+
   
-<div class = 'grid-inverse wrap content'>
-  <article class='post_content'>
-    <h1 class='post_title'>Connect an on-premises network to a Microsoft Azure - Part 1</h1><div class = 'post_meta'>
+
+<div class='grid-inverse wrap content'>
+  <ul class='posts' id = 'posts'>
+      
+<li class = 'post_item'>
+  <div class = 'excerpt'>
+    <div class = 'excerpt_header'>
+      <h3 class = 'post_link'>
+        <a href='https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/'>Connect an on-premises network to a Microsoft Azure - Part 1</a>
+      </h3>
+      <div class = 'post_meta'>
   <svg class="icon">
     <use xlink:href="#calendar"></use>
   </svg>
@@ -154,52 +163,48 @@
 
 </div>
 
-    
-    <p>Hi Everyone!</p>
-<p>With this post, I&rsquo;ll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :</p>
-<p><em>This Post - Connect an on-premises network to a Microsoft Azure - Part 1</em></p>
-<p><a href="/post/connect-azure-with-your-on-prem-network-part-2">Connect an on-premises network to a Microsoft Azure - Part 2</a></p>
-<p><a href="/post/implementing-hub-spoke-network-topology-in-azure-part-1">Implementing Hub-Spoke network topology in Azure - Part 1</a></p>
-<p><a href="/post/implementing-hub-spoke-network-topology-in-azure-part-2">Implementing Hub-Spoke network topology in Azure - Part 2</a></p>
-<p><a href="/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a></p>
-<p><a href="/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure">Implementing Azure Firewall in Hub-Spoke network topology in Azure</a></p>
-<p>But before going into details of Hub-Spoke Topology, we will try to figure out why we need to extend an on-premise network to Microsoft Azure, then we will try to figure out what are the possible way we can establish the connection between on-premise network to Microsoft Azure.</p>
-<h3 id="why-do-we-need-hybrid-connections-">Why do we need hybrid connections ?</h3>
-<p>You have on-prem datacenter and management wants to migrate the workload into cloud to optimize cost. While migrating, there will be time where some of the resources are in cloud and some of the resources are in on-prem, in such scenario these resources need to talk also due to security and many other reasons user should always access the resources as <strong>Intranet</strong> resources.</p>
-<p>Also while migrating applications to public cloud you need to extend your identity system as well because you do not want manage same users differently. So, as you can see, there are many use cases to use hybrid connections, we will not deep dive into this, I just want to set the context of this post.</p>
-<h3 id="solution-for-connecting-on-prem-and-azure">Solution for connecting On-prem and Azure</h3>
-<p>Next step to connect with On-prem network with azure virtual network. Well in this case we really don&rsquo;t have much choices, Either you can use VPN connection or Azure Expressroute.</p>
-<h4 id="vpn-connection">VPN connection</h4>
-<p>This architecture is simple to configure and suitable for hybrid applications where the traffic between on-premises hardware and the cloud is likely to be light. To configure VPN gateway on-premises VPN device is required (for Site-to-Site). A VPN gateway is a type of virtual network gateway that sends encrypted traffic between an Azure virtual network and an on-prem location. The encrypted traffic goes over the public Internet. Hence there is slightly extended latency. One thing to remember here, Microsoft guarantees 99.9% availability for VPN Gateway, not for your network connection.</p>
-<h4 id="azure-expressroute">Azure ExpressRoute</h4>
-<p>Azure ExpressRoute creates private connections between Azure datacenters and infrastructure on your prem or in a colocation environment. ExpressRoute connections don&rsquo;t go over the public Internet and they offer more reliability, faster speeds and lower latencies than typical Internet connections. This architecture is suitable for hybrid applications running large-scale, mission-critical workloads that require a high degree of scalability. Creating an Azure ExpressRoute connection requires working with a third-party connectivity provider and can be complex to setup. The provider is responsible for provisioning the network connection. Microsoft guarantees  99.9% availability SLA across the entire connection.</p>
-<blockquote>
-<p>Please note, you can also combine Azure ExpressRoute and VPN connection for high availability. In case of connectivity loss in Expressroute circuit, Azure will be still reachable over VPN. Here you need to consider cost as it requires redundant hardware and a redundant Azure VPN Gateway connection.</p>
-</blockquote>
-<p>Exactly here, Hub-Spoke network topology comes in. A hub-spoke network topology is a way to isolate workloads while sharing services such as identity and security. The hub is a virtual network in Azure that acts as a central point of connectivity to your on-premises network. The spokes are VNets that peer with the hub. Shared services are deployed in the hub, while individual workloads are deployed as spokes.</p>
-<p>In my <a href="/post/connect-azure-with-your-on-prem-network-part-2">next post</a> we will create a Hub Vnet and try to connect on-prem with Hub Vnet.</p>
+    </div>
+    <div class = 'excerpt_footer partition'>
+      <div class = 'excerpt_thumbnail'>
+      <img src = 'https://anktsrkr.github.io/images/azure.png'>
+      </div>
+      
+        <div>
+          <p class = 'pale'>Hi Everyone!
+With this post, I&rsquo;ll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :
+This Post - Connect an on-premises network to a Microsoft Azure - Part 1
+Connect an on-premises network to a Microsoft Azure - Part 2 …</p>
+          <a href='https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/' class='excerpt_more button'>Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+  
+    <li>
+<ul class="pagination">
+  <li class="page-item">
+    <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+  </li>
+  <li class="page-item">
+    <a href="/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+  </li>
+  <li class="page-item">
+    <a class="page-link" href="/">1</a>
+  </li>
+  <li class="page-item active">
+    <a class="page-link" href="/page/2/">2</a>
+  </li>
+  <li class="page-item disabled">
+    <a  class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+  </li>
+  <li class="page-item">
+    <a href="/page/2/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+  </li>
+</ul>
 
-    <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "anktsrkr-github-io" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-  </article>
+
+    </li>
+  </ul>
 <aside class="sidebar">
   <section class="sidebar_inner">
     <h2>Ankit Sarkar</h2>
@@ -230,6 +235,9 @@
         <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
       </li>
     
+      <li>
+        <a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/" class="nav-link">Connect an on-premises network to a Microsoft Azure - Part 1</a>
+      </li>
     
     </ul>
     <h2 class="mt-4">Recent Posts</h2>
@@ -339,6 +347,8 @@
 </aside>
 
 </div>
+
+
     </main><svg width="0" height="0" class="hidden">
   <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="facebook">
     <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h151V331h-60v-90h60v-61c0-49.629 40.371-90 90-90h91v90h-91v61h91l-15 90h-76v181h121c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zm0 0"></path>

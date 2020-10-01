@@ -18,13 +18,13 @@
 <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 <meta name="keywords" content="ase,app service, app service env, app service env v2,app service environment,app service environment v2,deploy application in app service environment,app service environment and private link, ase in hub spoke,hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology,app service environment and private endpoint,azure sql, azure sql and private endpoint,azure private dns zone, resolve azure internal DNS from your on prem,hub spoke dns forwarder,dns forwarder in hub spoke,dns forwarder in hub spoke network topology,dns forwarder">
-<meta name="description" content="Deploy App Service Environment in Microsoft Azure">
+<meta name="description" content="Create a WebApp in App Service Environment">
 <meta name = "twitter:card" content = "summary" />
 <meta name = "twitter:creator" content = "@anktsrkr">
 <meta name = "twitter:title" content = "Create a WebApp in App Service Environment" />
 <meta property = "og:url" content = "https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/" />
 <meta property = "og:title" content = "Create a WebApp in App Service Environment" />
-<meta property = "og:description" content = "Deploy App Service Environment in Microsoft Azure" />
+<meta property = "og:description" content = "Create a WebApp in App Service Environment" />
 <meta property = "og:image" content = "https://anktsrkr.github.io/images/ase.png" />
 <link rel='apple-touch-icon' sizes='180x180' href='https://anktsrkr.github.io/icons/apple-touch-icon.png'>
 <link rel='icon' type='image/png' sizes='32x32' href='https://anktsrkr.github.io/icons/favicon-32x32.png'>
@@ -165,7 +165,7 @@
 <p>This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :</p>
 <p><a href="/post/deploy-app-service-environment-v2-in-microsoft-azure">Deploy App Service Environment in Microsoft Azure</a></p>
 <p><em>This Post - Create a WebApp in App Service Environment</em></p>
-<p><a href="#">Coming Soon - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</a></p>
+<p><a href="/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem">Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</a></p>
 <p><a href="#">Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</a></p>
 <p><a href="#">Coming Soon - Add Custom Domain for App Service Environment Hosted WebApp</a></p>
 <p><a href="#">Coming Soon - Manage SSL Certificate for App Service Environment Hosted WebApp with Custom Domain</a></p>
@@ -199,7 +199,7 @@
 <p>Let&rsquo;s go to any virtual machine hosted in any vnet and hit the URL - <a href="http://sandbox.intranet.appserviceenvironment.net">http://sandbox.intranet.appserviceenvironment.net</a>, seems not working.
 <img src="/images/ase/unable_webapp.jpg" alt="Unable to resolve DNS"></p>
 <p>Try the same from On-premise, Hmm! it is also not working.</p>
-<p>In the next post, we will try to resolve this DNS issue.</p>
+<p>In the <a href="/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem">next post</a>, we will try to resolve this DNS issue.</p>
 
     <div id="disqus_thread"></div>
 <script type="application/javascript">
@@ -232,7 +232,6 @@
     <h2 class="mt-4">Featured Posts</h2>
     <ul>
     
-    
       <li>
         <a href="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" class="nav-link">Deploy App Service Environment (ASE v2) in Microsoft Azure</a>
       </li>
@@ -262,6 +261,9 @@
     <ul class="flex-column">
       
       <li>
+        <a href="https://anktsrkr.github.io/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem/" class="nav-link">Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</a>
+      </li>
+      <li>
         <a href="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" class="nav-link">Deploy App Service Environment (ASE v2) in Microsoft Azure</a>
       </li>
       <li>
@@ -279,9 +281,6 @@
       <li>
         <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 2</a>
       </li>
-      <li>
-        <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/" class="nav-link">Implementing Hub-Spoke network topology in Azure - Part 1</a>
-      </li>
     </ul> 
     
     <div>
@@ -289,12 +288,12 @@
       <nav class="tags_nav">
         <a href='https://anktsrkr.github.io/categories/hub-spoke-topology/' class=" post_tag post_tagcloud button button_translucent">
           HUB-SPOKE-TOPOLOGY
-          <span class='button_tally'>10</span>
+          <span class='button_tally'>11</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/cloud/' class=" post_tag post_tagcloud button button_translucent">
           CLOUD
-          <span class='button_tally'>9</span>
+          <span class='button_tally'>10</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/azure-architecture/' class=" post_tag post_tagcloud button button_translucent">
@@ -304,12 +303,12 @@
         
         <a href='https://anktsrkr.github.io/categories/app-service-environment/' class=" post_tag post_tagcloud button button_translucent">
           APP-SERVICE-ENVIRONMENT
-          <span class='button_tally'>2</span>
+          <span class='button_tally'>3</span>
         </a>
         
         <a href='https://anktsrkr.github.io/categories/azure-sql/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-SQL
-          <span class='button_tally'>2</span>
+          <span class='button_tally'>3</span>
         </a>
         
         
@@ -321,7 +320,7 @@
       <nav class="tags_nav">
         <a href='https://anktsrkr.github.io/tags/azure/' class=" post_tag post_tagcloud button button_translucent">
           AZURE
-          <span class='button_tally'>10</span>
+          <span class='button_tally'>11</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/networking/' class=" post_tag post_tagcloud button button_translucent">
@@ -331,27 +330,27 @@
         
         <a href='https://anktsrkr.github.io/tags/azure-private-dns-zone/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-PRIVATE-DNS-ZONE
-          <span class='button_tally'>4</span>
+          <span class='button_tally'>5</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/azure-private-link/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-PRIVATE-LINK
-          <span class='button_tally'>3</span>
+          <span class='button_tally'>4</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/app-service-environment/' class=" post_tag post_tagcloud button button_translucent">
           APP-SERVICE-ENVIRONMENT
+          <span class='button_tally'>3</span>
+        </a>
+        
+        <a href='https://anktsrkr.github.io/tags/azure-app-services/' class=" post_tag post_tagcloud button button_translucent">
+          AZURE-APP-SERVICES
           <span class='button_tally'>2</span>
         </a>
         
         <a href='https://anktsrkr.github.io/tags/azure-firewall/' class=" post_tag post_tagcloud button button_translucent">
           AZURE-FIREWALL
           <span class='button_tally'>2</span>
-        </a>
-        
-        <a href='https://anktsrkr.github.io/tags/azure-app-services/' class=" post_tag post_tagcloud button button_translucent">
-          AZURE-APP-SERVICES
-          <span class='button_tally'>1</span>
         </a>
         
         
