@@ -36,7 +36,7 @@ _This Post - Create a WebApp in App Service Environment_
 
 [Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem)
 
-[Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](#)
+[Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint)
 
 [Coming Soon - Add Custom Domain for App Service Environment Hosted WebApp](#)
 
