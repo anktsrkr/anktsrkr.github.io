@@ -6,10 +6,24 @@
     <description>Recent content in Posts on Ankit Sarkar</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright © 2020, Ankit Sarkar; all rights reserved.</copyright>
-    <lastBuildDate>Thu, 01 Oct 2020 01:00:00 +0530</lastBuildDate>
+    <lastBuildDate>Sun, 04 Oct 2020 01:00:00 +0530</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</title>
+      <link>https://anktsrkr.github.io/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/</link>
+      <pubDate>Sun, 04 Oct 2020 01:00:00 +0530</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/</guid>
+      <description>Hi Everyone!
+This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
+Deploy App Service Environment in Microsoft Azure
+Create a WebApp in App Service Environment
+Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
+This Post - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+    </item>
     
     <item>
       <title>Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</title>
@@ -22,7 +36,7 @@ This post is continuation of a series about Azure App Service Environment (ASE v
 Deploy App Service Environment in Microsoft Azure
 Create a WebApp in App Service Environment
 This Post - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
     
     <item>
@@ -36,7 +50,7 @@ This post is continuation of a series about Azure App Service Environment (ASE v
 Deploy App Service Environment in Microsoft Azure
 This Post - Create a WebApp in App Service Environment
 Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
     
     <item>
@@ -50,7 +64,7 @@ With this post, I&amp;rsquo;ll start a new series about Azure App Service Enviro
 This Post - Deploy App Service Environment in Microsoft Azure
 Create a WebApp in App Service Environment
 Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Coming Soon - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
     
     <item>
