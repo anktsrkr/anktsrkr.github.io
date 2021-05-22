@@ -1,6 +1,6 @@
 ---
 title: "Add Custom Domain for App Service Environment Hosted WebApp" # Title of the blog post.
-date: 2020-10-04T01:00:00+05:30 # Date of post creation.
+date: 2021-05-22T01:00:00+05:30 # Date of post creation.
 description: "Add Custom Domain for App Service Environment Hosted WebApp" # Description used for search engine.
 featured: false # Sets if post is a featured post, making appear on the home page side bar.
 draft: false # Sets whether to render this page. Draft of true will not be rendered.
