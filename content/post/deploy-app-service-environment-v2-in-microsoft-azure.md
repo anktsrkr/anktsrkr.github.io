@@ -37,7 +37,7 @@ _This Post - Deploy App Service Environment in Microsoft Azure_
 
 [Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint)
 
-[Coming Soon - Add Custom Domain for App Service Environment Hosted WebApp](#)
+[Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
 
 [Coming Soon - Manage SSL Certificate for App Service Environment Hosted WebApp with Custom Domain](#)
 

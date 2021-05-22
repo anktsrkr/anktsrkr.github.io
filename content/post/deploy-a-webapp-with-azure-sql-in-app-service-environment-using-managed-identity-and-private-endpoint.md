@@ -38,7 +38,7 @@ This post is continuation of a series about Azure App Service Environment (ASE v
 
 _This Post - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint_
 
-[Coming Soon - Add Custom Domain for App Service Environment Hosted WebApp](#)
+[Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
 
 [Coming Soon - Manage SSL Certificate for App Service Environment Hosted WebApp with Custom Domain](#)
 
@@ -124,7 +124,7 @@ Once deployed, open Postman to check if WebApp is running correctly or not by cr
 
 ![Get a User](/images/ase/user_get.jpg)
 
-Everything is working! So, in this post we have migrated a application in App Service along with Azure Sql which is using Private Endpoint. Also App Service is not using any credentials to connect to Azure Sql instead it is using system assigned managed identity to secure the application. 
+Everything is working! So, in this post we have migrated an application in App Service along with Azure Sql which is using Private Endpoint. Also App Service is not using any credentials to connect to Azure Sql instead it is using system assigned managed identity to secure the application. 
 
-However, the requirement is to run the application with custom domain over https. In the next post we will see how we can configure custom domain for this WebApp and access it.
+However, the requirement is to run the application with custom domain over https. In the [next post](/post/add-custom-domain-for-app-service-environment-hosted-webapp) we will see how we can configure custom domain for this WebApp and access it.
 

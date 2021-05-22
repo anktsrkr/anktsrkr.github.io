@@ -38,7 +38,7 @@ _This Post - Access App Service Environment Hosted WebApp from Azure Network and
 
 [Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint)
 
-[Coming Soon - Add Custom Domain for App Service Environment Hosted WebApp](#)
+[Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
 
 [Coming Soon - Manage SSL Certificate for App Service Environment Hosted WebApp with Custom Domain](#)
 
@@ -89,7 +89,7 @@ Let's see the certificate provided by Azure, seems working!
 Also,check the scm site.
 ![SCM is accessible](/images/ase/scm_acessible.jpg)
 
-All looks good finally. In the next post we will create a new webapp with Azure Sql and deploy it through Visual Studio.
+All looks good finally. In the [next post](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint) we will create a new webapp with Azure Sql and deploy it through Visual Studio.
 
 
 
