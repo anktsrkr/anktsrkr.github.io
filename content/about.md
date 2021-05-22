@@ -24,7 +24,7 @@ contributed for distributed lock provider based on [Azure Blob](https://github.c
 [AspNetCoreCertificates ](https://github.com/damienbod/AspNetCoreCertificates)[![GitHub stars](https://img.shields.io/github/stars/damienbod/AspNetCoreCertificates.svg?style=social&label=Star&maxAge=2592000)](https://github.com/damienbod/AspNetCoreCertificates/) - is a package which makes it easy to create certificates which can be used to in client server authentication and IoT Devices like Azure IoT Hub.Recently, contributed for [Common OIDs](https://github.com/damienbod/AspNetCoreCertificates/issues/26).
 
 
-Recently, I earned below certificates from Microsoft-
+Recently, I earned below certificates from Microsoft -
 
 ![](/images/about/azure_solutions_architect_expert.png)            ![](/images/about/azure_expert_devOps_engineer.png)            ![](/images/about/azure_developer_associate.png)            ![](/images/about/azure_fundamentals.png)
 
