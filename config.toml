@@ -29,7 +29,7 @@ disqusShortname = "anktsrkr-github-io"
 author = "Ankit Sarkar"
 twitter = "@anktsrkr"
 largeTwitterCard = false # set to true if you want to show a large twitter card image. The default is a small twitter card image
-introDescription = "Software Engineer By Profession"
+introDescription = "Technical Lead, Microsoft Certified Azure Solutions Architect Expert"
 
 # Google analytics Id
 ga_analytics = "UA-176781214-1"
