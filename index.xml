@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>About</title>
+      <link>https://anktsrkr.github.io/about/</link>
+      <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://anktsrkr.github.io/about/</guid>
+      <description>My name is Ankit Sarkar, Technical Architect by profession. I am from Kolkata, India. Recently,I moved to Nottingham, United Kindom for my new assignment.
+I have a Bachelor&amp;rsquo;s degree in Electronics and Communication and around 9 years of experience working on .NET technologies and Microsoft Azure.
+In my day job at Tata Consultancy Services (TCS), mainly focused on cloud migration and modernization of legacy applications. This allows me to give various application specific solutions based on Microsoft Azure services for business critical applications.</description>
+    </item>
+    
+    <item>
       <title>Add Custom Domain for App Service Environment Hosted WebApp</title>
       <link>https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
@@ -169,17 +180,6 @@ Connect an on-premises network to a Microsoft Azure - Part 1
 This Post - Connect an on-premises network to a Microsoft Azure - Part 2
 Implementing Hub-Spoke network topology in Azure - Part 1
 Implementing Hub-Spoke network topology in Azure - Part 2</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>https://anktsrkr.github.io/about/</link>
-      <pubDate>Sat, 05 Sep 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://anktsrkr.github.io/about/</guid>
-      <description>My name is Ankit Sarkar, Technical Lead/Architect by profession. I&amp;rsquo;m based in Kolkata, India.
-I have a Bachelor&amp;rsquo;s degree in Electronics and Communication and around 8+ years of experience working on .NET technologies and Microsoft Azure.
-In my day job at Tata Consultancy Services (TCS), mainly focused on cloud migration and modernization of legacy applications. This allows me to give various application specific solutions based on Microsoft Azure services for business critical applications.</description>
     </item>
     
     <item>
