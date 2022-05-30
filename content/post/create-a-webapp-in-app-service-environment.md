@@ -40,8 +40,6 @@ _This Post - Create a WebApp in App Service Environment_
 
 [Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
 
-[Coming Soon - Manage SSL Certificate for App Service Environment Hosted WebApp with Custom Domain](#)
-
 In the [previous post](/post/deploy-app-service-environment-v2-in-microsoft-azure) we have deployed the ASE. In this post we will see how to create a new webapp, so let's get started. 
 
 First thing first. We need to create a new App Service Plan to deploy a webapp. There is no special steps which is required to deploy a webapp in ASE. However, the main difference between deploying a webapp in ASE and a webapp in multi-tenant is `Region` selection. 
