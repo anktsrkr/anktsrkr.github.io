@@ -40,8 +40,6 @@ _This Post - Deploy a WebApp with Azure Sql in App Service Environment using Man
 
 [Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
 
-[Coming Soon - Manage SSL Certificate for App Service Environment Hosted WebApp with Custom Domain](#)
-
 In the [previous post](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem) we have configured DNS, now we are able to access the website from both on-premise and azure network. 
 
 In this blog post, we are going to migrate a on-prem User Directory application to Azure. This application is build with ASP.NET and Database is in Sql Server. Since we are moving to cloud our choice is to move the web application in WebApp hosted in ASE and we will move database in Azure SQL.

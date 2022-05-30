@@ -39,8 +39,6 @@ _This Post - Deploy App Service Environment in Microsoft Azure_
 
 [Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
 
-[Coming Soon - Manage SSL Certificate for App Service Environment Hosted WebApp with Custom Domain](#)
-
 Before going into deep details about App Service Environment (v2), we will first look into what is it, when to use it and what are different type of ASE exists in Microsoft Azure. Please note, _I am not reinventing the wheel_, so many of use cases and definitions are actually taken from Microsoft Docs and I have given the link reference where needed 😊. A lot of things to cover, let's get started.
 
 ## What is App Service Environment?

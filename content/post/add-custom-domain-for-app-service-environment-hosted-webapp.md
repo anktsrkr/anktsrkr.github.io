@@ -40,8 +40,6 @@ This post is continuation of a series about Azure App Service Environment (ASE v
 
 _This Post - Add Custom Domain for App Service Environment Hosted WebApp_
 
-[Coming Soon - Manage SSL Certificate for App Service Environment Hosted WebApp with Custom Domain](#)
-
 In the [previous post](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint) we have migrated a webapp in App Service we are able to access it using subdomain of ase environment.However, our requirement is to set custom domain to access the website. However we will still use ase subdomain to access kudu. Let's get started. 
 
 We will assume, Business wants to access the website using `https://demoapp.internal.xyz`. If you already have `internal.xyz` DNS zone in your own DNS server then you can just add `demoapp` as __CNAME__ that points to `sandbox.intranet.appserviceenvironment.net` else create a DNS zone and after that add CNAME.
@@ -102,8 +100,7 @@ To access your app using new domain `demoapp.internal.xyz`, go to your on-prem s
 
 ![Site is accessible using custom domain](/images/ase/site_is_accessible.jpg)
 
-But Wait! did you noticed that the webapp is not using `https`? which is one of our Business requirement, right? So let's fix the issue, in the next post.
-
+But Wait! did you noticed that the webapp is not using `https`? which is one of our Business requirement, right? We will fix the issue some day!
 
 
 

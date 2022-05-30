@@ -1,14 +1,14 @@
 +++
 title = "About"
 description = "About Ankit Sarkar"
-date = "2020-09-05"
+date = "2022-05-30"
 aliases = ["about-us", "about-ankit-sarkar", "contact"]
 author = "Ankit Sarkar"
 +++
 
-My name is Ankit Sarkar, Technical Lead/Architect by profession. I'm based in Kolkata, India.
+My name is Ankit Sarkar, Technical Architect by profession. I am from Kolkata, India. Recently,I moved to Nottingham, United Kindom for my new assignment. 
 
-I have a Bachelor's degree in Electronics and Communication and around 8+ years of experience working on .NET technologies and Microsoft Azure.
+I have a Bachelor's degree in Electronics and Communication and around 9 years of experience working on .NET technologies and Microsoft Azure.
 
 In my day job at [Tata Consultancy Services (TCS)](https://www.tcs.com/), mainly focused on cloud migration and modernization of legacy applications. This allows me to give various application specific solutions based on [Microsoft Azure](https://azure.microsoft.com/en-us/) services for business critical applications. 
 
