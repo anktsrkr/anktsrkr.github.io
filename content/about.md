@@ -1,5 +1,5 @@
 +++
-title = "About"
+title = "Hi there 👋"
 description = "About Ankit Sarkar"
 date = "2022-05-30"
 aliases = ["about-us", "about-ankit-sarkar", "contact"]
@@ -26,10 +26,10 @@ contributed for distributed lock provider based on [Azure Blob](https://github.c
 
 Recently, I earned below certificates from Microsoft -
 
-![](/images/about/azure_solutions_architect_expert.png)            ![](/images/about/azure_expert_devOps_engineer.png)            ![](/images/about/azure_developer_associate.png)            ![](/images/about/azure_fundamentals.png)
-
-
-
+{{< image classes="fig-25" src="//images.credly.com/size/340x340/images/987adb7e-49be-4e24-b67e-55986bd3fe66/azure-solutions-architect-expert-600x600.png" >}} 
+{{< image classes="fig-25" src="//images.credly.com/size/340x340/images/c3ab66f8-5d59-4afa-a6c2-0ba30a1989ca/CERT-Expert-DevOps-Engineer-600x600.png" >}} 
+{{< image classes="fig-25" src="//images.credly.com/size/340x340/images/63316b60-f62d-4e51-aacc-c23cb850089c/azure-developer-associate-600x600.png" >}}
+{{< image classes="fig-25" src="///images.credly.com/size/340x340/images/be8fcaeb-c769-4858-b567-ffaaa73ce8cf/image.png" >}}
 
 
  If you want to see full list of badges, please visit [Credly](https://www.credly.com/users/sarkaran/badges). Thank you!

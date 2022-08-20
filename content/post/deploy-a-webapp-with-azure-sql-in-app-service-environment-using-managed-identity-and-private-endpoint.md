@@ -24,6 +24,7 @@ tags:
   - Azure Private link
   - Azure App Services
 keywords: "dns configuration ASE,ase,app service, app service env, app service env v2,app service environment,app service environment v2,deploy application in app service environment,app service environment and private link, ase in hub spoke,hub spoke,hub spoke network,hub spoke network topology,azure hub spoke,azure hub spoke network,azure hub spoke network topology,app service environment and private endpoint,azure sql, azure sql and private endpoint,azure private dns zone, resolve azure internal DNS from your on prem,hub spoke dns forwarder,dns forwarder in hub spoke,dns forwarder in hub spoke network topology,dns forwarder"
+syntaxHighlighter: "highlight.js"
 ---
 
 Hi Everyone!
@@ -79,18 +80,16 @@ Below are changes we will do in `web.config`.
 ###### Add SqlAuthenticationProviders
 
 Add `SqlAuthenticationProviders` tag under configuration.
-{{< highlight xml >}}
-<SqlAuthenticationProviders>
+{{< codeblock "web.config" "xml">}}<SqlAuthenticationProviders>
     <providers>
       <add name="Active Directory Interactive" type="Microsoft.Azure.Services.AppAuthentication.SqlAppAuthenticationProvider, Microsoft.Azure.Services.AppAuthentication" />
     </providers>
   </SqlAuthenticationProviders>
-{{< /highlight >}}
+{{< /codeblock >}}
 
 ###### Change ConnectionString
-{{< highlight xml >}}
-  <add name="MyDbConnection" connectionString= "server=tcp:cloudsandbox.database.windows.net;database=demodb;UID=AnyString;Authentication=Active Directory Interactive" providerName="System.Data.SqlClient"/>
-{{< /highlight >}}
+{{< codeblock "web.config" "xml">}}<add name="MyDbConnection" connectionString= "server=tcp:cloudsandbox.database.windows.net;database=demodb;UID=AnyString;Authentication=Active Directory Interactive" providerName="System.Data.SqlClient"/>
+{{< /codeblock >}}
 Now, it's time to create system assigned user which is always WebApp name in our case `sandbox` in Azure Sql, also we will need to give required permission `db_datareader`, `db_datawriter`, `db_ddladmin`.
 
 We need to login with _Active Directory Admin_.
@@ -98,13 +97,12 @@ We need to login with _Active Directory Admin_.
 ![Login Azure SQL With Active Directory Admin](/images/ase/login_ada.jpg)
 
 Then create the user and give permission.
-{{< highlight sql >}}
-CREATE USER sandbox FROM EXTERNAL PROVIDER;
+{{< codeblock "create_user.sql" "sql">}}CREATE USER sandbox FROM EXTERNAL PROVIDER;
 ALTER ROLE db_datareader ADD MEMBER sandbox;
 ALTER ROLE db_datawriter ADD MEMBER sandbox;
 ALTER ROLE db_ddladmin ADD MEMBER sandbox;
 GO
-{{< /highlight >}}
+{{< /codeblock >}}
 
 It's time to publish the WebApp using Visual Studio. To do that Right click on the solution and click on publish. A popup will come. Select `Azure` as _Target_ and click on _Next_.
 

@@ -37,8 +37,7 @@ What about spokes vnet? Since they are not linked with private DNS zone they wil
 To resolve this issue, we need to deploy DNS forwarder in Azure which will be responsible for resolving all the DNS queries via a server-level forwarder to the Azure-provided DNS `168.63.129.16`. Since this is common service we are going to deploy it in `ManagementSubnet` of `hub-vnet`. 
 
 We will start by creating Private DNS Zone which will be linked `hub-vnet`. For this demo, I am assuming you already have hub-spoke topology setup and connected with on-premise over VPN.
-{{< highlight powershell >}}
-$ResourceGroupName = "dns-sandbox"
+{{< codeblock "create_dns_zone_and_link.ps1" "cs" >}}$ResourceGroupName = "dns-sandbox"
 $ZoneName ="virtualmachine.internal"
 $hubVnet = Get-AzVirtualNetwork `
               -Name "hub-vnet"
@@ -53,13 +52,12 @@ $link  = New-AzPrivateDnsVirtualNetworkLink `
             -Name "LinkWithHub" `
             -EnableRegistration `
             -VirtualNetworkId $hubVnet.Id
-{{< /highlight >}}
+{{< /codeblock >}}
 Here I am taking Zone name as `virtualmachine.internal`, which means all the virtual machine created in `hub-vnet` will have dns name like `*.virtualmachine.internal`. Also I have enabled auto registration for this vnet which means any vm created in this vnet will be auto registered with this zone. Auto registration works only for virtual machines. For all other resources, you can create DNS records manually in the private DNS zone linked to the virtual network. Please note, you can enable auto registration process for vnet only for single zone. Once completed, go to resource group from azure portal, click on newly created on private DNS zone and you should have something like this - 
 ![Private DNS Zone linked with hub-vnet](/images/azure-private-dns-zone/private-dns-zone-linked-hubvnet.jpg)
 
 As I mentioned earlier, we will need DNS forwarder in `hub-vnet`. Let's create that now with DNS feature enabled.
-{{< highlight powershell >}}
-$LocationName = "centralindia"
+{{< codeblock "create_dns_forwarder.ps1" "cs" >}}$LocationName = "centralindia"
 $ResourceGroupName = "vm-sandbox"
 $VMName = "DNSForwarder"
 $ComputerName = $VMName
@@ -171,7 +169,7 @@ Set-AzVMExtension `
         -Publisher "Microsoft.Compute" `
         -ExtensionType "CustomScriptExtension" -TypeHandlerVersion 1.4 `
         -SettingString $PublicSettings -Location $LocationName
-{{< /highlight >}}
+{{< /codeblock >}}
 Once completed, go to Private DNS Zone dashboard from Azure Portal, and you will see there is `A` record added for this vm automatically. Thanks to AutoRegistered! If you delete this vm, this record will be deregister automatically as well. 
 
 Now connect with this VM from on-prem (assuming you have connected with VPN) and try to connect with `dnsforwarder.virtualmachine.internal`. Oops! unable to connect. We will get back to this later. but for now lets connect with private ip. 
@@ -190,8 +188,7 @@ Add Azure DNS `168.63.129.16` and click on OK.
 We just setup a DNS forwarder, this will help us to resolute any domain name from Azure DNS by azure recursive resolver.
 
 Next step to setup this DNS forwarder server for all virtual networks so that all the domain name resolution should be done using this server only.
-{{< highlight powershell >}}
-$dnsserver = "10.10.1.4"
+{{< codeblock "change_dns_server.ps1" "cs" >}}$dnsserver = "10.10.1.4"
 
 $hubVnet = Get-AzVirtualNetwork `
               -Name "hub-vnet"
@@ -214,7 +211,7 @@ $spoke2Vnet = Get-AzVirtualNetwork `
 $spoke2Vnet.DhcpOptions.DnsServers.Clear();
 $spoke2Vnet.DhcpOptions.DnsServers.Add($dnsserver)
 Set-AzVirtualNetwork -VirtualNetwork $spoke2Vnet
-{{< /highlight >}}
+{{< /codeblock >}}
 You need to restart all servers to take this effect. Also you need to delete the existing Point to Site VPN Gateway and reinstall it.
 
 Now connect your VPN and connect the vm using DNS this time (I will assume you do not have any local DNS server setup). 
