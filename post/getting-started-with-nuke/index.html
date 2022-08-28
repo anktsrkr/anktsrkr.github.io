@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast",
+  "description":"Getting Started with Nuke.",
+  "url":"https:\/\/anktsrkr.github.io\/post\/getting-started-with-nuke\/",
+  "keywords":"[nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github nuget]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast">
+<meta name="keywords" content="nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github nuget">
+<meta name="description" content="Getting Started with Nuke.">
+
+
+<meta property="og:description" content="Getting Started with Nuke.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting Started with Nuke">
+<meta name="twitter:title" content="Getting Started with Nuke">
+<meta property="og:url" content="https://anktsrkr.github.io/post/getting-started-with-nuke/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/getting-started-with-nuke/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast">
+<meta property="og:description" content="Getting Started with Nuke.">
+<meta name="twitter:description" content="Getting Started with Nuke.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2022-08-28T11:07:35">
+  
+  
+    <meta property="article:modified_time" content="2022-08-28T11:07:35">
+  
+  
+  
+    
+      <meta property="article:section" content="CI/CD">
+    
+      <meta property="article:section" content="Nuke">
+    
+      <meta property="article:section" content="C#">
+    
+      <meta property="article:section" content=".NET 6">
+    
+      <meta property="article:section" content="Nuget">
+    
+      <meta property="article:section" content="Github Action">
+    
+  
+  
+    
+      <meta property="article:tag" content="nuke">
+    
+      <meta property="article:tag" content="automation">
+    
+      <meta property="article:tag" content="ci/cd">
+    
+      <meta property="article:tag" content=".net6">
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="github action">
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="aspnetcore">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan_full.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan_full.png">
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png">
+
+
+    <title>Getting Started with Nuke</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/getting-started-with-nuke/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('/images/nuke/nuke_plan_full.png')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title">
+      Getting Started with Nuke
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2022-08-28T11:07:35&#43;01:00">
+        
+  August 28, 2022
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/ci/cd">CI/CD</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/nuke">Nuke</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/c">C#</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-6">.NET 6</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/nuget">Nuget</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/github-action">Github Action</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p>Hi Everyone!</p>
+<p>With this post, I am starting a new series about a build automation tool called <strong><span class="highlight-text cyan">Nuke</span></strong> . Over the time, I will updated this page with links to individual posts :</p>
+<p><em>This Post - Getting Started with Nuke</em></p>
+<p><a href="#">Coming Soon - Write your first building block in Nuke</a></p>
+<p><a href="#">Coming Soon - Manage your Package Version using Nuke</a></p>
+<p><a href="#">Coming Soon - Publish your Package to Github, Myget and Nuget using Nuke</a></p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#what-we-are-going-to-build">What we are going to build?</a>
+          <ul>
+            <li><a href="#what-is-nuke">What is Nuke?</a></li>
+            <li><a href="#what-is-github-actions">What is Github Actions?</a></li>
+          </ul>
+        </li>
+        <li><a href="#getting-started">Getting Started</a>
+          <ul>
+            <li><a href="#install-nuke-global-tool">Install Nuke global tool</a></li>
+            <li><a href="#install-extension-for-your-ide">Install Extension for your IDE</a>
+              <ul>
+                <li><a href="#jetbrains-rider">JetBrains Rider</a></li>
+                <li><a href="#microsoft-visual-studio">Microsoft Visual Studio</a></li>
+              </ul>
+            </li>
+            <li><a href="#setup-your-first-nuke-build-project">Setup your first Nuke build project</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="what-we-are-going-to-build">What we are going to build?</h2>
+<p>In this series of posts we are going to build yet another<code>Hello World</code> C# library! Sounds interesting?  😇</p>
+<p>No! right? Well, we are going to build,pack and deploy the library using <strong><span class="highlight-text cyan">Nuke!</span></strong> and to automate the process we are going to use <strong><span class="highlight-text blue">Github Actions</span></strong> as our workflow automation tool.</p>
+<p>So, without further ado, lets get started!</p>
+<h3 id="what-is-nuke">What is Nuke?</h3>
+<p><strong><span class="highlight-text cyan">Nuke</span></strong> is a build automation library that is bootstrapped with simple  <strong><span class="highlight-text orange">.NET console applications </span></strong> and build steps that are defined as regular C# properties. Some of the key features of  <strong><span class="highlight-text cyan">Nuke</span></strong> are:</p>
+<ol>
+<li>No Need to write any XML or YAML files for your pipeline, just annotate your Build class with attribute, Nuke will do the rest!</li>
+<li><strong><span class="highlight-text cyan">Nuke</span></strong> is a cross-platform build automation tool, it can be used on Windows, Linux and Mac.</li>
+<li><strong><span class="highlight-text cyan">Nuke</span></strong> is a C# based build automation tool, so you can use all the power of C# to write your build steps.</li>
+<li>Make your build steps reusable by creating your own building blocks.</li>
+<li><strong><span class="highlight-text cyan">Nuke</span></strong> takes <em>Fail Fast</em> approach, if any of the build step fails, it will stop the execution of the build.</li>
+<li>Last but not the least,  <strong><span class="highlight-text cyan">Nuke</span></strong> has first class support for your IDE. You can use Visual Studio, Rider or VS Code to write your build steps. Features like code-completion, navigation, refactorings, and debugging are supported out-of-the-box!</li>
+</ol>
+<h3 id="what-is-github-actions">What is Github Actions?</h3>
+<p><strong><span class="highlight-text blue">Github Actions</span></strong> is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline.</p>
+<p><strong><span class="highlight-text blue">Github Actions</span></strong> gives developers the ability to automate their workflows across issues, pull requests, and more—plus native CI/CD functionality.</p>
+<p>In our case, we are going to use <strong><span class="highlight-text blue">Github Actions</span></strong> to run our <strong><span class="highlight-text cyan">Nuke</span></strong> build script.</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>Before we start, Let us create some branches in our repository. We are going to use the following branches in our repository:</p>
+<ol>
+<li>
+<p><strong><span class="highlight-text green">main</span></strong> - This is our main branch, we will use this branch to publish the package in <strong>Nuget</strong> with actual version number for public users.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text yellow">release/**</span></strong> - This is our release branch, we will use this branch to publish the pre relase version to <strong>Myget</strong> with <em>beta</em> tag for public users.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text red">dev</span></strong> - This is our development branch, we will use this branch to publish the pre relase version to <strong>Github Feed</strong> with <em>alpha</em> tag for internal users.
+Bonus:</p>
+</li>
+</ol>
+<div class="alert info no-icon ">
+  <p><strong>Github Feed</strong> is a private feed that is created by Github for each repository. We can use this feed to publish our package to our internal users.</p>
+</div>
+<p>Once we have the branches, we are ready to start our journey with <strong><span class="highlight-text cyan">Nuke</span></strong>.</p>
+<h3 id="install-nuke-global-tool">Install Nuke global tool</h3>
+<p><strong><span class="highlight-text cyan">Nuke</span></strong> comes with a .NET global tool that provides a comfortable way to setup and execute your build projects right from your terminal. In this series I am going to use <strong><span class="highlight-text orange">Window terminal</span></strong> to setup everything.
+Use below command to install <strong><span class="highlight-text cyan">Nuke</span></strong> global tool:</p>
+<p>
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">dotnet tool install Nuke.GlobalTool --global</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+From now on you can use the global tool to:</p>
+<ul>
+<li>Set up new builds</li>
+<li>Run existing builds</li>
+<li>Leverage shell completion</li>
+<li>Add tool &amp; library packages</li>
+<li>Navigate around root directories</li>
+<li>Convert CAKE build scripts</li>
+<li>Manage secrets in parameter files</li>
+</ul>
+<h3 id="install-extension-for-your-ide">Install Extension for your IDE</h3>
+<p>I am going to show you how to use <strong><span class="highlight-text cyan">Nuke</span></strong> with <strong><span class="highlight-text orange">Rider</span></strong> and <strong><span class="highlight-text orange">Visual Studio</span></strong>.</p>
+<h4 id="jetbrains-rider">JetBrains Rider</h4>
+<p>In  <strong><span class="highlight-text orange">Rider</span></strong> you can install the <a href="https://plugins.jetbrains.com/plugin/10803-nuke-support"><em><span class="highlight-text cyan">Nuke Support plugin</span></em></a> to be more productive in writing, running, and debugging your builds.</p>
+<p>Once you installed the plugin, you can click the gutter icon next to your targets or hit Alt + Enter from inside their declaration to run and debug them. The top-level item starts a normal execution including all dependencies. From the submenu, you can debug and run/debug without dependencies:
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/nuke/nuke_gutter.png" title="rider" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/nuke/nuke_gutter.png"  alt="rider">
+  
+    </a>
+  
+  
+</div>
+</p>
+<h4 id="microsoft-visual-studio">Microsoft Visual Studio</h4>
+<p>In  <strong><span class="highlight-text orange">Visual Studio</span></strong> you can install the <a href="https://marketplace.visualstudio.com/items?itemName=nuke.visualstudio"><em><span class="highlight-text cyan">Nuke Support plugin</span></em></a> to be more productive in writing, running, and debugging your builds.</p>
+<p>Once you installed the plugin, from the <em>Task Runner Explorer</em>, you can double-click a target to run it. Additionally, you can use toggle buttons to attach the debugger or skip dependencies:
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/nuke/vs_gutter.png" title="vs" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/nuke/vs_gutter.png"  alt="vs">
+  
+    </a>
+  
+  
+</div>
+</p>
+<h3 id="setup-your-first-nuke-build-project">Setup your first Nuke build project</h3>
+<p>After installing necessary tools, we are ready to setup our first <strong><span class="highlight-text cyan">Nuke</span></strong> build project.</p>
+<p>To setup a new build project,run the below command from an existing repository. <strong><span class="highlight-text cyan">Nuke</span></strong> will search for the next upwards <em><span class="highlight-text warning">.git</span></em> or <em><span class="highlight-text warning">.svn</span></em> directory to determine the build <em><span class="highlight-text warning">root directory</span></em>. If neither is found, it will use the current directory.</p>
+<p>During the setup, you&rsquo;ll be asked several questions to configure your build to your preferences.</p>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">nuke :setup</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<div class="alert info ">
+  <p>You can also pass the <strong>&ndash;root parameter</strong> to specify that the current directory should be used as a root directory.</p>
+</div>
+<p>Yay! 🎉 Your first build has now been set up, and you can run the build with the default implementation! though it will not do anything because we haven&rsquo;t added any build steps yet.</p>
+<p>In the next article, we will add some build steps to our build project and run it.</p>
+
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/nuke/">nuke</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/automation/">automation</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/ci/cd/">ci/cd</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/.net6/">.net6</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/github-action/">github action</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/aspnetcore/">aspnetcore</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/" data-tooltip="Add Custom Domain for App Service Environment Hosted WebApp" aria-label="PREVIOUS: Add Custom Domain for App Service Environment Hosted WebApp">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-nuke/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-nuke/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-nuke/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/getting-started-with-nuke\/';
+        
+          this.page.identifier = '\/post\/getting-started-with-nuke\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2022 Ankit Sarkar | .NET Enthusiast. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/" data-tooltip="Add Custom Domain for App Service Environment Hosted WebApp" aria-label="PREVIOUS: Add Custom Domain for App Service Environment Hosted WebApp">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-nuke/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-nuke/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-nuke/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-nuke%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-nuke%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-nuke%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Nottingham
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js" integrity="sha512-z+/WWfyD5tccCukM4VvONpEtLmbAm5LDu7eKiyMQJ9m7OfPEDL7gENyDRL3Yfe8XAuGsS2fS4xSMnl6d30kqGQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+
+
+    
+  </body>
+</html>
+
