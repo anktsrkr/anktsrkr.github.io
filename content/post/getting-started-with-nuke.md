@@ -53,7 +53,7 @@ With this post, I am starting a new series about a build automation tool called 
 
 _This Post - Getting Started with Nuke_
 
-[Coming Soon - Write your first building block in Nuke](#)
+[Write your first building block in Nuke](/post/write-your-first-building-block-in-nuke/)
 
 [Coming Soon - Manage your Package Version using Nuke](#)
 
@@ -146,7 +146,7 @@ You can also pass the **--root parameter** to specify that the current directory
 
 Yay! 🎉 Your first build has now been set up, and you can run the build with the default implementation! though it will not do anything because we haven't added any build steps yet. 
 
-In the next article, we will add some build steps to our build project and run it.
+In the [next](/post/write-your-first-building-block-in-nuke/) article, we will add some build steps to our build project and run it.
 
 
 

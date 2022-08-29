@@ -1,10 +1,15 @@
-+++
-title = "Hi there 👋"
-description = "About Ankit Sarkar"
-date = "2022-05-30"
-aliases = ["about-us", "about-ankit-sarkar", "contact"]
-author = "Ankit Sarkar"
-+++
+---
+title: "Hi there 👋"
+description: "About Ankit Sarkar"
+author: "Ankit Sarkar"
+showDate: false
+showTags: false
+showPagination: false
+showSocial: false
+showMeta: false
+showActions: false
+comments: false
+---
 
 My name is Ankit Sarkar, Technical Architect by profession. I am from Kolkata, India. Recently,I moved to Nottingham, United Kindom for my new assignment. 
 
