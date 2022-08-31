@@ -6,10 +6,25 @@
     <description>Recent content in nuke on Ankit Sarkar | .NET Enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 28 Aug 2022 11:07:35 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 30 Aug 2022 11:08:35 +0100</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/tags/nuke/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Write your first building block in Nuke</title>
+      <link>https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/</link>
+      <pubDate>Tue, 30 Aug 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/</guid>
+      <description>Hi Everyone!
+This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
+Getting Started with Nuke
+This Post - Write your first building block in Nuke
+Coming Soon - Manage your Package Version using Nuke
+Coming Soon - Manage your Package Release using Nuke in Github
+In our last post, we have created a new build project using Nuke.</description>
+    </item>
     
     <item>
       <title>Getting Started with Nuke</title>
@@ -22,7 +37,7 @@ With this post, I am starting a new series about a build automation tool called 
 This Post - Getting Started with Nuke
 Write your first building block in Nuke
 Coming Soon - Manage your Package Version using Nuke
-Coming Soon - Publish your Package to Github, Myget and Nuget using Nuke
+Coming Soon - Manage your Package Release using Nuke in Github
 Table of Contents    What we are going to build?</description>
     </item>
     

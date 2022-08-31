@@ -347,11 +347,11 @@ if (!doNotTrack) {
           <div class="post-content markdown">
             <div class="main-content-wrap">
               <p>Hi Everyone!</p>
-<p>With this post, I am starting a new series about a build automation tool called <strong><span class="highlight-text cyan">Nuke</span></strong> . Over the time, I will updated this page with links to individual posts :</p>
+<p>With this post, I am starting a new series about a build automation tool called <a href="https://nuke.build/"><strong><span class="highlight-text cyan">Nuke</span></strong></a>  . Over the time, I will updated this page with links to individual posts :</p>
 <p><em>This Post - Getting Started with Nuke</em></p>
 <p><a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">Write your first building block in Nuke</a></p>
 <p><a href="#">Coming Soon - Manage your Package Version using Nuke</a></p>
-<p><a href="#">Coming Soon - Publish your Package to Github, Myget and Nuget using Nuke</a></p>
+<p><a href="#">Coming Soon - Manage your Package Release using Nuke in Github</a></p>
 <h1 id="table-of-contents">Table of Contents</h1>
 <nav id="TableOfContents">
   <ul>
@@ -405,10 +405,10 @@ if (!doNotTrack) {
 <p><strong><span class="highlight-text green">main</span></strong> - This is our main branch, we will use this branch to publish the package in <strong>Nuget</strong> with actual version number for public users.</p>
 </li>
 <li>
-<p><strong><span class="highlight-text yellow">release/**</span></strong> - This is our release branch, we will use this branch to publish the pre relase version to <strong>Myget</strong> with <em>beta</em> tag for public users.</p>
+<p><strong><span class="highlight-text yellow">release/**</span></strong> - This is our release branch, we will use this branch to publish the pre release version to <strong>MyGet</strong> with <em>beta</em> tag for public users.</p>
 </li>
 <li>
-<p><strong><span class="highlight-text red">dev</span></strong> - This is our development branch, we will use this branch to publish the pre relase version to <strong>Github Feed</strong> with <em>alpha</em> tag for internal users.
+<p><strong><span class="highlight-text red">dev</span></strong> - This is our development branch, we will use this branch to publish the pre release version to <strong>Github Feed</strong> with <em>alpha</em> tag for internal users.
 Bonus:</p>
 </li>
 </ol>
@@ -595,7 +595,7 @@ From now on you can use the global tool to:</p>
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" data-tooltip="Write your first building block in Nuke" aria-label="NEXT: Write your first building block in Nuke">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -702,7 +702,7 @@ From now on you can use the global tool to:</p>
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" data-tooltip="Write your first building block in Nuke" aria-label="NEXT: Write your first building block in Nuke">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -837,7 +837,8 @@ From now on you can use the global tool to:</p>
     
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js" integrity="sha512-z+/WWfyD5tccCukM4VvONpEtLmbAm5LDu7eKiyMQJ9m7OfPEDL7gENyDRL3Yfe8XAuGsS2fS4xSMnl6d30kqGQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -893,7 +894,7 @@ $(document).ready(function() {
     if (!$(this).hasClass('codeblock')) {
       $(this).addClass('codeblock');
     }
-    hljs.highlightBlock(block);
+    hljs.highlightElement(block);
   });
 });
 </script>

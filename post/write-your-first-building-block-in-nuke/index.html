@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast",
+  "description":"Write your first building block in Nuke.",
+  "url":"https:\/\/anktsrkr.github.io\/post\/write-your-first-building-block-in-nuke\/",
+  "keywords":"[nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github nuget]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast">
+<meta name="keywords" content="nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github nuget">
+<meta name="description" content="Write your first building block in Nuke.">
+
+
+<meta property="og:description" content="Write your first building block in Nuke.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Write your first building block in Nuke">
+<meta name="twitter:title" content="Write your first building block in Nuke">
+<meta property="og:url" content="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast">
+<meta property="og:description" content="Write your first building block in Nuke.">
+<meta name="twitter:description" content="Write your first building block in Nuke.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2022-08-30T11:08:35">
+  
+  
+    <meta property="article:modified_time" content="2022-08-30T11:08:35">
+  
+  
+  
+    
+      <meta property="article:section" content="CI/CD">
+    
+      <meta property="article:section" content="Nuke">
+    
+      <meta property="article:section" content="C#">
+    
+      <meta property="article:section" content=".NET 6">
+    
+      <meta property="article:section" content="Nuget">
+    
+      <meta property="article:section" content="Github Action">
+    
+  
+  
+    
+      <meta property="article:tag" content="nuke">
+    
+      <meta property="article:tag" content="automation">
+    
+      <meta property="article:tag" content="ci/cd">
+    
+      <meta property="article:tag" content=".net6">
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="github action">
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="aspnetcore">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan_full.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan_full.png">
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Write your first building block in Nuke</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('/images/nuke/nuke_plan_full.png')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title">
+      Write your first building block in Nuke
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2022-08-30T11:08:35&#43;01:00">
+        
+  August 30, 2022
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/ci/cd">CI/CD</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/nuke">Nuke</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/c">C#</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-6">.NET 6</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/nuget">Nuget</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/github-action">Github Action</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p>Hi Everyone!</p>
+<p>This post is continuation of the series about a build automation tool called <a href="https://nuke.build/"><strong><span class="highlight-text cyan">Nuke</span></strong></a> . Over the time, I will updated this page with links to individual posts :</p>
+<p><a href="https://anktsrkr.github.io/post/getting-started-with-nuke/">Getting Started with Nuke</a></p>
+<p><em>This Post - Write your first building block in Nuke</em></p>
+<p><a href="#">Coming Soon - Manage your Package Version using Nuke</a></p>
+<p><a href="#">Coming Soon - Manage your Package Release using Nuke in Github</a></p>
+<p>In our <a href="https://anktsrkr.github.io/post/getting-started-with-nuke/">last post</a>, we have created a new build project using <strong><span class="highlight-text cyan">Nuke</span></strong>. In this post, <em>first</em> we will see what are the changes in the project structure and then we will write our first building block in <strong><span class="highlight-text cyan">Nuke</span></strong>. We will also see how to generate a new workflow for <strong><span class="highlight-text blue">Github Actions</span></strong> and <em>lastly</em> we will run our build project from local system.</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#effective-changes">Effective changes</a></li>
+        <li><a href="#write-your-first-target-block-in-nuke">Write your first &ldquo;Target&rdquo; block in Nuke</a></li>
+        <li><a href="#generate-the-build-script-for-github-actions">Generate the build script for &ldquo;Github Actions&rdquo;</a></li>
+        <li><a href="#lets-write-all-the-target">Let&rsquo;s write all the &ldquo;Target&rdquo;</a></li>
+        <li><a href="#new-requirement-">New Requirement! 😈</a></li>
+        <li><a href="#run-your-first-nuke-build">Run your first Nuke build</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="effective-changes">Effective changes</h2>
+<p>The setup will create a number of files in your repository and – if you&rsquo;ve chosen so – add the build project to your solution file. Below, you can examine the structure of added files and what they are used for:</p>
+<pre><code>&lt;root-directory&gt;
+├── .nuke                           # Root directory marker
+│   ├── build.schema.json           # Build schema file
+│   └── parameters.json             # Default parameters file
+│
+├── build
+│   ├── .editorconfig               # Common formatting
+│   ├── _build.csproj               # Build project file
+│   ├── _build.csproj.DotSettings   # ReSharper/Rider formatting
+│   ├── Build.cs                    # Default build implementation
+│   ├── Configuration.cs            # Enumeration of build configurations
+│   ├── Directory.Build.props       # MSBuild stop files
+│   └── Directory.Build.targets
+│
+├── build.cmd                       # Cross-platform bootstrapping
+├── build.ps1                       # Windows/PowerShell bootstrapping
+└── build.sh                        # Linux/Shell bootstrapping
+</code></pre><h2 id="write-your-first-target-block-in-nuke">Write your first &ldquo;Target&rdquo; block in Nuke</h2>
+<p><strong><span class="highlight-text green">Target</span></strong> properties are the building blocks of a <strong><span class="highlight-text cyan">Nuke</span></strong> project. Inside a <strong><span class="highlight-text primary">Build</span></strong> class, you can define your build steps as <strong><span class="highlight-text green">Target</span></strong> properties. The implementation for a build step is provided as a lambda function through the Executes method:</p>
+<p>
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Build.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Nuke.Common;
+using Nuke.Common.Tools.DotNet;
+using Nuke.Common.ProjectModel;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
+
+class Build : NukeBuild
+{
+    public static int Main() =&gt; Execute&lt;Build&gt;(x =&gt; x.Clean);
+
+    [Solution(GenerateProjects = true)]
+    readonly Solution Solution;
+
+    Target Clean =&gt; _ =&gt; _
+        .Description($&#34;Cleaning Project.&#34;)
+        .Executes(() =&gt;
+        {
+           DotNetClean(c =&gt; c.SetProject(Solution.src.Sundry_HelloWorld));
+        });
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+In the above code, we have defined a <span class="highlight-text green">Clean</span> target. We gave some nice description to the target and we are executing <em>DotNetClean</em>. If you have noticed, we are using strongly typed <em><span class="highlight-text primary">Solution.src.Sundry_HelloWorld</span></em> to reference the project file instead of <em>string</em> literal. We are going to discuss more about this later.</p>
+<p>You can make use of asynchronous execution by adding the <strong><span class="highlight-text warning">async</span></strong>  as well for example:</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Build.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Nuke.Common;
+class Build : NukeBuild
+{
+    public static int Main() =&gt; Execute&lt;Build&gt;();
+
+    Target MyTarget =&gt; _ =&gt; _
+        .Executes(async () =&gt;
+        {
+            await Console.Out.WriteLineAsync(&#34;Hello!&#34;);
+        });
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<div class="alert warning ">
+  <p>Please note, Async targets are just a convenience feature that allows you using async APIs in a straightforward way. Behind the scenes, they are still run synchronously.</p>
+</div>
+<p>We are going to use <strong><span class="highlight-text warning">async</span></strong> in coming <strong><span class="highlight-text green">Target</span></strong> with more complex tasks.</p>
+<h2 id="generate-the-build-script-for-github-actions">Generate the build script for &ldquo;Github Actions&rdquo;</h2>
+<p>Now, we have defined our first <strong><span class="highlight-text green">Target</span></strong>. We are going to generate the build script for <strong><span class="highlight-text blue">Github Actions</span></strong>. In general, this is most annoying thing to do as you have to write it in Yml file. But we are going to do it in a very simple way by just adding a attribute to the Build class:
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Build.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Nuke.Common;
+using Nuke.Common.Tools.DotNet;
+using Nuke.Common.ProjectModel;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using Nuke.Common.CI.GitHubActions;
+
+[GitHubActions(
+    &#34;continuous&#34;,
+    GitHubActionsImage.UbuntuLatest,
+    AutoGenerate = true,
+    FetchDepth = 0,
+    OnPushBranches = new[] { &#34;main&#34;, &#34;dev&#34;, &#34;releases/**&#34; },
+    OnPullRequestBranches = new[] { &#34;releases/**&#34; },
+    InvokedTargets = new[] {
+        nameof(Clean),
+   },
+    EnableGitHubToken = true,
+    ImportSecrets = new[] { nameof(MyGetApiKey), nameof(NuGetApiKey) }
+)]
+
+class Build : NukeBuild
+{
+    public static int Main() =&gt; Execute&lt;Build&gt;(x =&gt; x.Clean);
+
+    [Solution(GenerateProjects = true)]
+    readonly Solution Solution;
+
+    [Parameter(&#34;MyGet Api Key&#34;), Secret]
+    readonly string MyGetApiKey;
+
+    [Parameter(&#34;Nuget Api Key&#34;), Secret]
+    readonly string NuGetApiKey;
+
+    Target Clean =&gt; _ =&gt; _
+        .Description($&#34;Cleaning Project.&#34;)
+        .Executes(() =&gt;
+        {
+           DotNetClean(c =&gt; c.SetProject(Solution.src.Sundry_HelloWorld));
+        });
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+<p>Let&rsquo;s try to understand the above code. We have added a <strong><span class="highlight-text orange">GitHubActions</span></strong> attribute to the <strong><span class="highlight-text primary">Build</span></strong> class. This attribute is used to generate the build script for <strong><span class="highlight-text blue">Github Actions</span></strong>. We have provided the following parameters to the attribute:</p>
+<ul>
+<li><strong><span class="highlight-text orange">Name</span></strong> - This is the name of the workflow. It will be used to generate the workflow file name.</li>
+<li><strong><span class="highlight-text orange">Image</span></strong> - This is the image that will be used to run the build. In our case, we are using <em><span class="highlight-text blue">UbuntuLatest</span></em>.</li>
+<li><strong><span class="highlight-text orange">AutoGenerate</span></strong> - This is a boolean value that indicates whether the build script should be generated or not. In our case, we are setting it to <em><span class="highlight-text blue">true</span></em>.</li>
+<li><strong><span class="highlight-text orange">FetchDepth</span></strong> - This is the number of commits that will be fetched from the repository. In our case, we are setting it to <em><span class="highlight-text blue">0</span></em>, which means all the commits will be fetched from all the branches and tags.</li>
+<li><strong><span class="highlight-text orange">OnPushBranches</span></strong> - This is an array of branches that will trigger the build on push. In our case, we are setting it to <em><span class="highlight-text blue">main</span></em>, <em><span class="highlight-text blue">dev</span></em> and <em><span class="highlight-text blue">releases/**</span></em>.</li>
+<li><strong><span class="highlight-text orange">OnPullRequestBranches</span></strong> - This is an array of branches that will trigger the build on pull request. In our case, we are setting it to  <em><span class="highlight-text blue">releases/**</span></em>.</li>
+<li><strong><span class="highlight-text orange">InvokedTargets</span></strong> - This is an array of targets that will be invoked when the build is triggered. In our case, we are setting it to <em><span class="highlight-text blue">Clean</span></em>.</li>
+<li><strong><span class="highlight-text orange">EnableGitHubToken</span></strong> - This is a boolean value that indicates whether the <em><span class="highlight-text blue">GITHUB_TOKEN</span></em> should be enabled or not. In our case, we are setting it to <em><span class="highlight-text blue">true</span></em>.</li>
+<li><strong><span class="highlight-text orange">ImportSecrets</span></strong> - This is an array of secrets that will be imported from the repository. In our case, we are setting it to <em><span class="highlight-text blue">MY_GET_API_KEY</span></em> and <em><span class="highlight-text blue">NUGET_API_KEY</span></em>.</li>
+</ul>
+<p>Now, <span class="highlight-text red">build your project</span>, this is very <strong>important step</strong> and then go to your root folder from your <span class="highlight-text orange">Window terminal</span>  and run below command to generate the build script:</p>
+<pre><code>nuke
+</code></pre><p>This will generate the following yml file named <strong>&ldquo;continuous.yml&rdquo;</strong> :</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight yaml language-yaml">
+  <figcaption>
+    
+      <span>continuous.yml</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-yaml yaml"><code class="yaml"># ------------------------------------------------------------------------------
+# &lt;auto-generated&gt;
+#
+#     This code was generated.
+#
+#     - To turn off auto-generation set:
+#
+#         [GitHubActions (AutoGenerate = false)]
+#
+#     - To trigger manual generation invoke:
+#
+#         nuke --generate-configuration GitHubActions_continuous --host GitHubActions
+#
+# &lt;/auto-generated&gt;
+# ------------------------------------------------------------------------------
+
+name: continuous
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - &#39;releases/**&#39;
+  pull_request:
+    branches:
+      - &#39;releases/**&#39;
+
+jobs:
+  ubuntu-latest:
+    name: ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache .nuke/temp, ~/.nuget/packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            .nuke/temp
+            ~/.nuget/packages
+          key: ${{ runner.os }}-${{ hashFiles(&#39;**/global.json&#39;, &#39;**/*.csproj&#39;) }}
+      - name: Run &#39;./build.cmd Clean&#39;
+        run: ./build.cmd Clean
+        env:
+          MyGetApiKey: ${{ secrets.MY_GET_API_KEY }}
+          NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="lets-write-all-the-target">Let&rsquo;s write all the &ldquo;Target&rdquo;</h2>
+<p>Now, we have basic foundation. Let&rsquo;s write all the targets that we need to build our project. We will write the following targets:</p>
+<ul>
+<li>
+<p><strong><span class="highlight-text green">Clean</span></strong> - This target will clean the project.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text green">Restore</span></strong> - This target will restore the project.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text green">Compile</span></strong> - This target will build the project.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text green">Pack</span></strong> - This target will pack the project and generate the artifact (Nuget package) to specific folder.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text green">PublishToGithub</span></strong> - This target will publish the package to Github, Only if the build is triggered from the <strong><span class="highlight-text red">dev</span></strong> branch or the pull request.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text green">PublishToMyGet</span></strong> - This target will publish the package to MyGet, only if the build is triggered from the <strong><span class="highlight-text yellow">release/**</span></strong> branch.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text green">PublishToNuGet</span></strong> - This target will publish the package to NuGet, only if the build is triggered from the <strong><span class="highlight-text green">main</span></strong> branch.</p>
+</li>
+</ul>
+<p>Lets write the above targets in our <strong><span class="highlight-text orange">build.cs</span></strong> file:</p>
+<p>
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>build.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using System.Linq;
+
+using Nuke.Common;
+using Nuke.Common.IO;
+using Nuke.Common.Git;
+using Nuke.Common.ProjectModel;
+using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitVersion;
+using Nuke.Common.Utilities.Collections;
+using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.Tools.NerdbankGitVersioning;
+
+using static Nuke.Common.IO.FileSystemTasks;
+using static Nuke.Common.IO.PathConstruction;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
+[GitHubActions(&#34;continuous&#34;,
+    GitHubActionsImage.UbuntuLatest,
+    AutoGenerate = true,
+    FetchDepth = 0,
+    OnPushBranches = new[] 
+    {
+        &#34;main&#34;, 
+        &#34;dev&#34;,
+        &#34;releases/**&#34;
+    },
+    OnPullRequestBranches = new[] 
+    {
+        &#34;releases/**&#34; 
+    },
+    InvokedTargets = new[]
+    {
+        nameof(Pack),
+    },
+    EnableGitHubToken = true,
+    ImportSecrets = new[] 
+    { 
+        nameof(MyGetApiKey), 
+        nameof(NuGetApiKey) 
+    }
+)]
+
+class Build : NukeBuild
+{
+    public static int Main() =&gt; Execute&lt;Build&gt;(x =&gt; x.Pack);
+    
+    [Parameter(&#34;Configuration to build - Default is &#39;Debug&#39; (local) or &#39;Release&#39; (server)&#34;)]
+    readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+
+    [Parameter(&#34;MyGet Feed Url for Public Access of Pre Releases&#34;)]
+    readonly string MyGetNugetFeed;
+    [Parameter(&#34;MyGet Api Key&#34;), Secret]
+    readonly string MyGetApiKey;
+
+    [Parameter(&#34;Nuget Feed Url for Public Access of Pre Releases&#34;)]
+    readonly string NugetFeed;
+    [Parameter(&#34;Nuget Api Key&#34;), Secret]
+    readonly string NuGetApiKey;
+
+    [Parameter(&#34;Copyright Details&#34;)]
+    readonly string Copyright;
+
+    [Parameter(&#34;Artifacts Type&#34;)]
+    readonly string ArtifactsType;
+
+    [Parameter(&#34;Excluded Artifacts Type&#34;)]
+    readonly string ExcludedArtifactsType;
+
+    [GitVersion]
+    readonly GitVersion GitVersion;
+
+    [GitRepository]
+    readonly GitRepository GitRepository;
+
+    [Solution(GenerateProjects = true)]
+    readonly Solution Solution;
+
+    static GitHubActions GitHubActions =&gt; GitHubActions.Instance;
+    static AbsolutePath ArtifactsDirectory =&gt; RootDirectory / &#34;.artifacts&#34;;
+
+    string GithubNugetFeed =&gt; GitHubActions != null
+         ? $&#34;https://nuget.pkg.github.com/{GitHubActions.RepositoryOwner}/index.json&#34;
+         : null;
+
+
+    Target Clean =&gt; _ =&gt; _
+      .Description($&#34;Cleaning Project.&#34;)
+      .Before(Restore)
+      .Executes(() =&gt;
+      {
+          DotNetClean(c =&gt; c.SetProject(Solution.src.Sundry_HelloWorld));
+          EnsureCleanDirectory(ArtifactsDirectory);
+      });
+    Target Restore =&gt; _ =&gt; _
+        .Description($&#34;Restoring Project Dependencies.&#34;)
+        .DependsOn(Clean)
+        .Executes(() =&gt;
+        {
+            DotNetRestore(
+                r =&gt; r.SetProjectFile(Solution.src.Sundry_HelloWorld));
+        });
+
+    Target Compile =&gt; _ =&gt; _
+        .Description($&#34;Building Project with the version.&#34;)
+        .DependsOn(Restore)
+        .Executes(() =&gt;
+        {
+            DotNetBuild(b =&gt; b
+                .SetProjectFile(Solution.src.Sundry_HelloWorld)
+                .SetConfiguration(Configuration)
+                .SetVersion(GitVersion.NuGetVersionV2)
+                .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                .SetInformationalVersion(GitVersion.InformationalVersion)
+                .SetFileVersion(GitVersion.AssemblySemFileVer)
+                .EnableNoRestore());
+        });
+
+    Target Pack =&gt; _ =&gt; _
+    .Description($&#34;Packing Project with the version.&#34;)
+    .Requires(() =&gt; Configuration.Equals(Configuration.Release))
+    .Produces(ArtifactsDirectory / ArtifactsType)
+    .DependsOn(Compile)
+    .Triggers(PublishToGithub, PublishToMyGet, PublishToNuGet)
+    .Executes(() =&gt;
+    {
+        DotNetPack(p =&gt;
+            p
+                .SetProject(Solution.src.Sundry_HelloWorld)
+                .SetConfiguration(Configuration)
+                .SetOutputDirectory(ArtifactsDirectory)
+                .EnableNoBuild()
+                .EnableNoRestore()
+                .SetCopyright(Copyright)
+                .SetVersion(GitVersion.NuGetVersionV2)
+                .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                .SetInformationalVersion(GitVersion.InformationalVersion)
+                .SetFileVersion(GitVersion.AssemblySemFileVer));
+    });
+
+    Target PublishToGithub =&gt; _ =&gt; _
+       .Description($&#34;Publishing to Github for Development only.&#34;)
+       .Requires(() =&gt; Configuration.Equals(Configuration.Release))
+       .OnlyWhenStatic(() =&gt; GitRepository.IsOnDevelopBranch() || GitHubActions.IsPullRequest)
+       .Executes(() =&gt;
+       {
+           GlobFiles(ArtifactsDirectory, ArtifactsType)
+               .Where(x =&gt; !x.EndsWith(ExcludedArtifactsType))
+               .ForEach(x =&gt;
+               {
+                   DotNetNuGetPush(s =&gt; s
+                       .SetTargetPath(x)
+                       .SetSource(GithubNugetFeed)
+                       .SetApiKey(GitHubActions.Token)
+                       .EnableSkipDuplicate()
+                   );
+               });
+       });
+
+    Target PublishToMyGet =&gt; _ =&gt; _
+       .Description($&#34;Publishing to MyGet for PreRelese only.&#34;)
+       .Requires(() =&gt; Configuration.Equals(Configuration.Release))
+       .OnlyWhenStatic(() =&gt; GitRepository.IsOnReleaseBranch())
+       .Executes(() =&gt;
+       {
+           GlobFiles(ArtifactsDirectory, ArtifactsType)
+               .Where(x =&gt; !x.EndsWith(ExcludedArtifactsType))
+               .ForEach(x =&gt;
+               {
+                   DotNetNuGetPush(s =&gt; s
+                       .SetTargetPath(x)
+                       .SetSource(MyGetNugetFeed)
+                       .SetApiKey(MyGetApiKey)
+                       .EnableSkipDuplicate()
+                   );
+               });
+       });
+    Target PublishToNuGet =&gt; _ =&gt; _
+       .Description($&#34;Publishing to NuGet with the version.&#34;)
+       .Requires(() =&gt; Configuration.Equals(Configuration.Release))
+       .OnlyWhenStatic(() =&gt; GitRepository.IsOnMainOrMasterBranch())
+       .Executes(() =&gt;
+       {
+           GlobFiles(ArtifactsDirectory, ArtifactsType)
+               .Where(x =&gt; !x.EndsWith(ExcludedArtifactsType))
+               .ForEach(x =&gt;
+               {
+                   DotNetNuGetPush(s =&gt; s
+                       .SetTargetPath(x)
+                       .SetSource(NugetFeed)
+                       .SetApiKey(NuGetApiKey)
+                       .EnableSkipDuplicate()
+                   );
+               });
+       });
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+Couple of things to note here:</p>
+<ul>
+<li>
+<p><strong><span class="highlight-text red">Requires</span></strong> : This allows you to specify parameter requirement that must be met before the target is executed. In this case, we are saying that the target can only be executed if the configuration parameter is set to Release. This is because we don&rsquo;t want to publish a debug version of our packages.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text red">OnlyWhenStatic</span></strong> : This allows you to specify conditions that must be met before the target is executed. In our example for <strong>PublishToGithub</strong> case, we are saying that the target can only be executed if the branch is set to develop or if it is a pull request. This is because we want to publish this only for internal users.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text red">Produces</span></strong> : This allows you to specify the output of the target. In our example, we are saying that the output of the target is the artifacts directory.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text red">Triggers</span></strong> : This allows you to specify the targets that should be executed after the current target. In our example, we are saying that the target <strong>Pack</strong> should trigger the targets <strong>PublishToGithub</strong>, <strong>PublishToMyGet</strong> and <strong>PublishToNuGet</strong>.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text red">DependsOn</span></strong> : This allows you to specify the targets that should be executed before the current target. In our example, we are saying that the target <strong>Pack</strong> should depend on the targets <strong>Compile</strong> and <strong>Restore</strong>.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text warning">Parameter</span></strong> : This attribute allows you to specify the parameters that should be passed to the target. You can specify the parameters in the following ways:</p>
+<ul>
+<li>
+<p><em><strong>Through Command-Line</strong></em> : You can specify the parameters from the command-line through their kebab-case names prefixed with a double-dash. For example, if you want to specify the <code>Configuration</code> parameter, you can do so by running the following command:
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight powershell language-powershell">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-powershell powershell"><code class="powershell">nuke --configuration Release</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+</li>
+<li>
+<p><em><strong>Through Parameter Files</strong></em> : You can specify the parameters in a parameter file. The parameter file is located in <code>.nuke</code> folder. 
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight json language-json">
+  <figcaption>
+    
+      <span>.nuke/parameters.json</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-json json"><code class="json">{
+    &#34;$schema&#34;: &#34;./build.schema.json&#34;,
+    &#34;Configuration&#34;: &#34;Release&#34;
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<div class="alert info no-icon ">
+  <p>Besides the default parameters.json file, you can create additional profiles following the parameters.{name}.json naming pattern. These profiles can be loaded on-demand like : <code>nuke --profile {name} [other-profiles...]</code></p>
+</div></p>
+</li>
+<li>
+<p><em><strong>Through Environment Variables</strong></em> : You can specify the parameters through environment variables. My recommendation would be to keep The environment variables prefixed with <code>NUKE_</code> and keep the parameter name in uppercase. For example, if you want to specify the <code>Configuration</code> parameter, you can do so by setting the environment variable <code>NUKE_CONFIGURATION</code> to <code>Release</code>. Nuke will automatically pick up the environment variables and use them as parameters.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><span class="highlight-text warning">Secret</span></strong> : This attribute allows you to specify the parameters that should be passed to the target as secrets such as API Key, password. In our example, we are specifying the <code>NuGetApiKey</code> as a secret.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text warning">Solution</span></strong> : This attribute allows you to specify the solution file that should be used for the target. In our example, we are saying that the solution file that should be used for the target is <code>Sundry HelloWorld.sln</code>. We are also mentioning the project name should be automatically inferred from the solution file. Hence we used <code>GenerateProjects = true</code>.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text warning">GitVersion</span></strong> : This attribute allows you to get the version of the build. In our example, we are saying that we want to get the version of the build from GitVersion. we will discuss more about GitVersion in the next post.</p>
+</li>
+<li>
+<p><strong><span class="highlight-text warning">GitRepository</span></strong> : This attribute allows you to get the repository information.</p>
+</li>
+</ul>
+<h2 id="new-requirement-">New Requirement! 😈</h2>
+<p>As we understand from the above, Github will trigger this scripts when we push to the <strong><span class="highlight-text green">main</span></strong>, <strong><span class="highlight-text yellow">release/**</span></strong> and <strong><span class="highlight-text red">dev</span></strong> branches.</p>
+<p>Also it will trigger when  we submit pull request for the <strong><span class="highlight-text yellow">release/**</span></strong> branch.</p>
+<p>But, I don&rsquo;t want to trigger this Action when we push <code>Readme.md</code> file to any of the branches. So, to achieve this, we have to add <code>paths-ignore:</code> in the yml file. But <strong><span class="highlight-text cyan">Nuke</span></strong><em>doesn&rsquo;t support</em> this feature yet. So, we have to add it manually.</p>
+<p>To do that first, let&rsquo;s disable the auto-generation of the yml file by updating <strong><span class="highlight-text purple">AutoGenerate </span></strong> property of the <strong><span class="highlight-text green">GitHubActions</span></strong> attribute, like below:</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Build.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Nuke.Common;
+using Nuke.Common.Tools.DotNet;
+using Nuke.Common.ProjectModel;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using Nuke.Common.CI.GitHubActions;
+
+[GitHubActions(
+    &#34;continuous&#34;,
+    GitHubActionsImage.UbuntuLatest,
+    AutoGenerate = false,
+    FetchDepth = 0,
+    OnPushBranches = new[] { &#34;main&#34;, &#34;dev&#34;, &#34;releases/**&#34; },
+    OnPullRequestBranches = new[] { &#34;releases/**&#34; },
+    InvokedTargets = new[] {
+        nameof(Clean),
+   },
+    EnableGitHubToken = true,
+    ImportSecrets = new[] { nameof(MyGetApiKey), nameof(NuGetApiKey) }
+)]
+
+class Build : NukeBuild
+{
+    /* Omitted */
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Now, update the yml file by adding <code>paths-ignore:</code> as below:</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight yaml language-yaml">
+  <figcaption>
+    
+      <span>continuous.yml</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-yaml yaml"><code class="yaml"># ------------------------------------------------------------------------------
+# &lt;auto-generated&gt;
+#
+#     This code was generated.
+#
+#     - To turn off auto-generation set:
+#
+#         [GitHubActions (AutoGenerate = false)]
+#
+#     - To trigger manual generation invoke:
+#
+#         nuke --generate-configuration GitHubActions_continuous --host GitHubActions
+#
+# &lt;/auto-generated&gt;
+# ------------------------------------------------------------------------------
+
+name: continuous
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - &#39;releases/**&#39;
+    paths-ignore:
+      - &#39;**/README.md&#39;
+  pull_request:
+    branches:
+      - &#39;releases/**&#39;
+    paths-ignore:
+      - &#39;**/README.md&#39;
+
+jobs:
+  ubuntu-latest:
+    name: ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache .nuke/temp, ~/.nuget/packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            .nuke/temp
+            ~/.nuget/packages
+          key: ${{ runner.os }}-${{ hashFiles(&#39;**/global.json&#39;, &#39;**/*.csproj&#39;) }}
+      - name: Run &#39;./build.cmd Pack&#39;
+        run: ./build.cmd Pack
+        env:
+          MyGetApiKey: ${{ secrets.MY_GET_API_KEY }}
+          NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v1
+        with:
+          name: .artifacts
+          path: .artifacts</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="run-your-first-nuke-build">Run your first Nuke build</h2>
+<p>At this point, we have a working build script.  You can run the build script by executing the following command in the terminal but make sure you have Git repository initialized.</p>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">nuke</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Here is the output of the above command:
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/nuke/nuke_run_error.png" title="vs" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/nuke/nuke_run_error.png"  alt="vs">
+  
+    </a>
+  
+  
+</div>
+</p>
+<p>As we can see, we are getting an error that, <em>could not inject value for GitVersion</em>. This is because we haven&rsquo;t installed the <em><span class="highlight-text success">GitVersion</span></em> tool yet.</p>
+<p>In the next article, we will add the <em><span class="highlight-text success">GitVersion</span></em> tool and we will learn how to manage a version of a package using the same .</p>
+
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/nuke/">nuke</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/automation/">automation</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/ci/cd/">ci/cd</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/.net6/">.net6</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/github-action/">github action</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/aspnetcore/">aspnetcore</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-nuke/" data-tooltip="Getting Started with Nuke" aria-label="PREVIOUS: Getting Started with Nuke">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/write-your-first-building-block-in-nuke\/';
+        
+          this.page.identifier = '\/post\/write-your-first-building-block-in-nuke\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2022 Ankit Sarkar | .NET Enthusiast. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-nuke/" data-tooltip="Getting Started with Nuke" aria-label="PREVIOUS: Getting Started with Nuke">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fwrite-your-first-building-block-in-nuke%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fwrite-your-first-building-block-in-nuke%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fwrite-your-first-building-block-in-nuke%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Nottingham
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+    
+  </body>
+</html>
+

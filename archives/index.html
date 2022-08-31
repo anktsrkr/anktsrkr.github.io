@@ -261,6 +261,10 @@ if (!doNotTrack) {
         <ul class="archive-posts archive-month" data-date="202208">
           <h5 class="archive-title" style="text-decoration: none;">August</h5>
           
+            <li class="archive-post archive-day" data-date="20220830">
+              <a class="archive-post-title" href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">Write your first building block in Nuke</a>
+            </li>
+          
             <li class="archive-post archive-day" data-date="20220828">
               <a class="archive-post-title" href="https://anktsrkr.github.io/post/getting-started-with-nuke/">Getting Started with Nuke</a>
             </li>
@@ -395,7 +399,8 @@ if (!doNotTrack) {
     
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js" integrity="sha512-z+/WWfyD5tccCukM4VvONpEtLmbAm5LDu7eKiyMQJ9m7OfPEDL7gENyDRL3Yfe8XAuGsS2fS4xSMnl6d30kqGQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -451,7 +456,7 @@ $(document).ready(function() {
     if (!$(this).hasClass('codeblock')) {
       $(this).addClass('codeblock');
     }
-    hljs.highlightBlock(block);
+    hljs.highlightElement(block);
   });
 });
 </script>
