@@ -49,7 +49,7 @@ keywords:
  
 Hi Everyone!
 
-With this post, I am starting a new series about a build automation tool called **{{< hl-text cyan >}}Nuke{{< /hl-text >}}** . Over the time, I will updated this page with links to individual posts : 
+With this post, I am starting a new series about a build automation tool called [**{{< hl-text cyan >}}Nuke{{< /hl-text >}}**](https://nuke.build/)  . Over the time, I will updated this page with links to individual posts : 
 
 _This Post - Getting Started with Nuke_
 
@@ -57,7 +57,7 @@ _This Post - Getting Started with Nuke_
 
 [Coming Soon - Manage your Package Version using Nuke](#)
 
-[Coming Soon - Publish your Package to Github, Myget and Nuget using Nuke](#)
+[Coming Soon - Manage your Package Release using Nuke in Github](#)
 
 {{< toc >}}
 ## What we are going to build?
@@ -89,9 +89,9 @@ Before we start, Let us create some branches in our repository. We are going to 
 
  1. **{{< hl-text green>}}main{{< /hl-text >}}** - This is our main branch, we will use this branch to publish the package in **Nuget** with actual version number for public users.
 
- 2. **{{< hl-text yellow >}}release/**{{< /hl-text >}}** - This is our release branch, we will use this branch to publish the pre relase version to **Myget** with _beta_ tag for public users.
+ 2. **{{< hl-text yellow >}}release/**{{< /hl-text >}}** - This is our release branch, we will use this branch to publish the pre release version to **MyGet** with _beta_ tag for public users.
 
- 3. **{{< hl-text red >}}dev{{< /hl-text >}}** - This is our development branch, we will use this branch to publish the pre relase version to **Github Feed** with _alpha_ tag for internal users.
+ 3. **{{< hl-text red >}}dev{{< /hl-text >}}** - This is our development branch, we will use this branch to publish the pre release version to **Github Feed** with _alpha_ tag for internal users.
  Bonus: 
 
 {{< alert info no-icon>}}
