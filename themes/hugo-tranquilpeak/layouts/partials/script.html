@@ -52,7 +52,8 @@ $(document).ready(function() {
   {{ end }}
 {{ end }}
 
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-<script type="text/javascript">window.onload = function() { 
-  Calendly.initBadgeWidget({ url: 'https://calendly.com/anktsrkr/talkwithme?hide_event_type_details=1&hide_gdpr_banner=1', 
-  text: '#TalkWithMe', color: '#0069ff', textColor: '#ffffff', branding: false }); }</script>
+
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+ 
+{{ partial "internal/setmore.html" . }}
