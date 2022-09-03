@@ -59,9 +59,13 @@
     {{ end }}
 
     {{ if or .Params.googleAnalytics.async .Params.ga.async }}
-      {{ template "_internal/google_analytics_async.html" . }}
+      {{- if not .Site.IsServer -}}
+        {{ template "_internal/google_analytics_async.html" . }}
+      {{- end -}} 
     {{ else }}
-      {{ template "_internal/google_analytics.html" . }}
+      {{- if not .Site.IsServer -}}
+        {{ template "_internal/google_analytics.html" . }}
+      {{- end -}}
     {{ end }}
     {{ partial "head_end.html" . }}
     

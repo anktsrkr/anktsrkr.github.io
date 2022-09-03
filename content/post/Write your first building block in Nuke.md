@@ -55,7 +55,7 @@ This post is continuation of the series about a build automation tool called [**
 
 _This Post - Write your first building block in Nuke_
 
-[Coming Soon - Manage your Package Version using Nuke](#)
+[Manage your Package Version using Nuke](/post/manage-your-package-version-using-nuke/)
 
 [Coming Soon - Manage your Package Release using Nuke in Github](#)
 

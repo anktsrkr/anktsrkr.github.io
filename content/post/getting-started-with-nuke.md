@@ -55,7 +55,7 @@ _This Post - Getting Started with Nuke_
 
 [Write your first building block in Nuke](/post/write-your-first-building-block-in-nuke/)
 
-[Coming Soon - Manage your Package Version using Nuke](#)
+[Manage your Package Version using Nuke](/post/manage-your-package-version-using-nuke/)
 
 [Coming Soon - Manage your Package Release using Nuke in Github](#)
 
@@ -92,7 +92,6 @@ Before we start, Let us create some branches in our repository. We are going to 
  2. **{{< hl-text yellow >}}release/**{{< /hl-text >}}** - This is our release branch, we will use this branch to publish the pre release version to **MyGet** with _beta_ tag for public users.
 
  3. **{{< hl-text red >}}dev{{< /hl-text >}}** - This is our development branch, we will use this branch to publish the pre release version to **Github Feed** with _alpha_ tag for internal users.
- Bonus: 
 
 {{< alert info no-icon>}}
 **Github Feed** is a private feed that is created by Github for each repository. We can use this feed to publish our package to our internal users.
