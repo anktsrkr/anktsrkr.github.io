@@ -6,10 +6,25 @@
     <description>Recent content in C# on Ankit Sarkar | .NET Enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 03 Sep 2022 11:08:35 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 05 Sep 2022 11:08:35 +0100</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/categories/c#/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Manage your Package Release using Nuke in Github</title>
+      <link>https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/</link>
+      <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/</guid>
+      <description>Hi Everyone!
+This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
+Getting Started with Nuke
+Write your first building block in Nuke
+Manage your Package Version using Nuke
+This Post - Manage your Package Release using Nuke in Github
+In our last post, we ran the build successfully in our local machine.</description>
+    </item>
     
     <item>
       <title>Manage your Package Version using Nuke</title>
@@ -22,7 +37,7 @@ This post is continuation of the series about a build automation tool called Nuk
 Getting Started with Nuke
 Write your first building block in Nuke
 This Post - Manage your Package Version using Nuke
-Coming Soon - Manage your Package Release using Nuke in Github
+Manage your Package Release using Nuke in Github
 In our last post, we have completed all the steps to create a new package and publish it to the feed based on where we are running the build.</description>
     </item>
     
@@ -37,7 +52,7 @@ This post is continuation of the series about a build automation tool called Nuk
 Getting Started with Nuke
 This Post - Write your first building block in Nuke
 Manage your Package Version using Nuke
-Coming Soon - Manage your Package Release using Nuke in Github
+Manage your Package Release using Nuke in Github
 In our last post, we have created a new build project using Nuke.</description>
     </item>
     
@@ -52,7 +67,7 @@ With this post, I am starting a new series about a build automation tool called 
 This Post - Getting Started with Nuke
 Write your first building block in Nuke
 Manage your Package Version using Nuke
-Coming Soon - Manage your Package Release using Nuke in Github
+Manage your Package Release using Nuke in Github
 Table of Contents    What we are going to build?</description>
     </item>
     

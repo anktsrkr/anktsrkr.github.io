@@ -121,12 +121,16 @@
     <link rel="canonical" href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">
 
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     
     
-    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css" />
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>#
+    
     
     
 
@@ -351,7 +355,7 @@ if (!doNotTrack) {
 <p><a href="https://anktsrkr.github.io/post/getting-started-with-nuke/">Getting Started with Nuke</a></p>
 <p><em>This Post - Write your first building block in Nuke</em></p>
 <p><a href="https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/">Manage your Package Version using Nuke</a></p>
-<p><a href="#">Coming Soon - Manage your Package Release using Nuke in Github</a></p>
+<p><a href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/">Manage your Package Release using Nuke in Github</a></p>
 <p>In our <a href="https://anktsrkr.github.io/post/getting-started-with-nuke/">last post</a>, we have created a new build project using <strong><span class="highlight-text cyan">Nuke</span></strong>. In this post, <em>first</em> we will see what are the changes in the project structure and then we will write our first building block in <strong><span class="highlight-text cyan">Nuke</span></strong>. We will also see how to generate a new workflow for <strong><span class="highlight-text blue">Github Actions</span></strong> and <em>lastly</em> we will run our build project from local system.</p>
 <h1 id="table-of-contents">Table of Contents</h1>
 <nav id="TableOfContents">
@@ -677,7 +681,7 @@ jobs:
 <p><strong><span class="highlight-text green">PublishToNuGet</span></strong> - This target will publish the package to NuGet, only if the build is triggered from the <strong><span class="highlight-text green">main</span></strong> branch.</p>
 </li>
 </ul>
-<p>Lets write the above targets in our <strong><span class="highlight-text orange">build.cs</span></strong> file:</p>
+<p>Lets write the above targets in our <strong><span class="highlight-text orange">Build.cs</span></strong> file:</p>
 <p>
   
     

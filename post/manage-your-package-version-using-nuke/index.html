@@ -121,12 +121,16 @@
     <link rel="canonical" href="https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/">
 
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     
     
-    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css" />
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>#
+    
     
     
 
@@ -351,7 +355,7 @@ if (!doNotTrack) {
 <p><a href="https://anktsrkr.github.io/post/getting-started-with-nuke/">Getting Started with Nuke</a></p>
 <p><a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">Write your first building block in Nuke</a></p>
 <p><em>This Post - Manage your Package Version using Nuke</em></p>
-<p><a href="#">Coming Soon - Manage your Package Release using Nuke in Github</a></p>
+<p><a href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/">Manage your Package Release using Nuke in Github</a></p>
 <p>In our <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">last post</a>, we have completed all the steps to create a new package and publish it to the feed based on where we are running the build. But we have not yet covered the versioning of the package and hence it was not able to run the targets. In this post, we will cover the versioning of the package and how to publish it to the feed.</p>
 <h1 id="table-of-contents">Table of Contents</h1>
 <nav id="TableOfContents">
@@ -371,10 +375,10 @@ if (!doNotTrack) {
 <p><strong><span class="highlight-text success">GitVersion</span></strong> is a tool that generates a Semantic Version number based on your Git history. The version number generated from GitVersion can then be used for various different purposes, such as:</p>
 <ul>
 <li>
-<p><em>Stamping a version number on artifacts (packages)</em> produced during build. - This is what we did in our <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">last post</a>, check the Target <em><span class="highlight-text purple">Pack</span></em>  in the <strong><span class="highlight-text orange">build.cs</span></strong> file.</p>
+<p><em>Stamping a version number on artifacts (packages)</em> produced during build. - This is what we did in our <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">last post</a>, check the Target <em><span class="highlight-text purple">Pack</span></em>  in the <strong><span class="highlight-text orange">Build.cs</span></strong> file.</p>
 </li>
 <li>
-<p><em>Patching AssemblyInfo.cs (and similar) files with the version number during the build</em>, so the version number is embedded within the compiled binaries themselves - This is also we did in our <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">last post</a>, check the Target <em><span class="highlight-text purple">Compile</span></em> in the <strong><span class="highlight-text orange">build.cs</span></strong> file.</p>
+<p><em>Patching AssemblyInfo.cs (and similar) files with the version number during the build</em>, so the version number is embedded within the compiled binaries themselves - This is also we did in our <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">last post</a>, check the Target <em><span class="highlight-text purple">Compile</span></em> in the <strong><span class="highlight-text orange">Build.cs</span></strong> file.</p>
 </li>
 <li>
 <p>Exposing the version number to the build server to version the build itself.</p>
@@ -782,7 +786,7 @@ You can now run the build script by executing the following command in the termi
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/" data-tooltip="Manage your Package Release using Nuke in Github" aria-label="NEXT: Manage your Package Release using Nuke in Github">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -889,7 +893,7 @@ You can now run the build script by executing the following command in the termi
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/" data-tooltip="Manage your Package Release using Nuke in Github" aria-label="NEXT: Manage your Package Release using Nuke in Github">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
