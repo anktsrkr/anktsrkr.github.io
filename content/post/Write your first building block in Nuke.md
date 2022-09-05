@@ -57,7 +57,7 @@ _This Post - Write your first building block in Nuke_
 
 [Manage your Package Version using Nuke](/post/manage-your-package-version-using-nuke/)
 
-[Coming Soon - Manage your Package Release using Nuke in Github](#)
+[Manage your Package Release using Nuke in Github](/post/manage-your-package-release-using-nuke-in-github/)
 
 In our [last post](/post/getting-started-with-nuke/), we have created a new build project using **{{< hl-text cyan >}}Nuke{{< /hl-text >}}**. In this post, _first_ we will see what are the changes in the project structure and then we will write our first building block in **{{< hl-text cyan >}}Nuke{{< /hl-text >}}**. We will also see how to generate a new workflow for **{{< hl-text blue >}}Github Actions{{< /hl-text >}}** and _lastly_ we will run our build project from local system.
 
@@ -266,7 +266,7 @@ Now, we have basic foundation. Let's write all the targets that we need to build
 
 * **{{< hl-text green>}}PublishToNuGet{{< /hl-text >}}** - This target will publish the package to NuGet, only if the build is triggered from the **{{< hl-text green>}}main{{< /hl-text >}}** branch.
 
-Lets write the above targets in our **{{< hl-text orange >}}build.cs{{< /hl-text >}}** file:
+Lets write the above targets in our **{{< hl-text orange >}}Build.cs{{< /hl-text >}}** file:
 
 {{<codeblock "build.cs" "csharp">}}using System.Linq;
 

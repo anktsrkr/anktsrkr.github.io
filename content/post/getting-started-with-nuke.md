@@ -57,7 +57,7 @@ _This Post - Getting Started with Nuke_
 
 [Manage your Package Version using Nuke](/post/manage-your-package-version-using-nuke/)
 
-[Coming Soon - Manage your Package Release using Nuke in Github](#)
+[Manage your Package Release using Nuke in Github](/post/manage-your-package-release-using-nuke-in-github/)
 
 {{< toc >}}
 ## What we are going to build?

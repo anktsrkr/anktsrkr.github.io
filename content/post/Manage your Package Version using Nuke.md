@@ -53,7 +53,7 @@ This post is continuation of the series about a build automation tool called [**
 
 _This Post - Manage your Package Version using Nuke_
 
-[Coming Soon - Manage your Package Release using Nuke in Github](#)
+[Manage your Package Release using Nuke in Github](/post/manage-your-package-release-using-nuke-in-github/)
 
 In our [last post](/post/write-your-first-building-block-in-nuke/), we have completed all the steps to create a new package and publish it to the feed based on where we are running the build. But we have not yet covered the versioning of the package and hence it was not able to run the targets. In this post, we will cover the versioning of the package and how to publish it to the feed.
 
@@ -62,9 +62,9 @@ In our [last post](/post/write-your-first-building-block-in-nuke/), we have comp
 ## What is GitVersion?
  **{{< hl-text success >}}GitVersion{{< /hl-text >}}** is a tool that generates a Semantic Version number based on your Git history. The version number generated from GitVersion can then be used for various different purposes, such as:
 
-* _Stamping a version number on artifacts (packages)_ produced during build. - This is what we did in our [last post](/post/write-your-first-building-block-in-nuke/), check the Target _{{< hl-text purple >}}Pack{{< /hl-text >}}_  in the **{{< hl-text orange >}}build.cs{{< /hl-text >}}** file.
+* _Stamping a version number on artifacts (packages)_ produced during build. - This is what we did in our [last post](/post/write-your-first-building-block-in-nuke/), check the Target _{{< hl-text purple >}}Pack{{< /hl-text >}}_  in the **{{< hl-text orange >}}Build.cs{{< /hl-text >}}** file.
 
-* _Patching AssemblyInfo.cs (and similar) files with the version number during the build_, so the version number is embedded within the compiled binaries themselves - This is also we did in our [last post](/post/write-your-first-building-block-in-nuke/), check the Target _{{< hl-text purple >}}Compile{{< /hl-text >}}_ in the **{{< hl-text orange >}}build.cs{{< /hl-text >}}** file.
+* _Patching AssemblyInfo.cs (and similar) files with the version number during the build_, so the version number is embedded within the compiled binaries themselves - This is also we did in our [last post](/post/write-your-first-building-block-in-nuke/), check the Target _{{< hl-text purple >}}Compile{{< /hl-text >}}_ in the **{{< hl-text orange >}}Build.cs{{< /hl-text >}}** file.
 * Exposing the version number to the build server to version the build itself.
 
 ## What is Semantic Versioning?
