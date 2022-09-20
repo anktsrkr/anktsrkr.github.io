@@ -6,10 +6,55 @@
     <description>Recent content in Tags on Ankit Sarkar | .NET Enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 05 Sep 2022 11:08:35 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 20 Sep 2022 11:08:35 +0100</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>.net7</title>
+      <link>https://anktsrkr.github.io/tags/.net7/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/tags/.net7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>aspnetcore</title>
+      <link>https://anktsrkr.github.io/tags/aspnetcore/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/tags/aspnetcore/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>blazorwebassembly</title>
+      <link>https://anktsrkr.github.io/tags/blazorwebassembly/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/tags/blazorwebassembly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>c#</title>
+      <link>https://anktsrkr.github.io/tags/c#/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/tags/c#/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>oauth0</title>
+      <link>https://anktsrkr.github.io/tags/oauth0/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/tags/oauth0/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>.net6</title>
@@ -21,29 +66,11 @@
     </item>
     
     <item>
-      <title>aspnetcore</title>
-      <link>https://anktsrkr.github.io/tags/aspnetcore/</link>
-      <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
-      <guid>https://anktsrkr.github.io/tags/aspnetcore/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>automation</title>
       <link>https://anktsrkr.github.io/tags/automation/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
       
       <guid>https://anktsrkr.github.io/tags/automation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>c#</title>
-      <link>https://anktsrkr.github.io/tags/c#/</link>
-      <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
-      <guid>https://anktsrkr.github.io/tags/c#/</guid>
       <description></description>
     </item>
     

@@ -6,10 +6,46 @@
     <description>Recent content in Categories on Ankit Sarkar | .NET Enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 05 Sep 2022 11:08:35 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 20 Sep 2022 11:08:35 +0100</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>.NET 7</title>
+      <link>https://anktsrkr.github.io/categories/.net-7/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/categories/.net-7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Blazor WebAssembly</title>
+      <link>https://anktsrkr.github.io/categories/blazor-webassembly/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/categories/blazor-webassembly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>C#</title>
+      <link>https://anktsrkr.github.io/categories/c#/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/categories/c#/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OAuth0</title>
+      <link>https://anktsrkr.github.io/categories/oauth0/</link>
+      <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/categories/oauth0/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>.NET 6</title>
@@ -17,15 +53,6 @@
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
       
       <guid>https://anktsrkr.github.io/categories/.net-6/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>C#</title>
-      <link>https://anktsrkr.github.io/categories/c#/</link>
-      <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
-      <guid>https://anktsrkr.github.io/categories/c#/</guid>
       <description></description>
     </item>
     

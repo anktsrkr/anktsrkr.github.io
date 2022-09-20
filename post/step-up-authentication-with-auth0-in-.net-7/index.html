@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast",
+  "description":"Step-up authentication with Auth0 in .NET 7.",
+  "url":"https:\/\/anktsrkr.github.io\/post\/step-up-authentication-with-auth0-in-.net-7\/",
+  "keywords":"[step-up authentication, step-up authentication with auth0, step-up authentication with auth0 in .net 7, step-up authentication .net core, step-up authentication asp.net core, step up authentication, step up authentication with auth0, step up authentication with auth0 in .net 7, step up authentication .net core, step up authentication asp.net core, step up authentication Blazor, step up authentication Blazor WebAssembly, step up authentication Blazor Server]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast">
+<meta name="keywords" content="step-up authentication, step-up authentication with auth0, step-up authentication with auth0 in .net 7, step-up authentication .net core, step-up authentication asp.net core, step up authentication, step up authentication with auth0, step up authentication with auth0 in .net 7, step up authentication .net core, step up authentication asp.net core, step up authentication Blazor, step up authentication Blazor WebAssembly, step up authentication Blazor Server">
+<meta name="description" content="Step-up authentication with Auth0 in .NET 7.">
+
+
+<meta property="og:description" content="Step-up authentication with Auth0 in .NET 7.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Step-up authentication with Auth0 in .NET 7">
+<meta name="twitter:title" content="Step-up authentication with Auth0 in .NET 7">
+<meta property="og:url" content="https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast">
+<meta property="og:description" content="Step-up authentication with Auth0 in .NET 7.">
+<meta name="twitter:description" content="Step-up authentication with Auth0 in .NET 7.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2022-09-20T11:08:35">
+  
+  
+    <meta property="article:modified_time" content="2022-09-20T11:08:35">
+  
+  
+  
+    
+      <meta property="article:section" content="OAuth0">
+    
+      <meta property="article:section" content="C#">
+    
+      <meta property="article:section" content=".NET 7">
+    
+      <meta property="article:section" content="Blazor WebAssembly">
+    
+  
+  
+    
+      <meta property="article:tag" content="oauth0">
+    
+      <meta property="article:tag" content=".net7">
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="aspnetcore">
+    
+      <meta property="article:tag" content="blazorwebassembly">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/stepup/Step-up%20Authentication.jpg">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/stepup/Step-up%20Authentication.jpg">
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/stepup/small-step-up%20authentication.jpg">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/stepup/small-step-up%20authentication.jpg">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Step-up authentication with Auth0 in .NET 7</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/">
+
+    
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
+    
+    
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
+
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('/images/stepup/Step-up%20Authentication.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title">
+      Step-up authentication with Auth0 in .NET 7
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2022-09-20T11:08:35&#43;01:00">
+        
+  September 20, 2022
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/oauth0">OAuth0</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/c">C#</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-7">.NET 7</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/blazor-webassembly">Blazor WebAssembly</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p><strong>Security</strong> is the ❤️ of any application but sometimes we need to balance security with usability. Sometimes you want to allow users to access a resource with a lower level of authentication by just entering username and password. But if the user wants to access a resource with a higher level of authentication, then you want to ask the user to enter a second factor of authentication.</p>
+<p>For instance, if you are building a money transfer application, you want to allow users to view transaction history or adding a new beneficiary with just a username and password. But if the user wants to transfer money, then you want to ask the user to enter a second factor of authentication like a one-time password or a fingerprint. This is called <strong>step-up authentication</strong>.</p>
+<p>In this article, we will see how to implement step-up authentication with Auth0 in .NET 7.</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#why-did-i-choose-net-7">Why did I choose .NET 7?</a></li>
+        <li><a href="#what-is-auth0">What is Auth0?</a></li>
+        <li><a href="#how-it-works">How it works?</a></li>
+        <li><a href="#pre-requisites">Pre-requisites</a></li>
+        <li><a href="#create-rule">Create Rule</a></li>
+        <li><a href="#configure-web-app">Configure web app</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="why-did-i-choose-net-7">Why did I choose .NET 7?</h2>
+<p>Sometime back, ASP.NET Core team released .NET 7 RC 1, where they have introduced a lot of new features. One of the new features is <strong>Dynamic Authentication in Blazor WebAssembly</strong>.This allows us to crete dynamic authentication requests at runtime with custom parameters to handle more advanced authentication scenarios. To specify additional parameters, we will use new <code>InteractiveRequestOptions</code> type and <code>NavigateToLogin</code> helper methods on <code>NavigationManager</code>.</p>
+<h2 id="what-is-auth0">What is Auth0?</h2>
+<p>Auth0 is a cloud-based identity management platform that provides authentication, authorization, and user management for web, mobile, IoT, and internal applications. It supports a variety of identity protocols, including OAuth 2.0, OpenID Connect, and SAML. Auth0 also provides a free tier for developers to get started with authentication.</p>
+<h2 id="how-it-works">How it works?</h2>
+<p>Let&rsquo;s go back to the example of money transfer application. If user wants to see transaction history or add a new beneficiary, then we will allow the user to access the resource with just a username and password which are in our scenario is low risk resource. But if the user wants to transfer money which is in our scenario a high risk resource, will trigger a stronger authentication mechanism like MFA.</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/stepup/step-up-auth-flow.jpg" title="step-up-auth-flow" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/stepup/step-up-auth-flow.jpg"  alt="step-up-auth-flow">
+  
+    </a>
+  
+  
+</div>
+
+<p>In the above diagram, a user tries to access restricted page which redirects to the login page. User provides valid credentials and gets authenticated and returns back to the application with <code>id_token</code> and <code>access_token</code> (we will not focus on this).</p>
+<p><code>id_token</code> contains information relevant to the user&rsquo;s session in the form of claims. It might contain information like the user&rsquo;s name, email address, and so on but we will only focus on below claims -</p>
+<table>
+<thead>
+<tr>
+<th align="center">Claim</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">exp</td>
+<td>Token expiration</td>
+</tr>
+<tr>
+<td align="center">iss</td>
+<td>Token issuer</td>
+</tr>
+<tr>
+<td align="center">amr</td>
+<td>Authentication Method Reference Values</td>
+</tr>
+<tr>
+<td align="center">aud</td>
+<td>Intended recipient of the token</td>
+</tr>
+</tbody>
+</table>
+<p>If <code>amr</code> does not exist in the payload or does not contain the value <em>mfa</em>, the user did not log in with <em>MFA</em>. If <code>amr</code> exists in the payload and mfa contains the value , then the user did log in with MFA.</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight json language-json">
+  <figcaption>
+    
+      <span>AMR contains mfa</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-json json"><code class="json"> {
+    &#34;iss&#34;: &#34;YOUR_DOMAIN&#34;,
+    &#34;sub&#34;: &#34;USER_ID&#34;,
+    &#34;aud&#34;: &#34;YOUR_CLIENT_ID&#34;,
+    &#34;iat&#34;: 1522838054,
+    &#34;exp&#34;: 1522874054,
+    &#34;acr&#34;: &#34;http://schemas.openid.net/pape/policies/2007/06/multi-factor&#34;,
+    &#34;amr&#34;: [
+        &#34;mfa&#34;
+    ]
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="pre-requisites">Pre-requisites</h2>
+<p>For this scenario, you must configure the following items in the Auth0 dashboard.</p>
+<ul>
+<li>Register a web app.</li>
+<li>Create a database connection.</li>
+<li>Enable MFA to use push notifications.</li>
+</ul>
+<p>We also need to create a Blazor WebAssembly application and make sure the basic authentication is working with Auth0. If you are not familiar with implementation, you can refer to <a href="https://auth0.com/blog/securing-blazor-webassembly-apps/"><strong>this</strong></a> article.</p>
+<p>Once we have the basic authentication working and pre requisites are configured, we can start implementing step-up authentication.</p>
+<h2 id="create-rule">Create Rule</h2>
+<p>First we need to create a rule that challenges the user to authenticate with <em>MFA</em> when the web app requests it.
+To create a rule, go to the Auth0 dashboard and click on <strong>Rules</strong> under <strong>Auth Pipeline</strong>. Click on <strong>Create Rule</strong> and select <strong>Empty Rule</strong> template which will contains below code -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight js language-js">
+  <figcaption>
+    
+      <span>Enable MFA Rule</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-js js"><code class="js">function(user, context, callback) {ff
+      var CLIENTS_WITH_MFA = [&#39;YOUR_CLIENT_ID&#39;];
+      // run only for the specified clients
+      if (CLIENTS_WITH_MFA.indexOf(context.clientID) !== -1) {
+        // ask for MFA only if the web app said so in the authentication request
+        if (context.request.query.acr_values === &#39;http://schemas.openid.net/pape/policies/2007/06/multi-factor&#39;){
+          context.multifactor = {
+            provider: &#39;any&#39;,
+            allowRememberBrowser: false
+          };
+        }
+      }
+      callback(null, user, context);
+    }</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<ul>
+<li>
+<p>The <em>CLIENTS_WITH_MFA</em> variable holds the Client IDs of all the applications you want to use this rule. (You can remove this (and the if statement that follows) if you don&rsquo;t need it.)</p>
+</li>
+<li>
+<p>The <em>context.request.query.acr_values</em> property contains the context class that the Authorization Server is being requested to use when processing requests from the application. It only exists when the application includes it in the authentication request. In the next section, we will see how our web app will include it in the authentication request, but only when a user who has not already authenticated with MFA tries to transfer money. Our web will set a value of <code>http://schemas.openid.net/pape/policies/2007/06/multi-factor</code>, which indicates that we want the Authorization Server to require MFA, and the <em>context.multifactor</em> property value that we set in our code will specify MFA via whatever method the user has configured.</p>
+</li>
+</ul>
+<h2 id="configure-web-app">Configure web app</h2>
+<p>Now we need to configure our web app. We will make use of <code>AuthenticationStateProvider</code> to check if the user has logged in with MFA. If the user has not logged in with MFA, we will redirect the user to the login page with <code>acr_values</code> parameter set to <code>http://schemas.openid.net/pape/policies/2007/06/multi-factor</code>. This will trigger the rule we created in the previous section.</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs language-cs">
+  <figcaption>
+    
+      <span>TransferMoney.razor</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-cs cs"><code class="cs">@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@attribute [Authorize]
+
+....
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var amr = context.User.Claims.FirstOrDefault(c =&gt; c.Type == &#34;amr&#34;)?.Value;
+
+        if (amr == null || !amr.Contains(&#34;mfa&#34;))
+        {
+            Navigation.NavigateToMFA();
+        }
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Here <code>NavigateToMFA</code> is a extension of <code>NavigationManager</code>. Let&rsquo;s create a extension method to redirect the user to the login page with <code>acr_values</code> parameter set to <code>http://schemas.openid.net/pape/policies/2007/06/multi-factor</code>.</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight cs language-cs">
+  <figcaption>
+    
+      <span>NavigationManagerExtensions.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-cs cs"><code class="cs"> public static class NavigationManagerExtensions
+    {
+        public static void NavigateToMFA(this NavigationManager manager, string loginPath= &#34;authentication/login&#34;, string paramName = &#34;acr_values&#34;, string paramValue = &#34;http://schemas.openid.net/pape/policies/2007/06/multi-factor&#34;)
+        {
+                InteractiveRequestOptions requestOptions = new()
+                {
+                    Interaction = InteractionType.SignIn,
+                    ReturnUrl = manager.Uri,
+                };
+                requestOptions.TryAddAdditionalParameter(paramName, paramValue);
+                manager.NavigateToLogin(loginPath, requestOptions);
+        }
+
+    }</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Once the user authenticates with MFA, the web app receives the authorization code, which will be exchanged for the new ID token, which should now contain the <em>amr</em> claim with a value of <em>mfa</em>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The building blocks for step-up authentication are already available in open standards. you just need to know how to use them. Consciously, I have skipped a lot of details in this article. I have tried to explain the concept in a simple way. You can use Auth0 or any other identity provider to implement this if that follows the open standards. I hope you find it useful. If you have any questions or suggestions, please leave a comment below.</p>
+
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/oauth0/">oauth0</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/.net7/">.net7</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/aspnetcore/">aspnetcore</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/blazorwebassembly/">blazorwebassembly</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/" data-tooltip="Manage your Package Release using Nuke in Github" aria-label="PREVIOUS: Manage your Package Release using Nuke in Github">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/step-up-authentication-with-auth0-in-.net-7\/';
+        
+          this.page.identifier = '\/post\/step-up-authentication-with-auth0-in-.net-7\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2022 Ankit Sarkar | .NET Enthusiast. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/" data-tooltip="Manage your Package Release using Nuke in Github" aria-label="PREVIOUS: Manage your Package Release using Nuke in Github">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fstep-up-authentication-with-auth0-in-.net-7%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fstep-up-authentication-with-auth0-in-.net-7%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fstep-up-authentication-with-auth0-in-.net-7%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Nottingham
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+
+
+<script>
+    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
+   </script>
+   
+   
+
+<script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+            });
+  
+        navigator.serviceWorker
+            .ready
+            .then(function(registration) {
+            });
+    }
+  </script>
+  
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+
+<a id="Setmore_button_iframe" style="position: fixed;
+ right: 20px;
+ bottom: 15px;
+ z-index: 9998;text-decoration: none"
+    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
+    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
+display: table-cell;
+width: auto;
+height: 45px;
+padding: 0 30px;
+border-radius: 25px;
+box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
+font-family: sans-serif;
+text-align: center;
+vertical-align: middle;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+cursor: pointer;">#TalkWithMe</div>
+</a>
+
+    
+  </body>
+</html>
+
