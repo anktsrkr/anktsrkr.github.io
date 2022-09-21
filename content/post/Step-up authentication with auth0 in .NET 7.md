@@ -54,6 +54,8 @@ In this article, we will see how to implement step-up authentication with Auth0 
 ## Why did I choose .NET 7?
 Sometime back, ASP.NET Core team released .NET 7 RC 1, where they have introduced a lot of new features. One of the new features is **Dynamic Authentication in Blazor WebAssembly**.This allows us to crete dynamic authentication requests at runtime with custom parameters to handle more advanced authentication scenarios. To specify additional parameters, we will use new `InteractiveRequestOptions` type and `NavigateToLogin` helper methods on `NavigationManager`.
 
+However, this feature can be used with any .NET framework. But I choose .NET 7 because it is the latest version of .NET and it is almost ready. So, I thought it would be a good idea to try out this feature with .NET 7.
+
 ## What is Auth0?
 Auth0 is a cloud-based identity management platform that provides authentication, authorization, and user management for web, mobile, IoT, and internal applications. It supports a variety of identity protocols, including OAuth 2.0, OpenID Connect, and SAML. Auth0 also provides a free tier for developers to get started with authentication.
 
@@ -169,4 +171,7 @@ Here `NavigateToMFA` is a extension of `NavigationManager`. Let's create a exten
 Once the user authenticates with MFA, the web app receives the authorization code, which will be exchanged for the new ID token, which should now contain the _amr_ claim with a value of _mfa_.
 
 ## Conclusion
-The building blocks for step-up authentication are already available in open standards. you just need to know how to use them. Consciously, I have skipped a lot of details in this article. I have tried to explain the concept in a simple way. You can use Auth0 or any other identity provider to implement this if that follows the open standards. I hope you find it useful. If you have any questions or suggestions, please leave a comment below.
+The building blocks for step-up authentication are already available in open standards. you just need to know how to use them. Consciously, I have skipped a lot of details in this article. I have tried to explain the concept in a simple way. You might find [**this**](https://www.scottbrady91.com/oauth/step-up-authentication) article helpful to understand in detail.
+You can use Auth0 or any other identity provider to implement this if that follows the open standards. I hope you find it useful. If you have any questions or suggestions, please leave a comment below.
+
+You can find the source code [**here**](https://github.com/sundryoss/Sundry.Web.StepUpAuth).
