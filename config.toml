@@ -5,7 +5,7 @@
 baseURL = "https://anktsrkr.github.io/"
 languageCode = "en-us"
 defaultContentLanguage = "en-us"
-title = "Ankit Sarkar | .NET Enthusiast"
+title = "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner"
 theme = "hugo-tranquilpeak"
 disqusShortname = "anktsrkr-github-io"
 googleAnalytics = "UA-176781214-1"
@@ -34,7 +34,7 @@ canonifyurls = true
 # Author
 # ------
 [author]
-  name = "Ankit Sarkar | .NET Enthusiast"
+  name = "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner"
   bio = "**Technical Architect, Microsoft Certified Azure Solutions Architect Expert**"
   job = "Technical Architect"
   location = "Nottingham"
