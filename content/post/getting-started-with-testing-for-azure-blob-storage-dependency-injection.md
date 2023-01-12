@@ -27,7 +27,9 @@ tags:
 - testing
 - c#
 keywords:
+- azure storage unit test
 - azure storage unit testing
+- azure storage integration test
 - azure storage integration testing
 - azure storage test containers
 - azure storage moq
@@ -76,7 +78,21 @@ keywords:
 - Dependency injection
 - azure storage blob dependency injection
 - azure storage dependency injection
-
+- azure storage testing
+- azurite
+- moving solutions to Azure Cloud
+- How to Test Azure Blob Storage
+- How to make integration test for Azure Storage 
+- azure
+- integration test for azure storage,
+- storage
+- unit test
+- getting started with testing for azure blob storage
+- getting started with testing for azure blob storage dependency injection
+- getting started with testing for azure blob storage unit test
+- getting started with testing for azure blob storage unit test with moq
+- getting started with testing for azure blob storage integration test
+- getting started with testing for azure blob storage integration test with azurite test containers
 ---
 With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts : 
 
