@@ -1,6 +1,6 @@
 ---
 title: "Getting started with testing for Azure Blob Storage : Dependency Injection" # Title of the blog post.
-date: 2023-01-06T11:08:35+01:00 # Date of post creation.
+date: 2023-01-12T06:00:35+01:00 # Date of post creation.
 description: "Perform unit & integration tests for Azure Blob Storage: Dependency Injection" # Description used for search engine.
 featured: true # Sets if post is a featured post, making appear on the home page side bar.
 draft: false # Sets whether to render this page. Draft of true will not be rendered.
