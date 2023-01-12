@@ -4,12 +4,82 @@
   
   <url>
     <loc>https://anktsrkr.github.io/</loc>
-    <lastmod>2022-09-20T11:08:35+01:00</lastmod>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://anktsrkr.github.io/categories/.net-7/</loc>
-    <lastmod>2022-09-20T11:08:35+01:00</lastmod>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/azure/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/azure/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/azurite/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/c#/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/integration-testing/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/moq/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/post/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/test-containers/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/testing/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/unit-testing/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/xunit/</loc>
+    <lastmod>2023-01-06T11:08:35+01:00</lastmod>
   </url>
   
   <url>
@@ -38,16 +108,6 @@
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/c#/</loc>
-    <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/</loc>
-    <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://anktsrkr.github.io/categories/oauth0/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
   </url>
@@ -58,17 +118,7 @@
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/post/</loc>
-    <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/</loc>
-    <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/tags/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
   </url>
   
@@ -144,11 +194,6 @@
   
   <url>
     <loc>https://anktsrkr.github.io/categories/app-service-environment/</loc>
-    <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/tags/azure/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
   </url>
   

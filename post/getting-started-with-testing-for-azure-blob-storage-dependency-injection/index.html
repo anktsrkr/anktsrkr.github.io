@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+  "description":"Perform unit \u0026 integration tests for Azure Blob Storage: Dependency Injection",
+  "url":"https:\/\/anktsrkr.github.io\/post\/getting-started-with-testing-for-azure-blob-storage-dependency-injection\/",
+  "keywords":"[azure storage unit testing, azure storage integration testing, azure storage test containers, azure storage moq, azure storage xunit, azure storage .net 7, azure storage azurite, azure storage azurite test containers, azure storage azurite moq, azure storage azurite xunit, azure storage azurite .net 7, azure storage azurite unit testing, azure storage azurite integration testing, azure storage azurite test containers, azure storage unit testing, azure storage blob integration testing, azure storage blob test containers, azure storage blob moq, azure storage blob xunit, azure storage blob .net 7, azure storage blob azurite, azure storage blob azurite test containers, azure storage blob azurite moq, azure storage blob azurite xunit, azure storage blob azurite .net 7, azure storage blob azurite unit testing, azure storage blob azurite integration testing, azure storage blob azurite test containers, azurite integration testing, azurite test containers, azurite moq, azurite xunit, azurite .net 7, azurite unit testing, unit and integration testing for azure blob storage, unit and integration testing for azure blob storage using azurite test containers, unit and integration testing for azure blob storage using xunit moq, unit and integration testing for azure blob storage using .net 7, unit and integration testing for azure blob storage using azurite, BlobContainerClient, BlobContainerClient dependency injection, BlobClient, BlobServiceClient, Azure.Storage.Blobs, Azure.Storage.Blobs v12 unit testing, Azure.Storage.Blobs v12 integration testing, Dependency injection, azure storage blob dependency injection, azure storage dependency injection]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta name="keywords" content="azure storage unit testing, azure storage integration testing, azure storage test containers, azure storage moq, azure storage xunit, azure storage .net 7, azure storage azurite, azure storage azurite test containers, azure storage azurite moq, azure storage azurite xunit, azure storage azurite .net 7, azure storage azurite unit testing, azure storage azurite integration testing, azure storage azurite test containers, azure storage unit testing, azure storage blob integration testing, azure storage blob test containers, azure storage blob moq, azure storage blob xunit, azure storage blob .net 7, azure storage blob azurite, azure storage blob azurite test containers, azure storage blob azurite moq, azure storage blob azurite xunit, azure storage blob azurite .net 7, azure storage blob azurite unit testing, azure storage blob azurite integration testing, azure storage blob azurite test containers, azurite integration testing, azurite test containers, azurite moq, azurite xunit, azurite .net 7, azurite unit testing, unit and integration testing for azure blob storage, unit and integration testing for azure blob storage using azurite test containers, unit and integration testing for azure blob storage using xunit moq, unit and integration testing for azure blob storage using .net 7, unit and integration testing for azure blob storage using azurite, BlobContainerClient, BlobContainerClient dependency injection, BlobClient, BlobServiceClient, Azure.Storage.Blobs, Azure.Storage.Blobs v12 unit testing, Azure.Storage.Blobs v12 integration testing, Dependency injection, azure storage blob dependency injection, azure storage dependency injection">
+<meta name="description" content="Perform unit &amp; integration tests for Azure Blob Storage: Dependency Injection">
+
+
+<meta property="og:description" content="Perform unit &amp; integration tests for Azure Blob Storage: Dependency Injection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting started with testing for Azure Blob Storage : Dependency Injection">
+<meta name="twitter:title" content="Getting started with testing for Azure Blob Storage : Dependency Injection">
+<meta property="og:url" content="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta property="og:description" content="Perform unit &amp; integration tests for Azure Blob Storage: Dependency Injection">
+<meta name="twitter:description" content="Perform unit &amp; integration tests for Azure Blob Storage: Dependency Injection">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2023-01-06T11:08:35">
+  
+  
+    <meta property="article:modified_time" content="2023-01-06T11:08:35">
+  
+  
+  
+    
+      <meta property="article:section" content="Azure">
+    
+      <meta property="article:section" content="Azurite">
+    
+      <meta property="article:section" content="Unit Testing">
+    
+      <meta property="article:section" content="Integration Testing">
+    
+      <meta property="article:section" content="Test Containers">
+    
+      <meta property="article:section" content="Moq">
+    
+      <meta property="article:section" content="xUnit">
+    
+      <meta property="article:section" content=".NET 7">
+    
+  
+  
+    
+      <meta property="article:tag" content="azure">
+    
+      <meta property="article:tag" content="testing">
+    
+      <meta property="article:tag" content="c#">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/azstorage/banner.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/azstorage/banner.png">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Getting started with testing for Azure Blob Storage : Dependency Injection</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/">
+
+    
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
+    
+    
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
+     crossorigin="anonymous"></script>
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title">
+      Getting started with testing for Azure Blob Storage : Dependency Injection
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2023-01-06T11:08:35&#43;01:00">
+        
+  January 6, 2023
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/azure">Azure</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/azurite">Azurite</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/unit-testing">Unit Testing</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/integration-testing">Integration Testing</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/test-containers">Test Containers</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/moq">Moq</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/xunit">xUnit</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-7">.NET 7</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p>With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :</p>
+<p><em>This Post - Getting started with testing for Azure Blob Storage : Dependency Injection</em></p>
+<p><a href="#">Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</a></p>
+<p><a href="#">Getting started with testing for Azure Blob Storage : Integration Test with help of Test Containers and Azurite</a></p>
+<h2 id="introduction">Introduction</h2>
+<p>Recently, I was working on a existing project where we were uploading some files to Azure Blob Storage. While working on this project, I was responsible for maintaining atleast 80% code coverage. While started analyzing the code coverage,found that the way it was written, it&rsquo;s not possible to write unit tests for it. So, I decided to refactor the code. In this post, I will start with a very basic example and will refactor it to make it testable.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>Let&rsquo;s get started with a very basic example. In this example, we will upload a file to Azure Blob Storage. Below is the code snippet for the same.</p>
+<div class="alert info no-icon ">
+  <p><p>Please note, I am using .NET 7 console app to show in this post. But the process is same for any .NET version and any application type.</p>
+<p>In fact, it&rsquo;s difficult to introduce Dependency Injection in console app, so you can take it as <em>Bonus</em> that I am showing how to do it in console app.</p>
+</p>
+</div>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Azure.Storage.Blobs;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+
+using IHost host = Host
+    .CreateDefaultBuilder(args)
+    .ConfigureAppConfiguration((context, config) =&gt;
+    {
+        config.AddJsonFile(&#34;appsettings.json&#34;, optional: false, reloadOnChange: true)
+              .AddJsonFile($&#34;appsettings.{context.HostingEnvironment.EnvironmentName}.json&#34;, optional: true);
+    })
+    .Build();
+
+
+
+await UploadFileToAzBlob(host.Services);
+await host.RunAsync();
+
+
+static async Task UploadFileToAzBlob(IServiceProvider services)
+{
+    var config = services.GetRequiredService&lt;IConfiguration&gt;();
+    var azBlobConnectionString = config.GetValue&lt;string&gt;(&#34;AzBlobSettings:ConnectionString&#34;);
+    var azBlobContainerName = config.GetValue&lt;string&gt;(&#34;AzBlobSettings:ContainerName&#34;);
+    var fileName = config.GetValue&lt;string&gt;(&#34;AzBlobSettings:FileName&#34;)!;
+
+    using FileStream stream = new(fileName, FileMode.Open);
+    
+    BlobContainerClient container = new (azBlobConnectionString, azBlobContainerName);
+
+    try
+    {
+        await container.CreateIfNotExistsAsync();
+
+        var client = container.GetBlobClient(fileName);
+        await client.UploadAsync(stream);
+    }
+    catch (Exception)
+    {
+        throw;
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>We will focus on <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong> method. This method is responsible for uploading a file to Azure Blob Storage. In this method, we are creating a <strong><span class="highlight-text orange">BlobContainerClient</span></strong> object directly and then using it to upload the file.</p>
+<p>Problem with this approach is that we are not able to mock <strong><span class="highlight-text orange">BlobContainerClient</span></strong> object. So, we are not able to write unit tests for this method. Also, we it is dependent on <strong><span class="highlight-text purple">IServiceProvider</span></strong> , which is not a good practice and makes it difficult to write unit tests for this method.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>In this section, we will start refactoring the code to make it testable. The first step is to move the <strong><span class="highlight-text orange">BlobContainerClient</span></strong> releated code. We will introduce a new interface <strong><span class="highlight-text yellow">IAzBlobService</span></strong> and move all blob releated reponsibities to it&rsquo;s own class
+<strong><span class="highlight-text yellow">AzBlobService</span></strong>. Below is the code snippet for the same.</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>IAzBlobService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Azure.Storage.Blobs;
+using Microsoft.Extensions.Configuration;
+
+namespace SystemUnderTest.Interface;
+
+public interface IAzBlobService
+{
+    Task&lt;bool&gt; UploadFileToAzBlob(string fileName);
+}
+
+public class AzBlobService : IAzBlobService
+{
+    private readonly string azBlobConnectionString;
+    private readonly string azBlobContainerName;
+    public AzBlobService(IConfiguration  configuration)
+    {
+        azBlobConnectionString = configuration.GetValue&lt;string&gt;(&#34;AzBlobSettings:ConnectionString&#34;)!;
+        azBlobContainerName = configuration.GetValue&lt;string&gt;(&#34;AzBlobSettings:ContainerName&#34;)!;
+    }
+    public async Task&lt;bool&gt; UploadFileToAzBlob(string fileName)
+    {
+        using FileStream stream = new(fileName, FileMode.Open);
+        BlobContainerClient container = new(azBlobConnectionString, azBlobContainerName);
+
+        try
+        {          
+            await container.CreateIfNotExistsAsync();
+            var client = container.GetBlobClient(fileName);
+            await client.UploadAsync(stream);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($&#34;Unable to upload blob. Reason :{ex.Message}&#34; );
+            return false;
+        }
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Let&rsquo;s refractor the method <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong>.</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SystemUnderTest.Interface;
+
+using IHost host = Host
+    .CreateDefaultBuilder(args)
+    .ConfigureServices((context, services) =&gt;
+    {
+        services.AddSingleton&lt;IAzBlobService, AzBlobService&gt;();
+    })
+    .ConfigureAppConfiguration((context, config) =&gt;
+    {
+        config.AddJsonFile(&#34;appsettings.json&#34;, optional: false, reloadOnChange: true)
+              .AddJsonFile($&#34;appsettings.{context.HostingEnvironment.EnvironmentName}.json&#34;, optional: true);
+    })
+.Build();
+
+
+
+await UploadFileToAzBlob(host.Services);
+await host.RunAsync();
+
+
+static async Task UploadFileToAzBlob(IServiceProvider services)
+{
+    var azBlobService = services.GetRequiredService&lt;IAzBlobService&gt;();
+    var result = await azBlobService.UploadFileToAzBlob(&#34;samplefile.txt&#34;);
+
+    if (result)
+    {
+        Console.WriteLine(&#34;File uploaded successfully&#34;);
+    }
+    else
+    {
+        Console.WriteLine(&#34;File upload failed&#34;);
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Now, our method is not directly depends on  <strong><span class="highlight-text orange">BlobContainerClient</span></strong>, we have delegated the responsibility to <strong><span class="highlight-text yellow">IAzBlobService</span></strong>. This makes it easy to write unit tests for this method. In layman&rsquo;s terms, we have decoupled the code and it is called <em>Dependency Injection</em>.</p>
+<p>However, our method still dependents on <strong><span class="highlight-text purple">IServiceProvider</span></strong>. In our next post, we will see how to remove this dependency as well and will write our first unit test case.</p>
+<p>You can find the source code <a href="https://github.com/sundryoss/Sundry.AzStorageTest"><strong>here</strong></a>.</p>
+
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azure/">azure</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/testing/">testing</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/" data-tooltip="Step-up authentication with Auth0 in .NET 7" aria-label="PREVIOUS: Step-up authentication with Auth0 in .NET 7">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/getting-started-with-testing-for-azure-blob-storage-dependency-injection\/';
+        
+          this.page.identifier = '\/post\/getting-started-with-testing-for-azure-blob-storage-dependency-injection\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2023 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/" data-tooltip="Step-up authentication with Auth0 in .NET 7" aria-label="PREVIOUS: Step-up authentication with Auth0 in .NET 7">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-dependency-injection%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-dependency-injection%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-dependency-injection%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Nottingham
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+
+
+<script>
+    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
+   </script>
+   
+   
+
+<script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+            });
+  
+        navigator.serviceWorker
+            .ready
+            .then(function(registration) {
+            });
+    }
+  </script>
+  
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+
+<a id="Setmore_button_iframe" style="position: fixed;
+ right: 20px;
+ bottom: 15px;
+ z-index: 9998;text-decoration: none"
+    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
+    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
+display: table-cell;
+width: auto;
+height: 45px;
+padding: 0 30px;
+border-radius: 25px;
+box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
+font-family: sans-serif;
+text-align: center;
+vertical-align: middle;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+cursor: pointer;">#TalkWithMe</div>
+</a>
+
+    
+  </body>
+</html>
+
