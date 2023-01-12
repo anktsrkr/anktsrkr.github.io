@@ -6,7 +6,7 @@
     <description>Recent content in Posts on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 Jan 2023 11:08:35 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 12 Jan 2023 06:00:35 +0100</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>Getting started with testing for Azure Blob Storage : Dependency Injection</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</link>
-      <pubDate>Fri, 06 Jan 2023 11:08:35 +0100</pubDate>
+      <pubDate>Thu, 12 Jan 2023 06:00:35 +0100</pubDate>
       
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</guid>
       <description>With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
