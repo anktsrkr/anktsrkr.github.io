@@ -98,9 +98,9 @@ With this post, I am starting a new series about how to perform unit and integra
 
 _This Post - Getting started with testing for Azure Blob Storage : Dependency Injection_
 
-[Getting started with testing for Azure Blob Storage : Unit Test with help of Moq](#)
+[Getting started with testing for Azure Blob Storage : Unit Test with help of Moq](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq)
 
-[Getting started with testing for Azure Blob Storage : Integration Test with help of Test Containers and Azurite](#)
+[Getting started with testing for Azure Blob Storage : Integration Test with help of Test Containers and Azurite - Coming Soon](#)
 
 
 ## Introduction
@@ -256,6 +256,6 @@ static async Task UploadFileToAzBlob(IServiceProvider services)
 
 Now, our method is not directly depends on  **{{< hl-text orange >}}BlobContainerClient{{< /hl-text >}}**, we have delegated the responsibility to **{{< hl-text yellow >}}IAzBlobService{{< /hl-text >}}**. This makes it easy to write unit tests for this method. In layman's terms, we have decoupled the code and it is called _Dependency Injection_.
 
-However, our method still dependents on **{{< hl-text purple >}}IServiceProvider{{< /hl-text >}}**. In our next post, we will see how to remove this dependency as well and will write our first unit test case.
+However, our method still dependents on **{{< hl-text purple >}}IServiceProvider{{< /hl-text >}}**. In our [next](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq) post, we will see how to remove this dependency as well and will write our first unit test case.
 
 You can find the source code [**here**](https://github.com/sundryoss/Sundry.AzStorageTest).
