@@ -123,6 +123,8 @@ In our [last](/post/getting-started-with-testing-for-azure-blob-storage-unit-tes
 
 There are several different ways to install Azurite. You can install it as a Node.js package, as a Docker container, or as a standalone executable. In this post, we will use Azurite as a Docker container.
 
+##### Why am I using Azurite instead of actual storage account?
+IMO, it is always a good practice to use a local environment for testing. It will help you to avoid unnecessary costs and unnecessary headaches for managing the storage account. Also, it will help you to test your application in a more controlled environment.
 
 ### What is TestContainers?
 [Testcontainers](https://dotnet.testcontainers.org/) for .NET is a library to support tests with throwaway instances of Docker containers for all compatible .NET Standard versions. The library is built on top of the .NET Docker remote API and provides a lightweight implementation to support your test environment in all circumstances.
