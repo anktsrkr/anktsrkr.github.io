@@ -435,7 +435,7 @@ static async Task UploadFileToAzBlob(IServiceProvider services)
 </figure>
 
 <p>We will focus on <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong> method. This method is responsible for uploading a file to Azure Blob Storage. In this method, we are creating a <strong><span class="highlight-text orange">BlobContainerClient</span></strong> object directly and then using it to upload the file.</p>
-<p>Problem with this approach is that we are not able to mock <strong><span class="highlight-text orange">BlobContainerClient</span></strong> object. So, we are not able to write unit tests for this method. Also, we it is dependent on <strong><span class="highlight-text purple">IServiceProvider</span></strong> , which is not a good practice and makes it difficult to write unit tests for this method.</p>
+<p>Problem with this approach is that we are not able to mock <strong><span class="highlight-text orange">BlobContainerClient</span></strong> object. So, we are not able to write unit tests for this method. Also, it is dependent on <strong><span class="highlight-text purple">IServiceProvider</span></strong> , which is not a good practice and makes it difficult to write unit tests for this method.</p>
 <h2 id="the-solution">The Solution</h2>
 <p>In this section, we will start refactoring the code to make it testable. The first step is to move the <strong><span class="highlight-text orange">BlobContainerClient</span></strong> releated code. We will introduce a new interface <strong><span class="highlight-text yellow">IAzBlobService</span></strong> and move all blob releated reponsibities to it&rsquo;s own class
 <strong><span class="highlight-text yellow">AzBlobService</span></strong>. Below is the code snippet for the same.</p>
