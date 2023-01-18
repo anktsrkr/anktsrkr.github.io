@@ -582,11 +582,25 @@ public class AzuriteContainer : IAsyncLifetime
   </table>
 </figure>
 
-<p>To setup the shared context below features can be used:
-| Feature        | When to use        |
-| &mdash;&mdash;&mdash;&ndash; | &mdash;&mdash;&mdash;&ndash; |
-| Class Fixtures      | When you want to create a single test context and share it among all the tests in the class, and have it cleaned up after all the tests in the class have finished.|
-| Collection Fixtures      | When you want to create a single test context and share it among tests in several test classes, and have it cleaned up after all the tests in the test classes have finished.|</p>
+<p>To setup the shared context below features can be used:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Class Fixtures</td>
+<td>When you want to create a single test context and share it among all the tests in the class, and have it cleaned up after all the tests in the class have finished.</td>
+</tr>
+<tr>
+<td>Collection Fixtures</td>
+<td>When you want to create a single test context and share it among tests in several test classes, and have it cleaned up after all the tests in the test classes have finished.</td>
+</tr>
+</tbody>
+</table>
 <p>In our case, we want to create a single test context and share it among all the tests in the class, and have it cleaned up after all the tests in the class have finished. So, we could use <strong><span class="highlight-text purple">Class Fixture</span></strong>, but for demonstration purpose we will use <strong><span class="highlight-text warning">Collection Fixture</span></strong>.However, Please see the steps for how to use -</p>
 <p><strong><span class="highlight-text purple">Steps to use Class Fixture : </span></strong></p>
 <ul>
