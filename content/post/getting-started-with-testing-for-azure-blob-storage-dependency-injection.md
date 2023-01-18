@@ -32,6 +32,7 @@ keywords:
 - azure storage integration test
 - azure storage integration testing
 - azure storage test containers
+- azure storage testcontainers
 - azure storage moq
 - azure storage xunit
 - azure storage .net 7
@@ -43,6 +44,7 @@ keywords:
 - azure storage azurite unit testing
 - azure storage azurite integration testing
 - azure storage azurite test containers
+- azure storage azurite testcontainers
 - azure storage unit testing
 - azure storage blob integration testing
 - azure storage blob test containers
@@ -57,6 +59,7 @@ keywords:
 - azure storage blob azurite unit testing
 - azure storage blob azurite integration testing
 - azure storage blob azurite test containers
+- azure storage blob azurite testcontainers
 - azurite integration testing
 - azurite test containers
 - azurite moq
@@ -65,6 +68,7 @@ keywords:
 - azurite unit testing
 - unit and integration testing for azure blob storage
 - unit and integration testing for azure blob storage using azurite test containers
+- unit and integration testing for azure blob storage using azurite testcontainers
 - unit and integration testing for azure blob storage using xunit moq
 - unit and integration testing for azure blob storage using .net 7
 - unit and integration testing for azure blob storage using azurite
@@ -93,6 +97,14 @@ keywords:
 - getting started with testing for azure blob storage unit test with moq
 - getting started with testing for azure blob storage integration test
 - getting started with testing for azure blob storage integration test with azurite test containers
+- getting started with testing for azure blob storage integration test with azurite testcontainers
+- class fixture
+- collection fixture
+- IAsyncLifetime
+- xunit class fixture
+- xunit collection fixture
+- xunit IAsyncLifetime
+- azurite IAsyncLifetime
 ---
 With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts : 
 
@@ -100,12 +112,12 @@ _This Post - Getting started with testing for Azure Blob Storage : Dependency In
 
 [Getting started with testing for Azure Blob Storage : Unit Test with help of Moq](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq)
 
-[Getting started with testing for Azure Blob Storage : Integration Test with help of Test Containers and Azurite - Coming Soon](#)
+[Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite)
 
 
 ## Introduction
 
-Recently, I was working on a existing project where we were uploading some files to Azure Blob Storage. While working on this project, I was responsible for maintaining atleast 80% code coverage. While started analyzing the code coverage,found that the way it was written, it's not possible to write unit tests for it. So, I decided to refactor the code. In this post, I will start with a very basic example and will refactor it to make it testable. 
+Recently, I was working on a existing project where we were uploading some files to Azure Blob Storage. While working on this project, I was responsible for maintaining at least 80% code coverage. While started analyzing the code coverage,found that the way it was written, it's not possible to write unit tests for it. So, I decided to refactor the code. In this post, I will start with a very basic example and will refactor it to make it testable. 
 
 ## The Problem
 Let's get started with a very basic example. In this example, we will upload a file to Azure Blob Storage. Below is the code snippet for the same. 

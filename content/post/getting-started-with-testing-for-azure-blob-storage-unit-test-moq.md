@@ -32,6 +32,7 @@ keywords:
 - azure storage integration test
 - azure storage integration testing
 - azure storage test containers
+- azure storage testcontainers
 - azure storage moq
 - azure storage xunit
 - azure storage .net 7
@@ -43,6 +44,7 @@ keywords:
 - azure storage azurite unit testing
 - azure storage azurite integration testing
 - azure storage azurite test containers
+- azure storage azurite testcontainers
 - azure storage unit testing
 - azure storage blob integration testing
 - azure storage blob test containers
@@ -57,6 +59,7 @@ keywords:
 - azure storage blob azurite unit testing
 - azure storage blob azurite integration testing
 - azure storage blob azurite test containers
+- azure storage blob azurite testcontainers
 - azurite integration testing
 - azurite test containers
 - azurite moq
@@ -65,6 +68,7 @@ keywords:
 - azurite unit testing
 - unit and integration testing for azure blob storage
 - unit and integration testing for azure blob storage using azurite test containers
+- unit and integration testing for azure blob storage using azurite testcontainers
 - unit and integration testing for azure blob storage using xunit moq
 - unit and integration testing for azure blob storage using .net 7
 - unit and integration testing for azure blob storage using azurite
@@ -93,6 +97,14 @@ keywords:
 - getting started with testing for azure blob storage unit test with moq
 - getting started with testing for azure blob storage integration test
 - getting started with testing for azure blob storage integration test with azurite test containers
+- getting started with testing for azure blob storage integration test with azurite testcontainers
+- class fixture
+- collection fixture
+- IAsyncLifetime
+- xunit class fixture
+- xunit collection fixture
+- xunit IAsyncLifetime
+- azurite IAsyncLifetime
 ---
 Hi Everyone!
 
@@ -102,7 +114,7 @@ This post is continuation of how to perform unit and integration tests for Azure
 
 _This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of Moq_
 
-[Getting started with testing for Azure Blob Storage : Integration Test with help of Test Containers and Azurite - Coming Soon](#)
+[Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite)
 
 Now, we know the context of the problem and by some extend we tried to solve it.  However **{{< hl-text blue >}}UploadFileToAzBlob{{< /hl-text >}}** still has a dependency on **{{< hl-text purple >}}IServiceProvider{{< /hl-text >}}**. 
 
@@ -262,13 +274,13 @@ public async Task File_Upload_Failure ()
 }
 {{</codeblock>}}
 
-Here, the only difference is we are setting up the mock object to return _false_ when **{{< hl-text blue >}}UploadFileToAzBlob{{< /hl-text >}}** method is called.
+Here, the only difference is we are setting up the mock object to return _false_ when **{{< hl-text blue >}}UploadFileToAzBlobAsync{{< /hl-text >}}** method is called.
 
 ## Outro
-That's it. We have written two test cases for the method **{{< hl-text blue >}}UploadFileToAzBlob{{< /hl-text >}}**. We have used **Moq** to mock the dependency **{{< hl-text yellow >}}IAzBlobService{{< /hl-text >}}** and **xUnit** to write the test cases. 
+That's it. We have written two test cases for the method **{{< hl-text blue >}}UploadFileToAzBlobAsync{{< /hl-text >}}**. We have used **Moq** to mock the dependency **{{< hl-text yellow >}}IAzBlobService{{< /hl-text >}}** and **xUnit** to write the test cases. 
 
-However, we have not tested the implementation of **{{< hl-text blue >}}UploadFileToAzBlob{{< /hl-text >}}** method. We have only tested the output of the method. 
+However, we have not tested the implementation of **{{< hl-text blue >}}UploadFileToAzBlobAsync{{< /hl-text >}}** method. We have only tested the output of the method. 
 
-We will write the test cases for the implementation of **{{< hl-text blue >}}UploadFileToAzBlob{{< /hl-text >}}** method in the next post, which will be act as integration test cases.
+We will write the test cases for the implementation of **{{< hl-text blue >}}UploadFileToAzBlobAsync{{< /hl-text >}}** method in the [next](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-test-containers-azurite) post, which will be act as integration test cases.
 
 You can find the source code [**here**](https://github.com/sundryoss/Sundry.AzStorageTest).
