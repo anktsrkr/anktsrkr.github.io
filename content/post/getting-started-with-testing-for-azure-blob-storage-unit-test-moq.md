@@ -281,6 +281,6 @@ That's it. We have written two test cases for the method **{{< hl-text blue >}}U
 
 However, we have not tested the implementation of **{{< hl-text blue >}}UploadFileToAzBlobAsync{{< /hl-text >}}** method. We have only tested the output of the method. 
 
-We will write the test cases for the implementation of **{{< hl-text blue >}}UploadFileToAzBlobAsync{{< /hl-text >}}** method in the [next](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-test-containers-azurite) post, which will be act as integration test cases.
+We will write the test cases for the implementation of **{{< hl-text blue >}}UploadFileToAzBlobAsync{{< /hl-text >}}** method in the [next](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite) post, which will be act as integration test cases.
 
 You can find the source code [**here**](https://github.com/sundryoss/Sundry.AzStorageTest).

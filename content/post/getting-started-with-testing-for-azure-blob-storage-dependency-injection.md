@@ -177,7 +177,7 @@ static async Task UploadFileToAzBlob(IServiceProvider services)
 
 We will focus on **{{< hl-text blue >}}UploadFileToAzBlob{{< /hl-text >}}** method. This method is responsible for uploading a file to Azure Blob Storage. In this method, we are creating a **{{< hl-text orange >}}BlobContainerClient{{< /hl-text >}}** object directly and then using it to upload the file.
 
-Problem with this approach is that we are not able to mock **{{< hl-text orange >}}BlobContainerClient{{< /hl-text >}}** object. So, we are not able to write unit tests for this method. Also, we it is dependent on **{{< hl-text purple >}}IServiceProvider{{< /hl-text >}}** , which is not a good practice and makes it difficult to write unit tests for this method.
+Problem with this approach is that we are not able to mock **{{< hl-text orange >}}BlobContainerClient{{< /hl-text >}}** object. So, we are not able to write unit tests for this method. Also, it is dependent on **{{< hl-text purple >}}IServiceProvider{{< /hl-text >}}** , which is not a good practice and makes it difficult to write unit tests for this method.
 
 
 ## The Solution
