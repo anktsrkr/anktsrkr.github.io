@@ -248,6 +248,7 @@ public class AzuriteContainer : IAsyncLifetime
 {{< /codeblock >}}
 
 To setup the shared context below features can be used:
+
 | Feature        | When to use        |
 | ----------- | ----------- |
 | Class Fixtures      | When you want to create a single test context and share it among all the tests in the class, and have it cleaned up after all the tests in the class have finished.|
