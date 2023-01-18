@@ -356,6 +356,8 @@ if (!doNotTrack) {
 <h3 id="what-is-azurite">What is Azurite?</h3>
 <p><a href="https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azurite">Azurite</a> is an open-source emulator provides a free local environment for testing your Azure Blob, Queue Storage, and Table Storage applications. When you&rsquo;re satisfied with how your application is working locally, switch to using an Azure Storage account in the cloud. The emulator provides cross-platform support on Windows, Linux, and macOS.</p>
 <p>There are several different ways to install Azurite. You can install it as a Node.js package, as a Docker container, or as a standalone executable. In this post, we will use Azurite as a Docker container.</p>
+<h5 id="why-am-i-using-azurite-instead-of-actual-storage-account">Why am I using Azurite instead of actual storage account?</h5>
+<p>IMO, it is always a good practice to use a local environment for testing. It will help you to avoid unnecessary costs and unnecessary headaches for managing the storage account. Also, it will help you to test your application in a more controlled environment.</p>
 <h3 id="what-is-testcontainers">What is TestContainers?</h3>
 <p><a href="https://dotnet.testcontainers.org/">Testcontainers</a> for .NET is a library to support tests with throwaway instances of Docker containers for all compatible .NET Standard versions. The library is built on top of the .NET Docker remote API and provides a lightweight implementation to support your test environment in all circumstances.</p>
 <p>For example, When we will run our integration tests, you will see that the Azurite container will be created and started automatically.</p>
