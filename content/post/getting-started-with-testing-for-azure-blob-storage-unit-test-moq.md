@@ -116,6 +116,8 @@ _This Post - Getting started with testing for Azure Blob Storage : Unit Test wit
 
 [Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite)
 
+[Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk)
+
 Now, we know the context of the problem and by some extend we tried to solve it.  However **{{< hl-text blue >}}UploadFileToAzBlob{{< /hl-text >}}** still has a dependency on **{{< hl-text purple >}}IServiceProvider{{< /hl-text >}}**. 
 
 First thing first, we will try to replace the dependency with **{{< hl-text yellow >}}IAzBlobService{{< /hl-text >}}** and to make it work, we will refactor the **{{< hl-text purple >}}Main{{< /hl-text >}}** method. Actually not much difference, we just introduced another method  **{{< hl-text orange >}}CreateHostBuilder{{< /hl-text >}}** to create _IHostBuilder_ instance. I have also used **{{< hl-text red >}}ExcludeFromCodeCoverage{{< /hl-text >}}**  attribute to exclude configuration methods from code coverage. Below is the code snippet for updated startup - 

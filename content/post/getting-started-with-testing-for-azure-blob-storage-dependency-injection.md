@@ -114,7 +114,7 @@ _This Post - Getting started with testing for Azure Blob Storage : Dependency In
 
 [Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite)
 
-
+[Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk)
 ## Introduction
 
 Recently, I was working on a existing project where we were uploading some files to Azure Blob Storage. While working on this project, I was responsible for maintaining at least 80% code coverage. While started analyzing the code coverage,found that the way it was written, it's not possible to write unit tests for it. So, I decided to refactor the code. In this post, I will start with a very basic example and will refactor it to make it testable. 

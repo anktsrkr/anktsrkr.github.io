@@ -11,7 +11,9 @@ showActions: false
 comments: false
 ---
 
-My name is Ankit Sarkar, Technical Architect by profession. I am from Kolkata, India. Recently,I moved to Nottingham, United Kindom for my new assignment. 
+My name is Ankit Sarkar, Technical Architect by profession. I am from Kolkata, India. 
+
+Recently,I moved to Leeds, United Kindom for my new assignment from Nottingham. 
 
 I have a Bachelor's degree in Electronics and Communication and around 9 years of experience working on .NET technologies and Microsoft Azure.
 
