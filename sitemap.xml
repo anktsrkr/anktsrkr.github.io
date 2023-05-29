@@ -4,12 +4,57 @@
   
   <url>
     <loc>https://anktsrkr.github.io/</loc>
-    <lastmod>2023-05-24T06:00:35+01:00</lastmod>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
   </url>
   
   <url>
     <loc>https://anktsrkr.github.io/categories/.net-7/</loc>
-    <lastmod>2023-05-24T06:00:35+01:00</lastmod>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/c#/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/httpclientfactory/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/httpclientfactory/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/polly/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/polly/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/post/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/</loc>
+    <lastmod>2023-05-25T06:00:35+01:00</lastmod>
   </url>
   
   <url>
@@ -28,27 +73,7 @@
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/c#/</loc>
-    <lastmod>2023-05-24T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/</loc>
-    <lastmod>2023-05-24T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://anktsrkr.github.io/post/download-files-from-azure-blob-storage-efficiently-using-recyclablememorystream/</loc>
-    <lastmod>2023-05-24T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/post/</loc>
-    <lastmod>2023-05-24T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/tags/</loc>
     <lastmod>2023-05-24T06:00:35+01:00</lastmod>
   </url>
   

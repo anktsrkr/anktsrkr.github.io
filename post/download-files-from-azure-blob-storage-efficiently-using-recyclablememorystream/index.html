@@ -458,7 +458,7 @@ public class BenchmarkAPIPerformance
 <p>In our case, we are downloading the files and storing it in <strong><span class="highlight-text yellow">MemoryStream</span></strong>. Since the files are larger than 85 KB, surely it will end up in LOH.</p>
 <h2 id="the-solution">The Solution</h2>
 <p>So, from the above explanation, if we somehow can avoid LOH allocation, we might be able to reduce the memory consumption and performance will also improve. Microsoft has provided a library called <strong><span class="highlight-text orange">Microsoft.IO.RecyclableMemoryStream</span></strong> which can be used to avoid LOH allocation. The excellent documentation for the same can be found <a href="https://github.com/microsoft/Microsoft.IO.RecyclableMemoryStream">here</a> where you can find the details about how it actually works.</p>
-<p>The best part is that the semantics are close to the original <strong><span class="highlight-text green">System.IO.MemoryStream</span></strong>implementation, and is intended to be a drop-in replacement as much as possible.</p>
+<p>The best part is that the semantics are close to the original <strong><span class="highlight-text green">System.IO.MemoryStream</span></strong> implementation, and is intended to be a drop-in replacement as much as possible.</p>
 <p>So, Let&rsquo;s try to implement in our code -</p>
 
   
@@ -647,7 +647,7 @@ public class BenchmarkAPIPerformance
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/" data-tooltip="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory" aria-label="NEXT: Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -754,7 +754,7 @@ public class BenchmarkAPIPerformance
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/" data-tooltip="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory" aria-label="NEXT: Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>

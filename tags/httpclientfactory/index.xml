@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>httpclientfactory on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</title>
+    <link>https://anktsrkr.github.io/tags/httpclientfactory/</link>
+    <description>Recent content in httpclientfactory on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 May 2023 06:00:35 +0100</lastBuildDate>
+    
+	<atom:link href="https://anktsrkr.github.io/tags/httpclientfactory/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Re-Authorize Efficiently Using Polly And .NET HttpClientFactory</title>
+      <link>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/</link>
+      <pubDate>Thu, 25 May 2023 06:00:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/</guid>
+      <description>In today&amp;rsquo;s world, we are using a lot of APIs to build our applications. To make your .NET based applications more ressilient and fault tolerant, go to solution is to use Polly. Probably, you are already using it. So,I&amp;rsquo;m not going to explain how to use it in general. You can find some excellent documentation here.
+However, In this post I&amp;rsquo;m going to discuss about one of the typical scenario where we need to refresh the authentication token when using Polly.</description>
+    </item>
+    
+  </channel>
+</rss>

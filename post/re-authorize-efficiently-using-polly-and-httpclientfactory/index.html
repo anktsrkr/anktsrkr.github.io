@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+  "description":"Re-Authorize Efficiently Using Polly And .NET HttpClientFactory",
+  "url":"https:\/\/anktsrkr.github.io\/post\/re-authorize-efficiently-using-polly-and-httpclientfactory\/",
+  "keywords":"[polly get accesstoken, using polly to retry after HttpStatusCode.Unauthorized, refresh authentication token on retry when using polly, re-authorization and onRetry with polly, refresh bearer token when using named HttpClient, refresh bearer token when using typed HttpClient, refresh token when using typed HttpClientFactory, .net core polly retry accesstoken idtoken, re-authorize Efficiently Using Polly And .NET HttpClientFactory]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta name="keywords" content="polly get accesstoken, using polly to retry after HttpStatusCode.Unauthorized, refresh authentication token on retry when using polly, re-authorization and onRetry with polly, refresh bearer token when using named HttpClient, refresh bearer token when using typed HttpClient, refresh token when using typed HttpClientFactory, .net core polly retry accesstoken idtoken, re-authorize Efficiently Using Polly And .NET HttpClientFactory">
+<meta name="description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
+
+
+<meta property="og:description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
+<meta name="twitter:title" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
+<meta property="og:url" content="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta property="og:description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
+<meta name="twitter:description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2023-05-25T06:00:35">
+  
+  
+    <meta property="article:modified_time" content="2023-05-25T06:00:35">
+  
+  
+  
+    
+      <meta property="article:section" content=".NET 7">
+    
+      <meta property="article:section" content="Polly">
+    
+      <meta property="article:section" content="HttpClientFactory">
+    
+  
+  
+    
+      <meta property="article:tag" content="polly">
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="httpclientfactory">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/polly/logo.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/polly/logo.png">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Re-Authorize Efficiently Using Polly And .NET HttpClientFactory</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/">
+
+    
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
+    
+    
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
+     crossorigin="anonymous"></script>
+     
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TY8ZMTBGSM');
+</script>
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title">
+      Re-Authorize Efficiently Using Polly And .NET HttpClientFactory
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2023-05-25T06:00:35&#43;01:00">
+        
+  May 25, 2023
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-7">.NET 7</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/polly">Polly</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/httpclientfactory">HttpClientFactory</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p>In today&rsquo;s world, we are using a lot of APIs to build our applications. To make your .NET based applications more ressilient and fault tolerant, go to solution is to use  <strong><span class="highlight-text green">Polly</span></strong>. Probably, you are already using it. So,I&rsquo;m not going to explain how to use it in general. You can find some excellent documentation <a href="https://github.com/App-vNext/Polly#get-started">here</a>.</p>
+<p>However, In this post I&rsquo;m going to discuss about one of the typical scenario where we need to refresh the authentication token when using Polly. Let&rsquo;s get started.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>To handle such situation what we do is retry on <em>Unauthorized</em> failure and call a method to reauthorize. Something like below from the Polly documentation -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>FromDocumentation.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">HttpClient httpClient = ...
+
+var authEnsuringPolicy = Policy&lt;HttpResponseMessage&gt;  
+  .HandleResult(r =&gt; r.StatusCode == StatusCode.Unauthorized)
+  .RetryAsync(1, onRetryAsync: async (e, i) =&gt; await AuthHelper.RefreshAuthorization(httpClient));
+
+var httpResponseMessage =  
+    await authEnsuringPolicy.ExecuteAsync(() =&gt; httpClient.GetAsync(uri));</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p><em>The above pattern works by sharing the httpClient variable across closures, but a significant drawback is that you have to declare and use the policy in the same scope. This makes impossible to use dependency injection approach where you define policies centrally on startup, then provide them by DI to the point of use. Using DI with Polly in this way is a powerful pattern for separation of concerns, and allows easy stubbing out of Polly in unit testing.</em></p>
+<p><em>From Polly <em>v5.1.0</em>, with <strong>Context</strong> available as a state variable to every delegate, the policy declaration can be rewritten:</em></p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>FromDocumentation.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">var authEnsuringPolicy = Policy&lt;HttpResponseMessage&gt;  
+  .HandleResult(r =&gt; r.StatusCode == StatusCode.Unauthorized)
+  .RetryAsync(1, onRetryAsync: async (ex, i, context) =&gt; await AuthHelper.RefreshAuthorization(context[&#34;httpClient&#34;]));</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p><em>And the usage (elsewhere in the codebase):</em></p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>FromDocumentation.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">var httpResponseMessage =  
+    await authEnsuringPolicy.ExecuteAsync(context =&gt; context[&#34;httpClient&#34;].GetAsync(uri), 
+    contextData: new Dictionary&lt;string, object&gt; {{&#34;httpClient&#34;, httpClient}}
+    );</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p><em>Passing context as state-data parameters in the different parts of policy execution allows policy declaration and usage now to be separate.</em></p>
+<p>The above example and explanation is taken from the Polly documentation. You can find the same <a href="http://www.thepollyproject.org/2017/05/04/putting-the-context-into-polly/">here</a>.</p>
+<p>IMO, the above approach is not very clean as we are passing <em>httpClient</em> as a state variable. Instead if we can pass the <em>Token</em> as a state variable, it will be more cleaner. Let&rsquo;s try to implement the same.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>The solution could be to make use of the <em>Context</em> , <em>DelegationHandler</em> and <em>HttpClientFactory</em>. Define a communication between them as below -</p>
+<figure>
+    <img src="https://anktsrkr.github.io/images/polly/refresh-token-flow.png"
+         alt="Communication between Context, DelegationHandler and HttpClientFactory"/> 
+</figure>
+
+<p>In our scenario, we are using <em>Auth0</em> as Token Provider and our Downstream system (Todo API)is protected by it.</p>
+<p>First, we will focus on <strong><span class="highlight-text orange">Auth0 Service</span></strong>. This service is responsible for getting the actual <em>Token</em> from Auth0 and refresh it when it is expired. We will start by defining <em>Token</em> DTO as below -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>ITokenService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public record Token
+{
+    public static Token Empty =&gt; new();
+
+    [JsonPropertyName(&#34;token_type&#34;)]
+    public string Scheme { get; set; } = default!;
+
+    [JsonPropertyName(&#34;access_token&#34;)]
+    public string AccessToken { get; set; } = default!;
+
+    [JsonPropertyName(&#34;expires_in&#34;)]
+    public double ExpiresIn { get; set; } = default!;
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>We will also define a <em>Auth0Service</em>  which will be responsible for the actual hard work -</p>
+<p>
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>IAuth0Service.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public interface IAuth0Service
+{
+    Task&lt;Token&gt; GetTokenAsync();
+}
+public class Auth0Service : IAuth0Service
+{
+    private readonly HttpClient _httpClient;
+    private readonly Auth0Option _settings;
+    public Auth0Service(HttpClient client, Auth0Option settings)
+    {
+        _httpClient = client;
+        _settings = settings;
+    }
+    public async Task&lt;Token&gt; GetTokenAsync()
+    {
+        var content = new FormUrlEncodedContent(new Dictionary&lt;string, string&gt;
+        {
+            [&#34;client_id&#34;] = _settings.ClientId,
+            [&#34;client_secret&#34;] = _settings.ClientSecret,
+            [&#34;audience&#34;] = _settings.Audience,
+            [&#34;grant_type&#34;] = _settings.GrantType,
+            [&#34;scope&#34;] = _settings.Scope
+        });
+
+            var result= await  _httpClient.PostAsync(_settings.TokenUrl, content);
+            if (!result.IsSuccessStatusCode)
+            {
+               return Token.Empty;
+            }
+            var token = await result.Content.ReadFromJsonAsync&lt;Token&gt;();
+
+            return token!;
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+It will work as Typed Client for Auth0.</p>
+<p>Next, we will focus on <strong><span class="highlight-text green">Token Service</span></strong>. This service is responsible for getting the cached <em>Token</em> from memory and refresh it from <strong><span class="highlight-text orange">Auth0 Service</span></strong> when it is expired. Below is the implementation -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>ITokenService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public interface ITokenService
+{
+    ValueTask&lt;Token&gt; GetToken();
+    Task&lt;Token&gt; RefreshToken();
+}
+public class TokenService : ITokenService
+{
+    private const string CacheKey = nameof(TokenService);
+
+    private readonly IAuth0Service _auth0Service;
+    private readonly IMemoryCache _memoryCache;
+    public TokenService(IAuth0Service auth0Service, IMemoryCache memoryCache)
+    {
+        _auth0Service = auth0Service;
+        _memoryCache = memoryCache;
+    }
+    public async ValueTask&lt;Token&gt; GetToken()
+    {
+        if (!_memoryCache.TryGetValue(CacheKey, out Token? cacheValue))
+        {
+            cacheValue = await RefreshToken();
+        }
+        return cacheValue!;
+    }
+
+    public async Task&lt;Token&gt; RefreshToken()
+    {
+        var token = await _auth0Service.GetTokenAsync();
+        if (token != Token.Empty)
+        {
+            var expires_in = token.ExpiresIn&gt;0?token.ExpiresIn-10:token.ExpiresIn;
+            _memoryCache.Set(CacheKey, token, new MemoryCacheEntryOptions()
+                                                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                                                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(expires_in)));
+        }
+
+        return token;
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Here, couple of things to note -</p>
+<ol>
+<li>
+<p>We are using <strong>ValueTask</strong> for <em>GetToken</em>. This is because we know that the <strong>Hot path</strong> will be to get the <em>Token</em> from the memory cache and very few scenraio(e.g very first time when Downstream is getting hit) it will actualy call the <strong><span class="highlight-text orange">Auth0 Service</span></strong>. So, we are using <strong>ValueTask</strong> to avoid the overhead of allocating a new Task in the heap.</p>
+</li>
+<li>
+<p>We are using <em>SetAbsoluteExpiration</em> and <em>SetSlidingExpiration</em> both to make sure we are not overwhelming by storing the unused <em>Token</em> in the memory cache. Also to avoid edge case when the <em>Token</em> is expired but not yet refreshed we are making sure it removed from the cache before it&rsquo;s actual expiry time.</p>
+</li>
+</ol>
+<p>Time to rewrite our Policy fof getting the refreshed Token -
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>ITokenService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public static IAsyncPolicy&lt;HttpResponseMessage&gt; GetTokenRefresher(IServiceProvider provider, HttpRequestMessage request)
+    {
+        var delay = Backoff.ConstantBackoff(TimeSpan.FromMilliseconds(100), retryCount: 3);
+
+        return Policy&lt;HttpResponseMessage&gt;
+                .HandleResult(msg =&gt; msg.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                .WaitAndRetryAsync(delay, async (_, _, _, _) =&gt;
+            {
+                await provider.GetRequiredService&lt;ITokenService&gt;().RefreshToken();
+                request.SetPolicyExecutionContext(new Context());
+            });
+    }
+
+    public static IAsyncPolicy&lt;HttpResponseMessage&gt; GetConstantBackofffPolicy()
+    {
+        var delay = Backoff.ConstantBackoff(TimeSpan.FromMilliseconds(100), retryCount: 3);
+
+        return HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .OrResult(msg =&gt; msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+            .WaitAndRetryAsync(delay);
+    }</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+<p>Very simple and clean. We are making sure, after refreshing the token, the context is clear so that in <em>DelegationHandler</em> we can get the updated token. Below is the implementation of custom handler -
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>ITokenService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public class TokenRetrievalHandler : DelegatingHandler
+{
+    private readonly ITokenService tokenService;
+    private const string TokenRetrieval = nameof(TokenRetrieval);
+    private const string TokenKey = nameof(TokenKey);
+    public TokenRetrievalHandler(ITokenService service)
+    {
+        tokenService = service;
+    }
+
+    protected override async Task&lt;HttpResponseMessage&gt; SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        var context = request.GetPolicyExecutionContext();
+        if (context.Count == 0)
+        {
+            context = new Context(TokenRetrieval, new Dictionary&lt;string, object&gt; { { TokenKey, await tokenService.GetToken() } });
+            request.SetPolicyExecutionContext(context);
+        }
+
+        var token = (Token)context[TokenKey];
+
+        if(token!= Token.Empty)
+            request.Headers.Authorization = new AuthenticationHeaderValue(token.Scheme, token.AccessToken);
+
+        return await base.SendAsync(request, cancellationToken);
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+<p>We are intercepting the actual call and making sure,the updated token is added in header always.</p>
+<p>We have all the pieces in place. Now, we just need to orchestrate the flow. We will also make use of <strong>PolicyWrap</strong> to combine the same type of policies to make our application fault tolerant.</p>
+<p>We will create <em>ServiceCollection</em> extension to keep our <em>StartUp.cs</em> clear and concise. First we will create the extension for <strong><span class="highlight-text orange">Auth0 Service</span></strong> as below</p>
+<p>
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>ServiceCollectionExtensions.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public static IServiceCollection AddAuth0Service(this IServiceCollection services, HostBuilderContext context)
+    {
+        var auth0Option = context.Configuration.GetSection(Auth0Option.ConfigKey).Get&lt;Auth0Option&gt;()!;
+
+        services.AddSingleton(auth0Option);
+
+        services
+                .AddHttpClient&lt;IAuth0Service, Auth0Service&gt;(client =&gt;
+                {
+                    client.BaseAddress = new Uri(auth0Option.BaseAddress);
+                    client.DefaultRequestHeaders.TryAddWithoutValidation(&#34;Content-Type&#34;, &#34;application/json&#34;);
+                })
+                .AddPolicyHandler(PollyRetryPolicies.GetConstantBackofffPolicy());
+        return services;
+    }</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+Nothing fancy here, just making sure in case of any transient error, we are retrying 3 times with a constant backoff of 100ms.</p>
+<p>Now, the intersting Typed Client for DownStream System which is in our case <em>TodoService</em>. Below is the extension method for the same -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>ServiceCollectionExtensions.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public static IServiceCollection AddTodoService(this IServiceCollection services, HostBuilderContext context)
+    {
+        services.AddSingleton&lt;ITokenService, TokenService&gt;();
+        services.AddTransient&lt;TokenRetrievalHandler&gt;();
+
+        var todoServiceOption = context.Configuration.GetSection(TodoServiceOption.ConfigKey).Get&lt;TodoServiceOption&gt;()!;
+        services
+                .AddHttpClient&lt;ITodoService, TodoService&gt;(client =&gt; client.BaseAddress = new Uri(todoServiceOption.BaseUrl))
+                .AddPolicyHandler((provider,request)=&gt; Policy.WrapAsync(PollyRetryPolicies.GetConstantBackofffPolicy(), PollyRetryPolicies.GetTokenRefresher(provider, request)))
+                .AddHttpMessageHandler&lt;TokenRetrievalHandler&gt;();
+        return services;
+    }</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>We have added the <em>TokenRetrievalHandler</em>  to intercept any call from this Typed Client and attach the <em>Token</em> in the header. Also, we have added the <em>PolicyWrap</em> to make sure we are retrying 3 times with a constant backoff of 100ms in case of any transient error and also refresh the token in case of <em>Unauthorized</em> error.</p>
+<p>And the last bit, The Console from where we are calling the API -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public static class Program
+{
+    public static async Task Main(string[] args)
+    {
+        var host = CreateHostBuilder(args).Build();
+
+        var todoService = host.Services.GetRequiredService&lt;ITodoService&gt;();
+        await GetAllTodo(todoService);
+
+        await host.RunAsync();
+    }
+
+    static IHostBuilder CreateHostBuilder(string[] args) =&gt; Host
+        .CreateDefaultBuilder(args)
+         .ConfigureServices((context, services) =&gt; services.AddMemoryCache()
+                                                           .AddAuth0Service(context)
+                                                           .AddTodoService(context))
+        .ConfigureAppConfiguration((_, config) =&gt; config.AddJsonFile(&#34;appsettings.json&#34;, optional: false, reloadOnChange: true));
+
+    public static async Task GetAllTodo(ITodoService todoService)
+    {
+        var todos = await todoService.GetTodosAsync();
+        if (todos is null)
+        {
+            Console.WriteLine(&#34;Todos is null&#34;);
+            return;
+        }
+        Console.WriteLine($&#34;Todos: {todos.Count()}&#34;);
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Here, we have configured the services for <em>MemoryCache</em>, <em>Auth0Service</em> and <em>TodoService</em>. Also, we have added the <em>appsettings.json</em> file to get the configuration for the same.</p>
+<p>That&rsquo;s it. We are done. Now, we can run the application.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>IMO, the above approach is more cleaner and easy to understand. Also, it is more flexible and can be extended easily.Also, each service has it&rsquo;s own responsibility and can be tested independently. I have used <em>Auth0</em> as Token Provider but you can use any other provider as well with any other Downstream system.I have skipped the part for Auth0 configuration but let me know if you want me to explain it in seperate post. You can also use the same approach for <em>Named Client</em> as well. This post is inspired from below <a href="https://.stackoverflow.com/questions/59833373/refresh-token-using-polly-with-named-client/73123449">post</a></p>
+<p>As always, You can find the source code <a href="https://github.com/sundryoss/Sundry.PollyDemystified/"><strong>here</strong></a>.</p>
+
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/polly/">polly</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/httpclientfactory/">httpclientfactory</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/download-files-from-azure-blob-storage-efficiently-using-recyclablememorystream/" data-tooltip="Download Files From Azure Blob Storage Efficiently Using RecyclableMemoryStream" aria-label="PREVIOUS: Download Files From Azure Blob Storage Efficiently Using RecyclableMemoryStream">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/re-authorize-efficiently-using-polly-and-httpclientfactory\/';
+        
+          this.page.identifier = '\/post\/re-authorize-efficiently-using-polly-and-httpclientfactory\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2023 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/download-files-from-azure-blob-storage-efficiently-using-recyclablememorystream/" data-tooltip="Download Files From Azure Blob Storage Efficiently Using RecyclableMemoryStream" aria-label="PREVIOUS: Download Files From Azure Blob Storage Efficiently Using RecyclableMemoryStream">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fre-authorize-efficiently-using-polly-and-httpclientfactory%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fre-authorize-efficiently-using-polly-and-httpclientfactory%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fre-authorize-efficiently-using-polly-and-httpclientfactory%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Nottingham
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+
+
+<script>
+    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
+   </script>
+   
+   
+
+<script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+            });
+  
+        navigator.serviceWorker
+            .ready
+            .then(function(registration) {
+            });
+    }
+  </script>
+  
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+
+<a id="Setmore_button_iframe" style="position: fixed;
+ right: 20px;
+ bottom: 15px;
+ z-index: 9998;text-decoration: none"
+    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
+    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
+display: table-cell;
+width: auto;
+height: 45px;
+padding: 0 30px;
+border-radius: 25px;
+box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
+font-family: sans-serif;
+text-align: center;
+vertical-align: middle;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+cursor: pointer;">#TalkWithMe</div>
+</a>
+
+    
+  </body>
+</html>
+
