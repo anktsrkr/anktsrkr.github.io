@@ -147,7 +147,7 @@ In our case, we are downloading the files and storing it in **{{< hl-text yellow
 ## The Solution
 So, from the above explanation, if we somehow can avoid LOH allocation, we might be able to reduce the memory consumption and performance will also improve. Microsoft has provided a library called **{{< hl-text orange >}}Microsoft.IO.RecyclableMemoryStream{{< /hl-text >}}** which can be used to avoid LOH allocation. The excellent documentation for the same can be found [here](https://github.com/microsoft/Microsoft.IO.RecyclableMemoryStream) where you can find the details about how it actually works.
 
-The best part is that the semantics are close to the original **{{< hl-text green >}}System.IO.MemoryStream{{< /hl-text >}}**implementation, and is intended to be a drop-in replacement as much as possible.
+The best part is that the semantics are close to the original **{{< hl-text green >}}System.IO.MemoryStream{{< /hl-text >}}** implementation, and is intended to be a drop-in replacement as much as possible.
 
 So, Let's try to implement in our code -
 
