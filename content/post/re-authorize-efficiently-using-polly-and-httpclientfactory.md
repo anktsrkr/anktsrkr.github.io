@@ -327,7 +327,7 @@ That's it. We are done. Now, we can run the application.
 
 
 ## Conclusion
-IMO, the above approach is more cleaner and easy to understand. Also, it is more flexible and can be extended easily.Also, each service has it's own responsibility and can be tested independently. I have used _Auth0_ as Token Provider but you can use any other provider as well with any other Downstream system.I have skipped the part for Auth0 configuration but let me know if you want me to explain it in seperate post. You can also use the same approach for _Named Client_ as well. This post is inspired from below [post](https://.stackoverflow.com/questions/59833373/refresh-token-using-polly-with-named-client/73123449)
+IMO, the above approach is more cleaner and easy to understand. Also, it is more flexible and can be extended easily.Also, each service has it's own responsibility and can be tested independently. I have used _Auth0_ as Token Provider but you can use any other provider as well with any other Downstream system.I have skipped the part for Auth0 configuration but let me know if you want me to explain it in seperate post. You can also use the same approach for _Named Client_ as well. This post is inspired from below [post](https://stackoverflow.com/questions/59833373/refresh-token-using-polly-with-named-client/73123449)
 
 
 As always, You can find the source code [**here**](https://github.com/sundryoss/Sundry.PollyDemystified/).
