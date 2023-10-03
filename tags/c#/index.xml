@@ -6,10 +6,20 @@
     <description>Recent content in c# on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 May 2023 06:00:35 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 02 Oct 2023 06:00:35 +0100</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/tags/c#/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Use IHttpClientFactory and Polly(v8) to implement resilient HTTP requests</title>
+      <link>https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/</link>
+      <pubDate>Mon, 02 Oct 2023 06:00:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/</guid>
+      <description>Recently, Polly team did fabulous job 🎉 by releasing the new version 8.0.0. It has lot of improvements and also they re-implemented Policy as Strategy. Polly v8 introduces the concept of resilience pipelines, a powerful tool that put together one or more resilience strategies.Here is the all changes you can find.
+The Problem Microsoft provides a extension Microsoft.Extensions.Http.Polly  which allows us to use Polly with HttpClientFactory. It is very easy to use and you can find the documentation here.</description>
+    </item>
     
     <item>
       <title>Re-Authorize Efficiently Using Polly And .NET HttpClientFactory</title>
