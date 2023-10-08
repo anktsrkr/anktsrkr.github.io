@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+  "description":"Do not throw exceptions...Everywhere, Instead make it as rule.",
+  "url":"https:\/\/anktsrkr.github.io\/post\/do-not-throw-exceptions...everywhere\/",
+  "keywords":"[discriminated union c#, .net exception handling, .net exception handling best practices, .net core exception handling, .net core exception handling best practices, .net 7 exception handling, .net 7 exception handling best practices, .net 7 core exception handling, .net 7 core exception handling best practices, .net 8 exception handling, .net 8 exception handling best practices, .net 8 core exception handling, ProblemOr, Result, ErrorOr, Maybe, Either, erroror .net core, erroror c#, result .net core, problemor .net core, maybe .net core, result .net core, either .net core, C# Either, C# Either union, C# Either discriminated union, C# Either monad, C# Either type, C# Either functional programming, C# Either functional programming union, C# Either functional programming discriminated union, C# Result union, C# ProblemOr union, C# Result, C# ProblemOr, C# Result discriminated union, C# ProblemOr discriminated union, C# Maybe union type, C# Maybe discriminated union, C# Maybe, C# Maybe type, C# Maybe monad, C# Result monad, C# ProblemOr monad, C# monad, C# functional programming, C# functional, C# functional programming union, C# functional programming discriminated union, C# functional programming monad, C# functional programming maybe, C# functional programming maybe monad, C# functional programming result, C# functional programming result monad, C# functional programming problemor, C# functional programming problemor monad, C# functional programming eroror union, C# functional programming eroror discriminated union, C# functional programming eroror monad, C# functional programming eroror maybe]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta name="keywords" content="discriminated union c#, .net exception handling, .net exception handling best practices, .net core exception handling, .net core exception handling best practices, .net 7 exception handling, .net 7 exception handling best practices, .net 7 core exception handling, .net 7 core exception handling best practices, .net 8 exception handling, .net 8 exception handling best practices, .net 8 core exception handling, ProblemOr, Result, ErrorOr, Maybe, Either, erroror .net core, erroror c#, result .net core, problemor .net core, maybe .net core, result .net core, either .net core, C# Either, C# Either union, C# Either discriminated union, C# Either monad, C# Either type, C# Either functional programming, C# Either functional programming union, C# Either functional programming discriminated union, C# Result union, C# ProblemOr union, C# Result, C# ProblemOr, C# Result discriminated union, C# ProblemOr discriminated union, C# Maybe union type, C# Maybe discriminated union, C# Maybe, C# Maybe type, C# Maybe monad, C# Result monad, C# ProblemOr monad, C# monad, C# functional programming, C# functional, C# functional programming union, C# functional programming discriminated union, C# functional programming monad, C# functional programming maybe, C# functional programming maybe monad, C# functional programming result, C# functional programming result monad, C# functional programming problemor, C# functional programming problemor monad, C# functional programming eroror union, C# functional programming eroror discriminated union, C# functional programming eroror monad, C# functional programming eroror maybe">
+<meta name="description" content="Do not throw exceptions...Everywhere, Instead make it as rule.">
+
+
+<meta property="og:description" content="Do not throw exceptions...Everywhere, Instead make it as rule.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Do not throw exceptions...Everywhere">
+<meta name="twitter:title" content="Do not throw exceptions...Everywhere">
+<meta property="og:url" content="https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta property="og:description" content="Do not throw exceptions...Everywhere, Instead make it as rule.">
+<meta name="twitter:description" content="Do not throw exceptions...Everywhere, Instead make it as rule.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2023-10-08T08:00:35">
+  
+  
+    <meta property="article:modified_time" content="2023-10-08T08:00:35">
+  
+  
+  
+    
+      <meta property="article:section" content=".NET 7">
+    
+      <meta property="article:section" content="ProblemOr">
+    
+      <meta property="article:section" content="Exception handling">
+    
+  
+  
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="Monads">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/exception/rulevsexception.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/exception/rulevsexception.png">
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/exception/small-rulevsexception.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/exception/small-rulevsexception.png">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Do not throw exceptions...Everywhere</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/">
+
+    
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
+    
+    
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
+     crossorigin="anonymous"></script>
+     
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TY8ZMTBGSM');
+</script>
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              "
+       style="background-image:url('/images/exception/rulevsexception.png')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title">
+      Do not throw exceptions...Everywhere
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2023-10-08T08:00:35&#43;01:00">
+        
+  October 8, 2023
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-7">.NET 7</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/problemor">ProblemOr</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/exception-handling">Exception handling</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p>We, as C# developers, are used to throwing exceptions everywhere be it a functional such as validation or technical such as network failure. But is it worth throwing exceptions everywhere? Exceptions are expensive. You should not throw exceptions everywhere. You should throw exceptions only when it is necessary. But how? Let&rsquo;s discuss the alternative approach.</p>
+<h2 id="types-of-exceptions-in-general">Types of exceptions in general</h2>
+<p>Excellent <a href="https://learn.microsoft.com/en-gb/archive/blogs/ericlippert/vexing-exceptions"><strong>article</strong></a> by Eric Lippert on exceptions, where you can find the types of exceptions in general. I will discuss the four categories of exceptions in short and will discuss in which category you should throw exceptions and in which category you should not throw exceptions and also discuss the alternative approach.</p>
+<p>As per Eric Lippert, there are four categories of exceptions in general.</p>
+<ol>
+<li>Fatal</li>
+<li>Vexing</li>
+<li>Exogenous</li>
+<li>Boneheaded</li>
+</ol>
+<h3 id="fatal">Fatal</h3>
+<p>Fatal exceptions are the ones that you can&rsquo;t do anything about and not your fault. For example, <code>OutOfMemoryException</code>. You can&rsquo;t do anything about it. You can&rsquo;t recover from it. You can&rsquo;t retry it. You can&rsquo;t do anything about it. So, there is no point in catching it. You should let it bubble up to the top.</p>
+<h3 id="vexing">Vexing</h3>
+<p>Vexing exceptions are the ones that you can avoid by changing the code. For example, <code>FormatException</code>. You can avoid it by using <code>TryParse</code> instead of <code>Parse</code>. So, you should not throw vexing exceptions. You should use <code>TryParse</code> instead of <code>Parse</code> or similar approach.</p>
+<h3 id="exogenous">Exogenous</h3>
+<p>Exogenous exceptions are the ones that you can&rsquo;t avoid by changing the code. For example, <code>FileNotFoundException</code>. You can&rsquo;t avoid it by changing the code. For example, if you are trying to read a file and the file does not exist. You may try fail fast approach by checking the file existence before reading it.</p>
+<p>But what if the file is deleted/renamed/moved/locked after checking the existence and before reading it? to avoid this, you can lock the file maybe? But what if network failure happens.</p>
+<p>As we can see, how hard we try to avoid it, we can&rsquo;t avoid it. So, in such cases you should throw exogenous exceptions.</p>
+<h3 id="boneheaded">Boneheaded</h3>
+<p>Boneheaded exceptions are the ones that you can avoid by changing the code. For example, <code>ValidationException</code> or <code>IndexOutOfRange</code>. You can avoid it by checking the argument. So, you should not throw boneheaded exceptions. You should validate the argument and in latter case, you should check the index before accessing the array.</p>
+<h2 id="alternative-approach--dropping-exceptionstreat-as-rule">Alternative approach : Dropping exceptions,treat as rule</h2>
+<p>Let&rsquo;s say you are creating user with an email. There could be two business scenarios apart from infrastructure issues.</p>
+<ul>
+<li>Either user with the same email already exists.</li>
+<li>We should be able to create user with the email.</li>
+</ul>
+<p>In general, what we should is create a <code>DuplicateEmailException</code> and throws it from the service. But as per the above discussion, we should not throw it.</p>
+<p>Instead what we could do is return a <strong>ProblemOr<!-- raw HTML omitted --></strong>, in this case if the user with the same email already exists, we will return a <strong>Problem</strong> with the status code <strong>Conflict</strong> and if the user with the same email does not exist, we will return a <strong>User</strong>.
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>UserService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public async Task&lt;ProblemOr&lt;User&gt;&gt; CreateUserAsync(string email)
+{
+    if (await _userRepository.GetAsync(email) is User user)
+    {
+        return Problem.Conflict(&#34;Email already exists&#34;);
+    }
+
+    var probableUser = User.CreateWithEmail(email);// This might have email validation logic as well.
+
+    if (user.HasProblem)
+    {
+        return probableUser.Problems;
+    }
+    await _userRepository.AddAsync(probableUser.Value);
+    return probableUser.Value;
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+<p>What we did here basically instead of throwing an exception, we are treating as control flow. We are not breaking the chain but still we are bubbling up the problem to the top. So, the caller can decide what to do with the problem like below:
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>UserController.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">[HttpPost]
+probableUser.SwitchFirst(
+    user =&gt; Console.WriteLine(user.Name),
+    error =&gt; Console.WriteLine(error.Description));</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+<p>It is also possible that the method does not return any business object. For example, you are sending email to a user and you just want to return <strong>Success</strong> or <strong>Failure</strong>. In this case, if the user does not exist, you can return <strong>Problem</strong> with the problem as <strong>NotFound</strong> and if the user exists, you can send email and return <strong>Success</strong>, Like below:</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>UserService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public async Task&lt;ProblemOr&lt;Success&gt;&gt; SendEmailAsync(string email)
+{
+    if (await _userRepository.GetAsync(email) is not User user)
+    {
+        return Problem.NotFound(&#34;404&#34;,&#34;User not found&#34;);
+    }
+
+    await _emailService.SendEmailAsync(user);
+    return Result.Success;
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>We can now see the alternative approach in action. But what is this <strong>ProblemOr</strong>? Let&rsquo;s discuss it.</p>
+<h2 id="problemort--an-opinionated-discriminated-union-in-c">ProblemOr<!-- raw HTML omitted --> : An opinionated discriminated union in C#</h2>
+<p><strong>ProblemOr<!-- raw HTML omitted --></strong> is nothing but an opinionated discriminated union. Discriminated union provides a way to represent a value that can be one of a fixed set of different values and types. Discriminated unions are useful for heterogeneous data; data that can have special cases, including valid and error cases.</p>
+<p><strong>ProblemOr<!-- raw HTML omitted --></strong> can be one of the following:</p>
+<ol>
+<li><strong>Problem</strong> : Represents a problem with the status code and description.</li>
+<li><strong>Result</strong> : Represents a success.</li>
+<li><strong>T</strong> : Represents a value of type T.</li>
+</ol>
+<p>I mentioned it as <em>opinionated</em> because this is not a general purpose discriminated union, where you can have any number of cases. This is specifically designed for the scenarios where you want to return a value or a problem.</p>
+<p>You need to install the package from <a href="https://www.nuget.org/packages/Sundry.ProblemOr/"><strong>here</strong></a> to use it.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this article, we discussed the types of exceptions in general and in which category you should throw exceptions and in which category you should not throw exceptions and also discussed the alternative approach. We also discussed the <strong>ProblemOr</strong> which is an opinionated discriminated union in C#.</p>
+
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/monads/">Monads</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/" data-tooltip="Use IHttpClientFactory and Polly(v8) to implement resilient HTTP requests" aria-label="PREVIOUS: Use IHttpClientFactory and Polly(v8) to implement resilient HTTP requests">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/do-not-throw-exceptions...everywhere\/';
+        
+          this.page.identifier = '\/post\/do-not-throw-exceptions...everywhere\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2023 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/" data-tooltip="Use IHttpClientFactory and Polly(v8) to implement resilient HTTP requests" aria-label="PREVIOUS: Use IHttpClientFactory and Polly(v8) to implement resilient HTTP requests">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdo-not-throw-exceptions...everywhere%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdo-not-throw-exceptions...everywhere%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdo-not-throw-exceptions...everywhere%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Nottingham
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+
+
+<script>
+    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
+   </script>
+   
+   
+
+<script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+            });
+  
+        navigator.serviceWorker
+            .ready
+            .then(function(registration) {
+            });
+    }
+  </script>
+  
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+
+<a id="Setmore_button_iframe" style="position: fixed;
+ right: 20px;
+ bottom: 15px;
+ z-index: 9998;text-decoration: none"
+    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
+    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
+display: table-cell;
+width: auto;
+height: 45px;
+padding: 0 30px;
+border-radius: 25px;
+box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
+font-family: sans-serif;
+text-align: center;
+vertical-align: middle;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+cursor: pointer;">#TalkWithMe</div>
+</a>
+
+    
+  </body>
+</html>
+

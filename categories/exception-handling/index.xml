@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Exception handling on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</title>
+    <link>https://anktsrkr.github.io/categories/exception-handling/</link>
+    <description>Recent content in Exception handling on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 08 Oct 2023 08:00:35 +0100</lastBuildDate>
+    
+	<atom:link href="https://anktsrkr.github.io/categories/exception-handling/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Do not throw exceptions...Everywhere</title>
+      <link>https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/</link>
+      <pubDate>Sun, 08 Oct 2023 08:00:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/</guid>
+      <description>We, as C# developers, are used to throwing exceptions everywhere be it a functional such as validation or technical such as network failure. But is it worth throwing exceptions everywhere? Exceptions are expensive. You should not throw exceptions everywhere. You should throw exceptions only when it is necessary. But how? Let&amp;rsquo;s discuss the alternative approach.
+Types of exceptions in general Excellent article by Eric Lippert on exceptions, where you can find the types of exceptions in general.</description>
+    </item>
+    
+  </channel>
+</rss>
