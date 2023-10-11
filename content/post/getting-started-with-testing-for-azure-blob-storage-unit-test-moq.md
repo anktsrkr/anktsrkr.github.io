@@ -114,9 +114,13 @@ This post is continuation of how to perform unit and integration tests for Azure
 
 _This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of Moq_
 
+[Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy)
+
 [Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite)
 
 [Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk)
+
+[Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK with help of FakeItEasy (Alternative to MoQ)](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy)
 
 Now, we know the context of the problem and by some extend we tried to solve it.  However **{{< hl-text blue >}}UploadFileToAzBlob{{< /hl-text >}}** still has a dependency on **{{< hl-text purple >}}IServiceProvider{{< /hl-text >}}**. 
 

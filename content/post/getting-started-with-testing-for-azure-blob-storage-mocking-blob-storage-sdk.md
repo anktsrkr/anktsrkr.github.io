@@ -114,10 +114,13 @@ This post is continuation of how to perform unit and integration tests for Azure
 
 [Getting started with testing for Azure Blob Storage : Unit Test with help of Moq](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq)
 
+[Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy)
 
 [Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite)
 
 _This Post - Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK_
+
+[Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK with help of FakeItEasy (Alternative to MoQ)](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy)
 
 By far we have seen how to perform unit tests for Azure Blob Storage using _Moq_ by hiding the dependency of Azure Storage SDK and actual implementation of it. But what if we want to test the actual implementation (i.e `AzBlobService`) of Azure Storage SDK? In this post, we will see how to perform unit tests for Azure Blob Storage using _Moq_ by mocking the Azure Storage SDK. 
 

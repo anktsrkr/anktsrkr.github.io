@@ -114,9 +114,13 @@ This post is continuation of how to perform unit and integration tests for Azure
 
 [Getting started with testing for Azure Blob Storage : Unit Test with help of Moq](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq)
 
+[Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy)
+
 _This Post - Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite_
 
 [Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk)
+
+[Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK with help of FakeItEasy (Alternative to MoQ)](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy)
 
 In our [last](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq) post, we have seen how to perform unit tests for Azure Blob Storage using _Moq_ by hiding the dependency of Azure Storage SDK and actual implementation of it. In this post, we will see how to perform integration tests for Azure Blob Storage using TestContainers and Azurite.
 
