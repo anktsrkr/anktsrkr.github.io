@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FakeItEasy on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</title>
+    <link>https://anktsrkr.github.io/categories/fakeiteasy/</link>
+    <description>Recent content in FakeItEasy on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 11 Oct 2023 08:00:35 +0100</lastBuildDate>
+    
+	<atom:link href="https://anktsrkr.github.io/categories/fakeiteasy/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy</title>
+      <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/</link>
+      <pubDate>Wed, 11 Oct 2023 08:00:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/</guid>
+      <description>Hi Everyone!
+In this post, we will discuss about the alternative framework for mocking. This post is adoptation of this which is using Moq.
+You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.
+Getting started with testing for Azure Blob Storage : Dependency Injection
+Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
+    </item>
+    
+  </channel>
+</rss>
