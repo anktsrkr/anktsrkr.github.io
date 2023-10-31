@@ -70,17 +70,17 @@ Microsoft has released a new package for resiliency, which is [Microsoft.Extensi
 ## Setup
 For demonstration purpose, I have created a .NET 8 Web API project so that we can inject fault in our API as and when required. For some initial use cases, it will look like below :
 
-{{< image classes="fancybox right clear" group="polly" src="/images/polly/.net8/weather-api.png" title="Weather API" >}}
+{{< image classes="fancybox right clear" group="polly" src="/images/pollynet8/weather-api.png" title="Weather API" >}}
 
 Just boilerplate code, nothing fancy here apart from the fact that we throw exception randomly to simulate the fault.
 
 We will also create a console application to consume this API and will implement Polly strategies for HttpClientFactor here.
 
-{{< image classes="fancybox right clear" group="polly" src="/images/polly/.net8/console-startup.png" title="Console Startup" >}}
+{{< image classes="fancybox right clear" group="polly" src="/images/pollynet8/console-startup.png" title="Console Startup" >}}
 
 We are using Typed HttpClient here, so we will create a implementation for that as well.
 
-{{< image classes="fancybox right clear" group="polly" src="/images/polly/.net8/weatherforecast-client.png" title="Weather API" >}}
+{{< image classes="fancybox right clear" group="polly" src="/images/pollynet8/weatherforecast-client.png" title="Weather API" >}}
 
 ## Retry Resilience Strategy
 Resilience strategies (previously known as Policy in v7) are essential components of Polly, designed to execute user-defined callbacks while adding an extra layer of resilience.
@@ -99,19 +99,19 @@ These strategies can not run on their own, they need to be executed by a resilie
  
 Below is the sequence of diagram of how HttpClientFactory will execute the resilience strategy :
 
-{{< image classes="right clear" src="/images/polly/.net8/sequence.png" title="HttpClient Retry Resilience Strategy" >}}
+{{< image classes="right clear" src="/images/pollynet8/sequence.png" title="HttpClient Retry Resilience Strategy" >}}
 
 Enough of theory, let's implement Retry strategy for our HttpClientFactory.
 
 First thing first, we will add all required packages to our console application, below are the packages we need to install :
 
-{{< image classes="fancybox right clear" group="polly" src="/images/polly/.net8/console-required-packages.png" title="Required Packages for Console App" >}}
+{{< image classes="fancybox right clear" group="polly" src="/images/pollynet8/console-required-packages.png" title="Required Packages for Console App" >}}
 
 At the time of writing this post, All packages provided by Microsoft are in preview mode for RC2. By the time you are reading this post, it might be available in stable version.
 
 Now, we will add new extension method `AddResilienceHandler` provided by the package `Microsoft.Extensions.Http.Resilience` to our `Program.cs` file. We will also configure the retry policy here.
 
-{{< image classes="fancybox right clear" group="polly" src="/images/polly/.net8/console-startup-with-retry.png" title="HttpClientFactory Extension Method" >}}
+{{< image classes="fancybox right clear" group="polly" src="/images/pollynet8/console-startup-with-retry.png" title="HttpClientFactory Extension Method" >}}
 
 Above code implies that, it will retry 3 times with exponential backoff. It will also add some random jitter to the retry interval.
 > If you want to learn more about why we need to add jitter to the retry interval, please refer to [this](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) article.
@@ -130,7 +130,7 @@ By default, the options are set to respect Retry-After header as well.
 
 Now, if we run the console application, you will see that it will retry maximum configured time with exponential backoff and will eventually pass.
 
-{{< image classes="fancybox right clear" group="polly" src="/images/polly/.net8/console-retry.png" title="Console Retry" >}}
+{{< image classes="fancybox right clear" group="polly" src="/images/pollynet8/console-retry.png" title="Console Retry" >}}
 
 Here, Attempt: 0 is the actual call and Attempt: 1, 2 are the retries.
 
