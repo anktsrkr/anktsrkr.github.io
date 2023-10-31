@@ -4,7 +4,52 @@
   
   <url>
     <loc>https://anktsrkr.github.io/</loc>
-    <lastmod>2023-10-11T08:30:35+01:00</lastmod>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/.net-8/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/c#/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/httpclientfactory/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/polly/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/categories/polly-8/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/post/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://anktsrkr.github.io/tags/</loc>
+    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
   </url>
   
   <url>
@@ -28,16 +73,6 @@
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/c#/</loc>
-    <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/</loc>
-    <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://anktsrkr.github.io/categories/fakeiteasy/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
   </url>
@@ -49,16 +84,6 @@
   
   <url>
     <loc>https://anktsrkr.github.io/categories/integration-testing/</loc>
-    <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/post/</loc>
-    <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/tags/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
   </url>
   
@@ -113,17 +138,7 @@
   </url>
   
   <url>
-    <loc>https://anktsrkr.github.io/tags/httpclientfactory/</loc>
-    <lastmod>2023-10-02T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://anktsrkr.github.io/categories/polly/</loc>
-    <lastmod>2023-10-02T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/tags/polly/</loc>
     <lastmod>2023-10-02T06:00:35+01:00</lastmod>
   </url>
   

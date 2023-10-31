@@ -6,10 +6,28 @@
     <description>Recent content in Categories on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 11 Oct 2023 08:30:35 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 31 Oct 2023 06:00:35 +0100</lastBuildDate>
     
 	<atom:link href="https://anktsrkr.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>.NET 8</title>
+      <link>https://anktsrkr.github.io/categories/.net-8/</link>
+      <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/categories/.net-8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Polly 8</title>
+      <link>https://anktsrkr.github.io/categories/polly-8/</link>
+      <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/categories/polly-8/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>.NET 7</title>

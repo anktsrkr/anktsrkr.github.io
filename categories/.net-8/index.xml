@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>.NET 8 on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</title>
+    <link>https://anktsrkr.github.io/categories/.net-8/</link>
+    <description>Recent content in .NET 8 on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 31 Oct 2023 06:00:35 +0100</lastBuildDate>
+    
+	<atom:link href="https://anktsrkr.github.io/categories/.net-8/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Implementing Retry Strategy using HttpClientFactory with Polly(v8) and .NET 8</title>
+      <link>https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/</link>
+      <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
+      
+      <guid>https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/</guid>
+      <description>Hi Everyone!
+As we all aware, Polly v8 is released sometime back and so is .NET 8, it is ready for Production use 🥳.
+In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :
+This Post - Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8</description>
+    </item>
+    
+  </channel>
+</rss>
