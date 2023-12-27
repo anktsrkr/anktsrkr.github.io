@@ -85,7 +85,7 @@ _This Post - Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in 
 In the last post, we have seen how to implement Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8. In this post, we will see how to re-authorize efficiently using Polly and .NET HttpClientFactory in .NET 8.
 
 
-> Please note, This post is only for __.NET 8__. if you want to use **Polly v8** along with **.NET 7** then please refer to [this](/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/) post because **Microsoft.Extensions.Http.Resilience** not supported in .NET 7, For **Polly v8** along with **.NET 6** probably this post will help you however I have not tested it yet. But the post for _.NET 7_ will definitely help you to implement the same in _.NET 6_.
+> Please note, This post is only for __.NET 8__. For **Polly v8** along with **.NET 6** and **.NET 7** probably this post will help you however I have not tested it yet. 
 
 >Also note, You can refer this [post](/post/re-authorize-efficiently-using-polly-and-httpclientfactory/) if you are not using **Polly v8**.
 

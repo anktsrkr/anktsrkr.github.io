@@ -192,7 +192,7 @@ Here, couple of things to note -
 2. We are using _SetAbsoluteExpiration_ and _SetSlidingExpiration_ both to make sure we are not overwhelming by storing the unused _Token_ in the memory cache. Also to avoid edge case when the _Token_ is expired but not yet refreshed we are making sure it removed from the cache before it's actual expiry time.
 
 
-Time to rewrite our Policy fof getting the refreshed Token - 
+Time to rewrite our Policy for getting the refreshed Token - 
 {{<codeblock  "ITokenService.cs" csharp >}}public static IAsyncPolicy<HttpResponseMessage> GetTokenRefresher(IServiceProvider provider, HttpRequestMessage request)
     {
         var delay = Backoff.ConstantBackoff(TimeSpan.FromMilliseconds(100), retryCount: 3);
