@@ -52,6 +52,8 @@ In this series of posts, I will try to cover some of the new features of Polly v
 
 _This Post - Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8_
 
+[Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8](/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8)
+
 [Implementing Timeout Strategy for HttpClientFactory using Polly(v8) and .NET 8](#)
 
 [Implementing CircuitBreaker Strategy for HttpClientFactory using Polly(v8) and .NET 8](#)

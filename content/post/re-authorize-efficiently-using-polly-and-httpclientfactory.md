@@ -36,6 +36,8 @@ In today's world, we are using a lot of APIs to build our applications. To make 
 
 However, In this post I'm going to discuss about one of the typical scenario where we need to refresh the authentication token when using Polly. Let's get started.
 
+>__UPDATE__: If you are using **Polly v8** and **.NET 8**, you can find the updated post [here](/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/)
+
 ## The Problem
 To handle such situation what we do is retry on _Unauthorized_ failure and call a method to reauthorize. Something like below from the Polly documentation - 
 
