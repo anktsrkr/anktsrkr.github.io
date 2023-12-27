@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Install Hugo
         env:
-          HUGO_VERSION: 0.74.3
+          HUGO_VERSION: 0.121.1
         run: |
           mkdir ~/hugo
           cd ~/hugo
