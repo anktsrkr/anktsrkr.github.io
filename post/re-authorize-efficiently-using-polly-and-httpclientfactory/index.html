@@ -640,7 +640,7 @@ public class TokenService : ITokenService
 <p>We are using <em>SetAbsoluteExpiration</em> and <em>SetSlidingExpiration</em> both to make sure we are not overwhelming by storing the unused <em>Token</em> in the memory cache. Also to avoid edge case when the <em>Token</em> is expired but not yet refreshed we are making sure it removed from the cache before it&rsquo;s actual expiry time.</p>
 </li>
 </ol>
-<p>Time to rewrite our Policy fof getting the refreshed Token -
+<p>Time to rewrite our Policy for getting the refreshed Token -
 
   
     
