@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology, ,azure, firewall,connectivity, between, spoke,connectivity, between, spoke, vnet, using, azure, firewall,azure, powershell,Point, to, Site,, Site, to, Site,VPN">
 <meta name="description" content="Implementing Hub-Spoke network topology in Azure">
@@ -114,7 +114,7 @@
     
 
     
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -126,7 +126,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
      crossorigin="anonymous"></script>
@@ -336,81 +335,81 @@ if (!doNotTrack) {
 <p>Now, we know the context of this topology and architecture let&rsquo;s start to implement it. In this post, I am going to use azure powershell module to create all azure resources.</p>
 <p>In my <a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/">second post</a> of this series we have already created <code>hub-vnet</code>.</p>
 <p>Let&rsquo;s create Spoke 1 Virtual Network(<code>spoke1-vnet</code>), with address space <code>10.20.0.0/19</code>. We will also create a subnet <code>WorkloadSubnet</code> under Spoke1 virtual network with address space <code>10.20.1.0/24</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
-$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-$vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
-$defaultSubnet = <span style="color:#e6db74">&#34;WorkloadSubnet&#34;</span>
-$vnetAddressSpace = <span style="color:#e6db74">&#34;10.20.0.0/19&#34;</span>
-$subnetvnetAddressSpace = <span style="color:#e6db74">&#34;10.20.1.0/24&#34;</span>
-
-$virtualNetwork = New-AzVirtualNetwork `
-                     -ResourceGroupName $ResourceGroupName `
-                     -Location $LocationName `
-                     -Name $vnetName `
-                     -AddressPrefix $vnetAddressSpace
-
-$subnetConfig = Add-AzVirtualNetworkSubnetConfig `
-                   -Name $defaultSubnet `
-                   -AddressPrefix $subnetvnetAddressSpace `
-                   -VirtualNetwork $virtualNetwork
-
-
-$virtualNetwork = $virtualNetwork | Set-AzVirtualNetwork</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
+</span></span><span style="display:flex;"><span>$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
+</span></span><span style="display:flex;"><span>$vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$defaultSubnet = <span style="color:#e6db74">&#34;WorkloadSubnet&#34;</span>
+</span></span><span style="display:flex;"><span>$vnetAddressSpace = <span style="color:#e6db74">&#34;10.20.0.0/19&#34;</span>
+</span></span><span style="display:flex;"><span>$subnetvnetAddressSpace = <span style="color:#e6db74">&#34;10.20.1.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$virtualNetwork = New-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                     -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>                     -Location $LocationName `
+</span></span><span style="display:flex;"><span>                     -Name $vnetName `
+</span></span><span style="display:flex;"><span>                     -AddressPrefix $vnetAddressSpace
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$subnetConfig = Add-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                   -Name $defaultSubnet `
+</span></span><span style="display:flex;"><span>                   -AddressPrefix $subnetvnetAddressSpace `
+</span></span><span style="display:flex;"><span>                   -VirtualNetwork $virtualNetwork
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$virtualNetwork = $virtualNetwork | Set-AzVirtualNetwork</span></span></code></pre></div>
 <p>Please note, by default DDoS protection plan as Basic is selected, but it is highly recommended to enable DDoS protection plan for your production environment and this is applicable for all of your virtual networks.</p>
 <p>Next create Spoke 2 Virtual Network(<code>spoke2-vnet</code>), with address space <code>10.30.0.0/19</code>. We will also create a subnet <code>WorkloadSubnet</code> under Spoke1 virtual network with address space <code>10.30.1.0/24</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
-$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-$vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
-$defaultSubnet = <span style="color:#e6db74">&#34;WorkloadSubnet&#34;</span>
-$vnetAddressSpace = <span style="color:#e6db74">&#34;10.30.0.0/19&#34;</span>
-$subnetvnetAddressSpace =<span style="color:#e6db74">&#34;10.30.1.0/24&#34;</span>
-
-$virtualNetwork = New-AzVirtualNetwork `
-                     -ResourceGroupName $ResourceGroupName `
-                     -Location $LocationName `
-                     -Name $vnetName `
-                     -AddressPrefix $vnetAddressSpace
-
-$subnetConfig = Add-AzVirtualNetworkSubnetConfig `
-                   -Name $defaultSubnet `
-                   -AddressPrefix $subnetvnetAddressSpace `
-                   -VirtualNetwork $virtualNetwork
-
-$virtualNetwork = $virtualNetwork | Set-AzVirtualNetwork</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
+</span></span><span style="display:flex;"><span>$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
+</span></span><span style="display:flex;"><span>$vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$defaultSubnet = <span style="color:#e6db74">&#34;WorkloadSubnet&#34;</span>
+</span></span><span style="display:flex;"><span>$vnetAddressSpace = <span style="color:#e6db74">&#34;10.30.0.0/19&#34;</span>
+</span></span><span style="display:flex;"><span>$subnetvnetAddressSpace =<span style="color:#e6db74">&#34;10.30.1.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$virtualNetwork = New-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                     -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>                     -Location $LocationName `
+</span></span><span style="display:flex;"><span>                     -Name $vnetName `
+</span></span><span style="display:flex;"><span>                     -AddressPrefix $vnetAddressSpace
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$subnetConfig = Add-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                   -Name $defaultSubnet `
+</span></span><span style="display:flex;"><span>                   -AddressPrefix $subnetvnetAddressSpace `
+</span></span><span style="display:flex;"><span>                   -VirtualNetwork $virtualNetwork
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$virtualNetwork = $virtualNetwork | Set-AzVirtualNetwork</span></span></code></pre></div>
 <p>Two virtual networks can not talk to each other, so by default <code>hub-vnet</code> will not be able to connect with <code>spoke1-vnet</code> and <code>spoke2-vnet</code>. So, to make it work we need to enable vnet-peering between hub and spokes.</p>
 <p>Let&rsquo;s create vnet peering between hub and spokes:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$hubvnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
-$hubVnet = Get-AzVirtualNetwork `
-              -Name $hubvnetName
-
-$spoke1vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
-$spoke1Vnet = Get-AzVirtualNetwork `
-                 -Name $spoke1vnetName
-
-$spoke2vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
-$spoke2Vnet = Get-AzVirtualNetwork `
-                 -Name $spoke2vnetName
-
-
-<span style="color:#75715e"># Peer Hub to Spoke 1.</span>
-Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkHubToSpoke1&#39;</span> `
-                            -VirtualNetwork $hubVnet `
-                            -RemoteVirtualNetworkId $spoke1Vnet.Id
-
-<span style="color:#75715e"># Peer Spoke 1 to Hub.</span>
-Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkSpoke1ToHub&#39;</span> `
-                            -VirtualNetwork $spoke1Vnet `
-                            -RemoteVirtualNetworkId $hubVnet.Id
-
-<span style="color:#75715e"># Peer Hub to Spoke 2.</span>
-Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkHubToSpoke2&#39;</span> `
-                            -VirtualNetwork $hubVnet `
-                            -RemoteVirtualNetworkId $spoke2Vnet.Id
-
-<span style="color:#75715e"># Peer Spoke 2 to Hub.</span>
-Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkSpoke2ToHub&#39;</span> `
-                            -VirtualNetwork $spoke2Vnet `
-                            -RemoteVirtualNetworkId $hubVnet.Id</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$hubvnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$hubVnet = Get-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>              -Name $hubvnetName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$spoke1vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$spoke1Vnet = Get-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                 -Name $spoke1vnetName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$spoke2vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$spoke2Vnet = Get-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                 -Name $spoke2vnetName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Peer Hub to Spoke 1.</span>
+</span></span><span style="display:flex;"><span>Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkHubToSpoke1&#39;</span> `
+</span></span><span style="display:flex;"><span>                            -VirtualNetwork $hubVnet `
+</span></span><span style="display:flex;"><span>                            -RemoteVirtualNetworkId $spoke1Vnet.Id
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Peer Spoke 1 to Hub.</span>
+</span></span><span style="display:flex;"><span>Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkSpoke1ToHub&#39;</span> `
+</span></span><span style="display:flex;"><span>                            -VirtualNetwork $spoke1Vnet `
+</span></span><span style="display:flex;"><span>                            -RemoteVirtualNetworkId $hubVnet.Id
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Peer Hub to Spoke 2.</span>
+</span></span><span style="display:flex;"><span>Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkHubToSpoke2&#39;</span> `
+</span></span><span style="display:flex;"><span>                            -VirtualNetwork $hubVnet `
+</span></span><span style="display:flex;"><span>                            -RemoteVirtualNetworkId $spoke2Vnet.Id
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Peer Spoke 2 to Hub.</span>
+</span></span><span style="display:flex;"><span>Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkSpoke2ToHub&#39;</span> `
+</span></span><span style="display:flex;"><span>                            -VirtualNetwork $spoke2Vnet `
+</span></span><span style="display:flex;"><span>                            -RemoteVirtualNetworkId $hubVnet.Id</span></span></code></pre></div>
 <blockquote>
 <p><strong><em>NOTE:</em></strong>  You can also provide resource id if you do not have read access to the virtual network or subscription you wish to peer with.</p>
 </blockquote>
@@ -418,139 +417,139 @@ Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkSpoke2ToH
 <p><img src="https://anktsrkr.github.io/images/hub-spoke/hub-to-spoke1-peering-connected.jpg" alt="hub-vnet to spoke1-vnet peering connected"></p>
 <p>The interesting part is I have created peering between hub and spokes but not between spoke1 and spoke2, so spoke1 and spoke2 can not communicate with each other. you can ask me, can&rsquo;t we create peering between them? Yes! you can but you should not, I will try to explain the reason in next part and will show you how communication will be done between spokes if needed.</p>
 <p>Now for testing purpose, we are going to create JumpBox with IIS enabled in 3 different virtual network. None of these virtual machine will have public ip also no ports are open from NSG except the communication within VNet.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"> 
-<span style="color:#75715e"># Create Virtual Machine</span>
-$LocationName = Read-Host `
-                    -Prompt <span style="color:#e6db74">&#39;Enter Location&#39;</span>
-$ResourceGroupName = Read-Host `
-                         -Prompt <span style="color:#e6db74">&#39;Enter Resource Group Name&#39;</span>
-
-$VMName = Read-Host `
-              -Prompt <span style="color:#e6db74">&#39;Enter Virtual Machine Name&#39;</span>
-$ComputerName = $VMName
-$VMSize = <span style="color:#e6db74">&#34;Standard_B1ms&#34;</span>
-
-$NetworkName = Read-Host `
-                   -Prompt <span style="color:#e6db74">&#39;Enter Virtual Network Name&#39;</span>
-$SubnetName = Read-Host `
-                  -Prompt <span style="color:#e6db74">&#39;Enter Subnet Name&#39;</span>
- 
-$NICName = <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-Nic&#34;</span>
-
-$rdpRule = New-AzNetworkSecurityRuleConfig `
-              -Name Rdp-Rule `
-              -Description <span style="color:#e6db74">&#34;Allow RDP&#34;</span> `
-              -Access Allow `
-              -Protocol Tcp `
-              -Direction Inbound `
-              -Priority 1000 `
-              -SourceAddressPrefix Internet `
-              -SourcePortRange * `
-              -DestinationAddressPrefix * `
-              -DestinationPortRange 3389
-
-$networkSecurityGroup = New-AzNetworkSecurityGroup `
-                           -ResourceGroupName $ResourceGroupName `
-                           -Location $LocationName `
-                           -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-Nsg&#34;</span> `
-                           -SecurityRules $rdpRule
-
-$Vnet = Get-AzVirtualNetwork `
-            -Name $NetworkName
-$SingleSubnet = Set-AzVirtualNetworkSubnetConfig `
-                   -VirtualNetwork $Vnet `
-                   -Name $SubnetName `
-                   -NetworkSecurityGroup $networkSecurityGroup
-
-$Vnet = Set-AzVirtualNetwork `
-           -VirtualNetwork $VNET
-
-$SingleSubnet = Get-AzVirtualNetworkSubnetConfig `
-                   -VirtualNetwork $Vnet `
-                   -Name $SubnetName `
-
-$NIC = Get-AzNetworkInterface `
-          -Name $NICName
-$PipRequired = Read-Host `
-                   -Prompt <span style="color:#e6db74">&#39;Do you want to enable public ip for this virtual machine? (Press Y to Yes)&#39;</span>
-
-<span style="color:#66d9ef">if</span>($PipRequired <span style="color:#f92672">-eq</span> <span style="color:#e6db74">&#34;Y&#34;</span>){
-    $Pip = New-AzPublicIpAddress `
-              -ResourceGroupName $ResourceGroupName `
-              -Location $LocationName `
-              -AllocationMethod Dynamic `
-              -Sku Basic `
-              -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-PublicIp&#34;</span>
-
-$ipconfig = New-AzNetworkInterfaceIpConfig `
-               -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-IpConfig&#34;</span> `
-               -Subnet $SingleSubnet -PublicIpAddress $Pip
-}
-<span style="color:#66d9ef">else</span> {
-$ipconfig = New-AzNetworkInterfaceIpConfig `
-               -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-IpConfig&#34;</span> `
-               -Subnet $SingleSubnet
-}
-
-$NIC = New-AzNetworkInterface `
-          -Name $NICName `
-          -ResourceGroupName $ResourceGroupName `
-          -Location $LocationName `
-          -IpConfiguration $ipconfig
-
-$Credential = Get-Credential `
-                 -Message <span style="color:#e6db74">&#34;Enter a username and password for the virtual machine&#34;</span>
-
-$VirtualMachine = New-AzVMConfig `
-                     -VMName $VMName `
-                     -VMSize $VMSize
-
-$VirtualMachine = Set-AzVMBootDiagnostic `
-                     -VM $VirtualMachine `
-                     -Disable
-
-$VirtualMachine = Set-AzVMOperatingSystem `
-                     -VM $VirtualMachine `
-                     -Windows `
-                     -ComputerName $ComputerName `
-                     -Credential $Credential `
-                     -ProvisionVMAgent `
-                     -EnableAutoUpdate
-
-$VirtualMachine = Add-AzVMNetworkInterface `
-                     -VM $VirtualMachine `
-                     -Id $NIC.Id
-$VirtualMachine = Set-AzVMSourceImage `
-                     -VM $VirtualMachine `
-                     -PublisherName <span style="color:#e6db74">&#39;MicrosoftWindowsServer&#39;</span> `
-                     -Offer <span style="color:#e6db74">&#39;WindowsServer&#39;</span> `
-                     -Skus <span style="color:#e6db74">&#39;2019-Datacenter&#39;</span> `
-                     -Version latest
-$VirtualMachine = Set-AzVMOSDisk `
-                     -VM $VirtualMachine `
-                     -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-OsDisk&#34;</span> `
-                     -StorageAccountType <span style="color:#e6db74">&#34;Standard_LRS&#34;</span> `
-                     -Windows `
-                     -DiskSizeInGB 127 `
-                     -CreateOption FromImage 
-
-New-AzVM `
-   -ResourceGroupName $ResourceGroupName `
-   -Location $LocationName `
-   -VM $VirtualMachine `
-   -Verbose
-
-
-<span style="color:#75715e"># Install IIS</span>
-$PublicSettings = <span style="color:#e6db74">&#39;{&#34;commandToExecute&#34;:&#34;powershell Add-WindowsFeature Web-Server&#34;}&#39;</span>
-
-Set-AzVMExtension `
-        -ExtensionName <span style="color:#e6db74">&#34;IIS&#34;</span> `
-        -ResourceGroupName $ResourceGroupName `
-        -VMName $VMName `
-        -Publisher <span style="color:#e6db74">&#34;Microsoft.Compute&#34;</span> `
-        -ExtensionType <span style="color:#e6db74">&#34;CustomScriptExtension&#34;</span> -TypeHandlerVersion 1.4 `
-        -SettingString $PublicSettings -Location $LocationName</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create Virtual Machine</span>
+</span></span><span style="display:flex;"><span>$LocationName = Read-Host `
+</span></span><span style="display:flex;"><span>                    -Prompt <span style="color:#e6db74">&#39;Enter Location&#39;</span>
+</span></span><span style="display:flex;"><span>$ResourceGroupName = Read-Host `
+</span></span><span style="display:flex;"><span>                         -Prompt <span style="color:#e6db74">&#39;Enter Resource Group Name&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$VMName = Read-Host `
+</span></span><span style="display:flex;"><span>              -Prompt <span style="color:#e6db74">&#39;Enter Virtual Machine Name&#39;</span>
+</span></span><span style="display:flex;"><span>$ComputerName = $VMName
+</span></span><span style="display:flex;"><span>$VMSize = <span style="color:#e6db74">&#34;Standard_B1ms&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$NetworkName = Read-Host `
+</span></span><span style="display:flex;"><span>                   -Prompt <span style="color:#e6db74">&#39;Enter Virtual Network Name&#39;</span>
+</span></span><span style="display:flex;"><span>$SubnetName = Read-Host `
+</span></span><span style="display:flex;"><span>                  -Prompt <span style="color:#e6db74">&#39;Enter Subnet Name&#39;</span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>$NICName = <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-Nic&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$rdpRule = New-AzNetworkSecurityRuleConfig `
+</span></span><span style="display:flex;"><span>              -Name Rdp-Rule `
+</span></span><span style="display:flex;"><span>              -Description <span style="color:#e6db74">&#34;Allow RDP&#34;</span> `
+</span></span><span style="display:flex;"><span>              -Access Allow `
+</span></span><span style="display:flex;"><span>              -Protocol Tcp `
+</span></span><span style="display:flex;"><span>              -Direction Inbound `
+</span></span><span style="display:flex;"><span>              -Priority <span style="color:#ae81ff">1000</span> `
+</span></span><span style="display:flex;"><span>              -SourceAddressPrefix Internet `
+</span></span><span style="display:flex;"><span>              -SourcePortRange * `
+</span></span><span style="display:flex;"><span>              -DestinationAddressPrefix * `
+</span></span><span style="display:flex;"><span>              -DestinationPortRange <span style="color:#ae81ff">3389</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$networkSecurityGroup = New-AzNetworkSecurityGroup `
+</span></span><span style="display:flex;"><span>                           -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>                           -Location $LocationName `
+</span></span><span style="display:flex;"><span>                           -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-Nsg&#34;</span> `
+</span></span><span style="display:flex;"><span>                           -SecurityRules $rdpRule
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$Vnet = Get-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>            -Name $NetworkName
+</span></span><span style="display:flex;"><span>$SingleSubnet = Set-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                   -VirtualNetwork $Vnet `
+</span></span><span style="display:flex;"><span>                   -Name $SubnetName `
+</span></span><span style="display:flex;"><span>                   -NetworkSecurityGroup $networkSecurityGroup
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$Vnet = Set-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>           -VirtualNetwork $VNET
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$SingleSubnet = Get-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                   -VirtualNetwork $Vnet `
+</span></span><span style="display:flex;"><span>                   -Name $SubnetName `
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$NIC = Get-AzNetworkInterface `
+</span></span><span style="display:flex;"><span>          -Name $NICName
+</span></span><span style="display:flex;"><span>$PipRequired = Read-Host `
+</span></span><span style="display:flex;"><span>                   -Prompt <span style="color:#e6db74">&#39;Do you want to enable public ip for this virtual machine? (Press Y to Yes)&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>($PipRequired <span style="color:#f92672">-eq</span> <span style="color:#e6db74">&#34;Y&#34;</span>){
+</span></span><span style="display:flex;"><span>    $Pip = New-AzPublicIpAddress `
+</span></span><span style="display:flex;"><span>              -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>              -Location $LocationName `
+</span></span><span style="display:flex;"><span>              -AllocationMethod Dynamic `
+</span></span><span style="display:flex;"><span>              -Sku Basic `
+</span></span><span style="display:flex;"><span>              -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-PublicIp&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ipconfig = New-AzNetworkInterfaceIpConfig `
+</span></span><span style="display:flex;"><span>               -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-IpConfig&#34;</span> `
+</span></span><span style="display:flex;"><span>               -Subnet $SingleSubnet -PublicIpAddress $Pip
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>$ipconfig = New-AzNetworkInterfaceIpConfig `
+</span></span><span style="display:flex;"><span>               -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-IpConfig&#34;</span> `
+</span></span><span style="display:flex;"><span>               -Subnet $SingleSubnet
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$NIC = New-AzNetworkInterface `
+</span></span><span style="display:flex;"><span>          -Name $NICName `
+</span></span><span style="display:flex;"><span>          -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>          -Location $LocationName `
+</span></span><span style="display:flex;"><span>          -IpConfiguration $ipconfig
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$Credential = Get-Credential `
+</span></span><span style="display:flex;"><span>                 -Message <span style="color:#e6db74">&#34;Enter a username and password for the virtual machine&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$VirtualMachine = New-AzVMConfig `
+</span></span><span style="display:flex;"><span>                     -VMName $VMName `
+</span></span><span style="display:flex;"><span>                     -VMSize $VMSize
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$VirtualMachine = Set-AzVMBootDiagnostic `
+</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
+</span></span><span style="display:flex;"><span>                     -Disable
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$VirtualMachine = Set-AzVMOperatingSystem `
+</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
+</span></span><span style="display:flex;"><span>                     -Windows `
+</span></span><span style="display:flex;"><span>                     -ComputerName $ComputerName `
+</span></span><span style="display:flex;"><span>                     -Credential $Credential `
+</span></span><span style="display:flex;"><span>                     -ProvisionVMAgent `
+</span></span><span style="display:flex;"><span>                     -EnableAutoUpdate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$VirtualMachine = Add-AzVMNetworkInterface `
+</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
+</span></span><span style="display:flex;"><span>                     -Id $NIC.Id
+</span></span><span style="display:flex;"><span>$VirtualMachine = Set-AzVMSourceImage `
+</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
+</span></span><span style="display:flex;"><span>                     -PublisherName <span style="color:#e6db74">&#39;MicrosoftWindowsServer&#39;</span> `
+</span></span><span style="display:flex;"><span>                     -Offer <span style="color:#e6db74">&#39;WindowsServer&#39;</span> `
+</span></span><span style="display:flex;"><span>                     -Skus <span style="color:#e6db74">&#39;2019-Datacenter&#39;</span> `
+</span></span><span style="display:flex;"><span>                     -Version latest
+</span></span><span style="display:flex;"><span>$VirtualMachine = Set-AzVMOSDisk `
+</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
+</span></span><span style="display:flex;"><span>                     -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-OsDisk&#34;</span> `
+</span></span><span style="display:flex;"><span>                     -StorageAccountType <span style="color:#e6db74">&#34;Standard_LRS&#34;</span> `
+</span></span><span style="display:flex;"><span>                     -Windows `
+</span></span><span style="display:flex;"><span>                     -DiskSizeInGB <span style="color:#ae81ff">127</span> `
+</span></span><span style="display:flex;"><span>                     -CreateOption FromImage 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>New-AzVM `
+</span></span><span style="display:flex;"><span>   -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>   -Location $LocationName `
+</span></span><span style="display:flex;"><span>   -VM $VirtualMachine `
+</span></span><span style="display:flex;"><span>   -Verbose
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Install IIS</span>
+</span></span><span style="display:flex;"><span>$PublicSettings = <span style="color:#e6db74">&#39;{&#34;commandToExecute&#34;:&#34;powershell Add-WindowsFeature Web-Server&#34;}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Set-AzVMExtension `
+</span></span><span style="display:flex;"><span>        -ExtensionName <span style="color:#e6db74">&#34;IIS&#34;</span> `
+</span></span><span style="display:flex;"><span>        -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>        -VMName $VMName `
+</span></span><span style="display:flex;"><span>        -Publisher <span style="color:#e6db74">&#34;Microsoft.Compute&#34;</span> `
+</span></span><span style="display:flex;"><span>        -ExtensionType <span style="color:#e6db74">&#34;CustomScriptExtension&#34;</span> -TypeHandlerVersion <span style="color:#ae81ff">1.4</span> `
+</span></span><span style="display:flex;"><span>        -SettingString $PublicSettings -Location $LocationName</span></span></code></pre></div>
 <p>Once completed, Connect you VPN and let&rsquo;s see how data flows between hub to spokes from you local workspace.</p>
 <h4 id="local-workspace-to-hub">Local workspace To Hub</h4>
 <p>Since, we have established the VPN connection, Hub is reachable from local workspace.</p>
@@ -570,60 +569,60 @@ Set-AzVMExtension `
 </li>
 <li>
 <p>Configure the peering connection in the hub to allow gateway transit.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$resourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-$hubvnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
-
-<span style="color:#75715e"># Update Hub to Spoke 1.</span>
-$LinkHubToSpoke1 = Get-AzVirtualNetworkPeering `
-                      -VirtualNetworkName $hubvnetName `
-                      -ResourceGroupName $resourceGroupName `
-                      -Name <span style="color:#e6db74">&#34;LinkHubToSpoke1&#34;</span>
-
-$LinkHubToSpoke1.AllowGatewayTransit = $True
-$LinkHubToSpoke1.AllowForwardedTraffic = $True
-
-Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkHubToSpoke1
-
-
-<span style="color:#75715e"># Update Hub to Spoke 2.</span>
-$LinkHubToSpoke2 = Get-AzVirtualNetworkPeering `
-                      -VirtualNetworkName $hubvnetName `
-                      -ResourceGroupName $resourceGroupName `
-                      -Name <span style="color:#e6db74">&#34;LinkHubToSpoke2&#34;</span>
-
-$LinkHubToSpoke2.AllowGatewayTransit = $True
-$LinkHubToSpoke2.AllowForwardedTraffic = $True
-
-Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkHubToSpoke2</code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$resourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
+</span></span><span style="display:flex;"><span>$hubvnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Hub to Spoke 1.</span>
+</span></span><span style="display:flex;"><span>$LinkHubToSpoke1 = Get-AzVirtualNetworkPeering `
+</span></span><span style="display:flex;"><span>                      -VirtualNetworkName $hubvnetName `
+</span></span><span style="display:flex;"><span>                      -ResourceGroupName $resourceGroupName `
+</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#34;LinkHubToSpoke1&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$LinkHubToSpoke1.AllowGatewayTransit = $True
+</span></span><span style="display:flex;"><span>$LinkHubToSpoke1.AllowForwardedTraffic = $True
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkHubToSpoke1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Hub to Spoke 2.</span>
+</span></span><span style="display:flex;"><span>$LinkHubToSpoke2 = Get-AzVirtualNetworkPeering `
+</span></span><span style="display:flex;"><span>                      -VirtualNetworkName $hubvnetName `
+</span></span><span style="display:flex;"><span>                      -ResourceGroupName $resourceGroupName `
+</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#34;LinkHubToSpoke2&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$LinkHubToSpoke2.AllowGatewayTransit = $True
+</span></span><span style="display:flex;"><span>$LinkHubToSpoke2.AllowForwardedTraffic = $True
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkHubToSpoke2</span></span></code></pre></div></p>
 </li>
 <li>
 <p>Configure the peering connection in each spoke to use remote gateways.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$resourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-<span style="color:#75715e"># Update Spoke 1 to Hub.</span>
-
-$spoke1vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
-$LinkSpoke1ToHub = Get-AzVirtualNetworkPeering `
-                      -VirtualNetworkName $spoke1vnetName `
-                      -ResourceGroupName $resourceGroupName `
-                      -Name <span style="color:#e6db74">&#34;LinkSpoke1ToHub&#34;</span>
-
-$LinkSpoke1ToHub.UseRemoteGateways = $True
-$LinkSpoke1ToHub.AllowForwardedTraffic = $True
-
-Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkSpoke1ToHub
-
-<span style="color:#75715e"># Update Spoke 2 to Hub.</span>
-
-$spoke2vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
-$LinkSpoke2ToHub = Get-AzVirtualNetworkPeering `
-                      -VirtualNetworkName $spoke2vnetName `
-                      -ResourceGroupName $resourceGroupName `
-                      -Name <span style="color:#e6db74">&#34;LinkSpoke2ToHub&#34;</span>
-
-$LinkSpoke2ToHub.UseRemoteGateways = $True
-$LinkSpoke2ToHub.AllowForwardedTraffic = $True
-
-Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkSpoke2ToHub</code></pre></div></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$resourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Spoke 1 to Hub.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$spoke1vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$LinkSpoke1ToHub = Get-AzVirtualNetworkPeering `
+</span></span><span style="display:flex;"><span>                      -VirtualNetworkName $spoke1vnetName `
+</span></span><span style="display:flex;"><span>                      -ResourceGroupName $resourceGroupName `
+</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#34;LinkSpoke1ToHub&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$LinkSpoke1ToHub.UseRemoteGateways = $True
+</span></span><span style="display:flex;"><span>$LinkSpoke1ToHub.AllowForwardedTraffic = $True
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkSpoke1ToHub
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Spoke 2 to Hub.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$spoke2vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$LinkSpoke2ToHub = Get-AzVirtualNetworkPeering `
+</span></span><span style="display:flex;"><span>                      -VirtualNetworkName $spoke2vnetName `
+</span></span><span style="display:flex;"><span>                      -ResourceGroupName $resourceGroupName `
+</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#34;LinkSpoke2ToHub&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$LinkSpoke2ToHub.UseRemoteGateways = $True
+</span></span><span style="display:flex;"><span>$LinkSpoke2ToHub.AllowForwardedTraffic = $True
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkSpoke2ToHub</span></span></code></pre></div></p>
 </li>
 </ol>
 <p>After virtual network peering is established <strong>download and reinstall</strong> the point-to-site package so that the point-to-site clients get the updated routes to the spoke virtual network.</p>
@@ -634,6 +633,7 @@ Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkSpoke2ToHub</code></pre>
 <p>Here is the updated architecture, we just implemented -</p>
 <p><img src="https://anktsrkr.github.io/images/hub-spoke/implemented-hub-spoke-topology.jpg" alt="Updated architecture"></p>
 
+              
               
 
 

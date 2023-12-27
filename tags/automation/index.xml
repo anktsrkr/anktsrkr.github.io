@@ -7,69 +7,34 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 05 Sep 2022 11:08:35 +0100</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/tags/automation/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://anktsrkr.github.io/tags/automation/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Manage your Package Release using Nuke in Github</title>
       <link>https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/</guid>
-      <description>Hi Everyone!
-This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
-Getting Started with Nuke
-Write your first building block in Nuke
-Manage your Package Version using Nuke
-This Post - Manage your Package Release using Nuke in Github
-In our last post, we ran the build successfully in our local machine.</description>
+      <description>Hi Everyone!&#xA;This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Nuke&#xA;Write your first building block in Nuke&#xA;Manage your Package Version using Nuke&#xA;This Post - Manage your Package Release using Nuke in Github&#xA;In our last post, we ran the build successfully in our local machine.</description>
     </item>
-    
     <item>
       <title>Manage your Package Version using Nuke</title>
       <link>https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/</link>
       <pubDate>Sat, 03 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/</guid>
-      <description>Hi Everyone!
-This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
-Getting Started with Nuke
-Write your first building block in Nuke
-This Post - Manage your Package Version using Nuke
-Manage your Package Release using Nuke in Github
-In our last post, we have completed all the steps to create a new package and publish it to the feed based on where we are running the build.</description>
+      <description>Hi Everyone!&#xA;This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Nuke&#xA;Write your first building block in Nuke&#xA;This Post - Manage your Package Version using Nuke&#xA;Manage your Package Release using Nuke in Github&#xA;In our last post, we have completed all the steps to create a new package and publish it to the feed based on where we are running the build.</description>
     </item>
-    
     <item>
       <title>Write your first building block in Nuke</title>
       <link>https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/</link>
       <pubDate>Tue, 30 Aug 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/</guid>
-      <description>Hi Everyone!
-This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
-Getting Started with Nuke
-This Post - Write your first building block in Nuke
-Manage your Package Version using Nuke
-Manage your Package Release using Nuke in Github
-In our last post, we have created a new build project using Nuke.</description>
+      <description>Hi Everyone!&#xA;This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Nuke&#xA;This Post - Write your first building block in Nuke&#xA;Manage your Package Version using Nuke&#xA;Manage your Package Release using Nuke in Github&#xA;In our last post, we have created a new build project using Nuke.</description>
     </item>
-    
     <item>
       <title>Getting Started with Nuke</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-nuke/</link>
       <pubDate>Sun, 28 Aug 2022 11:07:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-nuke/</guid>
-      <description>Hi Everyone!
-With this post, I am starting a new series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
-This Post - Getting Started with Nuke
-Write your first building block in Nuke
-Manage your Package Version using Nuke
-Manage your Package Release using Nuke in Github
-Table of Contents    What we are going to build?</description>
+      <description>Hi Everyone!&#xA;With this post, I am starting a new series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting Started with Nuke&#xA;Write your first building block in Nuke&#xA;Manage your Package Version using Nuke&#xA;Manage your Package Release using Nuke in Github&#xA;Table of Contents What we are going to build? What is Nuke?</description>
     </item>
-    
   </channel>
 </rss>

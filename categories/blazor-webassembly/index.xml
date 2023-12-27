@@ -7,19 +7,13 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 20 Sep 2022 11:08:35 +0100</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/categories/blazor-webassembly/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://anktsrkr.github.io/categories/blazor-webassembly/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Step-up authentication with Auth0 in .NET 7</title>
       <link>https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/</guid>
-      <description>Security is the ❤️ of any application but sometimes we need to balance security with usability. Sometimes you want to allow users to access a resource with a lower level of authentication by just entering username and password. But if the user wants to access a resource with a higher level of authentication, then you want to ask the user to enter a second factor of authentication.
-For instance, if you are building a money transfer application, you want to allow users to view transaction history or adding a new beneficiary with just a username and password.</description>
+      <description>Security is the ❤️ of any application but sometimes we need to balance security with usability. Sometimes you want to allow users to access a resource with a lower level of authentication by just entering username and password. But if the user wants to access a resource with a higher level of authentication, then you want to ask the user to enter a second factor of authentication.&#xA;For instance, if you are building a money transfer application, you want to allow users to view transaction history or adding a new beneficiary with just a username and password.</description>
     </item>
-    
   </channel>
 </rss>

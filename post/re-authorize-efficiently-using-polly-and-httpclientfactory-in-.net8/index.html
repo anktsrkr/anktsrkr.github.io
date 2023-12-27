@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+  "description":"Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8",
+  "url":"https:\/\/anktsrkr.github.io\/post\/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8\/",
+  "keywords":"[polly get accesstoken, using polly to retry after HttpStatusCode.Unauthorized, refresh authentication token on retry when using polly, re-authorization and onRetry with polly, refresh bearer token when using named HttpClient, refresh bearer token when using typed HttpClient, refresh token when using typed HttpClientFactory, .net core polly retry accesstoken idtoken .net 8, re-authorize Efficiently Using Polly And .NET HttpClientFactory in .net 8, polly get accesstoken .net 8, using polly to retry after HttpStatusCode.Unauthorized .net 8, refresh authentication token on retry when using polly .net 8, re-authorization and onRetry with polly .net 8, refresh bearer token when using named HttpClient .net 8, refresh bearer token when using typed HttpClient .net 8, refresh token when using typed HttpClientFactory .net 8, polly v8, polly c#, polly .net 8, polly .net core, polly aspnetcore, polly 8, IHttpClientFactory polly 8, httpclient polly 8, polly 8 httpclientfactory, polly 8 httpclient, polly 8 resilience httpclientfactory, Microsoft.Extensions.Http.Polly, polly get accesstoken, using polly to retry after HttpStatusCode.Unauthorized, refresh authentication token on retry when using polly, re-authorization and onRetry with polly, refresh bearer token when using named HttpClient, refresh bearer token when using typed HttpClient, refresh token when using typed HttpClientFactory, .net core polly retry accesstoken idtoken, re-authorize Efficiently Using Polly And .NET HttpClientFactory, Use IHttpClientFactory to implement resilient HTTP requests - .NET]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta name="keywords" content="polly get accesstoken, using polly to retry after HttpStatusCode.Unauthorized, refresh authentication token on retry when using polly, re-authorization and onRetry with polly, refresh bearer token when using named HttpClient, refresh bearer token when using typed HttpClient, refresh token when using typed HttpClientFactory, .net core polly retry accesstoken idtoken .net 8, re-authorize Efficiently Using Polly And .NET HttpClientFactory in .net 8, polly get accesstoken .net 8, using polly to retry after HttpStatusCode.Unauthorized .net 8, refresh authentication token on retry when using polly .net 8, re-authorization and onRetry with polly .net 8, refresh bearer token when using named HttpClient .net 8, refresh bearer token when using typed HttpClient .net 8, refresh token when using typed HttpClientFactory .net 8, polly v8, polly c#, polly .net 8, polly .net core, polly aspnetcore, polly 8, IHttpClientFactory polly 8, httpclient polly 8, polly 8 httpclientfactory, polly 8 httpclient, polly 8 resilience httpclientfactory, Microsoft.Extensions.Http.Polly, polly get accesstoken, using polly to retry after HttpStatusCode.Unauthorized, refresh authentication token on retry when using polly, re-authorization and onRetry with polly, refresh bearer token when using named HttpClient, refresh bearer token when using typed HttpClient, refresh token when using typed HttpClientFactory, .net core polly retry accesstoken idtoken, re-authorize Efficiently Using Polly And .NET HttpClientFactory, Use IHttpClientFactory to implement resilient HTTP requests - .NET">
+<meta name="description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8">
+
+
+<meta property="og:description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8">
+<meta name="twitter:title" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8">
+<meta property="og:url" content="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta property="og:description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8">
+<meta name="twitter:description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2023-12-26T06:00:35">
+  
+  
+    <meta property="article:modified_time" content="2023-12-26T06:00:35">
+  
+  
+  
+    
+      <meta property="article:section" content=".NET 8">
+    
+      <meta property="article:section" content="Polly">
+    
+      <meta property="article:section" content="HttpClientFactory">
+    
+  
+  
+    
+      <meta property="article:tag" content="polly">
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="httpclientfactory">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/polly/logo.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/polly/logo.png">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/">
+
+    
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
+    
+    
+    
+
+    
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
+     crossorigin="anonymous"></script>
+     
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TY8ZMTBGSM');
+</script>
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title">
+      Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2023-12-26T06:00:35Z">
+        
+  December 26, 2023
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-8">.NET 8</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/polly">Polly</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/httpclientfactory">HttpClientFactory</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p>Hi Everyone!</p>
+<p>This is continuation of the series of posts on Polly v8 and .NET 8.</p>
+<p>In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :</p>
+<p><a href="https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/">Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8</a></p>
+<p><em>This Post - Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8</em></p>
+<p><a href="#">Implementing Timeout Strategy for HttpClientFactory using Polly(v8) and .NET 8</a></p>
+<p><a href="#">Implementing CircuitBreaker Strategy for HttpClientFactory using Polly(v8) and .NET 8</a></p>
+<p><a href="#">Implementing RateLimiter Strategy for HttpClientFactory using Polly(v8) and .NET 8</a></p>
+<p><a href="#">Implementing Multiple Strategy for HttpClientFactory using Polly(v8) and .NET 8</a></p>
+<p><a href="#">Implementing Telemetry for HttpClientFactory using Polly(v8) and .NET 8</a></p>
+<p>In the last post, we have seen how to implement Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8. In this post, we will see how to re-authorize efficiently using Polly and .NET HttpClientFactory in .NET 8.</p>
+<blockquote>
+<p>Please note, This post is only for <strong>.NET 8</strong>. if you want to use <strong>Polly v8</strong> along with <strong>.NET 7</strong> then please refer to <a href="https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/">this</a> post because <strong>Microsoft.Extensions.Http.Resilience</strong> not supported in .NET 7, For <strong>Polly v8</strong> along with <strong>.NET 6</strong> probably this post will help you however I have not tested it yet. But the post for <em>.NET 7</em> will definitely help you to implement the same in <em>.NET 6</em>.</p>
+</blockquote>
+<blockquote>
+<p>Also note, You can refer this <a href="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/">post</a> if you are not using <strong>Polly v8</strong>.</p>
+</blockquote>
+<h3 id="setup">Setup</h3>
+<p>For demonstration purpose, I have created a .NET 8 Web API project so that we can inject fault in our API randomly.</p>
+<p>Our API is very simple and it has only one endpoint to get the weather forecast. Below is the implementation of the same -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Microsoft.AspNetCore.Mvc;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+// Weather API
+var summaries = new[]
+{
+    &#34;Freezing&#34;, &#34;Bracing&#34;, &#34;Chilly&#34;, &#34;Cool&#34;, &#34;Mild&#34;, &#34;Warm&#34;, &#34;Balmy&#34;, &#34;Hot&#34;, &#34;Sweltering&#34;, &#34;Scorching&#34;
+};
+
+app.MapGet(&#34;/weatherforecast&#34;,  ([FromHeader(Name = &#34;Authorization&#34;)] string customHeader) =&gt;
+{
+    var rnd = Random.Shared.Next(0, 100);
+
+    Console.WriteLine(customHeader);
+
+    switch (rnd)
+    {
+        case &gt; 60:
+            return Results.Problem(&#34;Something went wrong&#34;);
+        case &gt; 30:
+            return Results.Unauthorized();
+        default:
+        {
+            var forecast = Enumerable.Range(1, 5).Select(index =&gt;
+                    new WeatherForecast
+                    (
+                        DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                        Random.Shared.Next(-20, 55),
+                        summaries[Random.Shared.Next(summaries.Length)]
+                    ))
+                .ToArray();
+            return Results.Ok(forecast);
+        }
+    }
+})
+.WithName(&#34;GetWeatherForecast&#34;)
+.WithOpenApi();
+
+app.Run();
+
+record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+{
+    public int TemperatureF =&gt; 32 &#43; (int)(TemperatureC / 0.5556);
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>We have another console application which will call this API. Below is the implementation of the same -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http.Resilience;
+using Polly;
+using Sundry.HttpClientDemisfied.Console;
+
+var builder = Host.CreateApplicationBuilder(args);
+
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton&lt;ICachedTokenService, CachedTokenService&gt;();
+builder.Services.AddSingleton&lt;IExternalTokenService, ExternalTokenService&gt;();
+
+builder.Services.AddTransient&lt;TokenRetrievalHandler&gt;();
+
+var httpClientBuilder = builder.Services.AddHttpClient&lt;IWeatherForecast, WeatherForecast&gt;(client =&gt;
+{
+    client.BaseAddress = new Uri(&#34;http://localhost:5298/&#34;);
+});
+    httpClientBuilder.AddResilienceHandler(&#34;Retry&#34;, (resiliencePipelineBuilder, context) =&gt;
+    {
+        resiliencePipelineBuilder
+            .AddRetry(new HttpRetryStrategyOptions
+            {
+                ShouldHandle = args =&gt; args.Outcome switch
+                {
+                    { Exception: HttpRequestException } =&gt; PredicateResult.True(),
+                    { Result.StatusCode: HttpStatusCode.Unauthorized } =&gt; PredicateResult.False(),
+                    { Result.IsSuccessStatusCode: false } =&gt; PredicateResult.True(),
+                    _ =&gt; PredicateResult.False()
+                },
+                MaxRetryAttempts = 3,
+                Delay = TimeSpan.FromSeconds(10),
+                UseJitter = true
+            })
+            .AddRetry(new HttpRetryStrategyOptions
+            {
+                ShouldHandle = args =&gt; args.Outcome switch
+                {
+                    { Result.StatusCode: HttpStatusCode.Unauthorized } =&gt; PredicateResult.True(),
+                    _ =&gt; PredicateResult.False()
+                },
+                MaxRetryAttempts = 3,
+                Delay = TimeSpan.FromSeconds(10),
+                UseJitter = true,
+                OnRetry = async (outcome) =&gt;
+                {
+                    await context.ServiceProvider.GetRequiredService&lt;ICachedTokenService&gt;().RefreshTokenAsync(outcome.Context);
+                }
+            });
+    });
+
+    httpClientBuilder.AddHttpMessageHandler&lt;TokenRetrievalHandler&gt;();
+
+using var host = builder.Build();
+await ExemplifyServiceLifetime(host.Services);
+
+await host.RunAsync();
+return;
+
+async Task ExemplifyServiceLifetime(IServiceProvider hostProvider)
+{
+    using var scope = hostProvider.CreateScope();
+    var provider = scope.ServiceProvider;
+    var weatherForecast = provider.GetRequiredService&lt;IWeatherForecast&gt;();
+    var forecasts = await weatherForecast.GetWeatherForecastAsync();
+    if (forecasts is not null)
+    {
+        foreach (var forecast in forecasts)
+        {
+            Console.WriteLine(forecast);
+        }
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Couple of things to note here -</p>
+<ol>
+<li>
+<p>We are using <strong>Microsoft.Extensions.Http.Resilience</strong> package to implement the retry strategy, which is a wrapper around <strong>Polly v8</strong> and provides a way to implement Polly strategies for HttpClientFactory in .NET 8.</p>
+</li>
+<li>
+<p>We are using <strong>AddResilienceHandler</strong> to add the retry strategies. We are using two different retry strategy here. First one is to retry 3 times with a delay of 10 seconds in case of any transient error. Second one is to retry 3 times with a delay of 10 seconds in case of <em>Unauthorized</em> error. Also, we are refreshing the <em>Token</em> in case of <em>Unauthorized</em> error.</p>
+</li>
+<li>
+<p>We are using <strong>AddHttpMessageHandler</strong> to add the <strong>TokenRetrievalHandler</strong> to intercept the call and add the <em>Token</em> in the header while retrying.</p>
+</li>
+<li>
+<p>We are using <strong>ICachedTokenService</strong> to get the <em>Token</em> from the memory cache and refresh it from <strong>IExternalTokenService</strong> when it is expired.</p>
+</li>
+<li>
+<p>We are using <strong>IExternalTokenService</strong> to get the actual <em>Token</em> from external service like <em>Auth0</em> and refresh it when it is expired.</p>
+</li>
+<li>
+<p>We are using <strong>AddHttpClient</strong> to add the <strong>IWeatherForecast</strong> as HttpClient.</p>
+</li>
+</ol>
+<h3 id="explanation">Explanation</h3>
+<p>Let&rsquo;s start with the <strong>AccessToken</strong> record which will be used to store the <em>Token</em> -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>AccessToken.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public record Token
+{
+    public static Token Empty =&gt; new();
+
+    [JsonPropertyName(&#34;token_type&#34;)]
+    public string Scheme { get; set; } = default!;
+
+    [JsonPropertyName(&#34;access_token&#34;)]
+    public string AccessToken { get; set; } = default!;
+
+    [JsonPropertyName(&#34;expires_in&#34;)]
+    public double ExpiresIn { get; set; } = default!;
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Next, To simulate the scenario, we are generating a random <em>Guid</em> as <em>Token</em> from <strong>IExternalTokenService</strong>. Abstartion for the same is as below -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>IExternalTokenService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public interface IExternalTokenService
+{
+    Task&lt;Token&gt; GetTokenAsync();
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Below is the implementation of the same -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>ExternalTokenService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public class ExternalTokenService : IExternalTokenService
+{
+    public Task&lt;Token&gt; GetTokenAsync()=&gt;  Task.FromResult(new Token()
+            { AccessToken = Guid.NewGuid().ToString(&#34;N&#34;), ExpiresIn = 3900, Scheme = &#34;Bearer&#34; });
+    
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>In real world, we will get the <em>Token</em> from external service like <em>Auth0</em> / <em>Azure Entra</em> etc.</p>
+<p>Next, we will create the abstraction for <strong>ICachedTokenService</strong> as below -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>ICachedTokenService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public interface ICachedTokenService
+{
+    ValueTask&lt;Token&gt; GetTokenAsync(ResilienceContext context);
+    Task&lt;Token&gt; RefreshTokenAsync(ResilienceContext context);
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Below is the implementation of the same -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>CachedTokenService.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public class CachedTokenService : ICachedTokenService
+{   
+    private const string CacheKey = nameof(CachedTokenService);
+    private readonly IMemoryCache _memoryCache;
+    private readonly IExternalTokenService _externalTokenService;
+    public CachedTokenService(IMemoryCache memoryCache, IExternalTokenService externalTokenService)
+    {
+        _memoryCache = memoryCache;
+        _externalTokenService = externalTokenService;
+    }
+    public async ValueTask&lt;Token&gt; GetTokenAsync(ResilienceContext context)
+    {
+        if (!_memoryCache.TryGetValue(CacheKey, out Token? cacheValue))
+        {
+            cacheValue = await RefreshTokenAsync(context);
+        }
+        return cacheValue!;
+    }
+
+    public async Task&lt;Token&gt; RefreshTokenAsync(ResilienceContext context)
+    {
+        var token = await _externalTokenService.GetTokenAsync();
+        
+        if (token != Token.Empty)
+        {
+           var expiresIn = token.ExpiresIn&gt;0?token.ExpiresIn-10:token.ExpiresIn;
+           
+           _memoryCache.Set(CacheKey, token, new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(expiresIn)));        
+        }
+
+        context.Properties.Set(new ResiliencePropertyKey&lt;Token&gt;(&#34;AccessKey&#34;), token);
+        
+        return token;
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Here, couple of things to note -</p>
+<ol>
+<li>
+<p>We are using <strong>ValueTask</strong> for <em>GetTokenAsync</em>. This is because we know that the <strong>Hot path</strong> will be to get the <em>Token</em> from the memory cache and very few scenraio(e.g very first time when Downstream is getting hit) it will actualy call the <strong>External Auth Server</strong>. So, we are using <strong>ValueTask</strong> to avoid the overhead of allocating a new Task in the heap.</p>
+</li>
+<li>
+<p>We are using <em>SetAbsoluteExpiration</em> and <em>SetSlidingExpiration</em> both to make sure we are not overwhelming by storing the unused <em>Token</em> in the memory cache. Also to avoid edge case when the <em>Token</em> is expired but not yet refreshed we are making sure it removed from the cache before it&rsquo;s actual expiry time.</p>
+</li>
+<li>
+<p>We are using <strong>ResilienceContext</strong> from <em>Polly</em> to store the <em>Token</em> in the context so that we can use it in <strong>TokenRetrievalHandler</strong>.</p>
+</li>
+</ol>
+<p>Next, we will write custom <em>DelegationHandler</em> to intercept the call and add the <em>Token</em> in the header while retrying. Below is the implementation of the same -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>TokenRetrievalHandler.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public class TokenRetrievalHandler : DelegatingHandler
+{   
+    private readonly ICachedTokenService _cachedTokenService;
+
+    public TokenRetrievalHandler(ICachedTokenService cachedTokenService)
+    {
+        _cachedTokenService = cachedTokenService;
+    }
+    protected override async Task&lt;HttpResponseMessage&gt; SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        var context =  ResilienceContextPool.Shared.Get(cancellationToken);
+        context.Properties.TryGetValue(new ResiliencePropertyKey&lt;Token&gt;(&#34;AccessToken&#34;), out var token);
+       
+        token ??= await _cachedTokenService.GetTokenAsync(context);
+
+        request.Headers.Authorization = new AuthenticationHeaderValue(token.Scheme, token.AccessToken);
+        return await base.SendAsync(request, cancellationToken);
+    }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Things to note here -</p>
+<ol>
+<li>
+<p>We are using <strong>ResilienceContextPool</strong> from <em>Polly</em> to get the context and then get the <em>Token</em> from the context. If the <em>Token</em> is not available in the context then we are getting it from <strong>ICachedTokenService</strong>.</p>
+</li>
+<li>
+<p>We are adding the <em>Token</em> in the <em>AuthenticationHeader</em>.</p>
+</li>
+</ol>
+<p>At last, we will create the abstraction for <strong>IWeatherForecast</strong> as below -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>IWeatherForecast.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public interface IWeatherForecast
+{ 
+    Task&lt;IEnumerable&lt;Weather&gt;?&gt; GetWeatherForecastAsync();
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Below is the implementation of the same -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>WeatherForecast.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">public class  WeatherForecast : IWeatherForecast{
+    private readonly HttpClient _httpClient;
+
+    public WeatherForecast(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    public async Task&lt;IEnumerable&lt;Weather&gt;?&gt; GetWeatherForecastAsync()
+    {
+        var response = await _httpClient.GetAsync(&#34;/weatherforecast&#34;);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync&lt;IEnumerable&lt;Weather&gt;&gt;();
+    }   
+}
+
+
+public record Weather(DateOnly Date, int TemperatureC, string? Summary);</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>All the pieces are in place. Now, we just need to orchestrate the flow. Let&rsquo;s revisit the <strong>Program.cs</strong> file where we are configuring the HttpClientFactory -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">var httpClientBuilder = builder.Services.AddHttpClient&lt;IWeatherForecast, WeatherForecast&gt;(client =&gt;
+{
+    client.BaseAddress = new Uri(&#34;http://localhost:5298/&#34;);
+});
+    httpClientBuilder.AddResilienceHandler(&#34;Retry&#34;, (resiliencePipelineBuilder, context) =&gt;
+    {
+        resiliencePipelineBuilder
+            .AddRetry(new HttpRetryStrategyOptions
+            {
+                ShouldHandle = args =&gt; args.Outcome switch
+                {
+                    { Exception: HttpRequestException } =&gt; PredicateResult.True(),
+                    { Result.StatusCode: HttpStatusCode.Unauthorized } =&gt; PredicateResult.False(),
+                    { Result.IsSuccessStatusCode: false } =&gt; PredicateResult.True(),
+                    _ =&gt; PredicateResult.False()
+                },
+                MaxRetryAttempts = 3,
+                Delay = TimeSpan.FromSeconds(10),
+                UseJitter = true
+            })
+            .AddRetry(new HttpRetryStrategyOptions
+            {
+                ShouldHandle = args =&gt; args.Outcome switch
+                {
+                    { Result.StatusCode: HttpStatusCode.Unauthorized } =&gt; PredicateResult.True(),
+                    _ =&gt; PredicateResult.False()
+                },
+                MaxRetryAttempts = 3,
+                Delay = TimeSpan.FromSeconds(10),
+                UseJitter = true,
+                OnRetry = async (outcome) =&gt;
+                {
+                    await context.ServiceProvider.GetRequiredService&lt;ICachedTokenService&gt;().RefreshTokenAsync(outcome.Context);
+                }
+            });
+    });
+
+    httpClientBuilder.AddHttpMessageHandler&lt;TokenRetrievalHandler&gt;();</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p><strong>AddResilienceHandler</strong> is an extension method provided by <strong>Microsoft.Extensions.Http.Resilience</strong> package. It takes two parameters, first one is the name of the pipeline and second one is the action to configure the pipeline. It does not return <strong>IHttpClientBuilder</strong> instead it returns <strong>IHttpResiliencePipelineBuilder</strong> provides a way to configure the resilience pipeline.</p>
+<p>Hence, we are keeping the reference of <em>IHttpClientsBuilder</em> in <strong>httpClientBuilder</strong> and then using it to configure the pipeline and adding the <strong>TokenRetrievalHandler</strong> to intercept the call and add the <em>Token</em> in the header while retrying.</p>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<p>Below is the sequence diagram for the same -</p>
+<pre class="mermaid">sequenceDiagram
+title HttpClient Retry Resiliency While UnAuthorized
+
+actor HttpCient
+Note over HttpCient,Polly Delegation Handler: PostAsync/GetAsync etc.<br/> Calls SendAsync inernally
+HttpCient->>+ Polly Delegation Handler: Calls SendAsync
+Polly Delegation Handler->>+Pipeline:  Calls ExecuteOutcomeAsync
+Pipeline->>+Retry: Calls ExecuteCore
+Retry->>+Token Retrival Delegation Handler: Calls SendAsync
+alt Token is Available
+Token Retrival Delegation Handler->>+ResilienceContextPool : Calls TryGetValue
+ResilienceContextPool->>-Token Retrival Delegation Handler : Returns Token
+else Token is not Available
+Token Retrival Delegation Handler->>+Cached Token Service : Calls GetTokenAsync
+Cached Token Service->>-Token Retrival Delegation Handler : Returns Token
+end
+alt Token is Expired
+Cached Token Service->>+ External Token Service: Calls RefreshTokenAsync
+External Token Service->>-Cached Token Service: Returns Token
+else Token is not Expired
+Cached Token Service->>+ Cached Token Service: Returns Cached Token
+end
+Token Retrival Delegation Handler->>Token Retrival Delegation Handler : Sets Authentication Header
+
+Note over Retry,Downstream Service: Initial Attempt
+Retry->>+Downstream Service: Invoke
+Downstream Service->>-Retry: Unauthorized (for Demonstration Purpose Only, because it is very unlikely it will return Unauthorized in very first Invoke just after getting fresh token)
+Retry-->Retry:Sleeps
+alt When Token is Valid
+    Note over Downstream Service,Retry: 1st Retry Attempt
+    Retry->>+Downstream Service: Invoke
+    Downstream Service->>-Retry: Returns Valid Response
+    Retry->>+Pipeline: Returns Valid Response
+    Pipeline->>+Polly Delegation Handler: Returns Valid Response
+    Polly Delegation Handler->>+HttpCient: Returns Valid Response
+
+else When Token is not Valid
+    Note over Downstream Service,Retry: 1st Retry Attempt
+    Retry->>+Downstream Service: Invoke
+    alt Token is Available
+Token Retrival Delegation Handler->>+ResilienceContextPool : Calls TryGetValue
+ResilienceContextPool->>-Token Retrival Delegation Handler : Returns Token
+else Token is not Available
+Token Retrival Delegation Handler->>+Cached Token Service : Calls GetTokenAsync
+Cached Token Service->>-Token Retrival Delegation Handler : Returns Token
+end
+alt Token is Expired
+Cached Token Service->>+ External Token Service: Calls RefreshTokenAsync
+External Token Service->>-Cached Token Service: Returns Token
+else Token is not Expired
+Cached Token Service->>+ Cached Token Service: Returns Cached Token
+end
+    Downstream Service->>-Retry: Returns Valid Response
+    Retry->>+Pipeline: Returns Valid Response
+    Pipeline->>+Polly Delegation Handler: Returns Valid Response
+    Polly Delegation Handler->>+HttpCient: Returns Valid Response
+end
+  </pre>
+  <h3 id="result">Result</h3>
+<p>Finally, we are ready to run the application. Let&rsquo;s run the <strong>Web API</strong> first and then <strong>Console Application</strong>.</p>
+<p>In my case, below is the output of the <strong>Console</strong> -</p>
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/pollynet8/reauth-console-output.png" title="Console Output" data-fancybox="polly">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/pollynet8/reauth-console-output.png"  alt="Console Output">
+  
+    </a>
+  
+   
+    <span class="caption">Console Output</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+<p>and below is the output of the <strong>Web API</strong> -</p>
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/pollynet8/reauth-webapi-output.png" title="Web API Output" data-fancybox="polly">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/pollynet8/reauth-webapi-output.png"  alt="Web API Output">
+  
+    </a>
+  
+   
+    <span class="caption">Web API Output</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+<p>Let&rsquo;s try to understand the output -</p>
+<ol>
+<li>
+<p>Very first attempt is unsuccessful and it is returning <strong>500</strong> which can be seen from the <strong>Console</strong> output. Since we are capturing the <em>Authorization</em> header in the <strong>Web API</strong> we can see that the <em>Token</em> is also getting logged in the <strong>Web API</strong> output. In our case, it is <strong>Bearer 201bf10e73164ea288ddc21d58fa0964</strong>. This is will be handled by the first retry strategy which is to retry 3 times with a delay of 10 seconds in case of any transient error.</p>
+</li>
+<li>
+<p>Second attempt is also unsuccessful and it is returning <strong>401</strong>. In this case we could see
+the same <em>Token</em> is getting logged in the <strong>Web API</strong> output as expected.</p>
+</li>
+<li>
+<p>Since in the second attempt we got <strong>401</strong> which is handled by the second retry strategy which is to retry 3 times with a delay of 10 seconds in case of <em>Unauthorized</em> error. This will refresh the <em>Token</em> and then retry the call. In our case, we could see that the <em>Token</em> is getting refreshed and the different <em>Token</em> is getting logged in the <strong>Web API</strong> output.In our case, it is <strong>Bearer a4b1af59a33e46db8251ff7bb5d4a5c4</strong>.</p>
+</li>
+<li>
+<p>To keep it short, I will not go through the third attempt. But I hope you got the idea that in case of <em>Unauthorized</em> error, it will refresh the <em>Token</em> and then retry the call and in case of any other error it will retry the call without refreshing the <em>Token</em>.</p>
+</li>
+<li>
+<p>Let&rsquo;s jump to the last attempt which is successful and it is returning <strong>200</strong>. Before retrying the call, it will refresh the <em>Token</em> as it got <strong>401</strong> in the previous attempt. In this case we could see that the different <em>Token</em> is getting logged in the <strong>Web API</strong> output as expected, which is <strong>Bearer 503b1c11dc66449cabf20fa04198c816</strong>.</p>
+</li>
+</ol>
+<h3 id="conclusion">Conclusion</h3>
+<p>IMO, it is now more easier to implement than the pervious version of Polly. But I did had a hard time to figure out how to add <em>DelegationHandler</em> while retrying, because the documentation is not very clear on that. I hope this post will help you to implement the same.</p>
+<p>You can find the complete source code <a href="https://github.com/anktsrkr/Sundry.HttpClientDemisfied">here</a></p>
+
+              
+                <script type="module">
+                  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+                  mermaid.initialize({ startOnLoad: true });
+                </script>
+              
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/polly/">polly</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/httpclientfactory/">httpclientfactory</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/" data-tooltip="Implementing Retry Strategy using HttpClientFactory with Polly(v8) and .NET 8" aria-label="PREVIOUS: Implementing Retry Strategy using HttpClientFactory with Polly(v8) and .NET 8">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8\/';
+        
+          this.page.identifier = '\/post\/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2023 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/" data-tooltip="Implementing Retry Strategy using HttpClientFactory with Polly(v8) and .NET 8" aria-label="PREVIOUS: Implementing Retry Strategy using HttpClientFactory with Polly(v8) and .NET 8">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fre-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fre-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fre-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Nottingham
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+
+
+<script>
+    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
+   </script>
+   
+   
+
+<script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+            });
+  
+        navigator.serviceWorker
+            .ready
+            .then(function(registration) {
+            });
+    }
+  </script>
+  
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+
+<a id="Setmore_button_iframe" style="position: fixed;
+ right: 20px;
+ bottom: 15px;
+ z-index: 9998;text-decoration: none"
+    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
+    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
+display: table-cell;
+width: auto;
+height: 45px;
+padding: 0 30px;
+border-radius: 25px;
+box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
+font-family: sans-serif;
+text-align: center;
+vertical-align: middle;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+cursor: pointer;">#TalkWithMe</div>
+</a>
+
+    
+  </body>
+</html>
+

@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="azure storage unit test, azure storage unit testing, azure storage integration test, azure storage integration testing, azure storage test containers, azure storage testcontainers, azure storage FakeItEasy, azure storage xunit, azure storage .net 7, azure storage azurite, azure storage azurite test containers, azure storage azurite FakeItEasy, azure storage azurite xunit, azure storage azurite .net 7, azure storage azurite unit testing, azure storage azurite integration testing, azure storage azurite test containers, azure storage azurite testcontainers, azure storage unit testing, azure storage blob integration testing, azure storage blob test containers, azure storage blob FakeItEasy, azure storage blob xunit, azure storage blob .net 7, azure storage blob azurite, azure storage blob azurite test containers, azure storage blob azurite FakeItEasy, azure storage blob azurite xunit, azure storage blob azurite .net 7, azure storage blob azurite unit testing, azure storage blob azurite integration testing, azure storage blob azurite test containers, azure storage blob azurite testcontainers, azurite integration testing, azurite test containers, azurite FakeItEasy, azurite xunit, azurite .net 7, azurite unit testing, unit and integration testing for azure blob storage, unit and integration testing for azure blob storage using azurite test containers, unit and integration testing for azure blob storage using azurite testcontainers, unit and integration testing for azure blob storage using xunit FakeItEasy, unit and integration testing for azure blob storage using .net 7, unit and integration testing for azure blob storage using azurite, BlobContainerClient, BlobContainerClient dependency injection, BlobClient, BlobServiceClient, Azure.Storage.Blobs, Azure.Storage.Blobs v12 unit testing, Azure.Storage.Blobs v12 integration testing, Dependency injection, azure storage blob dependency injection, azure storage dependency injection, azure storage testing, azurite, moving solutions to Azure Cloud, How to Test Azure Blob Storage, How to make integration test for Azure Storage, azure, integration test for azure storage,, storage, unit test, getting started with testing for azure blob storage, getting started with testing for azure blob storage dependency injection, getting started with testing for azure blob storage unit test, getting started with testing for azure blob storage unit test with FakeItEasy, getting started with testing for azure blob storage integration test, getting started with testing for azure blob storage integration test with azurite test containers, getting started with testing for azure blob storage integration test with azurite testcontainers, class fixture, collection fixture, IAsyncLifetime, xunit class fixture, xunit collection fixture, xunit IAsyncLifetime, azurite IAsyncLifetime">
 <meta name="description" content="Perform unit &amp; integration tests for Azure Blob Storage: Unit Test with help of Test Containers and Azurite">
@@ -126,7 +126,7 @@
     
 
     
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -138,7 +138,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
      crossorigin="anonymous"></script>
@@ -463,6 +462,7 @@ Nothing fancy here, we are just faking the dependency of <code>BlobServiceClient
 <p>In this article, we have learned how to write loosely coupled code for Azure Storage SDK and how to mock the Azure Storage SDK using <em>FakeItEasy</em> and <em>xUnit</em>. This whole series of articles was focused on Azure Blob Storage but you can use the same approach for Azure File Storage as well. For Azure File Storage, you just need to replace the <code>BlobServiceClient</code> with <code>FileServiceClient</code> and <code>BlobContainerClient</code> with <code>ShareClient</code> and <code>BlobClient</code> with <code>ShareFileClient</code>, and you are good to go. Also to mock the respose you will have <code>FilesModelFactory</code> instead of <code>BlobsModelFactory</code>.</p>
 <p>You can find the source code <a href="https://github.com/sundryoss/Sundry.AzStorageTest"><strong>here</strong></a>.</p>
 
+              
               
 
 

@@ -7,65 +7,34 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 22 May 2021 01:00:00 +0530</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/tags/azure-app-services/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://anktsrkr.github.io/tags/azure-app-services/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Add Custom Domain for App Service Environment Hosted WebApp</title>
       <link>https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/</guid>
-      <description>Hi Everyone!
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-Deploy App Service Environment in Microsoft Azure
-Create a WebApp in App Service Environment
-Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;Deploy App Service Environment in Microsoft Azure&#xA;Create a WebApp in App Service Environment&#xA;Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
     <item>
       <title>Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</title>
       <link>https://anktsrkr.github.io/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/</link>
       <pubDate>Sun, 04 Oct 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/</guid>
-      <description>Hi Everyone!
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-Deploy App Service Environment in Microsoft Azure
-Create a WebApp in App Service Environment
-Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-This Post - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;Deploy App Service Environment in Microsoft Azure&#xA;Create a WebApp in App Service Environment&#xA;Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;This Post - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
     <item>
       <title>Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</title>
       <link>https://anktsrkr.github.io/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem/</link>
       <pubDate>Thu, 01 Oct 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem/</guid>
-      <description>Hi Everyone!
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-Deploy App Service Environment in Microsoft Azure
-Create a WebApp in App Service Environment
-This Post - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;Deploy App Service Environment in Microsoft Azure&#xA;Create a WebApp in App Service Environment&#xA;This Post - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
     <item>
       <title>Create a WebApp in App Service Environment</title>
       <link>https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/</link>
       <pubDate>Wed, 30 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/</guid>
-      <description>Hi Everyone!
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-Deploy App Service Environment in Microsoft Azure
-This Post - Create a WebApp in App Service Environment
-Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;Deploy App Service Environment in Microsoft Azure&#xA;This Post - Create a WebApp in App Service Environment&#xA;Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
   </channel>
 </rss>

@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="ase,app, service,, app, service, env,, app, service, env, v2,app, service, environment,app, service, environment, v2,deploy, application, in, app, service, environment,app, service, environment, and, private, link,, ase, in, hub, spoke,hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology,app, service, environment, and, private, endpoint,azure, sql,, azure, sql, and, private, endpoint,azure, private, dns, zone,, resolve, azure, internal, DNS, from, your, on, prem,hub, spoke, dns, forwarder,dns, forwarder, in, hub, spoke,dns, forwarder, in, hub, spoke, network, topology,dns, forwarder">
 <meta name="description" content="Deploy App Service Environment (ASE v2) in Microsoft Azure">
@@ -120,7 +120,7 @@
     
 
     
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -132,7 +132,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
      crossorigin="anonymous"></script>
@@ -408,18 +407,19 @@ Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s 
 <p><strong>Private VIP</strong>  &ndash; If the apps in your ASE make calls to resources in your VNet or across a VPN, the source IP is one of the IPs in the subnet used by your ASE. Because the ASE is within the VNet, it can also access resources within the VNet without any additional configuration. If the VNet is connected to your on-premises network, apps in your ASE also have access to resources there without additional configuration.</p>
 <p>Okay, now we have the ASE ready, in my <a href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment">next post</a>
 we will deploy a sample Web App in this environment.</p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
-<p><a href="https://docs.microsoft.com/en-us/azure/app-service/environment/intro">Introduction to the App Service Environments</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:1">
+<p><a href="https://docs.microsoft.com/en-us/azure/app-service/environment/intro">Introduction to the App Service Environments</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
-<p><a href="https://docs.microsoft.com/en-us/azure/app-service/environment/network-info">Network Info</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:2">
+<p><a href="https://docs.microsoft.com/en-us/azure/app-service/environment/network-info">Network Info</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
+              
               
 
 

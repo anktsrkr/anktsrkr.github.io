@@ -6,262 +6,203 @@
     <description>Recent content in Categories on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2023 06:00:35 +0100</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 26 Dec 2023 06:00:35 +0000</lastBuildDate>
+    <atom:link href="https://anktsrkr.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>.NET 8</title>
       <link>https://anktsrkr.github.io/categories/.net-8/</link>
-      <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
-      
+      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
       <guid>https://anktsrkr.github.io/categories/.net-8/</guid>
       <description></description>
     </item>
-    
+    <item>
+      <title>HttpClientFactory</title>
+      <link>https://anktsrkr.github.io/categories/httpclientfactory/</link>
+      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
+      <guid>https://anktsrkr.github.io/categories/httpclientfactory/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Polly</title>
+      <link>https://anktsrkr.github.io/categories/polly/</link>
+      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
+      <guid>https://anktsrkr.github.io/categories/polly/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Polly 8</title>
       <link>https://anktsrkr.github.io/categories/polly-8/</link>
       <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/polly-8/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>.NET 7</title>
       <link>https://anktsrkr.github.io/categories/.net-7/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/.net-7/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure</title>
       <link>https://anktsrkr.github.io/categories/azure/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/azure/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azurite</title>
       <link>https://anktsrkr.github.io/categories/azurite/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/azurite/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>FakeItEasy</title>
       <link>https://anktsrkr.github.io/categories/fakeiteasy/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/fakeiteasy/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Integration Testing</title>
       <link>https://anktsrkr.github.io/categories/integration-testing/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/integration-testing/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Test Containers</title>
       <link>https://anktsrkr.github.io/categories/test-containers/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/test-containers/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Unit Testing</title>
       <link>https://anktsrkr.github.io/categories/unit-testing/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/unit-testing/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>xUnit</title>
       <link>https://anktsrkr.github.io/categories/xunit/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/xunit/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Exception handling</title>
       <link>https://anktsrkr.github.io/categories/exception-handling/</link>
       <pubDate>Sun, 08 Oct 2023 08:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/exception-handling/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>ProblemOr</title>
       <link>https://anktsrkr.github.io/categories/problemor/</link>
       <pubDate>Sun, 08 Oct 2023 08:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/problemor/</guid>
       <description></description>
     </item>
-    
-    <item>
-      <title>HttpClientFactory</title>
-      <link>https://anktsrkr.github.io/categories/httpclientfactory/</link>
-      <pubDate>Mon, 02 Oct 2023 06:00:35 +0100</pubDate>
-      
-      <guid>https://anktsrkr.github.io/categories/httpclientfactory/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Polly</title>
-      <link>https://anktsrkr.github.io/categories/polly/</link>
-      <pubDate>Mon, 02 Oct 2023 06:00:35 +0100</pubDate>
-      
-      <guid>https://anktsrkr.github.io/categories/polly/</guid>
-      <description></description>
-    </item>
-    
     <item>
       <title>Moq</title>
       <link>https://anktsrkr.github.io/categories/moq/</link>
       <pubDate>Wed, 17 May 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/moq/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Blazor WebAssembly</title>
       <link>https://anktsrkr.github.io/categories/blazor-webassembly/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/blazor-webassembly/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>C#</title>
       <link>https://anktsrkr.github.io/categories/c#/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/c#/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>OAuth0</title>
       <link>https://anktsrkr.github.io/categories/oauth0/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/oauth0/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>.NET 6</title>
       <link>https://anktsrkr.github.io/categories/.net-6/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/.net-6/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Github Action</title>
       <link>https://anktsrkr.github.io/categories/github-action/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/github-action/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Nuget</title>
       <link>https://anktsrkr.github.io/categories/nuget/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/nuget/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Nuke</title>
       <link>https://anktsrkr.github.io/categories/nuke/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/nuke/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>App Service Environment</title>
       <link>https://anktsrkr.github.io/categories/app-service-environment/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/app-service-environment/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure SQL</title>
       <link>https://anktsrkr.github.io/categories/azure-sql/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/azure-sql/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Cloud</title>
       <link>https://anktsrkr.github.io/categories/cloud/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/cloud/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Hub-Spoke Topology</title>
       <link>https://anktsrkr.github.io/categories/hub-spoke-topology/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/hub-spoke-topology/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure architecture</title>
       <link>https://anktsrkr.github.io/categories/azure-architecture/</link>
       <pubDate>Sun, 13 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/azure-architecture/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>CI/CD</title>
       <link>https://anktsrkr.github.io/categories/ci/cd/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>https://anktsrkr.github.io/categories/ci/cd/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

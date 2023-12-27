@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology, ,azure, firewall,connectivity, between, spoke,connectivity, between, spoke, vnet, using, azure, firewall,azure, powershell,Point, to, Site,, Site, to, Site,VPN">
 <meta name="description" content="Connect an on-premises network to a Microsoft Azure">
@@ -114,7 +114,7 @@
     
 
     
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -126,7 +126,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
      crossorigin="anonymous"></script>
@@ -342,111 +341,112 @@ if (!doNotTrack) {
 <p>While using this option, you need to establish connection between on-prem and Azure Vnet manually every time you want to access from your workstation. If you shutdown your workstation, connectivity will be lost. It connects over SSTP or IKEv2 VPN tunnel.</p>
 <p><img src="https://anktsrkr.github.io/images/hub-spoke/p2s.jpg" alt="Point-To-Site VPN Connection"></p>
 <p>Mostly I will use azure powershell module to automate all resources in azure. We will start by creating Hub Virtual Network(<code>hub-vnet</code>), with address space <code>10.10.0.0/19</code>. We will also create a subnet <code>ManagementSubnet</code> under hub virtual network with address space <code>10.10.1.0/24</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
-$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-$vnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
-$defaultSubnet = <span style="color:#e6db74">&#34;ManagementSubnet&#34;</span>
-$vnetAddressSpace = <span style="color:#e6db74">&#34;10.10.0.0/19&#34;</span>
-$subnetvnetAddressSpace = <span style="color:#e6db74">&#34;10.10.1.0/24&#34;</span>
-
-$virtualNetwork = New-AzVirtualNetwork `
-                     -ResourceGroupName $ResourceGroupName `
-                     -Location $LocationName `
-                     -Name $vnetName `
-                     -AddressPrefix $vnetAddressSpace
-
-$subnetConfig = Add-AzVirtualNetworkSubnetConfig `
-                   -Name $defaultSubnet `
-                   -AddressPrefix $subnetvnetAddressSpace `
-                   -VirtualNetwork $virtualNetwork
-
-
-$virtualNetwork = $virtualNetwork | Set-AzVirtualNetwork</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
+</span></span><span style="display:flex;"><span>$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
+</span></span><span style="display:flex;"><span>$vnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$defaultSubnet = <span style="color:#e6db74">&#34;ManagementSubnet&#34;</span>
+</span></span><span style="display:flex;"><span>$vnetAddressSpace = <span style="color:#e6db74">&#34;10.10.0.0/19&#34;</span>
+</span></span><span style="display:flex;"><span>$subnetvnetAddressSpace = <span style="color:#e6db74">&#34;10.10.1.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$virtualNetwork = New-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                     -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>                     -Location $LocationName `
+</span></span><span style="display:flex;"><span>                     -Name $vnetName `
+</span></span><span style="display:flex;"><span>                     -AddressPrefix $vnetAddressSpace
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$subnetConfig = Add-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                   -Name $defaultSubnet `
+</span></span><span style="display:flex;"><span>                   -AddressPrefix $subnetvnetAddressSpace `
+</span></span><span style="display:flex;"><span>                   -VirtualNetwork $virtualNetwork
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$virtualNetwork = $virtualNetwork | Set-AzVirtualNetwork</span></span></code></pre></div>
 <p>Next, we need to create the VPN gateway. To create VPN gateway the first requirement is to have <code>GatewaySubnet</code> in hub-vnet. Also we will need public ip for it. I&rsquo;m taking RouteBased vpn type and Basic Sku. Below script takes care of creating gateway subnet in hub-vnet and creating vpn gateway. This steps can take around 45 minutes and it depends on Sku type.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$vnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
-$gwAddressSpace = <span style="color:#e6db74">&#34;10.10.31.0/27&#34;</span>
-<span style="color:#75715e">#Get basic details</span>
-$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
-$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-
-$hubVnet = Get-AzVirtualNetwork `
-              -Name $vnetName
-
-$gwSubnet = Add-AzVirtualNetworkSubnetConfig `
-                          -Name <span style="color:#e6db74">&#34;GatewaySubnet&#34;</span> `
-                          -AddressPrefix $gwAddressSpace `
-                          -VirtualNetwork $hubVnet
-
-$updateHubVnet = Set-AzVirtualNetwork `
-                    -VirtualNetwork $hubVnet
-
-$gwpip    = New-AzPublicIpAddress `
-               -Name <span style="color:#e6db74">&#34;GateWayPIp&#34;</span> `
-               -ResourceGroupName $ResourceGroupName `
-               -AllocationMethod <span style="color:#e6db74">&#34;Dynamic&#34;</span> `
-               -Location $LocationName 
-               
-$gwSubnet   = Get-AzVirtualNetworkSubnetConfig -Name <span style="color:#e6db74">&#39;GatewaySubnet&#39;</span> `
-               -VirtualNetwork $updateHubVnet
-
-$gwipconf = New-AzVirtualNetworkGatewayIpConfig -Name <span style="color:#e6db74">&#34;VPNGatewayIp&#34;</span> `
-               -Subnet $gwSubnet -PublicIpAddress $gwpip
-
-New-AzVirtualNetworkGateway -Name <span style="color:#e6db74">&#34;AzVpn&#34;</span> -ResourceGroupName $ResourceGroupName `
-                            -Location $LocationName -IpConfigurations $gwipconf -GatewayType Vpn `
-                            -VpnType RouteBased -GatewaySku Basic</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$vnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$gwAddressSpace = <span style="color:#e6db74">&#34;10.10.31.0/27&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Get basic details</span>
+</span></span><span style="display:flex;"><span>$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
+</span></span><span style="display:flex;"><span>$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$hubVnet = Get-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>              -Name $vnetName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$gwSubnet = Add-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                          -Name <span style="color:#e6db74">&#34;GatewaySubnet&#34;</span> `
+</span></span><span style="display:flex;"><span>                          -AddressPrefix $gwAddressSpace `
+</span></span><span style="display:flex;"><span>                          -VirtualNetwork $hubVnet
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$updateHubVnet = Set-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                    -VirtualNetwork $hubVnet
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$gwpip    = New-AzPublicIpAddress `
+</span></span><span style="display:flex;"><span>               -Name <span style="color:#e6db74">&#34;GateWayPIp&#34;</span> `
+</span></span><span style="display:flex;"><span>               -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>               -AllocationMethod <span style="color:#e6db74">&#34;Dynamic&#34;</span> `
+</span></span><span style="display:flex;"><span>               -Location $LocationName 
+</span></span><span style="display:flex;"><span>               
+</span></span><span style="display:flex;"><span>$gwSubnet   = Get-AzVirtualNetworkSubnetConfig -Name <span style="color:#e6db74">&#39;GatewaySubnet&#39;</span> `
+</span></span><span style="display:flex;"><span>               -VirtualNetwork $updateHubVnet
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$gwipconf = New-AzVirtualNetworkGatewayIpConfig -Name <span style="color:#e6db74">&#34;VPNGatewayIp&#34;</span> `
+</span></span><span style="display:flex;"><span>               -Subnet $gwSubnet -PublicIpAddress $gwpip
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>New-AzVirtualNetworkGateway -Name <span style="color:#e6db74">&#34;AzVpn&#34;</span> -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>                            -Location $LocationName -IpConfigurations $gwipconf -GatewayType Vpn `
+</span></span><span style="display:flex;"><span>                            -VpnType RouteBased -GatewaySku Basic</span></span></code></pre></div>
 <p>Once VPN Gateway is created, at this point either you can configure Site to Site connectivity or Point to Site connectivity. We will take P2S approach.</p>
 <p>Azure uses certificate to authenticate VPN client. Each workspace that you connected to hub-vnet must have the client certificate installed. Now to generate a client certificate first you need to create a root certificate and you upload the public key information to Azure. The root certificate then considered as trusted. You also need to generate the client certificate from the same trusted root certificate and as I mentioned earlier you need to install it on each workspace from where you want to connect hub-vnet.</p>
 <p>Either you can use your existing certificate chain or you can generate self signed certificate. In this post I will go with self signed certificate.</p>
 <p>First, you will need to create root certificate and store it in current user.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$certStoreLocation = <span style="color:#e6db74">&#34;Cert:\CurrentUser\My&#34;</span>
-
-<span style="color:#75715e">#Create a self-signed root certificate</span>
-
-$cert = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
-                                -Subject <span style="color:#e6db74">&#34;CN=P2SRootCa&#34;</span> `
-                                -KeyExportPolicy Exportable `
-                                -HashAlgorithm sha256 -KeyLength 2048 `
-                                -CertStoreLocation $certStoreLocation `
-                                -KeyUsageProperty Sign `
-                                -KeyUsage CertSign</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$certStoreLocation = <span style="color:#e6db74">&#34;Cert:\CurrentUser\My&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Create a self-signed root certificate</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$cert = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
+</span></span><span style="display:flex;"><span>                                -Subject <span style="color:#e6db74">&#34;CN=P2SRootCa&#34;</span> `
+</span></span><span style="display:flex;"><span>                                -KeyExportPolicy Exportable `
+</span></span><span style="display:flex;"><span>                                -HashAlgorithm sha256 -KeyLength <span style="color:#ae81ff">2048</span> `
+</span></span><span style="display:flex;"><span>                                -CertStoreLocation $certStoreLocation `
+</span></span><span style="display:flex;"><span>                                -KeyUsageProperty Sign `
+</span></span><span style="display:flex;"><span>                                -KeyUsage CertSign</span></span></code></pre></div>
 <p>Next, create a client certificate signed by root certificate we just created, which needs to be installed every workstation from where you want to connect hub-vnet.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e">#Generate a client certificate</span>
-
-New-SelfSignedCertificate -Type Custom -DnsName <span style="color:#e6db74">&#34;P2SRootClient&#34;</span> -KeySpec Signature `
-                            -Subject <span style="color:#e6db74">&#34;CN=P2SRootClient&#34;</span> -KeyExportPolicy Exportable `
-                            -HashAlgorithm sha256 -KeyLength 2048 `
-                            -CertStoreLocation $certStoreLocation `
-                            -Signer $cert -TextExtension @(<span style="color:#e6db74">&#34;2.5.29.37={text}1.3.6.1.5.5.7.3.2&#34;</span>)</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e">#Generate a client certificate</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>New-SelfSignedCertificate -Type Custom -DnsName <span style="color:#e6db74">&#34;P2SRootClient&#34;</span> -KeySpec Signature `
+</span></span><span style="display:flex;"><span>                            -Subject <span style="color:#e6db74">&#34;CN=P2SRootClient&#34;</span> -KeyExportPolicy Exportable `
+</span></span><span style="display:flex;"><span>                            -HashAlgorithm sha256 -KeyLength <span style="color:#ae81ff">2048</span> `
+</span></span><span style="display:flex;"><span>                            -CertStoreLocation $certStoreLocation `
+</span></span><span style="display:flex;"><span>                            -Signer $cert -TextExtension @(<span style="color:#e6db74">&#34;2.5.29.37={text}1.3.6.1.5.5.7.3.2&#34;</span>)</span></span></code></pre></div>
 <p>It&rsquo;s time to download the VPN client, so to download, you need to upload public key information of root certification to azure also you need to mention address pool for your vpn client so that it can reserves a pool of IP addresses for VPN clients.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-$GatewayName=<span style="color:#e6db74">&#34;AzVpn&#34;</span>
-
-$Gateway=Get-AzVirtualNetworkGateway -Name $GatewayName -ResourceGroupName $ResourceGroupName
-
-$VPNClientAddressPool=<span style="color:#e6db74">&#34;192.168.0.0/24&#34;</span>
-$rootCaBase64 = <span style="color:#66d9ef">[system.convert]</span>::ToBase64String($cert.RawData)
-
-<span style="color:#75715e">#Disabling BGP</span>
-
-$Gateway.BgpSettings =$null
-
-<span style="color:#75715e">#Setting the VPN Client Address Pool</span>
-
-Set-AzVirtualNetworkGateway -VirtualNetworkGateway $Gateway -VpnClientAddressPool $VPNClientAddressPool
-
-<span style="color:#75715e">#Uploading the Certificate to the gateway</span>
-
-Add-AzVpnClientRootCertificate -VpnClientRootCertificateName <span style="color:#e6db74">&#34;P2SRootCA&#34;</span> `
-                               -VirtualNetworkGatewayname $GatewayName `
-                               -ResourceGroupName $ResourceGroupName `
-                               -PublicCertData $rootCaBase64</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
+</span></span><span style="display:flex;"><span>$GatewayName=<span style="color:#e6db74">&#34;AzVpn&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$Gateway=Get-AzVirtualNetworkGateway -Name $GatewayName -ResourceGroupName $ResourceGroupName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$VPNClientAddressPool=<span style="color:#e6db74">&#34;192.168.0.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>$rootCaBase64 = [<span style="color:#66d9ef">system.convert</span>]::ToBase64String($cert.RawData)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Disabling BGP</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$Gateway.BgpSettings =$null
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Setting the VPN Client Address Pool</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkGateway -VirtualNetworkGateway $Gateway -VpnClientAddressPool $VPNClientAddressPool
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Uploading the Certificate to the gateway</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Add-AzVpnClientRootCertificate -VpnClientRootCertificateName <span style="color:#e6db74">&#34;P2SRootCA&#34;</span> `
+</span></span><span style="display:flex;"><span>                               -VirtualNetworkGatewayname $GatewayName `
+</span></span><span style="display:flex;"><span>                               -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>                               -PublicCertData $rootCaBase64</span></span></code></pre></div>
 <p>Once done, go to azure portal select your vpn you just configured and then go to &ldquo;User VPN configuration&rdquo;. Download and based on your system architecture (x86 or x64) install it on your workspace.</p>
 <p><img src="https://anktsrkr.github.io/images/hub-spoke/user-vpn-configuration.jpg" alt="User VPN Configuration for P2S"></p>
 <p>If you are using Windows 10 you should have something like this after connecting with VPN -</p>
 <p><img src="https://anktsrkr.github.io/images/hub-spoke/hub-vnet-vpn-connected.jpg" alt="User VPN Configuration for P2S"></p>
 <p>At this point you have encrypted connection to hub-vnet using private ips over public internet. In <a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1">next post</a>, I will deep dive into Hub-Spoke topology also we will create JumpBoxes and connect over VPN.</p>
 
+              
               
 
 

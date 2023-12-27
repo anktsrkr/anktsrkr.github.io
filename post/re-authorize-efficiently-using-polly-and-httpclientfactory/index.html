@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="polly get accesstoken, using polly to retry after HttpStatusCode.Unauthorized, refresh authentication token on retry when using polly, re-authorization and onRetry with polly, refresh bearer token when using named HttpClient, refresh bearer token when using typed HttpClient, refresh token when using typed HttpClientFactory, .net core polly retry accesstoken idtoken, re-authorize Efficiently Using Polly And .NET HttpClientFactory">
 <meta name="description" content="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory">
@@ -116,7 +116,7 @@
     
 
     
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -128,7 +128,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
      crossorigin="anonymous"></script>
@@ -329,6 +328,9 @@ if (!doNotTrack) {
             <div class="main-content-wrap">
               <p>In today&rsquo;s world, we are using a lot of APIs to build our applications. To make your .NET based applications more ressilient and fault tolerant, go to solution is to use  <strong><span class="highlight-text green">Polly</span></strong>. Probably, you are already using it. So,I&rsquo;m not going to explain how to use it in general. You can find some excellent documentation <a href="https://github.com/App-vNext/Polly#get-started">here</a>.</p>
 <p>However, In this post I&rsquo;m going to discuss about one of the typical scenario where we need to refresh the authentication token when using Polly. Let&rsquo;s get started.</p>
+<blockquote>
+<p><strong>UPDATE</strong>: If you are using <strong>Polly v8</strong> and <strong>.NET 8</strong>, you can find the updated post <a href="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/">here</a></p>
+</blockquote>
 <h2 id="the-problem">The Problem</h2>
 <p>To handle such situation what we do is retry on <em>Unauthorized</em> failure and call a method to reauthorize. Something like below from the Polly documentation -</p>
 
@@ -444,9 +446,8 @@ var httpResponseMessage =
 <p>IMO, the above approach is not very clean as we are passing <em>httpClient</em> as a state variable. Instead if we can pass the <em>Token</em> as a state variable, it will be more cleaner. Let&rsquo;s try to implement the same.</p>
 <h2 id="the-solution">The Solution</h2>
 <p>The solution could be to make use of the <em>Context</em> , <em>DelegationHandler</em> and <em>HttpClientFactory</em>. Define a communication between them as below -</p>
-<figure>
-    <img src="https://anktsrkr.github.io/images/polly/refresh-token-flow.png"
-         alt="Communication between Context, DelegationHandler and HttpClientFactory"/> 
+<figure><img src="https://anktsrkr.github.io/images/polly/refresh-token-flow.png"
+         alt="Communication between Context, DelegationHandler and HttpClientFactory"/>
 </figure>
 
 <p>In our scenario, we are using <em>Auth0</em> as Token Provider and our Downstream system (Todo API)is protected by it.</p>
@@ -910,6 +911,7 @@ Nothing fancy here, just making sure in case of any transient error, we are retr
 <p>IMO, the above approach is more cleaner and easy to understand. Also, it is more flexible and can be extended easily.Also, each service has it&rsquo;s own responsibility and can be tested independently. I have used <em>Auth0</em> as Token Provider but you can use any other provider as well with any other Downstream system.I have skipped the part for Auth0 configuration but let me know if you want me to explain it in seperate post. You can also use the same approach for <em>Named Client</em> as well. This post is inspired from below <a href="https://stackoverflow.com/questions/59833373/refresh-token-using-polly-with-named-client/73123449">post</a></p>
 <p>As always, You can find the source code <a href="https://github.com/sundryoss/Sundry.PollyDemystified/"><strong>here</strong></a>.</p>
 
+              
               
 
 

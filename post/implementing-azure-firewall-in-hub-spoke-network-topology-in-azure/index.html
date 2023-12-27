@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology, ,azure, firewall,connectivity, between, spoke,connectivity, between, spoke, vnet, using, azure, firewall,azure, powershell,Point, to, Site,, Site, to, Site,VPN">
 <meta name="description" content="Implementing Azure Firewall in Hub-Spoke network topology in Azure">
@@ -116,7 +116,7 @@
     
 
     
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -128,7 +128,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
      crossorigin="anonymous"></script>
@@ -337,143 +336,143 @@ if (!doNotTrack) {
 <p><em>This Post - Implementing Azure Firewall in Hub-Spoke network topology in Azure</em></p>
 <p>Now we are able to connect between Hub and Spokes but there is no communication between Spokes. In this post we are going to see how Intra-Region Spokes VNET routing works.</p>
 <p>We will start by creating Azure Firewall. Like gateway subnet, Azure firewall also need dedicated subnet for it. Since azure firewall is shared service, we will put it in hub-vnet. Let&rsquo;s create a subnet called <code>AzurefirwallSubnet</code> in hub-vnet. Azure Firewall needs a <code>/26</code> subnet size because it ensures that the firewall has enough IP addresses available to provision more virtual machine instances as it scales.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
-$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-
-<span style="color:#75715e">#Create AzureFirewallSubnet in Hub Vnet</span>
-$vnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
-$azfirewallvnetAddressSpace = <span style="color:#e6db74">&#34;10.10.10.0/26&#34;</span>
-
-$hubVnet = Get-AzVirtualNetwork `
-              -Name $vnetName
-
-$azureFirewallSubnet = Add-AzVirtualNetworkSubnetConfig `
-                          -Name <span style="color:#e6db74">&#34;AzureFirewallSubnet&#34;</span> `
-                          -AddressPrefix $azfirewallvnetAddressSpace `
-                          -VirtualNetwork $hubVnet
-
-$updateHubVnet = Set-AzVirtualNetwork `
-                    -VirtualNetwork $hubVnet</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
+</span></span><span style="display:flex;"><span>$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Create AzureFirewallSubnet in Hub Vnet</span>
+</span></span><span style="display:flex;"><span>$vnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>$azfirewallvnetAddressSpace = <span style="color:#e6db74">&#34;10.10.10.0/26&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$hubVnet = Get-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>              -Name $vnetName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$azureFirewallSubnet = Add-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                          -Name <span style="color:#e6db74">&#34;AzureFirewallSubnet&#34;</span> `
+</span></span><span style="display:flex;"><span>                          -AddressPrefix $azfirewallvnetAddressSpace `
+</span></span><span style="display:flex;"><span>                          -VirtualNetwork $hubVnet
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$updateHubVnet = Set-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                    -VirtualNetwork $hubVnet</span></span></code></pre></div>
 Once subnet is ready we will provision azure firewall. We will also need public ip for firewall. We will wait till this process is finished because we need the private ip for our next step.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Get a Public IP for the firewall</span>
-$azFirewallName = <span style="color:#e6db74">&#34;HubAzFirewall&#34;</span>
-
-$firewallPip = New-AzPublicIpAddress `
-                  -ResourceGroupName $ResourceGroupName `
-                  -Location $LocationName `
-                  -AllocationMethod Static `
-                  -Sku Standard `
-                  -Name <span style="color:#e6db74">&#34;</span>$($azFirewallName)<span style="color:#e6db74">-PublicIp&#34;</span>
-
-
-<span style="color:#75715e"># Create the firewall</span>
-$azFirewall = New-AzFirewall `
-                 -Name $azFirewallName `
-                 -ResourceGroupName $ResourceGroupName  `
-                 -Location $LocationName `
-                 -VirtualNetworkName $updateHubVnet.Name`
-                 -PublicIpName $firewallPip.Name</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e"># Get a Public IP for the firewall</span>
+</span></span><span style="display:flex;"><span>$azFirewallName = <span style="color:#e6db74">&#34;HubAzFirewall&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$firewallPip = New-AzPublicIpAddress `
+</span></span><span style="display:flex;"><span>                  -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>                  -Location $LocationName `
+</span></span><span style="display:flex;"><span>                  -AllocationMethod Static `
+</span></span><span style="display:flex;"><span>                  -Sku Standard `
+</span></span><span style="display:flex;"><span>                  -Name <span style="color:#e6db74">&#34;</span>$($azFirewallName)<span style="color:#e6db74">-PublicIp&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create the firewall</span>
+</span></span><span style="display:flex;"><span>$azFirewall = New-AzFirewall `
+</span></span><span style="display:flex;"><span>                 -Name $azFirewallName `
+</span></span><span style="display:flex;"><span>                 -ResourceGroupName $ResourceGroupName  `
+</span></span><span style="display:flex;"><span>                 -Location $LocationName `
+</span></span><span style="display:flex;"><span>                 -VirtualNetworkName $updateHubVnet.Name`
+</span></span><span style="display:flex;"><span>                 -PublicIpName $firewallPip.Name</span></span></code></pre></div>
 Once done, we will create a user defined route so that all the outbound flow first goes to azure firewall.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e">#Create route table</span>
-$spoke1ToAzFwUdr = New-AzRouteTable `
-                      -Name <span style="color:#e6db74">&#39;Spoke1ToAzFwUdr&#39;</span> `
-                      -ResourceGroupName $ResourceGroupName `
-                      -location $LocationName
-
-$updatedSpoke1ToAzFwUdr = $spoke1ToAzFwUdr `
-                            | Add-AzRouteConfig `
-                                 -Name <span style="color:#e6db74">&#34;ToAzureFirewall&#34;</span> `
-                                 -AddressPrefix 0.0.0.0/0 `
-                                 -NextHopType <span style="color:#e6db74">&#34;VirtualAppliance&#34;</span> `
-                                 -NextHopIpAddress $azFirewall.IpConfigurations.privateipaddress `
-                            | Set-AzRouteTable</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#75715e">#Create route table</span>
+</span></span><span style="display:flex;"><span>$spoke1ToAzFwUdr = New-AzRouteTable `
+</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#39;Spoke1ToAzFwUdr&#39;</span> `
+</span></span><span style="display:flex;"><span>                      -ResourceGroupName $ResourceGroupName `
+</span></span><span style="display:flex;"><span>                      -location $LocationName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$updatedSpoke1ToAzFwUdr = $spoke1ToAzFwUdr `
+</span></span><span style="display:flex;"><span>                            | Add-AzRouteConfig `
+</span></span><span style="display:flex;"><span>                                 -Name <span style="color:#e6db74">&#34;ToAzureFirewall&#34;</span> `
+</span></span><span style="display:flex;"><span>                                 -AddressPrefix <span style="color:#ae81ff">0.0</span>.0.<span style="color:#ae81ff">0</span>/<span style="color:#ae81ff">0</span> `
+</span></span><span style="display:flex;"><span>                                 -NextHopType <span style="color:#e6db74">&#34;VirtualAppliance&#34;</span> `
+</span></span><span style="display:flex;"><span>                                 -NextHopIpAddress $azFirewall.IpConfigurations.privateipaddress `
+</span></span><span style="display:flex;"><span>                            | Set-AzRouteTable</span></span></code></pre></div>
 Next, we will add route table to subnet from where they need to communicate each other. In our case, <code>WorkloadSubnet</code> of <code>spoke1-vnet</code> needs to communicate with <code>WorkloadSubnet</code> of <code>spoke2-vnet</code>. So we will attach newly created UDR to both subnet.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$subNetinspokeVnet =<span style="color:#e6db74">&#34;WorkloadSubnet&#34;</span>
-$spoke1VnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
-                     
-$spoke1Vnet = Get-AzVirtualNetwork `
-                           -Name $spoke1VnetName
-
-$WorkloadSubnetAddressSpaceForSpoke1 = <span style="color:#e6db74">&#34;10.20.1.0/24&#34;</span>
-
-$spoke1Vnet =  Set-AzVirtualNetworkSubnetConfig `
-                 -VirtualNetwork $spoke1Vnet `
-                 -Name $subNetinspokeVnet `
-                 -AddressPrefix $WorkloadSubnetAddressSpaceForSpoke1 `
-                 -RouteTable $spokeToAzFwUdr | `
-              Set-AzVirtualNetwork
-
-$spoke2VnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
-                     
-$spoke2Vnet = Get-AzVirtualNetwork `
-                           -Name $spoke2VnetName
-
-$WorkloadSubnetAddressSpaceForSpoke2 = <span style="color:#e6db74">&#34;10.30.1.0/24&#34;</span>
-
-$spoke1Vnet =  Set-AzVirtualNetworkSubnetConfig `
-                 -VirtualNetwork $spoke2Vnet `
-                 -Name $subNetinspokeVnet `
-                 -AddressPrefix $WorkloadSubnetAddressSpaceForSpoke2 `
-                 -RouteTable $spokeToAzFwUdr | `
-              Set-AzVirtualNetwork</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$subNetinspokeVnet =<span style="color:#e6db74">&#34;WorkloadSubnet&#34;</span>
+</span></span><span style="display:flex;"><span>$spoke1VnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>                     
+</span></span><span style="display:flex;"><span>$spoke1Vnet = Get-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                           -Name $spoke1VnetName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$WorkloadSubnetAddressSpaceForSpoke1 = <span style="color:#e6db74">&#34;10.20.1.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$spoke1Vnet =  Set-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                 -VirtualNetwork $spoke1Vnet `
+</span></span><span style="display:flex;"><span>                 -Name $subNetinspokeVnet `
+</span></span><span style="display:flex;"><span>                 -AddressPrefix $WorkloadSubnetAddressSpaceForSpoke1 `
+</span></span><span style="display:flex;"><span>                 -RouteTable $spokeToAzFwUdr | `
+</span></span><span style="display:flex;"><span>              Set-AzVirtualNetwork
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$spoke2VnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
+</span></span><span style="display:flex;"><span>                     
+</span></span><span style="display:flex;"><span>$spoke2Vnet = Get-AzVirtualNetwork `
+</span></span><span style="display:flex;"><span>                           -Name $spoke2VnetName
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$WorkloadSubnetAddressSpaceForSpoke2 = <span style="color:#e6db74">&#34;10.30.1.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$spoke1Vnet =  Set-AzVirtualNetworkSubnetConfig `
+</span></span><span style="display:flex;"><span>                 -VirtualNetwork $spoke2Vnet `
+</span></span><span style="display:flex;"><span>                 -Name $subNetinspokeVnet `
+</span></span><span style="display:flex;"><span>                 -AddressPrefix $WorkloadSubnetAddressSpaceForSpoke2 `
+</span></span><span style="display:flex;"><span>                 -RouteTable $spokeToAzFwUdr | `
+</span></span><span style="display:flex;"><span>              Set-AzVirtualNetwork</span></span></code></pre></div>
 All Set! Now <em>Next Hop</em> for every request generating from <code>Spok1JumpBox</code> and <code>Spoke2JumpBox</code> is Azure firewall, So we just need to allow the flow from <code>WorkloadSubnet</code> of <code>spoke1-vnet</code> to <code>WorkloadSubnet</code> of <code>spoke2-vnet</code>. To do that, we will create network rule in azure firewall.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$sourceAddress = <span style="color:#e6db74">&#34;10.20.1.0/24&#34;</span>
-
-$destinationAddress =<span style="color:#e6db74">&#34;10.30.1.0/24&#34;</span>
-
-$spoke1ToSpoke2 = New-AzFirewallNetworkRule `
-                     -Name <span style="color:#e6db74">&#34;Allow-Spoke2-Routing&#34;</span> `
-                     -Protocol TCP `
-                     -SourceAddress $sourceAddress `
-                     -DestinationAddress $destinationAddress `
-                     -DestinationPort *
-           
-$netRuleCollection = New-AzFirewallNetworkRuleCollection `
-                        -Name <span style="color:#e6db74">&#34;Spoke-to-Spoke&#34;</span> `
-                        -Priority 1000 `
-                        -Rule $spoke1ToSpoke2 `
-                        -ActionType <span style="color:#e6db74">&#34;Allow&#34;</span>
-           
-$azFirewall.NetworkRuleCollections.Add($netRuleCollection)
-$updatedFirewall = Set-AzFirewall -AzureFirewall $azFirewall</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$sourceAddress = <span style="color:#e6db74">&#34;10.20.1.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$destinationAddress =<span style="color:#e6db74">&#34;10.30.1.0/24&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$spoke1ToSpoke2 = New-AzFirewallNetworkRule `
+</span></span><span style="display:flex;"><span>                     -Name <span style="color:#e6db74">&#34;Allow-Spoke2-Routing&#34;</span> `
+</span></span><span style="display:flex;"><span>                     -Protocol TCP `
+</span></span><span style="display:flex;"><span>                     -SourceAddress $sourceAddress `
+</span></span><span style="display:flex;"><span>                     -DestinationAddress $destinationAddress `
+</span></span><span style="display:flex;"><span>                     -DestinationPort *
+</span></span><span style="display:flex;"><span>           
+</span></span><span style="display:flex;"><span>$netRuleCollection = New-AzFirewallNetworkRuleCollection `
+</span></span><span style="display:flex;"><span>                        -Name <span style="color:#e6db74">&#34;Spoke-to-Spoke&#34;</span> `
+</span></span><span style="display:flex;"><span>                        -Priority <span style="color:#ae81ff">1000</span> `
+</span></span><span style="display:flex;"><span>                        -Rule $spoke1ToSpoke2 `
+</span></span><span style="display:flex;"><span>                        -ActionType <span style="color:#e6db74">&#34;Allow&#34;</span>
+</span></span><span style="display:flex;"><span>           
+</span></span><span style="display:flex;"><span>$azFirewall.NetworkRuleCollections.Add($netRuleCollection)
+</span></span><span style="display:flex;"><span>$updatedFirewall = Set-AzFirewall -AzureFirewall $azFirewall</span></span></code></pre></div>
 At this point, Spoke2JumpBox is accessible from Spoke1JumpBox!! However, Spoke1JumpBox is not accessible from Spoke2JumpBox, to enable that we just need to add a network rule, that&rsquo;s it!
 <img src="https://anktsrkr.github.io/images/hub-spoke/spoke1-to-spoke2-reachable.jpg" alt="spoke2-vnet is reachable from spoke1-vnet">
 Let&rsquo;s go to <a href="https://www.microsoft.com/">https://www.microsoft.com/</a> from Spoke1JumpBox. Oops! unable to reach, what happen? As I mentioned earlier, by default  all connections are denied from Azure firewall. So, create a application rule to allow google and lets see how it works.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$allowGoogle = New-AzFirewallApplicationRule `
-                  -Name <span style="color:#e6db74">&#34;Allow-Google&#34;</span>  `
-                  -SourceAddress $sourceAddress `
-                  -Protocol http, https  `
-                  -TargetFqdn www.google.com
-
-$appRuleCollection = New-AzFirewallApplicationRuleCollection `
-                        -Name <span style="color:#e6db74">&#34;Allow-Internet&#34;</span> `
-                        -Priority 2000 `
-                        -ActionType Allow `
-                        -Rule $allowGoogle `
-
-$azFirewall.ApplicationRuleCollections.Add($appRuleCollection)
-$updatedFirewall = Set-AzFirewall -AzureFirewall $azFirewall</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$allowGoogle = New-AzFirewallApplicationRule `
+</span></span><span style="display:flex;"><span>                  -Name <span style="color:#e6db74">&#34;Allow-Google&#34;</span>  `
+</span></span><span style="display:flex;"><span>                  -SourceAddress $sourceAddress `
+</span></span><span style="display:flex;"><span>                  -Protocol http, https  `
+</span></span><span style="display:flex;"><span>                  -TargetFqdn www.google.com
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$appRuleCollection = New-AzFirewallApplicationRuleCollection `
+</span></span><span style="display:flex;"><span>                        -Name <span style="color:#e6db74">&#34;Allow-Internet&#34;</span> `
+</span></span><span style="display:flex;"><span>                        -Priority <span style="color:#ae81ff">2000</span> `
+</span></span><span style="display:flex;"><span>                        -ActionType Allow `
+</span></span><span style="display:flex;"><span>                        -Rule $allowGoogle `
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$azFirewall.ApplicationRuleCollections.Add($appRuleCollection)
+</span></span><span style="display:flex;"><span>$updatedFirewall = Set-AzFirewall -AzureFirewall $azFirewall</span></span></code></pre></div>
 Once applied, We are able to reach Google! Yay!!
 <img src="https://anktsrkr.github.io/images/hub-spoke/filtered-internet-access.jpg" alt="Filtered internet access">
 You can also control inbound internet traffic with Azure Firewall DNAT. Assume, your VPN is not working but you have to access HubJumpBox which only have private ip. So how to access it? One of the way to access it by creating a DNAT rule.
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">$rdpToHubJumpbox =  New-AzFirewallNatRule `
-                       -Name <span style="color:#e6db74">&#34;RDP To HubJumpBox&#34;</span> `
-                       -Protocol <span style="color:#e6db74">&#34;TCP&#34;</span> `
-                       -SourceAddress * `
-                       -DestinationAddress $firewallPip.IpAddress `
-                       -DestinationPort <span style="color:#e6db74">&#34;4500&#34;</span> `
-                       -TranslatedAddress <span style="color:#e6db74">&#34;10.10.1.4&#34;</span> `
-                       -TranslatedPort <span style="color:#e6db74">&#34;3389&#34;</span>
-
-
-$natRuleCollection = New-AzFirewallNatRuleCollection `
-                       -Name <span style="color:#e6db74">&#34;Allow-RDP-To-HubJumpBox&#34;</span> `
-                       -Priority 500 `
-                       -Rule $rdpToHubJumpbox
-
-$azFirewall.NatRuleCollections.Add($natRuleCollection)
-
-$updatedFirewall = Set-AzFirewall -AzureFirewall $azFirewall</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$rdpToHubJumpbox =  New-AzFirewallNatRule `
+</span></span><span style="display:flex;"><span>                       -Name <span style="color:#e6db74">&#34;RDP To HubJumpBox&#34;</span> `
+</span></span><span style="display:flex;"><span>                       -Protocol <span style="color:#e6db74">&#34;TCP&#34;</span> `
+</span></span><span style="display:flex;"><span>                       -SourceAddress * `
+</span></span><span style="display:flex;"><span>                       -DestinationAddress $firewallPip.IpAddress `
+</span></span><span style="display:flex;"><span>                       -DestinationPort <span style="color:#e6db74">&#34;4500&#34;</span> `
+</span></span><span style="display:flex;"><span>                       -TranslatedAddress <span style="color:#e6db74">&#34;10.10.1.4&#34;</span> `
+</span></span><span style="display:flex;"><span>                       -TranslatedPort <span style="color:#e6db74">&#34;3389&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$natRuleCollection = New-AzFirewallNatRuleCollection `
+</span></span><span style="display:flex;"><span>                       -Name <span style="color:#e6db74">&#34;Allow-RDP-To-HubJumpBox&#34;</span> `
+</span></span><span style="display:flex;"><span>                       -Priority <span style="color:#ae81ff">500</span> `
+</span></span><span style="display:flex;"><span>                       -Rule $rdpToHubJumpbox
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$azFirewall.NatRuleCollections.Add($natRuleCollection)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$updatedFirewall = Set-AzFirewall -AzureFirewall $azFirewall</span></span></code></pre></div>
 Once applied, You will be able to access your RDP over firewall public ip and port <code>4500</code>!
 So basically, by introducing azure firewall you just enable more security in whole architecture.
 Here is the final architecture, we just implemented -</p>
@@ -481,6 +480,7 @@ Here is the final architecture, we just implemented -</p>
 <h3 id="ending-note">Ending Note</h3>
 <p>This whole series is based on single subscription, intra-region vnet communication.This works for small companies but for enterprise, inter-region vnet integration, multiple subscriptions is very common and also Azure Expressroute will be in use for extending On-Premise network and it involves a lot of network appliances, firewall etc. So, basically it is complex but if you get the idea of whole architecture, you good to go!</p>
 
+              
               
 
 

@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="azure storage recyclablememorystream, azure storage recyclablememorystream manager, azure storage .net 7, azure storage azurite, azure storage azurite recyclablememorystream, azure storage azurite recyclablememorystream manager, azure storage azurite memory optimized, azure storage blob recyclablememorystream, azure storage blob recyclablememorystream manager, azure storage blob memory optimized, azure storage blob xunit, azure storage blob .net 7, BlobContainerClient, BlobContainerClient dependency injection, BlobClient, BlobServiceClient, Azure.Storage.Blobs, Azure.Storage.Blobs v12 unit testing, Azure.Storage.Blobs v12 integration testing, Dependency injection, azure storage blob dependency injection, azure storage dependency injection, azure storage testing, azurite, moving solutions to Azure Cloud, How to download files memory optimized way from azure blob storage, How to download files memory optimized way from azure blob storage using recyclablememorystream, How to use RecyclableMemoryStream in .NET Core, Microsoft.IO.RecyclableMemoryStream, Take advantage of Microsoft.IO.RecyclableMemoryStream to eliminate LOH allocations and avoid memory fragmentation and memory leaks in your .NET Core applications., RecyclableMemoryStream, RecyclableMemoryStream Manager, Recyclable Memory Stream, .net core Recyclable Memory Stream, .net core Recyclable Memory Stream manager">
 <meta name="description" content="Download Files From Azure Blob Storage Efficiently Using RecyclableMemoryStream">
@@ -114,7 +114,7 @@
     
 
     
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -126,7 +126,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
      crossorigin="anonymous"></script>
@@ -442,9 +441,8 @@ public class BenchmarkAPIPerformance
 </figure>
 
 <p>Below is the benchmark result for the same.</p>
-<figure>
-    <img src="https://anktsrkr.github.io/images/azstorage/azblob-not-optimized.png"
-         alt="Azure Blob Storage Not Optimized"/> 
+<figure><img src="https://anktsrkr.github.io/images/azstorage/azblob-not-optimized.png"
+         alt="Azure Blob Storage Not Optimized"/>
 </figure>
 
 <p>If you see the above benchmark result, you will notice that Gen 0, Gen 1 and Gen 2 all has some value and also the memory allocation looks high. But what exactly is Gen 0, Gen 1 and Gen 2?</p>
@@ -609,9 +607,8 @@ public class BenchmarkAPIPerformance
 </figure>
 
 <p>Below is the benchmark result for the same.</p>
-<figure>
-    <img src="https://anktsrkr.github.io/images/azstorage/azblob-optimized.png"
-         alt="Azure Blob Storage Optimized"/> 
+<figure><img src="https://anktsrkr.github.io/images/azstorage/azblob-optimized.png"
+         alt="Azure Blob Storage Optimized"/>
 </figure>
 
 <h2 id="conclusion">Conclusion</h2>
@@ -619,6 +616,7 @@ public class BenchmarkAPIPerformance
 <p>Also the memory allocation is reduced significantly. In fact, the memory allocation is reduced by ~734% which is huge.</p>
 <p>You can find the source code <a href="https://github.com/sundryoss/Sundry.MsDemystified"><strong>here</strong></a>.</p>
 
+              
               
 
 

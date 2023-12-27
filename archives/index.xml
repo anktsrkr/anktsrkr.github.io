@@ -6,9 +6,6 @@
     <description>Recent content in Archives on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    
-	<atom:link href="https://anktsrkr.github.io/archives/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://anktsrkr.github.io/archives/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

@@ -6,22 +6,21 @@
     <description>Recent content in .NET 8 on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2023 06:00:35 +0100</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/categories/.net-8/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 26 Dec 2023 06:00:35 +0000</lastBuildDate>
+    <atom:link href="https://anktsrkr.github.io/categories/.net-8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8</title>
+      <link>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/</link>
+      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
+      <guid>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/</guid>
+      <description>Hi Everyone!&#xA;This is continuation of the series of posts on Polly v8 and .NET 8.&#xA;In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :&#xA;Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8&#xA;This Post - Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .</description>
+    </item>
     <item>
       <title>Implementing Retry Strategy using HttpClientFactory with Polly(v8) and .NET 8</title>
       <link>https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/</link>
       <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/</guid>
-      <description>Hi Everyone!
-As we all aware, Polly v8 is released sometime back and so is .NET 8, it is ready for Production use 🥳.
-In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :
-This Post - Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8</description>
+      <description>Hi Everyone!&#xA;As we all aware, Polly v8 is released sometime back and so is .NET 8, it is ready for Production use 🥳.&#xA;In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :&#xA;This Post - Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8</description>
     </item>
-    
   </channel>
 </rss>

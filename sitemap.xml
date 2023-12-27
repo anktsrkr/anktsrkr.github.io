@@ -1,421 +1,256 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>https://anktsrkr.github.io/</loc>
-    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/.net-8/</loc>
-    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/c#/</loc>
-    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/</loc>
-    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/httpclientfactory/</loc>
-    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
+    <loc>https://anktsrkr.github.io/categories/httpclientfactory/</loc>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
+    <loc>https://anktsrkr.github.io/tags/polly/</loc>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
+    <loc>https://anktsrkr.github.io/categories/polly/</loc>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
+    <loc>https://anktsrkr.github.io/post/</loc>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
+    <loc>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/</loc>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
+    <loc>https://anktsrkr.github.io/tags/</loc>
+    <lastmod>2023-12-26T06:00:35+00:00</lastmod>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/</loc>
     <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/tags/polly/</loc>
-    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/polly-8/</loc>
     <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/post/</loc>
-    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/tags/</loc>
-    <lastmod>2023-10-31T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/.net-7/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/azure/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/azure/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/azurite/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/fakeiteasy/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/integration-testing/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/test-containers/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/testing/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/unit-testing/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/xunit/</loc>
     <lastmod>2023-10-11T08:30:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/</loc>
     <lastmod>2023-10-11T08:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/</loc>
     <lastmod>2023-10-08T08:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/exception-handling/</loc>
     <lastmod>2023-10-08T08:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/monads/</loc>
     <lastmod>2023-10-08T08:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/problemor/</loc>
     <lastmod>2023-10-08T08:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/httpclientfactory/</loc>
-    <lastmod>2023-10-02T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/polly/</loc>
-    <lastmod>2023-10-02T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/</loc>
     <lastmod>2023-10-02T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/</loc>
     <lastmod>2023-05-25T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/download-files-from-azure-blob-storage-efficiently-using-recyclablememorystream/</loc>
     <lastmod>2023-05-24T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk/</loc>
     <lastmod>2023-05-17T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/moq/</loc>
     <lastmod>2023-05-17T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite/</loc>
     <lastmod>2023-01-18T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/</loc>
     <lastmod>2023-01-16T09:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</loc>
     <lastmod>2023-01-12T06:00:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/.net7/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/aspnetcore/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/blazor-webassembly/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/blazorwebassembly/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/c#/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/oauth0/</loc>
-    <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/oauth0/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://anktsrkr.github.io/categories/oauth0/</loc>
+    <lastmod>2022-09-20T11:08:35+01:00</lastmod>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/</loc>
     <lastmod>2022-09-20T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/.net-6/</loc>
     <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/.net6/</loc>
     <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/automation/</loc>
     <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/github-action/</loc>
-    <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/github-action/</loc>
     <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://anktsrkr.github.io/categories/github-action/</loc>
+    <lastmod>2022-09-05T11:08:35+01:00</lastmod>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/</loc>
     <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/nuget/</loc>
     <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/nuke/</loc>
-    <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/nuke/</loc>
     <lastmod>2022-09-05T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://anktsrkr.github.io/categories/nuke/</loc>
+    <lastmod>2022-09-05T11:08:35+01:00</lastmod>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/</loc>
     <lastmod>2022-09-03T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/</loc>
     <lastmod>2022-08-30T11:08:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/getting-started-with-nuke/</loc>
     <lastmod>2022-08-28T11:07:35+01:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/app-service-environment/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/app-service-environment/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/azure-app-services/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/azure-private-dns-zone/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/azure-private-link/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/azure-sql/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/cloud/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/hub-spoke-topology/</loc>
     <lastmod>2021-05-22T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/</loc>
     <lastmod>2020-10-04T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem/</loc>
     <lastmod>2020-10-01T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/</loc>
     <lastmod>2020-09-30T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/</loc>
     <lastmod>2020-09-26T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/networking/</loc>
     <lastmod>2020-09-15T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/categories/azure-architecture/</loc>
     <lastmod>2020-09-13T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/</loc>
     <lastmod>2020-09-13T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/azure-firewall/</loc>
     <lastmod>2020-09-10T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</loc>
     <lastmod>2020-09-10T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</loc>
     <lastmod>2020-09-09T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/</loc>
     <lastmod>2020-09-08T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/</loc>
     <lastmod>2020-09-07T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/</loc>
     <lastmod>2020-09-06T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/</loc>
     <lastmod>2020-09-05T01:00:00+05:30</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/archives/</loc>
-  </url>
-  
-  <url>
-    <loc>https://anktsrkr.github.io/categories/ci/cd/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://anktsrkr.github.io/tags/ci/cd/</loc>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://anktsrkr.github.io/categories/ci/cd/</loc>
+  </url><url>
     <loc>https://anktsrkr.github.io/about/</loc>
   </url>
-  
 </urlset>

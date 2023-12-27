@@ -7,59 +7,34 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 17 May 2023 06:00:35 +0100</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/categories/moq/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://anktsrkr.github.io/categories/moq/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk/</link>
       <pubDate>Wed, 17 May 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite/</link>
       <pubDate>Wed, 18 Jan 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/</link>
       <pubDate>Mon, 16 Jan 2023 09:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Dependency Injection</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</link>
       <pubDate>Thu, 12 Jan 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</guid>
-      <description>With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-This Post - Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
+      <description>With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
     </item>
-    
   </channel>
 </rss>

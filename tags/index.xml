@@ -6,199 +6,154 @@
     <description>Recent content in Tags on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2023 06:00:35 +0100</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 26 Dec 2023 06:00:35 +0000</lastBuildDate>
+    <atom:link href="https://anktsrkr.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>c#</title>
       <link>https://anktsrkr.github.io/tags/c#/</link>
-      <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
-      
+      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
       <guid>https://anktsrkr.github.io/tags/c#/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>httpclientfactory</title>
       <link>https://anktsrkr.github.io/tags/httpclientfactory/</link>
-      <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
-      
+      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
       <guid>https://anktsrkr.github.io/tags/httpclientfactory/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>polly</title>
       <link>https://anktsrkr.github.io/tags/polly/</link>
-      <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
-      
+      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
       <guid>https://anktsrkr.github.io/tags/polly/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure</title>
       <link>https://anktsrkr.github.io/tags/azure/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/azure/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>testing</title>
       <link>https://anktsrkr.github.io/tags/testing/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/testing/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Monads</title>
       <link>https://anktsrkr.github.io/tags/monads/</link>
       <pubDate>Sun, 08 Oct 2023 08:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/monads/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>.net7</title>
       <link>https://anktsrkr.github.io/tags/.net7/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/.net7/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>aspnetcore</title>
       <link>https://anktsrkr.github.io/tags/aspnetcore/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/aspnetcore/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>blazorwebassembly</title>
       <link>https://anktsrkr.github.io/tags/blazorwebassembly/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/blazorwebassembly/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>oauth0</title>
       <link>https://anktsrkr.github.io/tags/oauth0/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/oauth0/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>.net6</title>
       <link>https://anktsrkr.github.io/tags/.net6/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/.net6/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>automation</title>
       <link>https://anktsrkr.github.io/tags/automation/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/automation/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>github action</title>
       <link>https://anktsrkr.github.io/tags/github-action/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/github-action/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>nuke</title>
       <link>https://anktsrkr.github.io/tags/nuke/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/nuke/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>App Service Environment</title>
       <link>https://anktsrkr.github.io/tags/app-service-environment/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/app-service-environment/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure App Services</title>
       <link>https://anktsrkr.github.io/tags/azure-app-services/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/azure-app-services/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure Private DNS Zone</title>
       <link>https://anktsrkr.github.io/tags/azure-private-dns-zone/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/azure-private-dns-zone/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure Private link</title>
       <link>https://anktsrkr.github.io/tags/azure-private-link/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/azure-private-link/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Networking</title>
       <link>https://anktsrkr.github.io/tags/networking/</link>
       <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/networking/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Azure Firewall</title>
       <link>https://anktsrkr.github.io/tags/azure-firewall/</link>
       <pubDate>Thu, 10 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/azure-firewall/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>ci/cd</title>
       <link>https://anktsrkr.github.io/tags/ci/cd/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>https://anktsrkr.github.io/tags/ci/cd/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

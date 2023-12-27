@@ -6,380 +6,217 @@
     <description>Recent content in Posts on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2023 06:00:35 +0100</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/post/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 26 Dec 2023 06:00:35 +0000</lastBuildDate>
+    <atom:link href="https://anktsrkr.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8</title>
+      <link>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/</link>
+      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
+      <guid>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/</guid>
+      <description>Hi Everyone!&#xA;This is continuation of the series of posts on Polly v8 and .NET 8.&#xA;In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :&#xA;Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8&#xA;This Post - Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .</description>
+    </item>
     <item>
       <title>Implementing Retry Strategy using HttpClientFactory with Polly(v8) and .NET 8</title>
       <link>https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/</link>
       <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/</guid>
-      <description>Hi Everyone!
-As we all aware, Polly v8 is released sometime back and so is .NET 8, it is ready for Production use 🥳.
-In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :
-This Post - Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8</description>
+      <description>Hi Everyone!&#xA;As we all aware, Polly v8 is released sometime back and so is .NET 8, it is ready for Production use 🥳.&#xA;In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :&#xA;This Post - Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK Using FakeItEasy</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy/</guid>
-      <description>Hi Everyone!
-As you are aware I have decided to move away from MOQ and insted we will use FakeItEasy for mocking the Azure Storage SDK. This post is adoptation of this which is using Moq.
-You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.
-Getting started with testing for Azure Blob Storage : Dependency Injection</description>
+      <description>Hi Everyone!&#xA;As you are aware I have decided to move away from MOQ and insted we will use FakeItEasy for mocking the Azure Storage SDK. This post is adoptation of this which is using Moq.&#xA;You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/</link>
       <pubDate>Wed, 11 Oct 2023 08:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/</guid>
-      <description>Hi Everyone!
-In this post, we will discuss about the alternative framework for mocking. This post is adoptation of this which is using Moq.
-You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.
-Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
+      <description>Hi Everyone!&#xA;In this post, we will discuss about the alternative framework for mocking. This post is adoptation of this which is using Moq.&#xA;You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
     </item>
-    
     <item>
       <title>Do not throw exceptions...Everywhere</title>
       <link>https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/</link>
       <pubDate>Sun, 08 Oct 2023 08:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/</guid>
-      <description>We, as C# developers, are used to throwing exceptions everywhere be it a functional such as validation or technical such as network failure. But is it worth throwing exceptions everywhere? Exceptions are expensive. You should not throw exceptions everywhere. You should throw exceptions only when it is necessary. But how? Let&amp;rsquo;s discuss the alternative approach.
-Types of exceptions in general Excellent article by Eric Lippert on exceptions, where you can find the types of exceptions in general.</description>
+      <description>We, as C# developers, are used to throwing exceptions everywhere be it a functional such as validation or technical such as network failure. But is it worth throwing exceptions everywhere? Exceptions are expensive. You should not throw exceptions everywhere. You should throw exceptions only when it is necessary. But how? Let&amp;rsquo;s discuss the alternative approach.&#xA;Types of exceptions in general Excellent article by Eric Lippert on exceptions, where you can find the types of exceptions in general.</description>
     </item>
-    
     <item>
       <title>Use IHttpClientFactory and Polly(v8) to implement resilient HTTP requests</title>
       <link>https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/</link>
       <pubDate>Mon, 02 Oct 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/</guid>
-      <description>Recently, Polly team did fabulous job 🎉 by releasing the new version 8.0.0. It has lot of improvements and also they re-implemented Policy as Strategy. Polly v8 introduces the concept of resilience pipelines, a powerful tool that put together one or more resilience strategies.Here is the all changes you can find.
-The Problem Microsoft provides a extension Microsoft.Extensions.Http.Polly  which allows us to use Polly with HttpClientFactory. It is very easy to use and you can find the documentation here.</description>
+      <description>Recently, Polly team did fabulous job 🎉 by releasing the new version 8.0.0. It has lot of improvements and also they re-implemented Policy as Strategy. Polly v8 introduces the concept of resilience pipelines, a powerful tool that put together one or more resilience strategies.Here is the all changes you can find.&#xA;The Problem Microsoft provides a extension Microsoft.Extensions.Http.Polly which allows us to use Polly with HttpClientFactory. It is very easy to use and you can find the documentation here.</description>
     </item>
-    
     <item>
       <title>Re-Authorize Efficiently Using Polly And .NET HttpClientFactory</title>
       <link>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/</link>
       <pubDate>Thu, 25 May 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/</guid>
-      <description>In today&amp;rsquo;s world, we are using a lot of APIs to build our applications. To make your .NET based applications more ressilient and fault tolerant, go to solution is to use Polly. Probably, you are already using it. So,I&amp;rsquo;m not going to explain how to use it in general. You can find some excellent documentation here.
-However, In this post I&amp;rsquo;m going to discuss about one of the typical scenario where we need to refresh the authentication token when using Polly.</description>
+      <description>In today&amp;rsquo;s world, we are using a lot of APIs to build our applications. To make your .NET based applications more ressilient and fault tolerant, go to solution is to use Polly. Probably, you are already using it. So,I&amp;rsquo;m not going to explain how to use it in general. You can find some excellent documentation here.&#xA;However, In this post I&amp;rsquo;m going to discuss about one of the typical scenario where we need to refresh the authentication token when using Polly.</description>
     </item>
-    
     <item>
       <title>Download Files From Azure Blob Storage Efficiently Using RecyclableMemoryStream</title>
       <link>https://anktsrkr.github.io/post/download-files-from-azure-blob-storage-efficiently-using-recyclablememorystream/</link>
       <pubDate>Wed, 24 May 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/download-files-from-azure-blob-storage-efficiently-using-recyclablememorystream/</guid>
       <description>Recently, I was working on a project where we had to download multiple large files from Azure Blob Storage and process it further. When the application hits the production environment and started getting the actual files, we observed that memory consumption is getting very high. On top of that, the application was hosted in shared windows based app service plan, which was making it even worse for other applications too.</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk/</link>
       <pubDate>Wed, 17 May 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite/</link>
       <pubDate>Wed, 18 Jan 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/</link>
       <pubDate>Mon, 16 Jan 2023 09:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Dependency Injection</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</link>
       <pubDate>Thu, 12 Jan 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</guid>
-      <description>With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-This Post - Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
+      <description>With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
     </item>
-    
     <item>
       <title>Step-up authentication with Auth0 in .NET 7</title>
       <link>https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/</guid>
-      <description>Security is the ❤️ of any application but sometimes we need to balance security with usability. Sometimes you want to allow users to access a resource with a lower level of authentication by just entering username and password. But if the user wants to access a resource with a higher level of authentication, then you want to ask the user to enter a second factor of authentication.
-For instance, if you are building a money transfer application, you want to allow users to view transaction history or adding a new beneficiary with just a username and password.</description>
+      <description>Security is the ❤️ of any application but sometimes we need to balance security with usability. Sometimes you want to allow users to access a resource with a lower level of authentication by just entering username and password. But if the user wants to access a resource with a higher level of authentication, then you want to ask the user to enter a second factor of authentication.&#xA;For instance, if you are building a money transfer application, you want to allow users to view transaction history or adding a new beneficiary with just a username and password.</description>
     </item>
-    
     <item>
       <title>Manage your Package Release using Nuke in Github</title>
       <link>https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/</link>
       <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/</guid>
-      <description>Hi Everyone!
-This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
-Getting Started with Nuke
-Write your first building block in Nuke
-Manage your Package Version using Nuke
-This Post - Manage your Package Release using Nuke in Github
-In our last post, we ran the build successfully in our local machine.</description>
+      <description>Hi Everyone!&#xA;This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Nuke&#xA;Write your first building block in Nuke&#xA;Manage your Package Version using Nuke&#xA;This Post - Manage your Package Release using Nuke in Github&#xA;In our last post, we ran the build successfully in our local machine.</description>
     </item>
-    
     <item>
       <title>Manage your Package Version using Nuke</title>
       <link>https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/</link>
       <pubDate>Sat, 03 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/</guid>
-      <description>Hi Everyone!
-This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
-Getting Started with Nuke
-Write your first building block in Nuke
-This Post - Manage your Package Version using Nuke
-Manage your Package Release using Nuke in Github
-In our last post, we have completed all the steps to create a new package and publish it to the feed based on where we are running the build.</description>
+      <description>Hi Everyone!&#xA;This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Nuke&#xA;Write your first building block in Nuke&#xA;This Post - Manage your Package Version using Nuke&#xA;Manage your Package Release using Nuke in Github&#xA;In our last post, we have completed all the steps to create a new package and publish it to the feed based on where we are running the build.</description>
     </item>
-    
     <item>
       <title>Write your first building block in Nuke</title>
       <link>https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/</link>
       <pubDate>Tue, 30 Aug 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/</guid>
-      <description>Hi Everyone!
-This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
-Getting Started with Nuke
-This Post - Write your first building block in Nuke
-Manage your Package Version using Nuke
-Manage your Package Release using Nuke in Github
-In our last post, we have created a new build project using Nuke.</description>
+      <description>Hi Everyone!&#xA;This post is continuation of the series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Nuke&#xA;This Post - Write your first building block in Nuke&#xA;Manage your Package Version using Nuke&#xA;Manage your Package Release using Nuke in Github&#xA;In our last post, we have created a new build project using Nuke.</description>
     </item>
-    
     <item>
       <title>Getting Started with Nuke</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-nuke/</link>
       <pubDate>Sun, 28 Aug 2022 11:07:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-nuke/</guid>
-      <description>Hi Everyone!
-With this post, I am starting a new series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :
-This Post - Getting Started with Nuke
-Write your first building block in Nuke
-Manage your Package Version using Nuke
-Manage your Package Release using Nuke in Github
-Table of Contents    What we are going to build?</description>
+      <description>Hi Everyone!&#xA;With this post, I am starting a new series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting Started with Nuke&#xA;Write your first building block in Nuke&#xA;Manage your Package Version using Nuke&#xA;Manage your Package Release using Nuke in Github&#xA;Table of Contents What we are going to build? What is Nuke?</description>
     </item>
-    
     <item>
       <title>Add Custom Domain for App Service Environment Hosted WebApp</title>
       <link>https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/</link>
       <pubDate>Sat, 22 May 2021 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/</guid>
-      <description>Hi Everyone!
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-Deploy App Service Environment in Microsoft Azure
-Create a WebApp in App Service Environment
-Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;Deploy App Service Environment in Microsoft Azure&#xA;Create a WebApp in App Service Environment&#xA;Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
     <item>
       <title>Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</title>
       <link>https://anktsrkr.github.io/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/</link>
       <pubDate>Sun, 04 Oct 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/</guid>
-      <description>Hi Everyone!
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-Deploy App Service Environment in Microsoft Azure
-Create a WebApp in App Service Environment
-Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-This Post - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;Deploy App Service Environment in Microsoft Azure&#xA;Create a WebApp in App Service Environment&#xA;Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;This Post - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
     <item>
       <title>Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</title>
       <link>https://anktsrkr.github.io/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem/</link>
       <pubDate>Thu, 01 Oct 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem/</guid>
-      <description>Hi Everyone!
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-Deploy App Service Environment in Microsoft Azure
-Create a WebApp in App Service Environment
-This Post - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;Deploy App Service Environment in Microsoft Azure&#xA;Create a WebApp in App Service Environment&#xA;This Post - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
     <item>
       <title>Create a WebApp in App Service Environment</title>
       <link>https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/</link>
       <pubDate>Wed, 30 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/</guid>
-      <description>Hi Everyone!
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-Deploy App Service Environment in Microsoft Azure
-This Post - Create a WebApp in App Service Environment
-Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;Deploy App Service Environment in Microsoft Azure&#xA;This Post - Create a WebApp in App Service Environment&#xA;Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
     <item>
       <title>Deploy App Service Environment (ASE v2) in Microsoft Azure</title>
       <link>https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/</link>
       <pubDate>Sat, 26 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/</guid>
-      <description>Hi Everyone!
-With this post, I&amp;rsquo;ll start a new series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :
-This Post - Deploy App Service Environment in Microsoft Azure
-Create a WebApp in App Service Environment
-Access App Service Environment Hosted WebApp from Azure Network and from On-Prem
-Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
+      <description>Hi Everyone!&#xA;With this post, I&amp;rsquo;ll start a new series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :&#xA;This Post - Deploy App Service Environment in Microsoft Azure&#xA;Create a WebApp in App Service Environment&#xA;Access App Service Environment Hosted WebApp from Azure Network and from On-Prem&#xA;Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</description>
     </item>
-    
     <item>
       <title>Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</title>
       <link>https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</link>
       <pubDate>Tue, 15 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/</guid>
-      <description>Hi Everyone!
-In this post we are are going to explore different ways to connect Azure PaaS resources from On-premise network privately and securely. While deploying Azure PaaS service such as Azure SQL, Azure Storage etc. it always come with public facing endpoint many customer was not happy with that because of security concerns. So Microsoft introduces Virtual Network Service Endpoints. This will allow customers to secure and direct connectivity to Azure services over an optimized route over the Azure backbone network.</description>
+      <description>Hi Everyone!&#xA;In this post we are are going to explore different ways to connect Azure PaaS resources from On-premise network privately and securely. While deploying Azure PaaS service such as Azure SQL, Azure Storage etc. it always come with public facing endpoint many customer was not happy with that because of security concerns. So Microsoft introduces Virtual Network Service Endpoints. This will allow customers to secure and direct connectivity to Azure services over an optimized route over the Azure backbone network.</description>
     </item>
-    
     <item>
       <title>Resolve Azure Internal DNS from your on prem network and Spokes vnet</title>
       <link>https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/</link>
       <pubDate>Sun, 13 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/</guid>
-      <description>Hi Everyone!
-We have already implemented Hub-Spoke topology, and we are able to connect all the resources using IP from on premises network. But it is easier to use domain name instead ip directly from your virtual network. Also, If you want to use Azure Private Link, you need something which will resolve private link dns to respective ip. Other example is you have ASE v2 which comes with own domain but for your internal use you want some custom domain name which is easy to remember and also satisfy business need.</description>
+      <description>Hi Everyone!&#xA;We have already implemented Hub-Spoke topology, and we are able to connect all the resources using IP from on premises network. But it is easier to use domain name instead ip directly from your virtual network. Also, If you want to use Azure Private Link, you need something which will resolve private link dns to respective ip. Other example is you have ASE v2 which comes with own domain but for your internal use you want some custom domain name which is easy to remember and also satisfy business need.</description>
     </item>
-    
     <item>
       <title>Implementing Azure Firewall in Hub-Spoke network topology in Azure</title>
       <link>https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</link>
       <pubDate>Thu, 10 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :
-Connect an on-premises network to a Microsoft Azure - Part 1
-Connect an on-premises network to a Microsoft Azure - Part 2
-Implementing Hub-Spoke network topology in Azure - Part 1
-Implementing Hub-Spoke network topology in Azure - Part 2</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :&#xA;Connect an on-premises network to a Microsoft Azure - Part 1&#xA;Connect an on-premises network to a Microsoft Azure - Part 2&#xA;Implementing Hub-Spoke network topology in Azure - Part 1&#xA;Implementing Hub-Spoke network topology in Azure - Part 2</description>
     </item>
-    
     <item>
       <title>Introducing Azure Firewall in Hub-Spoke network topology in Azure</title>
       <link>https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</link>
       <pubDate>Wed, 09 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :
-Connect an on-premises network to a Microsoft Azure - Part 1
-Connect an on-premises network to a Microsoft Azure - Part 2
-Implementing Hub-Spoke network topology in Azure - Part 1
-Implementing Hub-Spoke network topology in Azure - Part 2</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :&#xA;Connect an on-premises network to a Microsoft Azure - Part 1&#xA;Connect an on-premises network to a Microsoft Azure - Part 2&#xA;Implementing Hub-Spoke network topology in Azure - Part 1&#xA;Implementing Hub-Spoke network topology in Azure - Part 2</description>
     </item>
-    
     <item>
       <title>Implementing Hub-Spoke network topology in Azure - Part 2</title>
       <link>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/</link>
       <pubDate>Tue, 08 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :
-Connect an on-premises network to a Microsoft Azure - Part 1
-Connect an on-premises network to a Microsoft Azure - Part 2
-Implementing Hub-Spoke network topology in Azure - Part 1
-This Post - Implementing Hub-Spoke network topology in Azure - Part 2</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :&#xA;Connect an on-premises network to a Microsoft Azure - Part 1&#xA;Connect an on-premises network to a Microsoft Azure - Part 2&#xA;Implementing Hub-Spoke network topology in Azure - Part 1&#xA;This Post - Implementing Hub-Spoke network topology in Azure - Part 2</description>
     </item>
-    
     <item>
       <title>Implementing Hub-Spoke network topology in Azure - Part 1</title>
       <link>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/</link>
       <pubDate>Mon, 07 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :
-Connect an on-premises network to a Microsoft Azure - Part 1
-Connect an on-premises network to a Microsoft Azure - Part 2
-This Post - Implementing Hub-Spoke network topology in Azure - Part 1
-Implementing Hub-Spoke network topology in Azure - Part 2</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :&#xA;Connect an on-premises network to a Microsoft Azure - Part 1&#xA;Connect an on-premises network to a Microsoft Azure - Part 2&#xA;This Post - Implementing Hub-Spoke network topology in Azure - Part 1&#xA;Implementing Hub-Spoke network topology in Azure - Part 2</description>
     </item>
-    
     <item>
       <title>Connect an on-premises network to a Microsoft Azure - Part 2</title>
       <link>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/</link>
       <pubDate>Sun, 06 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :
-Connect an on-premises network to a Microsoft Azure - Part 1
-This Post - Connect an on-premises network to a Microsoft Azure - Part 2
-Implementing Hub-Spoke network topology in Azure - Part 1
-Implementing Hub-Spoke network topology in Azure - Part 2</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :&#xA;Connect an on-premises network to a Microsoft Azure - Part 1&#xA;This Post - Connect an on-premises network to a Microsoft Azure - Part 2&#xA;Implementing Hub-Spoke network topology in Azure - Part 1&#xA;Implementing Hub-Spoke network topology in Azure - Part 2</description>
     </item>
-    
     <item>
       <title>Connect an on-premises network to a Microsoft Azure - Part 1</title>
       <link>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/</link>
       <pubDate>Sat, 05 Sep 2020 01:00:00 +0530</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/</guid>
-      <description>Hi Everyone!
-With this post, I&amp;rsquo;ll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :
-This Post - Connect an on-premises network to a Microsoft Azure - Part 1
-Connect an on-premises network to a Microsoft Azure - Part 2
-Implementing Hub-Spoke network topology in Azure - Part 1
-Implementing Hub-Spoke network topology in Azure - Part 2</description>
+      <description>Hi Everyone!&#xA;With this post, I&amp;rsquo;ll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :&#xA;This Post - Connect an on-premises network to a Microsoft Azure - Part 1&#xA;Connect an on-premises network to a Microsoft Azure - Part 2&#xA;Implementing Hub-Spoke network topology in Azure - Part 1&#xA;Implementing Hub-Spoke network topology in Azure - Part 2</description>
     </item>
-    
   </channel>
 </rss>

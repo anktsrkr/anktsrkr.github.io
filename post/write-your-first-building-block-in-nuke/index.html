@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github nuget">
 <meta name="description" content="Write your first building block in Nuke.">
@@ -135,7 +135,7 @@
     
 
     
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -147,7 +147,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
      crossorigin="anonymous"></script>
@@ -385,7 +384,7 @@ if (!doNotTrack) {
 
 <h2 id="effective-changes">Effective changes</h2>
 <p>The setup will create a number of files in your repository and – if you&rsquo;ve chosen so – add the build project to your solution file. Below, you can examine the structure of added files and what they are used for:</p>
-<pre><code>&lt;root-directory&gt;
+<pre tabindex="0"><code>&lt;root-directory&gt;
 ├── .nuke                           # Root directory marker
 │   ├── build.schema.json           # Build schema file
 │   └── parameters.json             # Default parameters file
@@ -585,7 +584,7 @@ class Build : NukeBuild
 <li><strong><span class="highlight-text orange">ImportSecrets</span></strong> - This is an array of secrets that will be imported from the repository. In our case, we are setting it to <em><span class="highlight-text blue">MY_GET_API_KEY</span></em> and <em><span class="highlight-text blue">NUGET_API_KEY</span></em>.</li>
 </ul>
 <p>Now, <span class="highlight-text red">build your project</span>, this is very <strong>important step</strong> and then go to your root folder from your <span class="highlight-text orange">Window terminal</span>  and run below command to generate the build script:</p>
-<pre><code>nuke
+<pre tabindex="0"><code>nuke
 </code></pre><p>This will generate the following yml file named <strong>&ldquo;continuous.yml&rdquo;</strong> :</p>
 
   
@@ -1231,6 +1230,7 @@ jobs:
 <p>As we can see, we are getting an error that, <em>could not inject value for GitVersion</em>. This is because we haven&rsquo;t installed the <em><span class="highlight-text success">GitVersion</span></em> tool yet.</p>
 <p>In the next article, we will add the <em><span class="highlight-text success">GitVersion</span></em> tool and we will learn how to manage a version of a package using the same .</p>
 
+              
               
 
 

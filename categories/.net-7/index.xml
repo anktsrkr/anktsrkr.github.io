@@ -7,133 +7,83 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 11 Oct 2023 08:30:35 +0100</lastBuildDate>
-    
-	<atom:link href="https://anktsrkr.github.io/categories/.net-7/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://anktsrkr.github.io/categories/.net-7/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK Using FakeItEasy</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy/</link>
       <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy/</guid>
-      <description>Hi Everyone!
-As you are aware I have decided to move away from MOQ and insted we will use FakeItEasy for mocking the Azure Storage SDK. This post is adoptation of this which is using Moq.
-You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.
-Getting started with testing for Azure Blob Storage : Dependency Injection</description>
+      <description>Hi Everyone!&#xA;As you are aware I have decided to move away from MOQ and insted we will use FakeItEasy for mocking the Azure Storage SDK. This post is adoptation of this which is using Moq.&#xA;You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/</link>
       <pubDate>Wed, 11 Oct 2023 08:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/</guid>
-      <description>Hi Everyone!
-In this post, we will discuss about the alternative framework for mocking. This post is adoptation of this which is using Moq.
-You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.
-Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
+      <description>Hi Everyone!&#xA;In this post, we will discuss about the alternative framework for mocking. This post is adoptation of this which is using Moq.&#xA;You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
     </item>
-    
     <item>
       <title>Do not throw exceptions...Everywhere</title>
       <link>https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/</link>
       <pubDate>Sun, 08 Oct 2023 08:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/</guid>
-      <description>We, as C# developers, are used to throwing exceptions everywhere be it a functional such as validation or technical such as network failure. But is it worth throwing exceptions everywhere? Exceptions are expensive. You should not throw exceptions everywhere. You should throw exceptions only when it is necessary. But how? Let&amp;rsquo;s discuss the alternative approach.
-Types of exceptions in general Excellent article by Eric Lippert on exceptions, where you can find the types of exceptions in general.</description>
+      <description>We, as C# developers, are used to throwing exceptions everywhere be it a functional such as validation or technical such as network failure. But is it worth throwing exceptions everywhere? Exceptions are expensive. You should not throw exceptions everywhere. You should throw exceptions only when it is necessary. But how? Let&amp;rsquo;s discuss the alternative approach.&#xA;Types of exceptions in general Excellent article by Eric Lippert on exceptions, where you can find the types of exceptions in general.</description>
     </item>
-    
     <item>
       <title>Use IHttpClientFactory and Polly(v8) to implement resilient HTTP requests</title>
       <link>https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/</link>
       <pubDate>Mon, 02 Oct 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/use-httpclientfactory-with-pollyv8-to-implement-resilient-http-requests/</guid>
-      <description>Recently, Polly team did fabulous job 🎉 by releasing the new version 8.0.0. It has lot of improvements and also they re-implemented Policy as Strategy. Polly v8 introduces the concept of resilience pipelines, a powerful tool that put together one or more resilience strategies.Here is the all changes you can find.
-The Problem Microsoft provides a extension Microsoft.Extensions.Http.Polly  which allows us to use Polly with HttpClientFactory. It is very easy to use and you can find the documentation here.</description>
+      <description>Recently, Polly team did fabulous job 🎉 by releasing the new version 8.0.0. It has lot of improvements and also they re-implemented Policy as Strategy. Polly v8 introduces the concept of resilience pipelines, a powerful tool that put together one or more resilience strategies.Here is the all changes you can find.&#xA;The Problem Microsoft provides a extension Microsoft.Extensions.Http.Polly which allows us to use Polly with HttpClientFactory. It is very easy to use and you can find the documentation here.</description>
     </item>
-    
     <item>
       <title>Re-Authorize Efficiently Using Polly And .NET HttpClientFactory</title>
       <link>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/</link>
       <pubDate>Thu, 25 May 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory/</guid>
-      <description>In today&amp;rsquo;s world, we are using a lot of APIs to build our applications. To make your .NET based applications more ressilient and fault tolerant, go to solution is to use Polly. Probably, you are already using it. So,I&amp;rsquo;m not going to explain how to use it in general. You can find some excellent documentation here.
-However, In this post I&amp;rsquo;m going to discuss about one of the typical scenario where we need to refresh the authentication token when using Polly.</description>
+      <description>In today&amp;rsquo;s world, we are using a lot of APIs to build our applications. To make your .NET based applications more ressilient and fault tolerant, go to solution is to use Polly. Probably, you are already using it. So,I&amp;rsquo;m not going to explain how to use it in general. You can find some excellent documentation here.&#xA;However, In this post I&amp;rsquo;m going to discuss about one of the typical scenario where we need to refresh the authentication token when using Polly.</description>
     </item>
-    
     <item>
       <title>Download Files From Azure Blob Storage Efficiently Using RecyclableMemoryStream</title>
       <link>https://anktsrkr.github.io/post/download-files-from-azure-blob-storage-efficiently-using-recyclablememorystream/</link>
       <pubDate>Wed, 24 May 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/download-files-from-azure-blob-storage-efficiently-using-recyclablememorystream/</guid>
       <description>Recently, I was working on a project where we had to download multiple large files from Azure Blob Storage and process it further. When the application hits the production environment and started getting the actual files, we observed that memory consumption is getting very high. On top of that, the application was hosted in shared windows based app service plan, which was making it even worse for other applications too.</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk/</link>
       <pubDate>Wed, 17 May 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite/</link>
       <pubDate>Wed, 18 Jan 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/</link>
       <pubDate>Mon, 16 Jan 2023 09:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/</guid>
-      <description>Hi Everyone!
-This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-Getting started with testing for Azure Blob Storage : Dependency Injection
-This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of Moq
-Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
+      <description>Hi Everyone!&#xA;This post is continuation of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of Moq&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</description>
     </item>
-    
     <item>
       <title>Getting started with testing for Azure Blob Storage : Dependency Injection</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</link>
       <pubDate>Thu, 12 Jan 2023 06:00:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/</guid>
-      <description>With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :
-This Post - Getting started with testing for Azure Blob Storage : Dependency Injection
-Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
+      <description>With this post, I am starting a new series about how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, Moq and xUnit. Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting started with testing for Azure Blob Storage : Dependency Injection&#xA;Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</description>
     </item>
-    
     <item>
       <title>Step-up authentication with Auth0 in .NET 7</title>
       <link>https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
-      
       <guid>https://anktsrkr.github.io/post/step-up-authentication-with-auth0-in-.net-7/</guid>
-      <description>Security is the ❤️ of any application but sometimes we need to balance security with usability. Sometimes you want to allow users to access a resource with a lower level of authentication by just entering username and password. But if the user wants to access a resource with a higher level of authentication, then you want to ask the user to enter a second factor of authentication.
-For instance, if you are building a money transfer application, you want to allow users to view transaction history or adding a new beneficiary with just a username and password.</description>
+      <description>Security is the ❤️ of any application but sometimes we need to balance security with usability. Sometimes you want to allow users to access a resource with a lower level of authentication by just entering username and password. But if the user wants to access a resource with a higher level of authentication, then you want to ask the user to enter a second factor of authentication.&#xA;For instance, if you are building a money transfer application, you want to allow users to view transaction history or adding a new beneficiary with just a username and password.</description>
     </item>
-    
   </channel>
 </rss>
