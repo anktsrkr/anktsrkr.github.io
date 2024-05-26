@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>fusioncache on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</title>
+    <link>https://anktsrkr.github.io/tags/fusioncache/</link>
+    <description>Recent content in fusioncache on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 26 May 2024 07:00:35 +0100</lastBuildDate>
+    <atom:link href="https://anktsrkr.github.io/tags/fusioncache/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sync Cached Data Between Azure Function Instances Using FusionCache</title>
+      <link>https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/</link>
+      <pubDate>Sun, 26 May 2024 07:00:35 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/</guid>
+      <description>Icon used in this post is property of FusionCache repo.&#xA;In today&amp;rsquo;s event-driven programming world, we are using lots of Azure Function as the serverless solution that allows us to write less code, maintain less infrastructure, and save on costs. Azure Function comes with various triggers such as HttpTrigger, ServiceBusTrigger, SqlTrigger etc. which help us build an API easily.&#xA;Let&amp;rsquo;s say the team already built a HttpTrigger API GetProductsById and the data is coming from Azure SQL.</description>
+    </item>
+  </channel>
+</rss>

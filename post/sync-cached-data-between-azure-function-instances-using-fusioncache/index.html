@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+  "description":"Sync Cached Data Between Azure Function Instances Using FusionCache",
+  "url":"https:\/\/anktsrkr.github.io\/post\/sync-cached-data-between-azure-function-instances-using-fusioncache\/",
+  "keywords":"[azure functions memory cache, azure functions memory cache fusioncache, azure function distributed cache, Azure Functions and Caching, Azure Functions and Caching fusioncache, c# - Azure Functions and Caching, c# - Azure Functions and Caching fusioncache, Clearing cache in Azure Function app and c#, How to reset memory cache in Azure Function, azure function app cache, azure functions cache stampede, c# azure function distributed cache, c# azure function distributed cache fusioncache]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta name="keywords" content="azure functions memory cache, azure functions memory cache fusioncache, azure function distributed cache, Azure Functions and Caching, Azure Functions and Caching fusioncache, c# - Azure Functions and Caching, c# - Azure Functions and Caching fusioncache, Clearing cache in Azure Function app and c#, How to reset memory cache in Azure Function, azure function app cache, azure functions cache stampede, c# azure function distributed cache, c# azure function distributed cache fusioncache">
+<meta name="description" content="Sync Cached Data Between Azure Function Instances Using FusionCache">
+
+
+<meta property="og:description" content="Sync Cached Data Between Azure Function Instances Using FusionCache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sync Cached Data Between Azure Function Instances Using FusionCache">
+<meta name="twitter:title" content="Sync Cached Data Between Azure Function Instances Using FusionCache">
+<meta property="og:url" content="https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta property="og:description" content="Sync Cached Data Between Azure Function Instances Using FusionCache">
+<meta name="twitter:description" content="Sync Cached Data Between Azure Function Instances Using FusionCache">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2024-05-26T07:00:35">
+  
+  
+    <meta property="article:modified_time" content="2024-05-26T07:00:35">
+  
+  
+  
+    
+      <meta property="article:section" content=".NET 6">
+    
+      <meta property="article:section" content=".NET 7">
+    
+      <meta property="article:section" content=".NET 8">
+    
+      <meta property="article:section" content="Azure Function">
+    
+      <meta property="article:section" content="FusionCache">
+    
+  
+  
+    
+      <meta property="article:tag" content="fusioncache">
+    
+      <meta property="article:tag" content="c#">
+    
+      <meta property="article:tag" content="azurefunctiontips">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/fusioncache/logo.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/fusioncache/logo.png">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Sync Cached Data Between Azure Function Instances Using FusionCache</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/">
+
+    
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
+    
+    
+    
+
+    
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
+     crossorigin="anonymous"></script>
+     
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TY8ZMTBGSM');
+</script>
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title">
+      Sync Cached Data Between Azure Function Instances Using FusionCache
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2024-05-26T07:00:35&#43;01:00">
+        
+  May 26, 2024
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-6">.NET 6</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-7">.NET 7</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-8">.NET 8</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/azure-function">Azure Function</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/fusioncache">FusionCache</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <div class="alert info no-icon ">
+  <p>Icon used in this post is property of <a href="https://github.com/ZiggyCreatures/FusionCache">FusionCache</a> repo.</p>
+</div>
+<p>In today&rsquo;s event-driven programming world, we are using lots of <strong><span class="highlight-text green">Azure Function</span></strong> as the serverless solution that allows us to write less code, maintain less infrastructure, and save on costs.
+ 
+<strong><span class="highlight-text green">Azure Function</span></strong> comes with various triggers such as <code>HttpTrigger</code>, <code>ServiceBusTrigger</code>, <code>SqlTrigger</code> etc. which help us build an API easily.</p>
+<p>Let&rsquo;s say the team already built a <code>HttpTrigger</code> API <strong>GetProductsById</strong> and the data is coming from Azure SQL. This API is exposed internally and <code>n</code> number of internal teams are using it maybe in batches with multiple products or a single product with multiple calls. The owner of this API is unaware of how this API is being used.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>The problem with this API is that it is not performant enough to meet the expectations even if they have enabled auto-scaling. The team started investigating the issue and noted below points -</p>
+<ol>
+<li>The data does not change very frequently.</li>
+<li>The requirement is if it gets updated it has to be mirrored as soon as possible.</li>
+<li>Based on this requirement, team wrote a query using <strong><span class="highlight-text yellow">Dapper</span></strong> to fetch the data directly from the database, which means no matter what, every time someone invokes the endpoint it always hit the database.</li>
+</ol>
+<p>Let&rsquo;s see how the function looks now -  </p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>GetProductById.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">[Function(&#34;GetProductById&#34;)]
+public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.Function, &#34;get&#34;, Route = null)] HttpRequestData req)
+{
+ using var conn = _dapperContext.CreateConnection();
+
+ var productid = req.Query[&#34;productid&#34;];
+
+ var product = await conn.GetAsync&lt;Product&gt;(productid);
+ if (product is null)
+ return new NotFoundResult();
+
+ return new OkObjectResult(product);
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="the-solution">The Solution</h2>
+<p>Team found a possible solution. As the data doesn&rsquo;t change frequently, team decided to cache the data in memory, something like -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>GetProductById.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">[Function(&#34;GetProductById&#34;)]
+public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.Function, &#34;get&#34;, Route = null)] HttpRequestData req)
+{
+ using var conn = _dapperContext.CreateConnection();
+
+ var productid = req.Query[&#34;productid&#34;];
+
+ var product = await _memcache.GetOrCreateAsync(productid, cacheEntry =&gt;
+ {
+ cacheEntry.SlidingExpiration = TimeSpan.FromSeconds(10);
+ cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+ return conn.GetAsync&lt;Product&gt;(productid);
+ });
+
+ if (product is null)
+ return new NotFoundResult();
+
+ return new OkObjectResult(product);
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Locally, everything seems super fast. However, when testing this solution on Azure, team soon realised that it had several flaws.</p>
+<p><em>When a single instance of Azure Function App running</em></p>
+<p>Team noticed that the database is getting hit more than expected when the system is under pressure. The possible reason for such a problem is that <code>_memcache.GetOrCreateAsync</code> is getting executed in parallel at the same time. You may call this as <strong>Cache stampede</strong>.</p>
+<p><em>When more than one instance of Azure Function App running (Horizentally Scalled)</em></p>
+<p>Along with the previous problem, each instance is now having a cold start problem which means it hits the database again to fetch the data.</p>
+<p><em>When Azure Function App is restarted</em></p>
+<p>Same as above as the memory cache is empty it hits the database and so on.</p>
+<h3 id="semaphoreslim-to-rescue-oops">SemaphoreSlim to rescue (Oops!)</h3>
+<p>Now, to solve the first problem team decided to use <code>SemaphoreSlim</code> which limits the number of threads that can access a resource or pool of resources concurrently. But this solves the problem partially because it might happen that <code>product id 2</code> is waiting for <code>product id 1</code>. So a better approach is to have <code>SemaphoreSlim</code> but with a key.</p>
+<h3 id="distributed-cache-to-rescue-sort-of">Distributed Cache to rescue (sort of!)</h3>
+<p>To solve the second and third problems, we can&rsquo;t only depend on memory cache we will need a second level of distributed cache where we could have data before we reach to database. The <strong>ideal solution</strong> could be to <em>have a hybrid cache which first checks in memory, if not found checks the distribued cache, if not found fetches data from the database</em>.</p>
+<h3 id="problem-with-ideal-solution">Problem with ideal solution</h3>
+<p>While the ideal solution makes more sense, it may create a problem while horizontally scaling. Memory cache could be out of sync very quickly when data changes in database/distributed cache but the memory cache is not expired.</p>
+<h3 id="fusioncache-to-rescue-yay">FusionCache to rescue (🎉Yay!🎉)</h3>
+<p>All of the above problems can be solved using <a href="https://github.com/ZiggyCreatures/FusionCache"><code>FusionCache</code></a>, a feature-rich, fully documented perfect caching solution available in .NET ecosystem.</p>
+<p><code>FusionCache</code> by default handles <strong>Cache stampede</strong> problem. It has many features but to keep it short we will only use two of it&rsquo;s features.</p>
+<ol>
+<li><a href="https://github.com/ZiggyCreatures/FusionCache/blob/main/docs/CacheLevels.md">2nd level</a>: This feature creates a bridge between the memory cache and the distributed cache.</li>
+<li><a href="https://github.com/ZiggyCreatures/FusionCache/blob/main/docs/Backplane.md">Backplane</a>: This feature notifies the other nodes about changes in the cache, so all will be in-sync.</li>
+</ol>
+<p>Below is the visual representation -</p>
+<figure><img src="https://anktsrkr.github.io/images/fusioncache/diagram.png"
+         alt="How fusioncache works"/>
+</figure>
+
+<div class="alert info no-icon ">
+  <p>The above image is the property of <a href="https://github.com/ZiggyCreatures/FusionCache">FusionCache</a> repo.</p>
+</div>
+<p>Let&rsquo;s update <code>Program.cs</code> to enable <code>FusionCache</code></p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">var host = new HostBuilder()
+ .ConfigureFunctionsWorkerDefaults()
+ .ConfigureLogging(logging =&gt;
+ {
+ logging.ClearProviders(); // Removes the default console logger
+ logging.AddApplicationInsights();
+ logging.AddSimpleConsole(c =&gt; // Adds a new console logger
+ {
+ c.SingleLine = true; // Ensures the &#34;info&#34; etc is at the start of the line.
+ });
+ logging.SetMinimumLevel(LogLevel.Trace);
+ })
+ .ConfigureServices((ctx,services) =&gt;
+ {
+ services.AddApplicationInsightsTelemetryWorkerService();
+ services.ConfigureFunctionsApplicationInsights();
+        
+ var sqlConn = ctx.Configuration.GetConnectionString(&#34;Sql&#34;);
+ var redisConn = ctx.Configuration.GetConnectionString(&#34;Redis&#34;);
+        
+        
+ if (string.IsNullOrWhiteSpace(sqlConn))
+ throw new NullReferenceException(&#34;You must specify a sql connection (see appsettings.json)&#34;);
+
+ // ADD SERVICES: DAPPER CONTEXT
+ services.AddSingleton(new DapperContext(sqlConn));
+
+ // ADD SERVICES: REDIS
+ if (string.IsNullOrWhiteSpace(redisConn) == false)
+ {
+ // ADD SERVICES: REDIS DISTRIBUTED CACHE
+ services.AddStackExchangeRedisCache(options =&gt;
+ {
+ options.Configuration = redisConn;
+ });
+
+ // ADD SERVICES: JSON SERIALIZER
+ services.AddFusionCacheSystemTextJsonSerializer();
+
+ // ADD SERVICES: REDIS BACKPLANE
+ services.AddFusionCacheStackExchangeRedisBackplane(options =&gt;
+ {
+ options.Configuration = redisConn;
+ });
+ }
+
+ // ADD SERVICES: FUSIONCACHE
+ services.AddFusionCache(options =&gt;
+ {
+ // SET DEFAULT OPTIONS
+ options.DefaultEntryOptions = new FusionCacheEntryOptions()
+ // DEFULT DURATION OF 5min
+ .SetDuration(TimeSpan.FromMinutes(5));
+ });
+ })
+ .Build();
+
+host.Run();</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Also, update our function&rsquo;s code -</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>GetProductById.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">[Function(&#34;GetProductById&#34;)]
+public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.Function, &#34;get&#34;, Route = null)] HttpRequestData req)
+{
+ using var conn = _dapperContext.CreateConnection();
+
+ var productid = req.Query[&#34;productid&#34;];
+
+ var product = await _cache.GetOrSetAsync&lt;Product&gt;(
+ $&#34;product:{productid}&#34;,
+ (ctx, _) =&gt;
+ {
+ var x = conn.GetAsync&lt;Product&gt;(productid);
+ return x;
+ }
+ );
+
+ if (product is null)
+ return new NotFoundResult();
+
+ return new OkObjectResult(product);
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The above codeblocks makes sure all cross cutting concerns such as cache stampede prevention,transient failure of distributed cache/backplace etc.</p>
+<hr>
+<p>Till this point, we haven&rsquo;t talked about updating the data, but one of our requirements is to reflect the updated data as soon as possible in all nodes.</p>
+<p>To achieve this, we have several options. One of the options could be to add an interceptor somehow while updating the data. The other option could use the feature of SQL Server known as <code>Change Tracking</code>, which works with Azure Function&rsquo;s <a href="https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-azure-sql-trigger?tabs=isolated-process%2Cportal&amp;pivots=programming-language-csharp"><code>SqlTrigger</code></a> very well.</p>
+<p>In this demo, I am using <code>AdventureWorks Lite database</code> which you can also download from <a href="https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&amp;tabs=ssms">here</a>.</p>
+<p>Let&rsquo;s enable the <code>Change Tracking</code> at database level first and enable it for the table for which you want to track the change.</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight sql language-sql">
+  <figcaption>
+    
+      <span>alterdatabase.sql</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-sql sql"><code class="sql">ALTER DATABASE [AdventureWorksLT2022]
+SET CHANGE_TRACKING = ON
+(CHANGE_RETENTION = 10 MINUTES, AUTO_CLEANUP = ON);
+
+ALTER TABLE [SalesLT].[Product]
+ENABLE CHANGE_TRACKING;</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<div class="alert warning no-icon ">
+  <p><p>The <code>CHANGE_RETENTION</code> option specifies the time period for which change history is kept. The retention of change history by the SQL database might affect trigger functionality.</p>
+<p>For example, if the Azure Function is turned off for several days and then resumed, the database will contain the changes that occurred in past two days in the above setup example.</p>
+</p>
+</div>
+<p>Let&rsquo;s add our <code>SqlTrigger</code> function which could be a separate Function App altogether.</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>InvalidateCache.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">[Function(&#34;InvalidateCache&#34;)]
+ public async Task Run(
+ [SqlTrigger(&#34; [SalesLT].[Product]&#34;, &#34;Sql&#34;)] 
+ IReadOnlyList&lt;SqlChange&lt;Product&gt;&gt; changes,
+ FunctionContext context)
+ {
+ foreach (var change in changes)
+ {
+ if (change.Operation == SqlChangeOperation.Update)
+ {
+ await _cache.ExpireAsync($&#34;product:{change.Item.ProductID}&#34;);
+ }
+ }
+ }</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Essentially, when it expires the data from this function, first it removes the data from the distributed cache and it notifies all the available nodes to remove the data for that particular key from their memory cache through backplane.
+ </p>
+<h2 id="conclusion">Conclusion</h2>
+<p>You might have several types of data to cache and you don&rsquo;t want to handle them in a single place, then the other approach could be to publish the update in eventhub and each consumer will invalidate their cached data.</p>
+<p>Nevertheless, IMO, the above approach makes the developer&rsquo;s life easy without worrying too much. It comes with a cost as Azure Redis is too costly.</p>
+<p>Let me know what you think about this!</p>
+
+              
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/fusioncache/">fusioncache</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azurefunctiontips/">azurefunctiontips</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/" data-tooltip="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8" aria-label="PREVIOUS: Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/sync-cached-data-between-azure-function-instances-using-fusioncache\/';
+        
+          this.page.identifier = '\/post\/sync-cached-data-between-azure-function-instances-using-fusioncache\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2024 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/re-authorize-efficiently-using-polly-and-httpclientfactory-in-.net8/" data-tooltip="Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8" aria-label="PREVIOUS: Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsync-cached-data-between-azure-function-instances-using-fusioncache%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsync-cached-data-between-azure-function-instances-using-fusioncache%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsync-cached-data-between-azure-function-instances-using-fusioncache%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Leeds
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+
+
+<script>
+    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
+   </script>
+   
+   
+
+<script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+            });
+  
+        navigator.serviceWorker
+            .ready
+            .then(function(registration) {
+            });
+    }
+  </script>
+  
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+
+<a id="Setmore_button_iframe" style="position: fixed;
+ right: 20px;
+ bottom: 15px;
+ z-index: 9998;text-decoration: none"
+    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
+    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
+display: table-cell;
+width: auto;
+height: 45px;
+padding: 0 30px;
+border-radius: 25px;
+box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
+font-family: sans-serif;
+text-align: center;
+vertical-align: middle;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+cursor: pointer;">#TalkWithMe</div>
+</a>
+
+    
+  </body>
+</html>
+

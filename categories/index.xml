@@ -6,13 +6,41 @@
     <description>Recent content in Categories on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 26 Dec 2023 06:00:35 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 May 2024 07:00:35 +0100</lastBuildDate>
     <atom:link href="https://anktsrkr.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>.NET 6</title>
+      <link>https://anktsrkr.github.io/categories/.net-6/</link>
+      <pubDate>Sun, 26 May 2024 07:00:35 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/categories/.net-6/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>.NET 7</title>
+      <link>https://anktsrkr.github.io/categories/.net-7/</link>
+      <pubDate>Sun, 26 May 2024 07:00:35 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/categories/.net-7/</guid>
+      <description></description>
+    </item>
     <item>
       <title>.NET 8</title>
       <link>https://anktsrkr.github.io/categories/.net-8/</link>
-      <pubDate>Tue, 26 Dec 2023 06:00:35 +0000</pubDate>
+      <pubDate>Sun, 26 May 2024 07:00:35 +0100</pubDate>
       <guid>https://anktsrkr.github.io/categories/.net-8/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Azure Function</title>
+      <link>https://anktsrkr.github.io/categories/azure-function/</link>
+      <pubDate>Sun, 26 May 2024 07:00:35 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/categories/azure-function/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>FusionCache</title>
+      <link>https://anktsrkr.github.io/categories/fusioncache/</link>
+      <pubDate>Sun, 26 May 2024 07:00:35 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/categories/fusioncache/</guid>
       <description></description>
     </item>
     <item>
@@ -34,13 +62,6 @@
       <link>https://anktsrkr.github.io/categories/polly-8/</link>
       <pubDate>Tue, 31 Oct 2023 06:00:35 +0100</pubDate>
       <guid>https://anktsrkr.github.io/categories/polly-8/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>.NET 7</title>
-      <link>https://anktsrkr.github.io/categories/.net-7/</link>
-      <pubDate>Wed, 11 Oct 2023 08:30:35 +0100</pubDate>
-      <guid>https://anktsrkr.github.io/categories/.net-7/</guid>
       <description></description>
     </item>
     <item>
@@ -132,13 +153,6 @@
       <link>https://anktsrkr.github.io/categories/oauth0/</link>
       <pubDate>Tue, 20 Sep 2022 11:08:35 +0100</pubDate>
       <guid>https://anktsrkr.github.io/categories/oauth0/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>.NET 6</title>
-      <link>https://anktsrkr.github.io/categories/.net-6/</link>
-      <pubDate>Mon, 05 Sep 2022 11:08:35 +0100</pubDate>
-      <guid>https://anktsrkr.github.io/categories/.net-6/</guid>
       <description></description>
     </item>
     <item>
