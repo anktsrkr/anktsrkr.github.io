@@ -37,7 +37,7 @@ canonifyurls = true
   name = "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner"
   bio = "**Technical Architect, Microsoft Certified Azure Solutions Architect Expert**"
   job = "Technical Architect"
-  location = "Nottingham"
+  location = "Leeds"
   # Your Gravatar email. Overwrite `author.picture` everywhere in the blog
   gravatarEmail = "ankt.srkr@live.in"
   # Your profile picture
