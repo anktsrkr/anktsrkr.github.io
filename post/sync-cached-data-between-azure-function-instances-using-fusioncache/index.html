@@ -376,15 +376,15 @@ if (!doNotTrack) {
           <pre class="code-highlight language-csharp csharp"><code class="csharp">[Function(&#34;GetProductById&#34;)]
 public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.Function, &#34;get&#34;, Route = null)] HttpRequestData req)
 {
- using var conn = _dapperContext.CreateConnection();
+    using var conn = _dapperContext.CreateConnection();
 
- var productid = req.Query[&#34;productid&#34;];
+    var productid = req.Query[&#34;productid&#34;];
 
- var product = await conn.GetAsync&lt;Product&gt;(productid);
- if (product is null)
- return new NotFoundResult();
+    var product = await conn.GetAsync&lt;Product&gt;(productid);
+    if (product is null)
+    return new NotFoundResult();
 
- return new OkObjectResult(product);
+    return new OkObjectResult(product);
 }</code></pre>
         </td>
       </tr>
@@ -421,21 +421,21 @@ public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.
           <pre class="code-highlight language-csharp csharp"><code class="csharp">[Function(&#34;GetProductById&#34;)]
 public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.Function, &#34;get&#34;, Route = null)] HttpRequestData req)
 {
- using var conn = _dapperContext.CreateConnection();
+    using var conn = _dapperContext.CreateConnection();
 
- var productid = req.Query[&#34;productid&#34;];
+    var productid = req.Query[&#34;productid&#34;];
 
- var product = await _memcache.GetOrCreateAsync(productid, cacheEntry =&gt;
- {
- cacheEntry.SlidingExpiration = TimeSpan.FromSeconds(10);
- cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
- return conn.GetAsync&lt;Product&gt;(productid);
- });
+    var product = await _memcache.GetOrCreateAsync(productid, cacheEntry =&gt;
+    {
+        cacheEntry.SlidingExpiration = TimeSpan.FromSeconds(10);
+        cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+        return conn.GetAsync&lt;Product&gt;(productid);
+    });
 
- if (product is null)
- return new NotFoundResult();
+    if (product is null)
+    return new NotFoundResult();
 
- return new OkObjectResult(product);
+    return new OkObjectResult(product);
 }</code></pre>
         </td>
       </tr>
@@ -493,67 +493,58 @@ public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.
     <tbody>
       <tr>
         <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre>
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre>
         </td>
         <td class="code">
           <pre class="code-highlight language-csharp csharp"><code class="csharp">var host = new HostBuilder()
- .ConfigureFunctionsWorkerDefaults()
- .ConfigureLogging(logging =&gt;
- {
- logging.ClearProviders(); // Removes the default console logger
- logging.AddApplicationInsights();
- logging.AddSimpleConsole(c =&gt; // Adds a new console logger
- {
- c.SingleLine = true; // Ensures the &#34;info&#34; etc is at the start of the line.
- });
- logging.SetMinimumLevel(LogLevel.Trace);
- })
- .ConfigureServices((ctx,services) =&gt;
- {
- services.AddApplicationInsightsTelemetryWorkerService();
- services.ConfigureFunctionsApplicationInsights();
-        
- var sqlConn = ctx.Configuration.GetConnectionString(&#34;Sql&#34;);
- var redisConn = ctx.Configuration.GetConnectionString(&#34;Redis&#34;);
-        
-        
- if (string.IsNullOrWhiteSpace(sqlConn))
- throw new NullReferenceException(&#34;You must specify a sql connection (see appsettings.json)&#34;);
+    .ConfigureFunctionsWorkerDefaults()
+    .ConfigureLogging(logging =&gt;
+    {
+        logging.ClearProviders(); // Removes the default console logger
+        logging.AddApplicationInsights();
+        logging.AddSimpleConsole(c =&gt; // Adds a new console logger
+        {
+            c.SingleLine = true; // Ensures the &#34;info&#34; etc is at the start of the line.
+        });
+        logging.SetMinimumLevel(LogLevel.Trace);
+    })
+    .ConfigureServices((ctx, services) =&gt;
+    {
+        services.AddApplicationInsightsTelemetryWorkerService();
+        services.ConfigureFunctionsApplicationInsights();
 
- // ADD SERVICES: DAPPER CONTEXT
- services.AddSingleton(new DapperContext(sqlConn));
+        var sqlConn = ctx.Configuration.GetConnectionString(&#34;Sql&#34;);
+        var redisConn = ctx.Configuration.GetConnectionString(&#34;Redis&#34;);
 
- // ADD SERVICES: REDIS
- if (string.IsNullOrWhiteSpace(redisConn) == false)
- {
- // ADD SERVICES: REDIS DISTRIBUTED CACHE
- services.AddStackExchangeRedisCache(options =&gt;
- {
- options.Configuration = redisConn;
- });
 
- // ADD SERVICES: JSON SERIALIZER
- services.AddFusionCacheSystemTextJsonSerializer();
+        if (string.IsNullOrWhiteSpace(sqlConn))
+            throw new NullReferenceException(&#34;You must specify a sql connection (see appsettings.json)&#34;);
 
- // ADD SERVICES: REDIS BACKPLANE
- services.AddFusionCacheStackExchangeRedisBackplane(options =&gt;
- {
- options.Configuration = redisConn;
- });
- }
+        // ADD SERVICES: DAPPER CONTEXT
+        services.AddSingleton(new DapperContext(sqlConn));
 
- // ADD SERVICES: FUSIONCACHE
- services.AddFusionCache(options =&gt;
- {
- // SET DEFAULT OPTIONS
- options.DefaultEntryOptions = new FusionCacheEntryOptions()
- // DEFULT DURATION OF 5min
- .SetDuration(TimeSpan.FromMinutes(5));
- });
- })
- .Build();
+        // ADD SERVICES: REDIS
+        if (string.IsNullOrWhiteSpace(redisConn) == false)
+        {
+            // ADD SERVICES: REDIS DISTRIBUTED CACHE
+            services.AddStackExchangeRedisCache(options =&gt; { options.Configuration = redisConn; });
 
-host.Run();</code></pre>
+            // ADD SERVICES: JSON SERIALIZER
+            services.AddFusionCacheSystemTextJsonSerializer();
+
+            // ADD SERVICES: REDIS BACKPLANE
+            services.AddFusionCacheStackExchangeRedisBackplane(options =&gt; { options.Configuration = redisConn; });
+        }
+
+        // ADD SERVICES: FUSIONCACHE
+        services.AddFusionCache()
+            .WithDefaultEntryOptions(x =&gt;
+                x.SetDuration(TimeSpan.FromMinutes(5)))
+            .TryWithRegisteredDistributedCache()
+            .TryWithRegisteredBackplane();
+    }).Build();
+
+    host.Run();</code></pre>
         </td>
       </tr>
     </tbody>
@@ -582,29 +573,26 @@ host.Run();</code></pre>
     <tbody>
       <tr>
         <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre>
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre>
         </td>
         <td class="code">
           <pre class="code-highlight language-csharp csharp"><code class="csharp">[Function(&#34;GetProductById&#34;)]
 public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.Function, &#34;get&#34;, Route = null)] HttpRequestData req)
 {
- using var conn = _dapperContext.CreateConnection();
+    using var conn = _dapperContext.CreateConnection();
 
- var productid = req.Query[&#34;productid&#34;];
+    var productid = req.Query[&#34;productid&#34;];
 
- var product = await _cache.GetOrSetAsync&lt;Product&gt;(
- $&#34;product:{productid}&#34;,
- (ctx, _) =&gt;
- {
- var x = conn.GetAsync&lt;Product&gt;(productid);
- return x;
- }
- );
+    var product = await _cache.GetOrSetAsync&lt;Product&gt;($&#34;product:{productid}&#34;,(ctx, _) =&gt;
+        {
+            var x = conn.GetAsync&lt;Product&gt;(productid);
+            return x;
+        });
 
- if (product is null)
- return new NotFoundResult();
+    if (product is null)
+    return new NotFoundResult();
 
- return new OkObjectResult(product);
+    return new OkObjectResult(product);
 }</code></pre>
         </td>
       </tr>
@@ -681,23 +669,20 @@ ENABLE CHANGE_TRACKING;</code></pre>
     <tbody>
       <tr>
         <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre>
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre>
         </td>
         <td class="code">
           <pre class="code-highlight language-csharp csharp"><code class="csharp">[Function(&#34;InvalidateCache&#34;)]
- public async Task Run(
- [SqlTrigger(&#34; [SalesLT].[Product]&#34;, &#34;Sql&#34;)] 
- IReadOnlyList&lt;SqlChange&lt;Product&gt;&gt; changes,
- FunctionContext context)
- {
- foreach (var change in changes)
- {
- if (change.Operation == SqlChangeOperation.Update)
- {
- await _cache.ExpireAsync($&#34;product:{change.Item.ProductID}&#34;);
- }
- }
- }</code></pre>
+public async Task Run([SqlTrigger(&#34; [SalesLT].[Product]&#34;, &#34;Sql&#34;)] IReadOnlyList&lt;SqlChange&lt;Product&gt;&gt; changes,FunctionContext context)
+{
+    foreach (var change in changes)
+    {
+        if (change.Operation == SqlChangeOperation.Update)
+        {
+            await _cache.ExpireAsync($&#34;product:{change.Item.ProductID}&#34;);
+        }
+    }
+}</code></pre>
         </td>
       </tr>
     </tbody>
