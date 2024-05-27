@@ -60,15 +60,15 @@ Let's see how the function looks now -  
 {{<codeblock "GetProductById.cs" csharp >}}[Function("GetProductById")]
 public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequestData req)
 {
- using var conn = _dapperContext.CreateConnection();
+    using var conn = _dapperContext.CreateConnection();
 
- var productid = req.Query["productid"];
+    var productid = req.Query["productid"];
 
- var product = await conn.GetAsync<Product>(productid);
- if (product is null)
- return new NotFoundResult();
+    var product = await conn.GetAsync<Product>(productid);
+    if (product is null)
+    return new NotFoundResult();
 
- return new OkObjectResult(product);
+    return new OkObjectResult(product);
 }
 {{</codeblock>}}
 
@@ -78,21 +78,21 @@ Team found a possible solution. As the data doesn't change frequently, team deci
 {{<codeblock "GetProductById.cs" csharp >}}[Function("GetProductById")]
 public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequestData req)
 {
- using var conn = _dapperContext.CreateConnection();
+    using var conn = _dapperContext.CreateConnection();
 
- var productid = req.Query["productid"];
+    var productid = req.Query["productid"];
 
- var product = await _memcache.GetOrCreateAsync(productid, cacheEntry =>
- {
- cacheEntry.SlidingExpiration = TimeSpan.FromSeconds(10);
- cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
- return conn.GetAsync<Product>(productid);
- });
+    var product = await _memcache.GetOrCreateAsync(productid, cacheEntry =>
+    {
+        cacheEntry.SlidingExpiration = TimeSpan.FromSeconds(10);
+        cacheEntry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+        return conn.GetAsync<Product>(productid);
+    });
 
- if (product is null)
- return new NotFoundResult();
+    if (product is null)
+    return new NotFoundResult();
 
- return new OkObjectResult(product);
+    return new OkObjectResult(product);
 }
 {{</codeblock>}}
 
@@ -139,63 +139,54 @@ The above image is the property of [FusionCache](https://github.com/ZiggyCreatur
 Let's update `Program.cs` to enable `FusionCache`
 
 {{<codeblock "Program.cs" csharp >}}var host = new HostBuilder()
- .ConfigureFunctionsWorkerDefaults()
- .ConfigureLogging(logging =>
- {
- logging.ClearProviders(); // Removes the default console logger
- logging.AddApplicationInsights();
- logging.AddSimpleConsole(c => // Adds a new console logger
- {
- c.SingleLine = true; // Ensures the "info" etc is at the start of the line.
- });
- logging.SetMinimumLevel(LogLevel.Trace);
- })
- .ConfigureServices((ctx,services) =>
- {
- services.AddApplicationInsightsTelemetryWorkerService();
- services.ConfigureFunctionsApplicationInsights();
-        
- var sqlConn = ctx.Configuration.GetConnectionString("Sql");
- var redisConn = ctx.Configuration.GetConnectionString("Redis");
-        
-        
- if (string.IsNullOrWhiteSpace(sqlConn))
- throw new NullReferenceException("You must specify a sql connection (see appsettings.json)");
+    .ConfigureFunctionsWorkerDefaults()
+    .ConfigureLogging(logging =>
+    {
+        logging.ClearProviders(); // Removes the default console logger
+        logging.AddApplicationInsights();
+        logging.AddSimpleConsole(c => // Adds a new console logger
+        {
+            c.SingleLine = true; // Ensures the "info" etc is at the start of the line.
+        });
+        logging.SetMinimumLevel(LogLevel.Trace);
+    })
+    .ConfigureServices((ctx, services) =>
+    {
+        services.AddApplicationInsightsTelemetryWorkerService();
+        services.ConfigureFunctionsApplicationInsights();
 
- // ADD SERVICES: DAPPER CONTEXT
- services.AddSingleton(new DapperContext(sqlConn));
+        var sqlConn = ctx.Configuration.GetConnectionString("Sql");
+        var redisConn = ctx.Configuration.GetConnectionString("Redis");
 
- // ADD SERVICES: REDIS
- if (string.IsNullOrWhiteSpace(redisConn) == false)
- {
- // ADD SERVICES: REDIS DISTRIBUTED CACHE
- services.AddStackExchangeRedisCache(options =>
- {
- options.Configuration = redisConn;
- });
 
- // ADD SERVICES: JSON SERIALIZER
- services.AddFusionCacheSystemTextJsonSerializer();
+        if (string.IsNullOrWhiteSpace(sqlConn))
+            throw new NullReferenceException("You must specify a sql connection (see appsettings.json)");
 
- // ADD SERVICES: REDIS BACKPLANE
- services.AddFusionCacheStackExchangeRedisBackplane(options =>
- {
- options.Configuration = redisConn;
- });
- }
+        // ADD SERVICES: DAPPER CONTEXT
+        services.AddSingleton(new DapperContext(sqlConn));
 
- // ADD SERVICES: FUSIONCACHE
- services.AddFusionCache(options =>
- {
- // SET DEFAULT OPTIONS
- options.DefaultEntryOptions = new FusionCacheEntryOptions()
- // DEFULT DURATION OF 5min
- .SetDuration(TimeSpan.FromMinutes(5));
- });
- })
- .Build();
+        // ADD SERVICES: REDIS
+        if (string.IsNullOrWhiteSpace(redisConn) == false)
+        {
+            // ADD SERVICES: REDIS DISTRIBUTED CACHE
+            services.AddStackExchangeRedisCache(options => { options.Configuration = redisConn; });
 
-host.Run();
+            // ADD SERVICES: JSON SERIALIZER
+            services.AddFusionCacheSystemTextJsonSerializer();
+
+            // ADD SERVICES: REDIS BACKPLANE
+            services.AddFusionCacheStackExchangeRedisBackplane(options => { options.Configuration = redisConn; });
+        }
+
+        // ADD SERVICES: FUSIONCACHE
+        services.AddFusionCache()
+            .WithDefaultEntryOptions(x =>
+                x.SetDuration(TimeSpan.FromMinutes(5)))
+            .TryWithRegisteredDistributedCache()
+            .TryWithRegisteredBackplane();
+    }).Build();
+
+    host.Run();
 {{</codeblock>}}
 
 Also, update our function's code - 
@@ -203,23 +194,20 @@ Also, update our function's code -
 {{<codeblock "GetProductById.cs" csharp >}}[Function("GetProductById")]
 public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequestData req)
 {
- using var conn = _dapperContext.CreateConnection();
+    using var conn = _dapperContext.CreateConnection();
 
- var productid = req.Query["productid"];
+    var productid = req.Query["productid"];
 
- var product = await _cache.GetOrSetAsync<Product>(
- $"product:{productid}",
- (ctx, _) =>
- {
- var x = conn.GetAsync<Product>(productid);
- return x;
- }
- );
+    var product = await _cache.GetOrSetAsync<Product>($"product:{productid}",(ctx, _) =>
+        {
+            var x = conn.GetAsync<Product>(productid);
+            return x;
+        });
 
- if (product is null)
- return new NotFoundResult();
+    if (product is null)
+    return new NotFoundResult();
 
- return new OkObjectResult(product);
+    return new OkObjectResult(product);
 }
 {{</codeblock>}}
 
@@ -252,19 +240,16 @@ For example, if the Azure Function is turned off for several days and then resum
 Let's add our `SqlTrigger` function which could be a separate Function App altogether. 
 
 {{<codeblock "InvalidateCache.cs" csharp >}}[Function("InvalidateCache")]
- public async Task Run(
- [SqlTrigger(" [SalesLT].[Product]", "Sql")] 
- IReadOnlyList<SqlChange<Product>> changes,
- FunctionContext context)
- {
- foreach (var change in changes)
- {
- if (change.Operation == SqlChangeOperation.Update)
- {
- await _cache.ExpireAsync($"product:{change.Item.ProductID}");
- }
- }
- }
+public async Task Run([SqlTrigger(" [SalesLT].[Product]", "Sql")] IReadOnlyList<SqlChange<Product>> changes,FunctionContext context)
+{
+    foreach (var change in changes)
+    {
+        if (change.Operation == SqlChangeOperation.Update)
+        {
+            await _cache.ExpireAsync($"product:{change.Item.ProductID}");
+        }
+    }
+}
 {{</codeblock>}}
 
 Essentially, when it expires the data from this function, first it removes the data from the distributed cache and it notifies all the available nodes to remove the data for that particular key from their memory cache through backplane.
