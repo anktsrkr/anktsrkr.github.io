@@ -211,7 +211,7 @@ public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Functi
 }
 {{</codeblock>}}
 
-The above codeblocks makes sure all cross cutting concerns such as cache stampede prevention,transient failure of distributed cache/backplace etc.
+The above codeblocks makes sure all cross cutting concerns such as cache stampede prevention,transient failure of distributed cache/backplane etc.
 
 --------------------------------------------------
 
@@ -234,7 +234,7 @@ ENABLE CHANGE_TRACKING;
 {{<alert warning no-icon>}}
 The `CHANGE_RETENTION` option specifies the time period for which change history is kept. The retention of change history by the SQL database might affect trigger functionality.
 
-For example, if the Azure Function is turned off for several days and then resumed, the database will contain the changes that occurred in past two days in the above setup example.
+For example, if the Azure Function is turned off for several days and then resumed, the database will contain the changes that occurred in past ten minutes in the above setup example.
 {{</alert>}}
 
 Let's add our `SqlTrigger` function which could be a separate Function App altogether. 
