@@ -600,7 +600,7 @@ public async Task&lt;IActionResult&gt; RunAsync([HttpTrigger(AuthorizationLevel.
   </table>
 </figure>
 
-<p>The above codeblocks makes sure all cross cutting concerns such as cache stampede prevention,transient failure of distributed cache/backplace etc.</p>
+<p>The above codeblocks makes sure all cross cutting concerns such as cache stampede prevention,transient failure of distributed cache/backplane etc.</p>
 <hr>
 <p>Till this point, we haven&rsquo;t talked about updating the data, but one of our requirements is to reflect the updated data as soon as possible in all nodes.</p>
 <p>To achieve this, we have several options. One of the options could be to add an interceptor somehow while updating the data. The other option could use the feature of SQL Server known as <code>Change Tracking</code>, which works with Azure Function&rsquo;s <a href="https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-azure-sql-trigger?tabs=isolated-process%2Cportal&amp;pivots=programming-language-csharp"><code>SqlTrigger</code></a> very well.</p>
@@ -644,7 +644,7 @@ ENABLE CHANGE_TRACKING;</code></pre>
 
 <div class="alert warning no-icon ">
   <p><p>The <code>CHANGE_RETENTION</code> option specifies the time period for which change history is kept. The retention of change history by the SQL database might affect trigger functionality.</p>
-<p>For example, if the Azure Function is turned off for several days and then resumed, the database will contain the changes that occurred in past two days in the above setup example.</p>
+<p>For example, if the Azure Function is turned off for several days and then resumed, the database will contain the changes that occurred in past ten minutes in the above setup example.</p>
 </p>
 </div>
 <p>Let&rsquo;s add our <code>SqlTrigger</code> function which could be a separate Function App altogether.</p>
