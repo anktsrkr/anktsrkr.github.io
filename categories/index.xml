@@ -6,8 +6,29 @@
     <description>Recent content in Categories on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 May 2024 07:00:35 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 14 May 2025 06:00:00 +0100</lastBuildDate>
     <atom:link href="https://anktsrkr.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>.NET 9</title>
+      <link>https://anktsrkr.github.io/categories/.net-9/</link>
+      <pubDate>Wed, 14 May 2025 06:00:00 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/categories/.net-9/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Gen AI</title>
+      <link>https://anktsrkr.github.io/categories/gen-ai/</link>
+      <pubDate>Wed, 14 May 2025 06:00:00 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/categories/gen-ai/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LLM</title>
+      <link>https://anktsrkr.github.io/categories/llm/</link>
+      <pubDate>Wed, 14 May 2025 06:00:00 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/categories/llm/</guid>
+      <description></description>
+    </item>
     <item>
       <title>.NET 6</title>
       <link>https://anktsrkr.github.io/categories/.net-6/</link>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>genai on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</title>
+    <link>https://anktsrkr.github.io/tags/genai/</link>
+    <description>Recent content in genai on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 14 May 2025 06:00:00 +0100</lastBuildDate>
+    <atom:link href="https://anktsrkr.github.io/tags/genai/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Getting Started with Semantic Kernel</title>
+      <link>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/</link>
+      <pubDate>Wed, 14 May 2025 06:00:00 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/</guid>
+      <description>Hi Everyone!&#xA;With this post, I am starting a new series about a build automation tool called Nuke . Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting Started with Nuke&#xA;Write your first building block in Nuke&#xA;Manage your Package Version using Nuke&#xA;Manage your Package Release using Nuke in Github&#xA;Table of Contents What we are going to build? What is Nuke?</description>
+    </item>
+  </channel>
+</rss>
