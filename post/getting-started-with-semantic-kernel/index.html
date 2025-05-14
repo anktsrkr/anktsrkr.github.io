@@ -62,11 +62,9 @@
     
       <meta property="article:tag" content="genai">
     
-      <meta property="article:tag" content="gen ai">
-    
       <meta property="article:tag" content="llm">
     
-      <meta property="article:tag" content="aspnetcore">
+      <meta property="article:tag" content="semantic kernel">
     
   
 
@@ -86,12 +84,9 @@
 
 
 
-  <meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan_full.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan_full.png">
 
-
-  <meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png">
+  <meta property="og:image" content="https://anktsrkr.github.io/images/semantic-kernel/sk.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/semantic-kernel/sk.png">
 
 
   <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
@@ -289,13 +284,15 @@ if (!doNotTrack) {
 </nav>
 
       
-  <div class="post-header-cover
-              text-center
-              "
-       style="background-image:url('/images/nuke/nuke_plan_full.png')"
-       data-behavior="5">
-    
-      <div class="post-header main-content-wrap text-center">
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title">
       Getting Started with Semantic Kernel
@@ -326,226 +323,18 @@ if (!doNotTrack) {
   </div>
 
 </div>
-    
-  </div>
-
-
-      <div id="main" data-behavior="5"
-        class="hasCover
-               hasCoverMetaIn
-               ">
-        <article class="post" id="top">
-          
           
           <div class="post-content markdown">
             <div class="main-content-wrap">
               <p>Hi Everyone!</p>
-<p>With this post, I am starting a new series about a build automation tool called <a href="https://nuke.build/"><strong><span class="highlight-text cyan">Nuke</span></strong></a>  . Over the time, I will updated this page with links to individual posts :</p>
-<p><em>This Post - Getting Started with Nuke</em></p>
-<p><a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">Write your first building block in Nuke</a></p>
-<p><a href="https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/">Manage your Package Version using Nuke</a></p>
-<p><a href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/">Manage your Package Release using Nuke in Github</a></p>
-<h1 id="table-of-contents">Table of Contents</h1>
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#what-we-are-going-to-build">What we are going to build?</a>
-          <ul>
-            <li><a href="#what-is-nuke">What is Nuke?</a></li>
-            <li><a href="#what-is-github-actions">What is Github Actions?</a></li>
-          </ul>
-        </li>
-        <li><a href="#getting-started">Getting Started</a>
-          <ul>
-            <li><a href="#install-nuke-global-tool">Install Nuke global tool</a></li>
-            <li><a href="#install-extension-for-your-ide">Install Extension for your IDE</a>
-              <ul>
-                <li><a href="#jetbrains-rider">JetBrains Rider</a></li>
-                <li><a href="#microsoft-visual-studio">Microsoft Visual Studio</a></li>
-              </ul>
-            </li>
-            <li><a href="#setup-your-first-nuke-build-project">Setup your first Nuke build project</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-
-<h2 id="what-we-are-going-to-build">What we are going to build?</h2>
-<p>In this series of posts we are going to build yet another<code>Hello World</code> C# library! Sounds interesting?  😇</p>
-<p>No! right? Well, we are going to build,pack and deploy the library using <strong><span class="highlight-text cyan">Nuke!</span></strong> and to automate the process we are going to use <strong><span class="highlight-text blue">Github Actions</span></strong> as our workflow automation tool.</p>
-<p>So, without further ado, lets get started!</p>
-<h3 id="what-is-nuke">What is Nuke?</h3>
-<p><strong><span class="highlight-text cyan">Nuke</span></strong> is a build automation library that is bootstrapped with simple  <strong><span class="highlight-text orange">.NET console applications </span></strong> and build steps that are defined as regular C# properties. Some of the key features of  <strong><span class="highlight-text cyan">Nuke</span></strong> are:</p>
+<p>With this post, I am starting a new series about <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>. Over the time, I will updated this page with links to individual posts :</p>
+<p><em>This Post - Getting Started with Semantic Kernel</em></p>
+<p>In this post, we will try to understand the following concepts:</p>
 <ol>
-<li>No Need to write any XML or YAML files for your pipeline, just annotate your Build class with attribute, Nuke will do the rest!</li>
-<li><strong><span class="highlight-text cyan">Nuke</span></strong> is a cross-platform build automation tool, it can be used on Windows, Linux and Mac.</li>
-<li><strong><span class="highlight-text cyan">Nuke</span></strong> is a C# based build automation tool, so you can use all the power of C# to write your build steps.</li>
-<li>Make your build steps reusable by creating your own building blocks.</li>
-<li><strong><span class="highlight-text cyan">Nuke</span></strong> takes <em>Fail Fast</em> approach, if any of the build step fails, it will stop the execution of the build.</li>
-<li>Last but not the least,  <strong><span class="highlight-text cyan">Nuke</span></strong> has first class support for your IDE. You can use Visual Studio, Rider or VS Code to write your build steps. Features like code-completion, navigation, refactorings, and debugging are supported out-of-the-box!</li>
+<li><strong>What is Semantic Kernel?</strong></li>
+<li><strong>How to use Semantic Kernel?</strong></li>
 </ol>
-<h3 id="what-is-github-actions">What is Github Actions?</h3>
-<p><strong><span class="highlight-text blue">Github Actions</span></strong> is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline.</p>
-<p><strong><span class="highlight-text blue">Github Actions</span></strong> gives developers the ability to automate their workflows across issues, pull requests, and more—plus native CI/CD functionality.</p>
-<p>In our case, we are going to use <strong><span class="highlight-text blue">Github Actions</span></strong> to run our <strong><span class="highlight-text cyan">Nuke</span></strong> build script.</p>
-<h2 id="getting-started">Getting Started</h2>
-<p>Before we start, Let us create some branches in our repository. We are going to use the following branches in our repository:</p>
-<ol>
-<li>
-<p><strong><span class="highlight-text green">main</span></strong> - This is our main branch, we will use this branch to publish the package in <strong>Nuget</strong> with actual version number for public users.</p>
-</li>
-<li>
-<p><strong><span class="highlight-text yellow">release/**</span></strong> - This is our release branch, we will use this branch to publish the pre release version to <strong>MyGet</strong> with <em>beta</em> tag for public users.</p>
-</li>
-<li>
-<p><strong><span class="highlight-text red">dev</span></strong> - This is our development branch, we will use this branch to publish the pre release version to <strong>Github Feed</strong> with <em>alpha</em> tag for internal users.</p>
-</li>
-</ol>
-<div class="alert info no-icon ">
-  <p><strong>Github Feed</strong> is a private feed that is created by Github for each repository. We can use this feed to publish our package to our internal users.</p>
-</div>
-<p>Once we have the branches, we are ready to start our journey with <strong><span class="highlight-text cyan">Nuke</span></strong>.</p>
-<h3 id="install-nuke-global-tool">Install Nuke global tool</h3>
-<p><strong><span class="highlight-text cyan">Nuke</span></strong> comes with a .NET global tool that provides a comfortable way to setup and execute your build projects right from your terminal. In this series I am going to use <strong><span class="highlight-text orange">Window terminal</span></strong> to setup everything.
-Use below command to install <strong><span class="highlight-text cyan">Nuke</span></strong> global tool:</p>
-<p>
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">dotnet tool install Nuke.GlobalTool --global</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-From now on you can use the global tool to:</p>
-<ul>
-<li>Set up new builds</li>
-<li>Run existing builds</li>
-<li>Leverage shell completion</li>
-<li>Add tool &amp; library packages</li>
-<li>Navigate around root directories</li>
-<li>Convert CAKE build scripts</li>
-<li>Manage secrets in parameter files</li>
-</ul>
-<h3 id="install-extension-for-your-ide">Install Extension for your IDE</h3>
-<p>I am going to show you how to use <strong><span class="highlight-text cyan">Nuke</span></strong> with <strong><span class="highlight-text orange">Rider</span></strong> and <strong><span class="highlight-text orange">Visual Studio</span></strong>.</p>
-<h4 id="jetbrains-rider">JetBrains Rider</h4>
-<p>In  <strong><span class="highlight-text orange">Rider</span></strong> you can install the <a href="https://plugins.jetbrains.com/plugin/10803-nuke-support"><em><span class="highlight-text cyan">Nuke Support plugin</span></em></a> to be more productive in writing, running, and debugging your builds.</p>
-<p>Once you installed the plugin, you can click the gutter icon next to your targets or hit Alt + Enter from inside their declaration to run and debug them. The top-level item starts a normal execution including all dependencies. From the submenu, you can debug and run/debug without dependencies:
-
-
- 
-  
-  
-  
-  
-    
-      
-    
-  
-    
-      
-    
-  
-    
-  
-
-<div class="figure center nocaption" >
-  
-    <a class="fancybox" href="https://anktsrkr.github.io/images/nuke/nuke_gutter.png" title="rider" data-fancybox="">
-  
-    <img class="fig-img" src="https://anktsrkr.github.io/images/nuke/nuke_gutter.png"  alt="rider">
-  
-    </a>
-  
-  
-</div>
-</p>
-<h4 id="microsoft-visual-studio">Microsoft Visual Studio</h4>
-<p>In  <strong><span class="highlight-text orange">Visual Studio</span></strong> you can install the <a href="https://marketplace.visualstudio.com/items?itemName=nuke.visualstudio"><em><span class="highlight-text cyan">Nuke Support plugin</span></em></a> to be more productive in writing, running, and debugging your builds.</p>
-<p>Once you installed the plugin, from the <em>Task Runner Explorer</em>, you can double-click a target to run it. Additionally, you can use toggle buttons to attach the debugger or skip dependencies:
-
-
- 
-  
-  
-  
-  
-    
-      
-    
-  
-    
-      
-    
-  
-    
-  
-
-<div class="figure center nocaption" >
-  
-    <a class="fancybox" href="https://anktsrkr.github.io/images/nuke/vs_gutter.png" title="vs" data-fancybox="">
-  
-    <img class="fig-img" src="https://anktsrkr.github.io/images/nuke/vs_gutter.png"  alt="vs">
-  
-    </a>
-  
-  
-</div>
-</p>
-<h3 id="setup-your-first-nuke-build-project">Setup your first Nuke build project</h3>
-<p>After installing necessary tools, we are ready to setup our first <strong><span class="highlight-text cyan">Nuke</span></strong> build project.</p>
-<p>To setup a new build project,run the below command from an existing repository. <strong><span class="highlight-text cyan">Nuke</span></strong> will search for the next upwards <em><span class="highlight-text warning">.git</span></em> or <em><span class="highlight-text warning">.svn</span></em> directory to determine the build <em><span class="highlight-text warning">root directory</span></em>. If neither is found, it will use the current directory.</p>
-<p>During the setup, you&rsquo;ll be asked several questions to configure your build to your preferences.</p>
-
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">nuke :setup</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<div class="alert info ">
-  <p>You can also pass the <strong>&ndash;root parameter</strong> to specify that the current directory should be used as a root directory.</p>
-</div>
-<p>Yay! 🎉 Your first build has now been set up, and you can run the build with the default implementation! though it will not do anything because we haven&rsquo;t added any build steps yet.</p>
-<p>In the <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">next</a> article, we will add some build steps to our build project and run it.</p>
+<p>Apart from that, we will also try to touch the concept of <strong>LLM</strong> and <strong>Prompt Engineering</strong>.</p>
 
               
               
@@ -563,11 +352,9 @@ From now on you can use the global tool to:</p>
                     
   <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/genai/">genai</a>
 
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/gen-ai/">gen ai</a>
-
   <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/llm/">llm</a>
 
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/aspnetcore/">aspnetcore</a>
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/semantic-kernel/">semantic kernel</a>
 
                   </div>
                 
