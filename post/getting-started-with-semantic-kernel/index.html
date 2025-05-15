@@ -16,7 +16,7 @@
     
   },
   "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-  "description":"Getting Started with Semantic Kernel.",
+  "description":"Getting Started with Semantic Kernel (Part 1).",
   "url":"https:\/\/anktsrkr.github.io\/post\/getting-started-with-semantic-kernel\/",
   "keywords":"[nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github nuget]"
 }
@@ -28,18 +28,18 @@
 <meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
 <meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta name="keywords" content="nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github nuget">
-<meta name="description" content="Getting Started with Semantic Kernel.">
+<meta name="description" content="Getting Started with Semantic Kernel (Part 1).">
 
 
-<meta property="og:description" content="Getting Started with Semantic Kernel.">
+<meta property="og:description" content="Getting Started with Semantic Kernel (Part 1).">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Getting Started with Semantic Kernel">
-<meta name="twitter:title" content="Getting Started with Semantic Kernel">
+<meta property="og:title" content="Getting Started with Semantic Kernel (Part 1)">
+<meta name="twitter:title" content="Getting Started with Semantic Kernel (Part 1)">
 <meta property="og:url" content="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/">
 <meta property="twitter:url" content="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/">
 <meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta property="og:description" content="Getting Started with Semantic Kernel.">
-<meta name="twitter:description" content="Getting Started with Semantic Kernel.">
+<meta property="og:description" content="Getting Started with Semantic Kernel (Part 1).">
+<meta name="twitter:description" content="Getting Started with Semantic Kernel (Part 1).">
 <meta property="og:locale" content="en-us">
 
   
@@ -92,7 +92,7 @@
   <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
   <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
 
-    <title>Getting Started with Semantic Kernel</title>
+    <title>Getting Started with Semantic Kernel (Part 1)</title>
 
     <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
     
@@ -295,7 +295,7 @@ if (!doNotTrack) {
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title">
-      Getting Started with Semantic Kernel
+      Getting Started with Semantic Kernel (Part 1)
     </h1>
   
   
@@ -328,13 +328,124 @@ if (!doNotTrack) {
             <div class="main-content-wrap">
               <p>Hi Everyone!</p>
 <p>With this post, I am starting a new series about <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>. Over the time, I will updated this page with links to individual posts :</p>
-<p><em>This Post - Getting Started with Semantic Kernel</em></p>
-<p>In this post, we will try to understand the following concepts:</p>
+<p><em>This Post - Getting Started with Semantic Kernel (Part 1)</em></p>
+<h2 id="what-is-semantic-kernel">What is Semantic Kernel?</h2>
+<p>Semantic Kernel is a lightweight, open-source development kit that provides a framework for building AI applications using large language models (LLMs). It allows developers to create and manage complex workflows, integrate with various AI services, and leverage the power of LLMs in their applications. Semantic Kernel is designed to be flexible, extensible, and easy to use, making it a great choice for developers looking to build AI-powered applications.</p>
+<p>Did you identify any buzzwords in the previous definition? If not, let me help you with that. The definition contains the following buzzwords:</p>
+<ul>
+<li>
+<p><strong>Large Language Models (LLMs)</strong>: These are AI models that are trained on vast amounts of text data and can generate human-like text. They are used in various applications, including chatbots, content generation, and more.</p>
+</li>
+<li>
+<p><strong>AI Applications</strong>: These are applications that provide AI capabilities, such as natural language processing, image recognition, and more. Sometimes, this kind of application can have it&rsquo;s own memory, can take decisions on its own, and can even learn from the user. This is where Semantic Kernel comes into play.</p>
+</li>
+</ul>
+<p>Before we dive into the details of Semantic Kernel, let&rsquo;s take a moment to understand what is Generative AI and where LLMs fit in the picture.</p>
+<h2 id="what-is-generative-ai">What is Generative AI?</h2>
+<p>At the highest level, <span class="highlight-text blue">Generative AI </span> (GenAI) is a subset of artificial intelligence that focuses on creating new content, such as text, images, music, and more. Below is a simple diagram that illustrates the relationship between artificial intelligence and Generative AI:</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/gen_ai.svg" title="Gen AI" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/gen_ai.svg"  alt="Gen AI">
+  
+    </a>
+  
+  
+</div>
+
+<ul>
+<li>
+<p><strong>Artificial Intelligence (AI)</strong>
+A multidisciplinary field of computer science that focuses on creating systems capable of performing tasks that typically require human intelligence. This includes problem-solving, learning, reasoning, and understanding natural language.</p>
+</li>
+<li>
+<p><strong>Machine Learning (ML)</strong>
+A subset of Artificial Intelligence that learns from existing data and makes predictions or decisions without being explicitly programmed.</p>
+</li>
+<li>
+<p><strong>Deep Learning (DL)</strong>
+A subset of machine learning that uses <span class="highlight-text green">artificial neural networks</span> with many layers to analyze various factors of data.</p>
+</li>
+</ul>
+<p><span class="highlight-text blue">Generative AI </span>is built upon a specific type of AI model, called a <strong><span class="highlight-text yellow">Generative Model</span></strong>.  These models mathematically approximate the distribution of the training data. These models take large amounts of data as input such as text, images etc., In second phase, a deep learning model is utilized to recognize patterns within the data. Finally, the model generates new content based on the learned patterns.</p>
+<h3 id="why-generative-ai-possible-now">Why Generative AI possible now?</h3>
+<p>GenAI has been around for a while, but it has gained significant traction in recent years due to several factors:</p>
+<ul>
+<li><strong>Data Availability</strong>: The internet has made vast amounts of data available, which is essential for training generative models. This includes text, images, audio, and video data.</li>
+<li><strong>Computational Power</strong>: Advances in hardware, particularly GPUs and TPUs, have made it possible to train large models on massive datasets. This has significantly reduced the time and cost associated with training generative models.</li>
+<li><strong>Advancements in Deep Learning</strong>: The development of more sophisticated deep learning algorithms and architectures such as GANs (Generative Adversarial Networks), Transformers, and RLHF (Reinforcement Learning with Human Feedback) has made it possible to train larger and more complex models. These architectures have shown remarkable performance in generating high-quality content across various domains.</li>
+</ul>
+<p>Within GenAI, we have Large Language Models (LLMs) and Foundation Models (FMs).</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/llm_fm.svg" title="LLM &amp; FM" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/llm_fm.svg"  alt="LLM &amp; FM">
+  
+    </a>
+  
+  
+</div>
+
+<ul>
+<li>
+<p><strong>Foundation Models (FMs)</strong>: These are large-scale ML models trained on diverse data sources and tasks. They can be fine-tuned for specific applications, making them versatile and powerful. Examples include GPT-4, BART.</p>
+</li>
+<li>
+<p><strong>Large Language Models (LLMs)</strong>: These are a subset of foundation models specifically designed for natural language processing tasks. They are trained on vast amounts of text data and can generate human-like text, answer questions, and perform various language-related tasks.</p>
+</li>
+</ul>
+<h2 id="how-llms-work">How LLMs Work?</h2>
+<p>Typically, LLM consists of three main components:</p>
 <ol>
-<li><strong>What is Semantic Kernel?</strong></li>
-<li><strong>How to use Semantic Kernel?</strong></li>
+<li>
+<p><strong>Encoder</strong>: This component processes the input text and converts it into a numerical representation (embedding) that captures the meaning and context of the text. The encoder uses techniques like tokenization and word embeddings to achieve this.</p>
+</li>
+<li>
+<p><strong>Pre-trained Transformer Model</strong>: This is the core of the LLM. Once the token embeddings are generated,  they are trained using pre-trained transformer models. Based on the architecture of LLM, there may be step involving human feedback to guide the model&rsquo;s output for specific tasks.</p>
+</li>
+<li>
+<p><strong>Decoder</strong>: This component then converts the encoded input from previous steps back into text.</p>
+</li>
 </ol>
-<p>Apart from that, we will also try to touch the concept of <strong>LLM</strong> and <strong>Prompt Engineering</strong>.</p>
+<p>Now, we understand the basic concepts of GenAI and LLMs and how they work. Next, we will focus on Semantic Kernel our main topic of discussion in the next blog post.</p>
 
               
               

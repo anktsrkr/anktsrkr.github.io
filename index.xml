@@ -9,11 +9,11 @@
     <lastBuildDate>Wed, 14 May 2025 06:00:00 +0100</lastBuildDate>
     <atom:link href="https://anktsrkr.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Getting Started with Semantic Kernel</title>
+      <title>Getting Started with Semantic Kernel (Part 1)</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/</link>
       <pubDate>Wed, 14 May 2025 06:00:00 +0100</pubDate>
       <guid>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/</guid>
-      <description>Hi Everyone!&#xA;With this post, I am starting a new series about Semantic Kernel. Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting Started with Semantic Kernel&#xA;In this post, we will try to understand the following concepts:&#xA;What is Semantic Kernel? How to use Semantic Kernel? Apart from that, we will also try to touch the concept of LLM and Prompt Engineering.</description>
+      <description>Hi Everyone!&#xA;With this post, I am starting a new series about Semantic Kernel. Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting Started with Semantic Kernel (Part 1)&#xA;What is Semantic Kernel? Semantic Kernel is a lightweight, open-source development kit that provides a framework for building AI applications using large language models (LLMs). It allows developers to create and manage complex workflows, integrate with various AI services, and leverage the power of LLMs in their applications.</description>
     </item>
     <item>
       <title>Sync Cached Data Between Azure Function Instances Using FusionCache</title>
