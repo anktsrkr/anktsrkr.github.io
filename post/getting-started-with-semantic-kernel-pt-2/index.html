@@ -17,7 +17,7 @@
   },
   "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
   "description":"How to use Semantic Kernel in AI development",
-  "url":"https:\/\/anktsrkr.github.io\/post\/getting-started-with-semantic-kernel\/",
+  "url":"https:\/\/anktsrkr.github.io\/post\/getting-started-with-semantic-kernel-pt-2\/",
   "keywords":"[Semantic Kernel, AI development, Machine learning, Microsoft AI, Natural language processing (NLP), OpenAI integration, .NET AI framework, Python AI tools, AI-powered applications, Prompt engineering, AI agent creation, Large language models (LLMs), AI automation, Cognitive computing, AI SDK, Gen AI, .NET 9, LLM]"
 }
 
@@ -33,20 +33,20 @@
 
 <meta property="og:description" content="How to use Semantic Kernel in AI development">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Getting Started with Semantic Kernel (Part 1)">
-<meta name="twitter:title" content="Getting Started with Semantic Kernel (Part 1)">
-<meta property="og:url" content="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/">
-<meta property="twitter:url" content="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/">
+<meta property="og:title" content="Getting Started with Semantic Kernel (Part 2) ">
+<meta name="twitter:title" content="Getting Started with Semantic Kernel (Part 2) ">
+<meta property="og:url" content="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/">
 <meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta property="og:description" content="How to use Semantic Kernel in AI development">
 <meta name="twitter:description" content="How to use Semantic Kernel in AI development">
 <meta property="og:locale" content="en-us">
 
   
-    <meta property="article:published_time" content="2025-05-14T06:00:00">
+    <meta property="article:published_time" content="2025-05-16T06:00:00">
   
   
-    <meta property="article:modified_time" content="2025-05-14T06:00:00">
+    <meta property="article:modified_time" content="2025-05-16T06:00:00">
   
   
   
@@ -94,14 +94,14 @@
   <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
   <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
 
-    <title>Getting Started with Semantic Kernel (Part 1)</title>
+    <title>Getting Started with Semantic Kernel (Part 2) </title>
 
     <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/">
+    <link rel="canonical" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/">
 
     
     <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -297,15 +297,15 @@ if (!doNotTrack) {
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title">
-      Getting Started with Semantic Kernel (Part 1)
+      Getting Started with Semantic Kernel (Part 2) 
     </h1>
   
   
   <div class="postShorten-meta post-meta">
     
-      <time datetime="2025-05-14T06:00:00&#43;01:00">
+      <time datetime="2025-05-16T06:00:00&#43;01:00">
         
-  May 14, 2025
+  May 16, 2025
 
       </time>
     
@@ -332,127 +332,102 @@ if (!doNotTrack) {
           
           <div class="post-content markdown">
             <div class="main-content-wrap">
-              <p>Hi Everyone!</p>
-<p>With this post, I am starting a new series about <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>. Over the time, I will updated this page with links to individual posts :</p>
-<p><em>This Post - Getting Started with Semantic Kernel (Part 1)</em></p>
-<p><a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2">Getting Started with Semantic Kernel (Part 2)</a></p>
-<h2 id="what-is-semantic-kernel">What is Semantic Kernel?</h2>
-<p>Semantic Kernel is a lightweight, open-source development kit that provides a framework for building AI applications using large language models (LLMs). It allows developers to create and manage complex workflows, integrate with various AI services, and leverage the power of LLMs in their applications. Semantic Kernel is designed to be flexible, extensible, and easy to use, making it a great choice for developers looking to build AI-powered applications.</p>
-<p>Did you identify any buzzwords in the previous definition? If not, let me help you with that. The definition contains the following buzzwords:</p>
+              <p>Hi Everyone!
+This post is continuation of a series about <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>. Over the time, I will updated this page with links to individual posts :</p>
+<p><a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel">Getting Started with Semantic Kernel (Part 1)</a></p>
+<p><em>This Post - Getting Started with Semantic Kernel (Part 2)</em></p>
+<p>We now have a basic understanding of Gen AI and how LLM works. However, before we dive into Semantic Kernel, Let&rsquo;s take a moment to understand some of the key components and tools that will be important as we move forward.</p>
+<h2 id="slm-vs-llm">SLM vs LLM</h2>
+<h3 id="slm-small-language-model">SLM (Small Language Model)</h3>
+<p>SLM refers to Small language models that are typically less complex and require fewer resources to run. They are often used for specific tasks or applications where a full LLM may not be necessary. SLMs can be effective for tasks like text classification, sentiment analysis, and other simpler NLP tasks.</p>
+<h3 id="llm-large-language-model">LLM (Large Language Model)</h3>
+<p>LLM refers to large language models that are trained on vast amounts of text data and can generate human-like text. They are capable of understanding and generating natural language, making them suitable for a wide range of applications, including chatbots, content generation, translation, and more. LLMs are typically more complex and require significant computational resources to run.</p>
+<h3 id="key-differences">Key Differences</h3>
+<ul>
+<li><strong>Size</strong>: LLMs are larger and more complex than SLMs, requiring more computational resources.</li>
+<li><strong>Number of Parameters</strong>: LLMs typically have a significantly higher number of parameters (Billions to trillions) compared to SLMs (Millions to tens of millions).</li>
+<li><strong>Capabilities</strong>: LLMs can handle a wider range of tasks and generate more coherent and contextually relevant text compared to SLMs.</li>
+<li><strong>Training Data</strong>: LLMs are trained on vast amounts of text data, while SLMs may be trained on smaller datasets.</li>
+<li><strong>Use Cases</strong>: SLMs are often used for specific tasks, while LLMs are more versatile and can be used for a variety of applications.</li>
+</ul>
+<h3 id="examples">Examples</h3>
+<ul>
+<li><strong>SLM</strong>: 	Phi-3, GPT-4o mini etc.</li>
+<li><strong>LLM</strong>: OpenAI, Mistral, LLama etc.</li>
+</ul>
+<h3 id="when-to-use-slm-vs-llm">When to Use SLM vs LLM</h3>
+<ul>
+<li><strong>Use SLM</strong>: When you have limited computational resources, need to perform specific tasks, or require faster inference times.</li>
+<li><strong>Use LLM</strong>: When you need to generate high-quality text, handle complex tasks, or require a model that can understand and generate natural language in a more sophisticated manner.</li>
+</ul>
+<p>You may refer this <a href="https://www.microsoft.com/en-us/microsoft-cloud/blog/2024/11/11/explore-ai-models-key-differences-between-small-language-models-and-large-language-models/">link</a> for more details.</p>
+<h2 id="local-llm-vs-cloud-llm">Local LLM vs Cloud LLM</h2>
+<p>When it comes to using LLMs, there are two main options: local LLMs and cloud LLMs. Local LLMs are models that you can run on your own hardware, while cloud LLMs are hosted by a third-party provider and accessed via an API. Each option has its own advantages and disadvantages.</p>
+<h3 id="local-llms">Local LLMs</h3>
 <ul>
 <li>
-<p><strong>Large Language Models (LLMs)</strong>: These are AI models that are trained on vast amounts of text data and can generate human-like text. They are used in various applications, including chatbots, content generation, and more.</p>
+<p><strong>Advantages</strong>:</p>
+<ul>
+<li>Greater control over the model and data.</li>
+<li>No latency issues related to network calls.</li>
+<li>Can be optimized for specific hardware.</li>
+</ul>
 </li>
 <li>
-<p><strong>AI Applications</strong>: These are applications that provide AI capabilities, such as natural language processing, image recognition, and more. Sometimes, this kind of application can have it&rsquo;s own memory, can take decisions on its own, and can even learn from the user. This is where Semantic Kernel comes into play.</p>
+<p><strong>Disadvantages</strong>:</p>
+<ul>
+<li>Requires significant hardware resources.</li>
+<li>Sort of complex setup and maintenance.</li>
+<li>Limited scalability compared to cloud solutions.</li>
+</ul>
 </li>
 </ul>
-<p>Before we dive into the details of Semantic Kernel, let&rsquo;s take a moment to understand what is Generative AI and where LLMs fit in the picture.</p>
-<h2 id="what-is-generative-ai">What is Generative AI?</h2>
-<p>At the highest level, <span class="highlight-text blue">Generative AI </span> (GenAI) is a subset of artificial intelligence that focuses on creating new content, such as text, images, music, and more. Below is a simple diagram that illustrates the relationship between artificial intelligence and Generative AI:</p>
-
-
- 
-  
-  
-  
-  
-    
-      
-    
-  
-    
-      
-    
-  
-    
-  
-
-<div class="figure center nocaption" >
-  
-    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/gen_ai.svg" title="Gen AI" data-fancybox="">
-  
-    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/gen_ai.svg"  alt="Gen AI">
-  
-    </a>
-  
-  
-</div>
-
+<h3 id="cloud-llms">Cloud LLMs</h3>
 <ul>
 <li>
-<p><strong>Artificial Intelligence (AI)</strong>
-A multidisciplinary field of computer science that focuses on creating systems capable of performing tasks that typically require human intelligence. This includes problem-solving, learning, reasoning, and understanding natural language.</p>
-</li>
-<li>
-<p><strong>Machine Learning (ML)</strong>
-A subset of Artificial Intelligence that learns from existing data and makes predictions or decisions without being explicitly programmed.</p>
-</li>
-<li>
-<p><strong>Deep Learning (DL)</strong>
-A subset of machine learning that uses <span class="highlight-text green">artificial neural networks</span> with many layers to analyze various factors of data.</p>
-</li>
-</ul>
-<p><span class="highlight-text blue">Generative AI </span>is built upon a specific type of AI model, called a <strong><span class="highlight-text yellow">Generative Model</span></strong>.  These models mathematically approximate the distribution of the training data. These models take large amounts of data as input such as text, images etc., In second phase, a deep learning model is utilized to recognize patterns within the data. Finally, the model generates new content based on the learned patterns.</p>
-<h3 id="why-generative-ai-possible-now">Why Generative AI possible now?</h3>
-<p>GenAI has been around for a while, but it has gained significant traction in recent years due to several factors:</p>
+<p><strong>Advantages</strong>:</p>
 <ul>
-<li><strong>Data Availability</strong>: The internet has made vast amounts of data available, which is essential for training generative models. This includes text, images, audio, and video data.</li>
-<li><strong>Computational Power</strong>: Advances in hardware, particularly GPUs and TPUs, have made it possible to train large models on massive datasets. This has significantly reduced the time and cost associated with training generative models.</li>
-<li><strong>Advancements in Deep Learning</strong>: The development of more sophisticated deep learning algorithms and architectures such as GANs (Generative Adversarial Networks), Transformers, and RLHF (Reinforcement Learning with Human Feedback) has made it possible to train larger and more complex models. These architectures have shown remarkable performance in generating high-quality content across various domains.</li>
+<li>Easy to set up and use.</li>
+<li>Scalable to handle varying workloads.</li>
+<li>Access to the latest models and updates.</li>
 </ul>
-<p>Within GenAI, we have Large Language Models (LLMs) and Foundation Models (FMs).</p>
-
-
- 
-  
-  
-  
-  
-    
-      
-    
-  
-    
-      
-    
-  
-    
-  
-
-<div class="figure center nocaption" >
-  
-    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/llm_fm.svg" title="LLM &amp; FM" data-fancybox="">
-  
-    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/llm_fm.svg"  alt="LLM &amp; FM">
-  
-    </a>
-  
-  
-</div>
-
+</li>
+<li>
+<p><strong>Disadvantages</strong>:</p>
 <ul>
-<li>
-<p><strong>Foundation Models (FMs)</strong>: These are large-scale ML models trained on diverse data sources and tasks. They can be fine-tuned for specific applications, making them versatile and powerful. Examples include GPT-4, BART.</p>
-</li>
-<li>
-<p><strong>Large Language Models (LLMs)</strong>: These are a subset of foundation models specifically designed for natural language processing tasks. They are trained on vast amounts of text data and can generate human-like text, answer questions, and perform various language-related tasks.</p>
+<li>Less control over the model and data.</li>
+<li>Potential latency issues due to network calls.</li>
+<li>Ongoing costs associated with usage.</li>
+</ul>
 </li>
 </ul>
-<h2 id="how-llms-work">How LLMs Work?</h2>
-<p>Typically, LLM consists of three main components:</p>
-<ol>
-<li>
-<p><strong>Encoder</strong>: This component processes the input text and converts it into a numerical representation (embedding) that captures the meaning and context of the text. The encoder uses techniques like tokenization and word embeddings to achieve this.</p>
-</li>
-<li>
-<p><strong>Pre-trained Transformer Model</strong>: This is the core of the LLM. Once the token embeddings are generated,  they are trained using pre-trained transformer models. Based on the architecture of LLM, there may be step involving human feedback to guide the model&rsquo;s output for specific tasks.</p>
-</li>
-<li>
-<p><strong>Decoder</strong>: This component then converts the encoded input from previous steps back into text.</p>
-</li>
-</ol>
-<p>Now, we understand the basic concepts of GenAI and LLMs and how they work. Next, we will focus on Semantic Kernel our main topic of discussion in the next blog post.</p>
+<p>Semantic Kernel supports both local and cloud LLMs, allowing developers to choose the best option for their specific use case.</p>
+<h2 id="how-to-run-llm-locally">How to run LLM locally?</h2>
+<p>These days, there are many options available to run LLM locally. Some of the popular options include:</p>
+<ul>
+<li><strong>Ollama</strong>: Ollama is a command-line tool that allows you to run LLMs locally on your machine. It provides a simple interface for downloading and running models, making it easy to get started with local LLMs.</li>
+<li><strong>LM Studio</strong>: LM Studio is a GUI-based application that allows you to run LLMs locally on your machine. It provides a user-friendly interface for managing models and running inference, making it accessible to users who may not be comfortable with command-line tools.</li>
+<li><strong>Docker Model Runner</strong>: Currently it is in preview, but it allows you to run LLMs in a containerized environment using Docker.</li>
+</ul>
+<p>In our case, we will be mostly using <strong>Ollama</strong> in Docker and <strong>LM Studio</strong>.</p>
+<h2 id="where-can-i-find-cloud-llms">Where can I find Cloud LLMs?</h2>
+<p>There are many cloud LLM providers available, some of the popular ones include:</p>
+<ul>
+<li><strong>OpenAI</strong>: OpenAI provides access to its GPT models via an API, allowing developers to integrate LLM capabilities into their applications.</li>
+<li><strong>Microsoft</strong>: Microsoft provides access to its Azure OpenAI Service, allowing developers to integrate LLM capabilities into their applications.</li>
+<li><strong>Github Models</strong>: Github provides access to various LLMs via its API, allowing developers to integrate LLM capabilities into their applications.</li>
+</ul>
+<p>Last but not the least, we will be touching on <strong>Vector DB</strong> in this post.</p>
+<h2 id="what-is-vector-db">What is Vector DB?</h2>
+<p>Vector databases are specialized databases designed to store and manage high-dimensional vectors, which are often used in machine learning and artificial intelligence applications. These databases are optimized for similarity search and retrieval tasks, making them ideal for applications that involve large-scale data processing, such as image recognition, natural language processing, and recommendation systems.</p>
+<h3 id="examples-of-vector-db">Examples of Vector DB</h3>
+<p>You may use cloud-based vector databases or run them locally. Some popular options for local vector databases include:</p>
+<ul>
+<li><strong>Qdrant</strong>: A vector database that provides high-performance similarity search and retrieval capabilities. It is designed for large-scale applications and supports various data types, including text, images.</li>
+<li><strong>Chroma</strong>: A vector database that focuses on providing fast and efficient similarity search capabilities. It is designed for use in machine learning and AI applications, making it a popular choice for developers working with high-dimensional data.</li>
+</ul>
+<p>In our case, we will be mostly using <strong>Qdrant</strong>.</p>
+<p>We now have more understanding of the components and tools that will be important as we move forward. In the next post, we will see how to use Semantic Kernel with <strong>Ollama</strong> / <strong>LM Studio</strong>. Later, we will see how to use <strong>Qdrant</strong> with Semantic Kernel.</p>
 
               
               
@@ -483,7 +458,7 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" data-tooltip="Getting Started with Semantic Kernel (Part 2) " aria-label="NEXT: Getting Started with Semantic Kernel (Part 2) ">
+            <a class="post-action-btn btn btn--disabled">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -491,7 +466,7 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" data-tooltip="Sync Cached Data Between Azure Function Instances Using FusionCache" aria-label="PREVIOUS: Sync Cached Data Between Azure Function Instances Using FusionCache">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" data-tooltip="Getting Started with Semantic Kernel (Part 1)" aria-label="PREVIOUS: Getting Started with Semantic Kernel (Part 1)">
           
               <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
               <i class="fa fa-angle-right"></i>
@@ -509,19 +484,19 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
     </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Facebook" aria-label="Share on Facebook">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" title="Share on Facebook" aria-label="Share on Facebook">
           <i class="fab fa-facebook-square" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Twitter" aria-label="Share on Twitter">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" title="Share on Twitter" aria-label="Share on Twitter">
           <i class="fab fa-twitter" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Linkedin" aria-label="Share on Linkedin">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" title="Share on Linkedin" aria-label="Share on Linkedin">
           <i class="fab fa-linkedin" aria-hidden="true"></i>
         </a>
       </li>
@@ -552,9 +527,9 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
     </div>
     <script type="text/javascript">
       var disqus_config = function() {
-        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/getting-started-with-semantic-kernel\/';
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/getting-started-with-semantic-kernel-pt-2\/';
         
-          this.page.identifier = '\/post\/getting-started-with-semantic-kernel\/'
+          this.page.identifier = '\/post\/getting-started-with-semantic-kernel-pt-2\/'
         
       };
       (function() {
@@ -590,7 +565,7 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" data-tooltip="Getting Started with Semantic Kernel (Part 2) " aria-label="NEXT: Getting Started with Semantic Kernel (Part 2) ">
+            <a class="post-action-btn btn btn--disabled">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -598,7 +573,7 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" data-tooltip="Sync Cached Data Between Azure Function Instances Using FusionCache" aria-label="PREVIOUS: Sync Cached Data Between Azure Function Instances Using FusionCache">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" data-tooltip="Getting Started with Semantic Kernel (Part 1)" aria-label="PREVIOUS: Getting Started with Semantic Kernel (Part 1)">
           
               <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
               <i class="fa fa-angle-right"></i>
@@ -616,19 +591,19 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
     </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Facebook" aria-label="Share on Facebook">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" title="Share on Facebook" aria-label="Share on Facebook">
           <i class="fab fa-facebook-square" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Twitter" aria-label="Share on Twitter">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" title="Share on Twitter" aria-label="Share on Twitter">
           <i class="fab fa-twitter" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Linkedin" aria-label="Share on Linkedin">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" title="Share on Linkedin" aria-label="Share on Linkedin">
           <i class="fab fa-linkedin" aria-hidden="true"></i>
         </a>
       </li>
@@ -659,19 +634,19 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
   <ul class="share-options">
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel%2F" aria-label="Share on Facebook">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel-pt-2%2F" aria-label="Share on Facebook">
           <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel%2F" aria-label="Share on Twitter">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel-pt-2%2F" aria-label="Share on Twitter">
           <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel%2F" aria-label="Share on Linkedin">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel-pt-2%2F" aria-label="Share on Linkedin">
           <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
         </a>
       </li>

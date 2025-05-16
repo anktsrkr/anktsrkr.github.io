@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>genai on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</title>
-    <link>https://anktsrkr.github.io/tags/genai/</link>
-    <description>Recent content in genai on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
+    <title>Vector DB on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</title>
+    <link>https://anktsrkr.github.io/categories/vector-db/</link>
+    <description>Recent content in Vector DB on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 16 May 2025 06:00:00 +0100</lastBuildDate>
-    <atom:link href="https://anktsrkr.github.io/tags/genai/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://anktsrkr.github.io/categories/vector-db/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Getting Started with Semantic Kernel (Part 2) </title>
       <link>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/</link>
