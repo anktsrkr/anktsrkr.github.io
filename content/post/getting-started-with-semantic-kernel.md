@@ -1,7 +1,7 @@
 ---
 title: "Getting Started with Semantic Kernel (Part 1)" # Title of the blog post.
 date: 2025-05-14T06:00:00+01:00 # Date of post creation.
-description: "Getting Started with Semantic Kernel (Part 1)." # Description used for search engine.
+description: "How to use Semantic Kernel in AI development" # Description used for search engine.
 featured: true # Sets if post is a featured post, making appear on the home page side bar.
 draft: false # Sets whether to render this page. Draft of true will not be rendered.
 toc: false # Controls if a table of contents should be generated for first-level links automatically.
@@ -14,25 +14,33 @@ codeLineNumbers: false # Override global value for showing of line numbers withi
 figurePositionShow: true # Override global value for showing the figure label.
 
 categories:
+- Semantic Kernel
+- LLM
+- .NET 9
+- AI
+- Vector DB
+tags:
+- genai
+- ollama
+keywords:
+- Semantic Kernel
+- AI development
+- Machine learning
+- Microsoft AI
+- Natural language processing (NLP)
+- OpenAI integration
+- .NET AI framework
+- Python AI tools
+- AI-powered applications
+- Prompt engineering
+- AI agent creation
+- Large language models (LLMs)
+- AI automation
+- Cognitive computing
+- AI SDK
 - Gen AI
 - .NET 9
 - LLM
-tags:
-- genai
-- llm
-- semantic kernel
-keywords:
-- nuke
-- automation
-- ci
-- cd
-- .net6
-- c#
-- aspnetcore
-- github action
-- nuget
-- myget
-- github nuget
 ---
  
 Hi Everyone!
@@ -40,6 +48,8 @@ Hi Everyone!
 With this post, I am starting a new series about **{{< hl-text cyan >}}Semantic Kernel{{< /hl-text >}}**. Over the time, I will updated this page with links to individual posts : 
 
 _This Post - Getting Started with Semantic Kernel (Part 1)_
+
+[Getting Started with Semantic Kernel (Part 2)](/post/getting-started-with-semantic-kernel-pt-2)
 
 ## What is Semantic Kernel?
 
