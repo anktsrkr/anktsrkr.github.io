@@ -41,6 +41,9 @@ keywords:
 - Gen AI
 - .NET 9
 - LLM
+- Ollama
+- Foundry Local
+- LM Studio
 ---
  
 Hi Everyone!
@@ -52,6 +55,8 @@ _This Post - Getting Started with Semantic Kernel (Part 1)_
 [Getting Started with Semantic Kernel (Part 2)](/post/getting-started-with-semantic-kernel-pt-2)
 
 [Building Blocks of Semantic Kernel](/post/semantic-kernel/semantic-kernel-building-blocks)
+
+[Getting Started with Foundry Local & Semantic Kernel](/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel)
 
 ## What is Semantic Kernel?
 
