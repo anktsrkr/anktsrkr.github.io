@@ -218,12 +218,13 @@ Probably, you have noticed that the follow up question do not makes sense if the
 In this post, we have discussed how to use Foundry Local with Semantic Kernel. We have seen how to install Foundry Local, run a model, and use it with Semantic Kernel.
 
 Will I be using Foundry Local in my future posts? probably not because of the following reasons:
+- This is in public preview.
 - Model catalog has limited models available.
 - The above, can be solved but for that we need to download the models from Hugging Face and have to go through the process of converting them to Onnx format using python. This is a bit tedious process especially when you are .NET developer and you want to focus on building applications.
 - Though the api is OpenAI compatible, structured output is not supported yet.
 - Onnx model hosted on Hugging Face are not optimized for Foundry Local yet. However, we have the confirmation from **{{< hl-text red >}}the awesome team of Foundry Local {{< /hl-text >}}** that they are working on it and will be available soon.
 
-We will keep an eye on the Foundry Local and will update this post when we have more information.
+I will keep an eye on the Foundry Local and will update this post when I have more information.
 
 Next post will be about **{{< hl-text cyan >}}Ollama{{< /hl-text >}}** and **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. We will see how to use them with Semantic Kernel and build a chat application.
 
