@@ -336,6 +336,7 @@ if (!doNotTrack) {
 This post is continuation of a series about <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>. Over the time, I will updated this page with links to individual posts :</p>
 <p><a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel">Getting Started with Semantic Kernel (Part 1)</a></p>
 <p><em>This Post - Getting Started with Semantic Kernel (Part 2)</em></p>
+<p><a href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks">Building Blocks of Semantic Kernel</a></p>
 <p>We now have a basic understanding of Gen AI and how LLM works. However, before we dive into Semantic Kernel, Let&rsquo;s take a moment to understand some of the key components and tools that will be important as we move forward.</p>
 <h2 id="slm-vs-llm">SLM vs LLM</h2>
 <h3 id="slm-small-language-model">SLM (Small Language Model)</h3>
@@ -408,8 +409,9 @@ This post is continuation of a series about <strong><span class="highlight-text 
 <li><strong>Ollama</strong>: Ollama is a command-line tool that allows you to run LLMs locally on your machine. It provides a simple interface for downloading and running models, making it easy to get started with local LLMs.</li>
 <li><strong>LM Studio</strong>: LM Studio is a GUI-based application that allows you to run LLMs locally on your machine. It provides a user-friendly interface for managing models and running inference, making it accessible to users who may not be comfortable with command-line tools.</li>
 <li><strong>Docker Model Runner</strong>: Currently it is in preview, but it allows you to run LLMs in a containerized environment using Docker.</li>
+<li><strong>Foundry Local</strong>: Foundry Local brings the power of Azure AI Foundry to your local device without requiring an Azure subscription.</li>
 </ul>
-<p>In our case, we will be mostly using <strong>Ollama</strong> in Docker and <strong>LM Studio</strong>.</p>
+<p>In our case, we will be mostly using <strong>Ollama</strong> in Docker and <strong>LM Studio</strong> as these are feature-rich. We will also use <strong>Foundry Local</strong> to show how to integrate with Semantic Kernel.</p>
 <h2 id="where-can-i-find-cloud-llms">Where can I find Cloud LLMs?</h2>
 <p>There are many cloud LLM providers available, some of the popular ones include:</p>
 <ul>
@@ -428,6 +430,9 @@ This post is continuation of a series about <strong><span class="highlight-text 
 </ul>
 <p>In our case, we will be mostly using <strong>Qdrant</strong>.</p>
 <p>We now have more understanding of the components and tools that will be important as we move forward. In the next post, we will see how to use Semantic Kernel with <strong>Ollama</strong> / <strong>LM Studio</strong>. Later, we will see how to use <strong>Qdrant</strong> with Semantic Kernel.</p>
+<div class="alert info no-icon ">
+  <p>Icon used in this post is property of Microsoft. Story behind the icon is available <a href="https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/">here</a>.</p>
+</div>
 
               
               
@@ -458,7 +463,7 @@ This post is continuation of a series about <strong><span class="highlight-text 
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/" data-tooltip="Building Blocks of Semantic Kernel" aria-label="NEXT: Building Blocks of Semantic Kernel">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -565,7 +570,7 @@ This post is continuation of a series about <strong><span class="highlight-text 
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/" data-tooltip="Building Blocks of Semantic Kernel" aria-label="NEXT: Building Blocks of Semantic Kernel">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>

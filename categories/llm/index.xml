@@ -6,21 +6,28 @@
     <description>Recent content in LLM on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 16 May 2025 06:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 21 May 2025 06:00:00 +0100</lastBuildDate>
     <atom:link href="https://anktsrkr.github.io/categories/llm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building Blocks of Semantic Kernel</title>
+      <link>https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/</link>
+      <pubDate>Wed, 21 May 2025 06:00:00 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/</guid>
+      <description>Hi Everyone! This post is continuation of a series about Semantic Kernel. Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Semantic Kernel (Part 1)&#xA;Getting Started with Semantic Kernel (Part 2)&#xA;This Post - Building Blocks of Semantic Kernel&#xA;So far, we have covered the theoretical aspects of Gen AI and LLM. We will continue to explore the theoretical aspects of Semantic Kernel in this post.</description>
+    </item>
     <item>
       <title>Getting Started with Semantic Kernel (Part 2) </title>
       <link>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/</link>
       <pubDate>Fri, 16 May 2025 06:00:00 +0100</pubDate>
       <guid>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/</guid>
-      <description>Hi Everyone! This post is continuation of a series about Semantic Kernel. Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Semantic Kernel (Part 1)&#xA;This Post - Getting Started with Semantic Kernel (Part 2)&#xA;We now have a basic understanding of Gen AI and how LLM works. However, before we dive into Semantic Kernel, Let&amp;rsquo;s take a moment to understand some of the key components and tools that will be important as we move forward.</description>
+      <description>Hi Everyone! This post is continuation of a series about Semantic Kernel. Over the time, I will updated this page with links to individual posts :&#xA;Getting Started with Semantic Kernel (Part 1)&#xA;This Post - Getting Started with Semantic Kernel (Part 2)&#xA;Building Blocks of Semantic Kernel&#xA;We now have a basic understanding of Gen AI and how LLM works. However, before we dive into Semantic Kernel, Let&amp;rsquo;s take a moment to understand some of the key components and tools that will be important as we move forward.</description>
     </item>
     <item>
       <title>Getting Started with Semantic Kernel (Part 1)</title>
       <link>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/</link>
       <pubDate>Wed, 14 May 2025 06:00:00 +0100</pubDate>
       <guid>https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/</guid>
-      <description>Hi Everyone!&#xA;With this post, I am starting a new series about Semantic Kernel. Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting Started with Semantic Kernel (Part 1)&#xA;Getting Started with Semantic Kernel (Part 2)&#xA;What is Semantic Kernel? Semantic Kernel is a lightweight, open-source development kit that provides a framework for building AI applications using large language models (LLMs). It allows developers to create and manage complex workflows, integrate with various AI services, and leverage the power of LLMs in their applications.</description>
+      <description>Hi Everyone!&#xA;With this post, I am starting a new series about Semantic Kernel. Over the time, I will updated this page with links to individual posts :&#xA;This Post - Getting Started with Semantic Kernel (Part 1)&#xA;Getting Started with Semantic Kernel (Part 2)&#xA;Building Blocks of Semantic Kernel&#xA;What is Semantic Kernel? Semantic Kernel is a lightweight, open-source development kit that provides a framework for building AI applications using large language models (LLMs).</description>
     </item>
   </channel>
 </rss>

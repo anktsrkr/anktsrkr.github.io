@@ -17,7 +17,7 @@
   },
   "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
   "description":"How to use Semantic Kernel in AI development",
-  "url":"https:\/\/anktsrkr.github.io\/post\/getting-started-with-semantic-kernel\/",
+  "url":"https:\/\/anktsrkr.github.io\/post\/semantic-kernel\/semantic-kernel-building-blocks\/",
   "keywords":"[Semantic Kernel, AI development, Machine learning, Microsoft AI, Natural language processing (NLP), OpenAI integration, .NET AI framework, Python AI tools, AI-powered applications, Prompt engineering, AI agent creation, Large language models (LLMs), AI automation, Cognitive computing, AI SDK, Gen AI, .NET 9, LLM]"
 }
 
@@ -33,20 +33,20 @@
 
 <meta property="og:description" content="How to use Semantic Kernel in AI development">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Getting Started with Semantic Kernel (Part 1)">
-<meta name="twitter:title" content="Getting Started with Semantic Kernel (Part 1)">
-<meta property="og:url" content="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/">
-<meta property="twitter:url" content="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/">
+<meta property="og:title" content="Building Blocks of Semantic Kernel">
+<meta name="twitter:title" content="Building Blocks of Semantic Kernel">
+<meta property="og:url" content="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/">
 <meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
 <meta property="og:description" content="How to use Semantic Kernel in AI development">
 <meta name="twitter:description" content="How to use Semantic Kernel in AI development">
 <meta property="og:locale" content="en-us">
 
   
-    <meta property="article:published_time" content="2025-05-14T06:00:00">
+    <meta property="article:published_time" content="2025-05-21T06:00:00">
   
   
-    <meta property="article:modified_time" content="2025-05-14T06:00:00">
+    <meta property="article:modified_time" content="2025-05-21T06:00:00">
   
   
   
@@ -94,14 +94,14 @@
   <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
   <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
 
-    <title>Getting Started with Semantic Kernel (Part 1)</title>
+    <title>Building Blocks of Semantic Kernel</title>
 
     <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/">
+    <link rel="canonical" href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/">
 
     
     <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -297,15 +297,15 @@ if (!doNotTrack) {
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title">
-      Getting Started with Semantic Kernel (Part 1)
+      Building Blocks of Semantic Kernel
     </h1>
   
   
   <div class="postShorten-meta post-meta">
     
-      <time datetime="2025-05-14T06:00:00&#43;01:00">
+      <time datetime="2025-05-21T06:00:00&#43;01:00">
         
-  May 14, 2025
+  May 21, 2025
 
       </time>
     
@@ -332,25 +332,21 @@ if (!doNotTrack) {
           
           <div class="post-content markdown">
             <div class="main-content-wrap">
-              <p>Hi Everyone!</p>
-<p>With this post, I am starting a new series about <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>. Over the time, I will updated this page with links to individual posts :</p>
-<p><em>This Post - Getting Started with Semantic Kernel (Part 1)</em></p>
+              <p>Hi Everyone!
+This post is continuation of a series about <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>. Over the time, I will updated this page with links to individual posts :</p>
+<p><a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel">Getting Started with Semantic Kernel (Part 1)</a></p>
 <p><a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2">Getting Started with Semantic Kernel (Part 2)</a></p>
-<p><a href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks">Building Blocks of Semantic Kernel</a></p>
-<h2 id="what-is-semantic-kernel">What is Semantic Kernel?</h2>
-<p>Semantic Kernel is a lightweight, open-source <strong><span class="highlight-text red">development kit</span></strong> that provides a framework for building AI applications using large language models (LLMs). It allows developers to create and manage complex workflows, integrate with various AI services, and leverage the power of LLMs in their applications. Semantic Kernel is designed to be flexible, extensible, and easy to use, making it a great choice for developers looking to build AI-powered applications.</p>
-<p>Did you identify any buzzwords in the previous definition? If not, let me help you with that. The definition contains the following buzzwords:</p>
-<ul>
-<li>
-<p><strong>Large Language Models (LLMs)</strong>: These are AI models that are trained on vast amounts of text data and can generate human-like text. They are used in various applications, including chatbots, content generation, and more.</p>
-</li>
-<li>
-<p><strong>AI Applications</strong>: These are applications that provide AI capabilities, such as natural language processing, image recognition, and more. Sometimes, this kind of application can have it&rsquo;s own memory, can take decisions on its own, and can even learn from the user. This is where Semantic Kernel comes into play.</p>
-</li>
-</ul>
-<p>Before we dive into the details of Semantic Kernel, let&rsquo;s take a moment to understand what is Generative AI and where LLMs fit in the picture.</p>
-<h2 id="what-is-generative-ai">What is Generative AI?</h2>
-<p>At the highest level, <span class="highlight-text blue">Generative AI </span> (GenAI) is a subset of artificial intelligence that focuses on creating new content, such as text, images, music, and more. Below is a simple diagram that illustrates the relationship between artificial intelligence and Generative AI:</p>
+<p><em>This Post - Building Blocks of Semantic Kernel</em></p>
+<p>So far, we have covered the theoretical aspects of Gen AI and LLM. We will continue to explore the theoretical aspects of Semantic Kernel in this post.</p>
+<p>Let me reiterate what I have said in <a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel">Part 1</a> <strong><span class="highlight-text cyan">Semantic Kernel</span></strong> is a <strong><span class="highlight-text red">development kit</span></strong>.</p>
+<blockquote>
+<p>As per wikipedia, A <em><strong>software development kit (SDK)</strong></em> is a collection of software development tools.</p>
+</blockquote>
+<p>In the context of Semantic Kernel, the development kit provides a various frameworks and components that can be used to build AI applications.</p>
+<h3 id="semantic-kernel-components">Semantic Kernel Components</h3>
+<p>Semantic Kernel provides a set of components that can be used individually or in combination to build AI applications. These components include:</p>
+<h4 id="kernel">Kernel</h4>
+<p>Kernel is the core component of Semantic Kernel.  It is basically a dependency container, which has two component <code>Services</code> and <code>Plugins</code>.</p>
 
 
  
@@ -371,91 +367,170 @@ if (!doNotTrack) {
 
 <div class="figure center nocaption" >
   
-    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/gen_ai.svg" title="Gen AI" data-fancybox="">
+    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/kernel.png" title="Kernel" data-fancybox="">
   
-    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/gen_ai.svg"  alt="Gen AI">
-  
-    </a>
-  
-  
-</div>
-
-<ul>
-<li>
-<p><strong>Artificial Intelligence (AI)</strong>
-A multidisciplinary field of computer science that focuses on creating systems capable of performing tasks that typically require human intelligence. This includes problem-solving, learning, reasoning, and understanding natural language.</p>
-</li>
-<li>
-<p><strong>Machine Learning (ML)</strong>
-A subset of Artificial Intelligence that learns from existing data and makes predictions or decisions without being explicitly programmed.</p>
-</li>
-<li>
-<p><strong>Deep Learning (DL)</strong>
-A subset of machine learning that uses <span class="highlight-text green">artificial neural networks</span> with many layers to analyze various factors of data.</p>
-</li>
-</ul>
-<p><span class="highlight-text blue">Generative AI </span>is built upon a specific type of AI model, called a <strong><span class="highlight-text yellow">Generative Model</span></strong>.  These models mathematically approximate the distribution of the training data. These models take large amounts of data as input such as text, images etc., In second phase, a deep learning model is utilized to recognize patterns within the data. Finally, the model generates new content based on the learned patterns.</p>
-<h3 id="why-generative-ai-possible-now">Why Generative AI possible now?</h3>
-<p>GenAI has been around for a while, but it has gained significant traction in recent years due to several factors:</p>
-<ul>
-<li><strong>Data Availability</strong>: The internet has made vast amounts of data available, which is essential for training generative models. This includes text, images, audio, and video data.</li>
-<li><strong>Computational Power</strong>: Advances in hardware, particularly GPUs and TPUs, have made it possible to train large models on massive datasets. This has significantly reduced the time and cost associated with training generative models.</li>
-<li><strong>Advancements in Deep Learning</strong>: The development of more sophisticated deep learning algorithms and architectures such as GANs (Generative Adversarial Networks), Transformers, and RLHF (Reinforcement Learning with Human Feedback) has made it possible to train larger and more complex models. These architectures have shown remarkable performance in generating high-quality content across various domains.</li>
-</ul>
-<p>Within GenAI, we have Large Language Models (LLMs) and Foundation Models (FMs).</p>
-
-
- 
-  
-  
-  
-  
-    
-      
-    
-  
-    
-      
-    
-  
-    
-  
-
-<div class="figure center nocaption" >
-  
-    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/llm_fm.svg" title="LLM &amp; FM" data-fancybox="">
-  
-    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/llm_fm.svg"  alt="LLM &amp; FM">
+    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/kernel.png"  alt="Kernel">
   
     </a>
   
   
 </div>
 
-<ul>
-<li>
-<p><strong>Foundation Models (FMs)</strong>: These are large-scale ML models trained on diverse data sources and tasks. They can be fine-tuned for specific applications, making them versatile and powerful. Examples include GPT-4, BART.</p>
-</li>
-<li>
-<p><strong>Large Language Models (LLMs)</strong>: These are a subset of foundation models specifically designed for natural language processing tasks. They are trained on vast amounts of text data and can generate human-like text, answer questions, and perform various language-related tasks.</p>
-</li>
-</ul>
-<h2 id="how-llms-work">How LLMs Work?</h2>
-<p>Typically, LLM consists of three main components:</p>
+<p>Let&rsquo;s take a look at the two components of Kernel:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Services</td>
+<td>Just like any other <code>Services</code> in .NET project. It has <em>Logging</em>, <em>Cache</em>, <em>HttpClient</em> etc. capabilities. The only difference is that these <code>Services</code> also consists of AI specific services, such as <em>ChatCompletion</em> , <em>Vector Store</em> etc. services via connectors.</td>
+</tr>
+<tr>
+<td>Plugins</td>
+<td>These are components that are used to extend the functionality of LLM. We will explore this topic in more detail in future posts.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="connectors">Connectors</h4>
+<p>Connectors are the components that are used to connect Semantic Kernel with other external services. Yhere are two types of connectors:</p>
+<table>
+<thead>
+<tr>
+<th>Connector</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI Connectors</td>
+<td>These connectors provide an abstraction layer that exposes multiple AI service types from different providers such as Azure OpenAI, Local LLMs etc. via a common interface. Supported services include Chat Completion, Text Generation, Embedding Generation, Text to Image, Image to Text, Text to Audio and Audio to Text.</td>
+</tr>
+<tr>
+<td>Vector Store Connectors</td>
+<td>These connectors provide an abstraction layer that exposes vector store from different providers such as Qdrant, Azure Search, Chroma etc. via a common interface.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="functions-and-plugins">Functions and Plugins</h4>
+<p>These are components that are used to extend the functionality of LLM. Plugins are a collection of named functions that can be used to perform specific tasks. Functions are the individual units of work that can be executed by the Semantic Kernel. As mentioned earlier, Plugins can be registered with the kernel, which allows the kernel to use them in two ways:</p>
 <ol>
-<li>
-<p><strong>Encoder</strong>: This component processes the input text and converts it into a numerical representation (embedding) that captures the meaning and context of the text. The encoder uses techniques like tokenization and word embeddings to achieve this.</p>
-</li>
-<li>
-<p><strong>Pre-trained Transformer Model</strong>: This is the core of the LLM. Once the token embeddings are generated,  they are trained using pre-trained transformer models. Based on the architecture of LLM, there may be step involving human feedback to guide the model&rsquo;s output for specific tasks.</p>
-</li>
-<li>
-<p><strong>Decoder</strong>: This component then converts the encoded input from previous steps back into text.</p>
-</li>
+<li>Advertise them to the chat completion AI, so that the AI can choose them for invocation.</li>
+<li>Make them available to be called from a template during template rendering.</li>
 </ol>
-<p>Now, we understand the basic concepts of GenAI and LLMs and how they work. Next, we will focus on Semantic Kernel our main topic of discussion in the next blog post.</p>
+<p>Below diagram shows the different sources of plugins:</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/plugins-from-sources.png" title="plugins-from-sources" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/plugins-from-sources.png"  alt="plugins-from-sources">
+  
+    </a>
+  
+  
+</div>
+
+<p><code>KernelFunction</code> attribute is used to define a function. In general, it should have well defined description and input/output parameters, which should be understood by the AI.</p>
+<h4 id="prompt-templates">Prompt Templates</h4>
+<p>Prompt templates allow you to create instructions that can be used to guide the LLM in generating responses. In general, it gives the context and/or persona with the user input and function output, if any.
+See the following diagram for where prompt templates fit in the overall architecture of Semantic Kernel:</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/template-function-execution.png" title="template-function-execution" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/template-function-execution.png"  alt="template-function-execution">
+  
+    </a>
+  
+  
+</div>
+
+<h4 id="filters">Filters</h4>
+<p>Filters are components which provides a way to take action before and after of function invocation and prompt rendering in the Semantic Kernel pipeline.</p>
+<div class="alert warning ">
+  <p>Please note, Prompt templates are always converted to <code>KernelFunction</code> before execution, both function and prompt filters will be invoked for a prompt template. Function filters are the outer filters and prompt filters are the inner filters.</p>
+</div>
+<p>See the following diagram for where filters fit in the overall architecture of Semantic Kernel:</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/filters-overview.png" title="filters-overview" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/filters-overview.png"  alt="filters-overview">
+  
+    </a>
+  
+  
+</div>
+
+<h3 id="semantic-kernel-frameworks">Semantic Kernel Frameworks</h3>
+<p>Semantic Kernel provides a set of frameworks as well, which can be used together or independently to build more advanced applications.</p>
+<h4 id="agent-framework">Agent Framework</h4>
+<p>Agent Framework provides a way to create agents that can interact with each other and/or with the user to perform tasks autonomously or semi-autonomously.</p>
+<p>We will explore this topic in more detail in future posts, however <a href="https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agents">here</a> is the official documentation.</p>
+<h4 id="process-framework">Process Framework</h4>
+<p>Process Framework provides a way to define and manage business processes within the Semantic Kernel. It allows you to create complex workflows by chaining together multiple functions and components, utilizing an event-driven model to manage workflow execution.</p>
+<p>We will also explore this topic in more detail in future posts, however <a href="https://learn.microsoft.com/en-us/semantic-kernel/frameworks/process/process-framework">here</a> is the official documentation.</p>
+<p>I know this is the third post, but we did not cover any code yet. Just because I wanted to make sure we are on the same page and understand the basic concepts of Semantic Kernel.
+In the next post, we will start with the code and build a simple application using Semantic Kernel.</p>
 <div class="alert info no-icon ">
-  <p>Icon used in this post is property of Microsoft. Story behind the icon is available <a href="https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/">here</a>.</p>
+  <p>Icon and images used in this post is property of Microsoft. Story behind the icon is available <a href="https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/">here</a>.</p>
 </div>
 
               
@@ -487,7 +562,7 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" data-tooltip="Getting Started with Semantic Kernel (Part 2) " aria-label="NEXT: Getting Started with Semantic Kernel (Part 2) ">
+            <a class="post-action-btn btn btn--disabled">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -495,7 +570,7 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" data-tooltip="Sync Cached Data Between Azure Function Instances Using FusionCache" aria-label="PREVIOUS: Sync Cached Data Between Azure Function Instances Using FusionCache">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" data-tooltip="Getting Started with Semantic Kernel (Part 2) " aria-label="PREVIOUS: Getting Started with Semantic Kernel (Part 2) ">
           
               <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
               <i class="fa fa-angle-right"></i>
@@ -513,19 +588,19 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
     </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Facebook" aria-label="Share on Facebook">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/" title="Share on Facebook" aria-label="Share on Facebook">
           <i class="fab fa-facebook-square" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Twitter" aria-label="Share on Twitter">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/" title="Share on Twitter" aria-label="Share on Twitter">
           <i class="fab fa-twitter" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Linkedin" aria-label="Share on Linkedin">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/" title="Share on Linkedin" aria-label="Share on Linkedin">
           <i class="fab fa-linkedin" aria-hidden="true"></i>
         </a>
       </li>
@@ -556,9 +631,9 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
     </div>
     <script type="text/javascript">
       var disqus_config = function() {
-        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/getting-started-with-semantic-kernel\/';
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/semantic-kernel\/semantic-kernel-building-blocks\/';
         
-          this.page.identifier = '\/post\/getting-started-with-semantic-kernel\/'
+          this.page.identifier = '\/post\/semantic-kernel\/semantic-kernel-building-blocks\/'
         
       };
       (function() {
@@ -594,7 +669,7 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" data-tooltip="Getting Started with Semantic Kernel (Part 2) " aria-label="NEXT: Getting Started with Semantic Kernel (Part 2) ">
+            <a class="post-action-btn btn btn--disabled">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -602,7 +677,7 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/sync-cached-data-between-azure-function-instances-using-fusioncache/" data-tooltip="Sync Cached Data Between Azure Function Instances Using FusionCache" aria-label="PREVIOUS: Sync Cached Data Between Azure Function Instances Using FusionCache">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2/" data-tooltip="Getting Started with Semantic Kernel (Part 2) " aria-label="PREVIOUS: Getting Started with Semantic Kernel (Part 2) ">
           
               <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
               <i class="fa fa-angle-right"></i>
@@ -620,19 +695,19 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
     </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Facebook" aria-label="Share on Facebook">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/" title="Share on Facebook" aria-label="Share on Facebook">
           <i class="fab fa-facebook-square" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Twitter" aria-label="Share on Twitter">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/" title="Share on Twitter" aria-label="Share on Twitter">
           <i class="fab fa-twitter" aria-hidden="true"></i>
         </a>
       </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-semantic-kernel/" title="Share on Linkedin" aria-label="Share on Linkedin">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks/" title="Share on Linkedin" aria-label="Share on Linkedin">
           <i class="fab fa-linkedin" aria-hidden="true"></i>
         </a>
       </li>
@@ -663,19 +738,19 @@ A subset of machine learning that uses <span class="highlight-text green">artifi
   <ul class="share-options">
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel%2F" aria-label="Share on Facebook">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsemantic-kernel%2Fsemantic-kernel-building-blocks%2F" aria-label="Share on Facebook">
           <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel%2F" aria-label="Share on Twitter">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsemantic-kernel%2Fsemantic-kernel-building-blocks%2F" aria-label="Share on Twitter">
           <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-semantic-kernel%2F" aria-label="Share on Linkedin">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsemantic-kernel%2Fsemantic-kernel-building-blocks%2F" aria-label="Share on Linkedin">
           <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
         </a>
       </li>
