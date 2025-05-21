@@ -50,6 +50,8 @@ This post is continuation of a series about **{{< hl-text cyan >}}Semantic Kerne
 
 _This Post - Getting Started with Semantic Kernel (Part 2)_
 
+[Building Blocks of Semantic Kernel](/post/semantic-kernel/semantic-kernel-building-blocks)
+
 We now have a basic understanding of Gen AI and how LLM works. However, before we dive into Semantic Kernel, Let's take a moment to understand some of the key components and tools that will be important as we move forward.
 
 ## SLM vs LLM
@@ -105,8 +107,9 @@ These days, there are many options available to run LLM locally. Some of the pop
 - **Ollama**: Ollama is a command-line tool that allows you to run LLMs locally on your machine. It provides a simple interface for downloading and running models, making it easy to get started with local LLMs. 
 - **LM Studio**: LM Studio is a GUI-based application that allows you to run LLMs locally on your machine. It provides a user-friendly interface for managing models and running inference, making it accessible to users who may not be comfortable with command-line tools.
 - **Docker Model Runner**: Currently it is in preview, but it allows you to run LLMs in a containerized environment using Docker. 
+- **Foundry Local**: Foundry Local brings the power of Azure AI Foundry to your local device without requiring an Azure subscription. 
 
-In our case, we will be mostly using **Ollama** in Docker and **LM Studio**.
+In our case, we will be mostly using **Ollama** in Docker and **LM Studio** as these are feature-rich. We will also use **Foundry Local** to show how to integrate with Semantic Kernel.
 
 ## Where can I find Cloud LLMs?
 There are many cloud LLM providers available, some of the popular ones include:
@@ -126,3 +129,7 @@ You may use cloud-based vector databases or run them locally. Some popular optio
 In our case, we will be mostly using **Qdrant**.
 
 We now have more understanding of the components and tools that will be important as we move forward. In the next post, we will see how to use Semantic Kernel with **Ollama** / **LM Studio**. Later, we will see how to use **Qdrant** with Semantic Kernel.
+
+{{<alert info no-icon>}}
+Icon used in this post is property of Microsoft. Story behind the icon is available [here](https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/).
+{{</alert >}}

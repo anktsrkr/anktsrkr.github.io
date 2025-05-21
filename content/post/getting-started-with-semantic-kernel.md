@@ -51,9 +51,11 @@ _This Post - Getting Started with Semantic Kernel (Part 1)_
 
 [Getting Started with Semantic Kernel (Part 2)](/post/getting-started-with-semantic-kernel-pt-2)
 
+[Building Blocks of Semantic Kernel](/post/semantic-kernel/semantic-kernel-building-blocks)
+
 ## What is Semantic Kernel?
 
-Semantic Kernel is a lightweight, open-source development kit that provides a framework for building AI applications using large language models (LLMs). It allows developers to create and manage complex workflows, integrate with various AI services, and leverage the power of LLMs in their applications. Semantic Kernel is designed to be flexible, extensible, and easy to use, making it a great choice for developers looking to build AI-powered applications.
+Semantic Kernel is a lightweight, open-source **{{< hl-text red >}}development kit{{< /hl-text >}}** that provides a framework for building AI applications using large language models (LLMs). It allows developers to create and manage complex workflows, integrate with various AI services, and leverage the power of LLMs in their applications. Semantic Kernel is designed to be flexible, extensible, and easy to use, making it a great choice for developers looking to build AI-powered applications.
 
 Did you identify any buzzwords in the previous definition? If not, let me help you with that. The definition contains the following buzzwords:
  
@@ -102,3 +104,6 @@ Typically, LLM consists of three main components:
 
 Now, we understand the basic concepts of GenAI and LLMs and how they work. Next, we will focus on Semantic Kernel our main topic of discussion in the next blog post.
 
+{{<alert info no-icon>}}
+Icon used in this post is property of Microsoft. Story behind the icon is available [here](https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/).
+{{</alert >}}
