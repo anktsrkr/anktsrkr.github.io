@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+  "description":"How to use Semantic Kernel in AI development using Ollama \/ OpenAI using C#",
+  "url":"https:\/\/anktsrkr.github.io\/post\/semantic-kernel\/getting-started-with-ollama-and-semantic-kernel\/",
+  "keywords":"[Semantic Kernel, AI development, Machine learning, Microsoft AI, Natural language processing (NLP), OpenAI integration, .NET AI framework, Python AI tools, AI-powered applications, Prompt engineering, AI agent creation, Large language models (LLMs), AI automation, Cognitive computing, AI SDK, Gen AI, .NET 9, LLM, Ollama, Foundry Local, LM Studio]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta name="keywords" content="Semantic Kernel, AI development, Machine learning, Microsoft AI, Natural language processing (NLP), OpenAI integration, .NET AI framework, Python AI tools, AI-powered applications, Prompt engineering, AI agent creation, Large language models (LLMs), AI automation, Cognitive computing, AI SDK, Gen AI, .NET 9, LLM, Ollama, Foundry Local, LM Studio">
+<meta name="description" content="How to use Semantic Kernel in AI development using Ollama / OpenAI using C#">
+
+
+<meta property="og:description" content="How to use Semantic Kernel in AI development using Ollama / OpenAI using C#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Getting Started with Ollama &amp; Semantic Kernel">
+<meta name="twitter:title" content="Getting Started with Ollama &amp; Semantic Kernel">
+<meta property="og:url" content="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta property="og:description" content="How to use Semantic Kernel in AI development using Ollama / OpenAI using C#">
+<meta name="twitter:description" content="How to use Semantic Kernel in AI development using Ollama / OpenAI using C#">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2025-05-23T19:00:00">
+  
+  
+    <meta property="article:modified_time" content="2025-05-23T19:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="Semantic Kernel">
+    
+      <meta property="article:section" content="LLM">
+    
+      <meta property="article:section" content=".NET 9">
+    
+      <meta property="article:section" content="AI">
+    
+      <meta property="article:section" content="Vector DB">
+    
+  
+  
+    
+      <meta property="article:tag" content="genai">
+    
+      <meta property="article:tag" content="ollama">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/semantic-kernel/ollama.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/semantic-kernel/ollama.png">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Getting Started with Ollama &amp; Semantic Kernel</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/">
+
+    
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
+    
+    
+    
+
+    
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
+     crossorigin="anonymous"></script>
+<script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="9gZ8D7m_t9Y2oK" async></script>
+     
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TY8ZMTBGSM');
+</script>
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title">
+      Getting Started with Ollama &amp; Semantic Kernel
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2025-05-23T19:00:00&#43;01:00">
+        
+  May 23, 2025
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/semantic-kernel">Semantic Kernel</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/llm">LLM</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-9">.NET 9</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/ai">AI</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/vector-db">Vector DB</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p>Hi Everyone!
+This post is continuation of a series about <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>. Over the time, I will updated this page with links to individual posts :</p>
+<p><a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel">Getting Started with Semantic Kernel (Part 1)</a></p>
+<p><a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2">Getting Started with Semantic Kernel (Part 2)</a></p>
+<p><a href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks">Building Blocks of Semantic Kernel</a></p>
+<p><a href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel">Getting Started with Foundry Local &amp; Semantic Kernel</a></p>
+<p><em>This Post - Getting Started with Ollama &amp; Semantic Kernel</em></p>
+<p>Now, we have a basic understanding how to integrate with local LLM using <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>.  In this post we will continue our journey with another local LLM tool <strong><span class="highlight-text cyan">Ollama</span></strong>.</p>
+<h3 id="what-is-ollama">What is Ollama?</h3>
+<p><strong>Ollama</strong> is the high performance and headless application that is designed to run LLM on your own hardware. It supports both GPU &amp; CPU. It is based on llama.cpp. Since v0.7.0, it supports multimodal models, models which can process both text, images and audio.</p>
+<p>Ollama maintains a <a href="https://ollama.com/search">catalog</a> of models that are optimized and customized for the application. However, you can use any GGUF models from Hugging Face. I will write another post on how to use Ollama with Hugging Face models but In this post, we use the models available in the catalog.</p>
+<p>Ollama is available for Windows, Linux and  MacOS. We will be using Windows for this post.</p>
+<h3 id="installing-ollama">Installing Ollama</h3>
+<p>You can install ollama, either using the installer or using the docker image. I will be using the installer for this post but will also show you how to use the docker image.</p>
+<h5 id="installation-using-docker">Installation using Docker</h5>
+<h6 id="cpu-only">CPU Only</h6>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+</span></span></code></pre></div><h6 id="gpu-only">GPU Only</h6>
+<p>To enable Nvidia GPU support for Docker Desktop, make sure all prerequisites are met. You can check the <a href="https://docs.docker.com/desktop/features/gpu/">Docker</a> for more information.</p>
+<p>You also need to make sure you have <a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installation">Nvidia container toolkit</a> installed.</p>
+<p>Once you have all the prerequisites, you can run the following command to start the Ollama container with GPU support:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -d --gpus<span style="color:#f92672">=</span>all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+</span></span></code></pre></div><h5 id="installation-using-installer">Installation using Installer</h5>
+<p>You can download the installer from official website <a href="https://ollama.com/download">Ollama</a>. Based on your OS, you can download the installer. Once downloaded, run the installer and follow the instructions to install Ollama.</p>
+<p>Alternatively, you can download the installer from the <a href="https://github.com/ollama/ollama/releases/">Ollama Github Repo</a>.</p>
+<h3 id="list-available-models">List Available Models</h3>
+<p>Based on, how you installed it <code>ollama</code> command will be available either in your windows terminal or docker container. You can use the following command to list all available models:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ollama list
+</span></span></code></pre></div><p>Just after the installation, you will see no models available.</p>
+<h3 id="run-your-first-model">Run your first model</h3>
+<p>To run your first model, you can use the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ollama run &lt;model_name&gt;
+</span></span></code></pre></div><p>For example, to run the <code>qwen3:0.6b</code> model, you can use the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ollama run qwen3:0.6b
+</span></span></code></pre></div><p>Once you run the command, under the hood, it will download the model in your local machine and keep it <code>C:\Users\ankts\.ollama\models</code> and can be used for future reference.</p>
+<p>If you want to download the model without running it, you can use the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ollama pull &lt;model_name&gt;
+</span></span></code></pre></div><p>If you want to change the model directory location, you can set the <code>OLLAMA_MODELS</code> environment variable to the desired path. Once set make sure to restart the application.</p>
+<p>You can also expose the model as a REST API using the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ollama serve 
+</span></span></code></pre></div><p>This will expose OpenAI API compatible endpoint on <code>http://localhost:11434</code>. You can use this endpoint from your semantic kernel application.</p>
+<h3 id="setup-semantic-kernel">Setup Semantic Kernel</h3>
+<p>We will create a new minimal api project using your favorite IDE. I will be using Visual Studio.</p>
+<ol>
+<li>Open Visual Studio and create a new project.</li>
+<li>Select &ldquo;ASP.NET Core Web API&rdquo; template.</li>
+<li>Configure the project name and location.</li>
+<li>Click &ldquo;Create&rdquo; to generate the project.</li>
+</ol>
+<p>It could be a console application as well, but I prefer to use minimal api as we will be using it from out chat application.</p>
+<p>It gets interesting from here. As <code>Ollama</code> serves OpenAI compatible API, we can use the same code we used for Foundry Local.</p>
+<p><code>Ollama</code> also has a first class support in .NET using a awesome project called <a href="https://github.com/awaescher/OllamaSharp">OllamaSharp</a>. Based on this project, Semantic Kernel has also has dedicated connector for <code>Ollama</code>.</p>
+<h4 id="add-nuget-packages">Add Nuget Packages</h4>
+<p>First, we need to install following nuget packages:
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight xml language-xml">
+  <figcaption>
+    
+      <span>SemanticChat.Ollama.csproj</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-xml xml"><code class="xml">&lt;Project Sdk=&#34;Microsoft.NET.Sdk.Web&#34;&gt;
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;net9.0&lt;/TargetFramework&gt;
+    &lt;Nullable&gt;enable&lt;/Nullable&gt;
+    &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&#34;Microsoft.AspNetCore.OpenApi&#34; Version=&#34;9.0.5&#34; /&gt;
+    &lt;!-- 👇 Use this package if you want to use OpenAI compatible API --&gt;
+    &lt;PackageReference Include=&#34;Microsoft.SemanticKernel.Connectors.OpenAI&#34; Version=&#34;1.54.0&#34; /&gt;
+    &lt;!-- 👇 Use this package if you want to use OllamaSharp compatible API --&gt;
+    &lt;PackageReference Include=&#34;Microsoft.SemanticKernel.Connectors.Ollama&#34; Version=&#34;1.54.0-alpha&#34; /&gt;
+  &lt;/ItemGroup&gt;
+&lt;/Project&gt;</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+<h4 id="add-connector-and-kernel">Add Connector and Kernel</h4>
+<p>Next step is to add the OpenAI connector and Kernel to the <code>ServiceCollection</code> in <code>Program.cs</code> file. You can use the following code to do that:</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>SemanticChat.Ollama.csproj</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddKernel();
+  &lt;!-- 👇 Use this if you installed OpenAI Connector--&gt;
+builder.Services.AddOpenAIChatCompletion(&#34;qwen3:0.6b&#34;, new Uri(&#34;http://localhost:11434/v1&#34;), serviceId: &#34;qwen3:0.6b&#34;); 
+  &lt;!-- 👇 Use this if you installed Ollama Connector--&gt;
+builder.Services.AddOllamaChatCompletion(&#34;qwen3:0.6b&#34;, new Uri(&#34;http://localhost:11434/&#34;), serviceId: &#34;qwen3:0.6b&#34;); </code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Notice that the endpoint is different for different connectors.</p>
+<h4 id="add-chat-completion-endpoint">Add Chat Completion Endpoint</h4>
+<p>Next step is to add the chat completion endpoint to the <code>Program.cs</code> file. You can use the following code to do that:</p>
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight csharp language-csharp">
+  <figcaption>
+    
+      <span>Program.cs</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-csharp csharp"><code class="csharp">var chatHistories = new Dictionary&lt;string, ChatHistory&gt;();
+app.MapPost(&#34;/api/chat&#34;,async (Kernel kernel, ChatRequest request, HttpContext ctx,  CancellationToken ct) =&gt;
+{
+    ctx.Response.Headers.Append(HeaderNames.ContentType, &#34;text/event-stream&#34;);
+
+    var chatService = kernel.GetRequiredService&lt;IChatCompletionService&gt;(serviceKey: request.model);
+
+    var chatHistory = chatHistories.TryGetValue(request.sessionid, out var result) ? result : new ChatHistory(&#34;You are helpful assistant.&#34;);
+    
+    // Add user message
+    chatHistory!.AddUserMessage(request.content);
+    
+    var roleWritten = false;
+    var fullMessage = string.Empty;
+    var role = string.Empty; 
+    await foreach (var chatUpdate in chatService.GetStreamingChatMessageContentsAsync(chatHistory,  cancellationToken: ct))
+    { 
+        if (chatUpdate.Content is { Length: &gt; 0 })
+        {
+            if (!roleWritten &amp;&amp; chatUpdate.Role.HasValue)
+            {
+                Console.Write($&#34;{chatUpdate.Role.Value}: {chatUpdate.Content}&#34;);
+                roleWritten = true;
+                role = chatUpdate.Role.Value.Label;
+            }
+
+            fullMessage &#43;= chatUpdate.Content;
+            await ctx.Response.WriteAsync($&#34;data: &#34;, cancellationToken: ct);
+            await JsonSerializer.SerializeAsync(ctx.Response.Body, new ChatResponse { Content = chatUpdate.Content!, Role = role!, AuthorName = &#34;Assistant&#34; }, cancellationToken: ct);
+            await ctx.Response.WriteAsync($&#34;\n\n&#34;, cancellationToken: ct);
+            await ctx.Response.Body.FlushAsync(ct);
+        }
+    }
+    chatHistory.AddAssistantMessage(fullMessage);
+    chatHistories[request.sessionid] = chatHistory;
+
+})
+.WithName(&#34;Chat&#34;);</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Let&rsquo;s break down the code:</p>
+<ul>
+<li>We are using <code>MapPost</code> to create a new endpoint <code>/api/chat</code> that will handle chat requests.</li>
+<li>We are using <code>text/event-stream</code> to set the response type for streaming, which is used for server-sent events.</li>
+<li>We are using <code>IChatCompletionService</code> to get the chat service for the model we are using from Kernel.</li>
+<li>We are using <code>ChatHistory</code> to keep track of the chat history based on per session. Initially, we are setting the system message to <code>You are helpful assistant.</code>. Notice that, we are using global variable <code>chatHistories</code> for demo purpose, later post we will use a better approach to manage the chat history.</li>
+<li>We are using <code>AddUserMessage</code> to add the user message to the chat history.</li>
+<li>We are using <code>GetStreamingChatMessageContentsAsync</code> to get the streaming chat message contents from the LLM.</li>
+<li>We are using <code>JsonSerializer</code> to serialize the response and send it back to the client.</li>
+<li>Finally, we are using <code>AddAssistantMessage</code> to add the assistant message to the chat history. So that follow up questions can be asked.</li>
+<li>We are using <code>cancellationToken</code> to cancel the request if needed.</li>
+</ul>
+<p>Let&rsquo;s see it in action.</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/ollama.gif" title="ollama" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/ollama.gif"  alt="ollama">
+  
+    </a>
+  
+  
+</div>
+
+<p>The UI is a chat application built using Blazor which supports thinking step as well, will explain it in detail in some future post. For now, you can see that we are able to get the response from the LLM using Foundry Local and Semantic Kernel.</p>
+<p>Probably, you have noticed that the follow up question do not makes sense if the user is not providing any context. Since we are using <code>ChatHistory</code> to keep track of the chat history, we can use it to provide context to the LLM.</p>
+<h3 id="outro">Outro</h3>
+<p>In this post, we have discussed how to use Ollama with Semantic Kernel. We have seen how to install Ollama, run a model, and use it with Semantic Kernel.</p>
+<p>Will I be using Ollama in my future posts? For Chat completion, we will not be using Ollama as streaming is not supported yet with function call. Instead, we will be using <strong><span class="highlight-text cyan">LM Studio</span></strong>. However other task like Text embedding, we will use Ollama.</p>
+<p>Ollama team is working to support streaming with function call, releated discussiono can be found <a href="https://github.com/ollama/ollama/pull/10415">here</a> and as soons as it is available, I will update this post.</p>
+<p>Next post will talk about <strong><span class="highlight-text cyan">LM Studio</span></strong>. We will see how to use it with Semantic Kernel and build a chat application.</p>
+<div class="alert info no-icon ">
+  <p>Ollama Icon used in this post is property of <a href="https://ollama.com/">Ollama</a>.</p>
+</div>
+<div class="alert info no-icon ">
+  <p>Semantic Kernel Icon used in this post is property of Microsoft. Story behind the icon is available <a href="https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/">here</a>.</p>
+</div>
+
+              
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/genai/">genai</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/ollama/">ollama</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel/" data-tooltip="Getting Started with Foundry Local &amp; Semantic Kernel" aria-label="PREVIOUS: Getting Started with Foundry Local &amp; Semantic Kernel">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/semantic-kernel\/getting-started-with-ollama-and-semantic-kernel\/';
+        
+          this.page.identifier = '\/post\/semantic-kernel\/getting-started-with-ollama-and-semantic-kernel\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2025 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel/" data-tooltip="Getting Started with Foundry Local &amp; Semantic Kernel" aria-label="PREVIOUS: Getting Started with Foundry Local &amp; Semantic Kernel">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsemantic-kernel%2Fgetting-started-with-ollama-and-semantic-kernel%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsemantic-kernel%2Fgetting-started-with-ollama-and-semantic-kernel%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fsemantic-kernel%2Fgetting-started-with-ollama-and-semantic-kernel%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Leeds
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+
+
+<script>
+    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
+   </script>
+   
+   
+
+<script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+            });
+  
+        navigator.serviceWorker
+            .ready
+            .then(function(registration) {
+            });
+    }
+  </script>
+  
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+
+<a id="Setmore_button_iframe" style="position: fixed;
+ right: 20px;
+ bottom: 15px;
+ z-index: 9998;text-decoration: none"
+    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
+    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
+display: table-cell;
+width: auto;
+height: 45px;
+padding: 0 30px;
+border-radius: 25px;
+box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
+font-family: sans-serif;
+text-align: center;
+vertical-align: middle;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+cursor: pointer;">#TalkWithMe</div>
+</a>
+
+    
+  </body>
+</html>
+

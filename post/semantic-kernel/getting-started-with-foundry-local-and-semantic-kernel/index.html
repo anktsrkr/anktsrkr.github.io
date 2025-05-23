@@ -339,6 +339,7 @@ This post is continuation of a series about <strong><span class="highlight-text 
 <p><a href="https://anktsrkr.github.io/post/getting-started-with-semantic-kernel-pt-2">Getting Started with Semantic Kernel (Part 2)</a></p>
 <p><a href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks">Building Blocks of Semantic Kernel</a></p>
 <p><em>This Post - Getting Started with Foundry Local &amp; Semantic Kernel</em></p>
+<p><a href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel">Getting Started with Ollama &amp; Semantic Kernel</a></p>
 <p>So far, we have discussed theorical aspects of Semantic Kernel. In this post, we will focus on practical aspects of using Semantic Kernel with Foundry Local.</p>
 <p>Initially, I had a plan to start this technical part with <strong><span class="highlight-text cyan">Ollama</span></strong> and <strong><span class="highlight-text cyan">LM Studio</span></strong>. However, I have decided to start with <strong><span class="highlight-text cyan">Foundry Local</span></strong>, as this is something Microsoft just announced in Build 2025. You can find more information about Foundry Local <a href="https://build.microsoft.com/en-US/sessions/BRK146">here</a>.</p>
 <h3 id="what-is-foundry-local">What is Foundry Local?</h3>
@@ -416,7 +417,7 @@ This post is continuation of a series about <strong><span class="highlight-text 
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>foundry model run &lt;model_name&gt;
 </span></span></code></pre></div><p>For example, to run the <code>qwen2.5-0.5b</code> model, you can use the following command:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>foundry model run qwen2.5-0.5b
-</span></span></code></pre></div><p>Once you run the command, under the hood, it will download the model in your local machine and keep it <code>C:\Users\%USERNAME%\.foundry\cache\models</code> and can be used for future referenc. You can also use below command to see the models downloaded in your local machine:</p>
+</span></span></code></pre></div><p>Once you run the command, under the hood, it will download the model in your local machine and keep it <code>C:\Users\%USERNAME%\.foundry\cache\models</code> and can be used for future reference. You can also use below command to see the models downloaded in your local machine:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>foundry cache ls
 </span></span></code></pre></div><p>Once the command is executed, you will see the following output:</p>
 
@@ -664,7 +665,7 @@ app.MapPost(&#34;/api/chat&#34;,async (Kernel kernel, ChatRequest request, HttpC
 <li>Onnx model hosted on Hugging Face are not optimized for Foundry Local yet. However, we have the confirmation from <strong><span class="highlight-text red">the awesome team of Foundry Local </span></strong> that they are working on it and will be available soon.</li>
 </ul>
 <p>I will keep an eye on the Foundry Local and will update this post when I have more information.</p>
-<p>Next post will be about <strong><span class="highlight-text cyan">Ollama</span></strong> and <strong><span class="highlight-text cyan">LM Studio</span></strong>. We will see how to use them with Semantic Kernel and build a chat application.</p>
+<p>Next post will talk about <strong><span class="highlight-text cyan">Ollama</span></strong> and <strong><span class="highlight-text cyan">LM Studio</span></strong>. We will see how to use them with Semantic Kernel and build a chat application.</p>
 <div class="alert info no-icon ">
   <p>Icon and images used in this post is property of Microsoft. Story behind the icon is available <a href="https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/">here</a>.</p>
 </div>
@@ -698,7 +699,7 @@ app.MapPost(&#34;/api/chat&#34;,async (Kernel kernel, ChatRequest request, HttpC
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/" data-tooltip="Getting Started with Ollama &amp; Semantic Kernel" aria-label="NEXT: Getting Started with Ollama &amp; Semantic Kernel">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -805,7 +806,7 @@ app.MapPost(&#34;/api/chat&#34;,async (Kernel kernel, ChatRequest request, HttpC
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel/" data-tooltip="Getting Started with Ollama &amp; Semantic Kernel" aria-label="NEXT: Getting Started with Ollama &amp; Semantic Kernel">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
