@@ -57,6 +57,8 @@ This post is continuation of a series about **{{< hl-text cyan >}}Semantic Kerne
 
 _This Post - Getting Started with Foundry Local & Semantic Kernel_
 
+[Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
+
 So far, we have discussed theorical aspects of Semantic Kernel. In this post, we will focus on practical aspects of using Semantic Kernel with Foundry Local.
 
 Initially, I had a plan to start this technical part with **{{< hl-text cyan >}}Ollama{{< /hl-text >}}** and **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. However, I have decided to start with **{{< hl-text cyan >}}Foundry Local{{< /hl-text >}}**, as this is something Microsoft just announced in Build 2025. You can find more information about Foundry Local [here](https://build.microsoft.com/en-US/sessions/BRK146).
@@ -100,7 +102,7 @@ For example, to run the `qwen2.5-0.5b` model, you can use the following command:
 foundry model run qwen2.5-0.5b
 ```
 
-Once you run the command, under the hood, it will download the model in your local machine and keep it `C:\Users\%USERNAME%\.foundry\cache\models` and can be used for future referenc. You can also use below command to see the models downloaded in your local machine:
+Once you run the command, under the hood, it will download the model in your local machine and keep it `C:\Users\%USERNAME%\.foundry\cache\models` and can be used for future reference. You can also use below command to see the models downloaded in your local machine:
 
 ```bash
 foundry cache ls
@@ -226,7 +228,7 @@ Will I be using Foundry Local in my future posts? probably not because of the fo
 
 I will keep an eye on the Foundry Local and will update this post when I have more information.
 
-Next post will be about **{{< hl-text cyan >}}Ollama{{< /hl-text >}}** and **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. We will see how to use them with Semantic Kernel and build a chat application.
+Next post will talk about **{{< hl-text cyan >}}Ollama{{< /hl-text >}}** and **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. We will see how to use them with Semantic Kernel and build a chat application.
 
 {{<alert info no-icon>}}
 Icon and images used in this post is property of Microsoft. Story behind the icon is available [here](https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/).

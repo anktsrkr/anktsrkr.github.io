@@ -58,6 +58,8 @@ _This Post - Getting Started with Semantic Kernel (Part 1)_
 
 [Getting Started with Foundry Local & Semantic Kernel](/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel)
 
+[Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
+
 ## What is Semantic Kernel?
 
 Semantic Kernel is a lightweight, open-source **{{< hl-text red >}}development kit{{< /hl-text >}}** that provides a framework for building AI applications using large language models (LLMs). It allows developers to create and manage complex workflows, integrate with various AI services, and leverage the power of LLMs in their applications. Semantic Kernel is designed to be flexible, extensible, and easy to use, making it a great choice for developers looking to build AI-powered applications.

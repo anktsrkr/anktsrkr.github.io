@@ -47,7 +47,7 @@ keywords:
 ---
  
 Hi Everyone! 
-This post is continuation of a series about **{{< hl-text cyan >}}Semantic Kernel{{< /hl-text >}}**. Over the time, I will updated this page with links to individual posts : 
+This post is continuation of a series about **{{< hl-text cyan >}}Semantic Kernel{{< /hl-text >}}**. Over the time, I will updated this page with links to individual posts : 4
 
 [Getting Started with Semantic Kernel (Part 1)](/post/getting-started-with-semantic-kernel)
 
@@ -56,6 +56,8 @@ _This Post - Getting Started with Semantic Kernel (Part 2)_
 [Building Blocks of Semantic Kernel](/post/semantic-kernel/semantic-kernel-building-blocks)
 
 [Getting Started with Foundry Local & Semantic Kernel](/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel)
+
+[Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
 
 We now have a basic understanding of Gen AI and how LLM works. However, before we dive into Semantic Kernel, Let's take a moment to understand some of the key components and tools that will be important as we move forward.
 
