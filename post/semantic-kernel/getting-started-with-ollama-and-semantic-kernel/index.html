@@ -340,6 +340,7 @@ This post is continuation of a series about <strong><span class="highlight-text 
 <p><a href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks">Building Blocks of Semantic Kernel</a></p>
 <p><a href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel">Getting Started with Foundry Local &amp; Semantic Kernel</a></p>
 <p><em>This Post - Getting Started with Ollama &amp; Semantic Kernel</em></p>
+<p><a href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel">Getting Started with LMStudio &amp; Semantic Kernel</a></p>
 <p>Now, we have a basic understanding how to integrate with local LLM using <strong><span class="highlight-text cyan">Semantic Kernel</span></strong>.  In this post we will continue our journey with another local LLM tool <strong><span class="highlight-text cyan">Ollama</span></strong>.</p>
 <h3 id="what-is-ollama">What is Ollama?</h3>
 <p><strong>Ollama</strong> is the high performance and headless application that is designed to run LLM on your own hardware. It supports both GPU &amp; CPU. It is based on llama.cpp. Since v0.7.0, it supports multimodal models, models which can process both text, images and audio.</p>
@@ -367,7 +368,7 @@ This post is continuation of a series about <strong><span class="highlight-text 
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ollama run &lt;model_name&gt;
 </span></span></code></pre></div><p>For example, to run the <code>qwen3:0.6b</code> model, you can use the following command:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ollama run qwen3:0.6b
-</span></span></code></pre></div><p>Once you run the command, under the hood, it will download the model in your local machine and keep it <code>C:\Users\ankts\.ollama\models</code> and can be used for future reference.</p>
+</span></span></code></pre></div><p>Once you run the command, under the hood, it will download the model in your local machine and keep it <code>C:\Users\%USERNAME%\.ollama\models</code> and can be used for future reference.</p>
 <p>If you want to download the model without running it, you can use the following command:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ollama pull &lt;model_name&gt;
 </span></span></code></pre></div><p>If you want to change the model directory location, you can set the <code>OLLAMA_MODELS</code> environment variable to the desired path. Once set make sure to restart the application.</p>
@@ -586,12 +587,12 @@ app.MapPost(&#34;/api/chat&#34;,async (Kernel kernel, ChatRequest request, HttpC
   
 </div>
 
-<p>The UI is a chat application built using Blazor which supports thinking step as well, will explain it in detail in some future post. For now, you can see that we are able to get the response from the LLM using Foundry Local and Semantic Kernel.</p>
+<p>The UI is a chat application built using Blazor which supports thinking step as well, will explain it in detail in some future post. For now, you can see that we are able to get the response from the LLM using Ollama and Semantic Kernel.</p>
 <p>Probably, you have noticed that the follow up question do not makes sense if the user is not providing any context. Since we are using <code>ChatHistory</code> to keep track of the chat history, we can use it to provide context to the LLM.</p>
 <h3 id="outro">Outro</h3>
 <p>In this post, we have discussed how to use Ollama with Semantic Kernel. We have seen how to install Ollama, run a model, and use it with Semantic Kernel.</p>
 <p>Will I be using Ollama in my future posts? For Chat completion, we will not be using Ollama as streaming is not supported yet with function call. Instead, we will be using <strong><span class="highlight-text cyan">LM Studio</span></strong>. However other task like Text embedding, we will use Ollama.</p>
-<p>Ollama team is working to support streaming with function call, releated discussiono can be found <a href="https://github.com/ollama/ollama/pull/10415">here</a> and as soons as it is available, I will update this post.</p>
+<p>Ollama team is working to support streaming with function call, releated discussion can be found <a href="https://github.com/ollama/ollama/pull/10415">here</a> and as soons as it is available, I will update this post.</p>
 <p>Next post will talk about <strong><span class="highlight-text cyan">LM Studio</span></strong>. We will see how to use it with Semantic Kernel and build a chat application.</p>
 <div class="alert info no-icon ">
   <p>Ollama Icon used in this post is property of <a href="https://ollama.com/">Ollama</a>.</p>
@@ -629,7 +630,7 @@ app.MapPost(&#34;/api/chat&#34;,async (Kernel kernel, ChatRequest request, HttpC
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel/" data-tooltip="Getting Started with LMStudio &amp; Semantic Kernel" aria-label="NEXT: Getting Started with LMStudio &amp; Semantic Kernel">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -736,7 +737,7 @@ app.MapPost(&#34;/api/chat&#34;,async (Kernel kernel, ChatRequest request, HttpC
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--disabled">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel/" data-tooltip="Getting Started with LMStudio &amp; Semantic Kernel" aria-label="NEXT: Getting Started with LMStudio &amp; Semantic Kernel">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>

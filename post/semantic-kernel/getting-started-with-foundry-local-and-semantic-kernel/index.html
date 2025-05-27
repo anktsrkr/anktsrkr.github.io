@@ -340,6 +340,7 @@ This post is continuation of a series about <strong><span class="highlight-text 
 <p><a href="https://anktsrkr.github.io/post/semantic-kernel/semantic-kernel-building-blocks">Building Blocks of Semantic Kernel</a></p>
 <p><em>This Post - Getting Started with Foundry Local &amp; Semantic Kernel</em></p>
 <p><a href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel">Getting Started with Ollama &amp; Semantic Kernel</a></p>
+<p><a href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel">Getting Started with LMStudio &amp; Semantic Kernel</a></p>
 <p>So far, we have discussed theorical aspects of Semantic Kernel. In this post, we will focus on practical aspects of using Semantic Kernel with Foundry Local.</p>
 <p>Initially, I had a plan to start this technical part with <strong><span class="highlight-text cyan">Ollama</span></strong> and <strong><span class="highlight-text cyan">LM Studio</span></strong>. However, I have decided to start with <strong><span class="highlight-text cyan">Foundry Local</span></strong>, as this is something Microsoft just announced in Build 2025. You can find more information about Foundry Local <a href="https://build.microsoft.com/en-US/sessions/BRK146">here</a>.</p>
 <h3 id="what-is-foundry-local">What is Foundry Local?</h3>
@@ -495,7 +496,7 @@ This post is continuation of a series about <strong><span class="highlight-text 
   &lt;/PropertyGroup&gt;
   &lt;ItemGroup&gt;
     &lt;PackageReference Include=&#34;Microsoft.AspNetCore.OpenApi&#34; Version=&#34;9.0.5&#34; /&gt;
-    &lt;PackageReference Include=&#34;Microsoft.SemanticKernel.Connectors.OpenAI&#34; Version=&#34;1.53.1&#34; /&gt;
+    &lt;PackageReference Include=&#34;Microsoft.SemanticKernel.Connectors.OpenAI&#34; Version=&#34;1.54.0&#34; /&gt;
   &lt;/ItemGroup&gt;
 &lt;/Project&gt;</code></pre>
         </td>
@@ -543,7 +544,6 @@ builder.Services.AddOpenAIChatCompletion(&#34;qwen2.5-0.5b-instruct-cuda-gpu&#34
   </table>
 </figure>
 
-<p>Use Model Id (not the alias) and the endpoint <code>http://localhost:5273/v1</code> from <strong>Foundry Local</strong>.</p>
 <h4 id="add-chat-completion-endpoint">Add Chat Completion Endpoint</h4>
 <p>Next step is to add the chat completion endpoint to the <code>Program.cs</code> file. You can use the following code to do that:</p>
 
