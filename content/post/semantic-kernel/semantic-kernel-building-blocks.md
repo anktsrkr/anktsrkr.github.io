@@ -59,6 +59,9 @@ _This Post - Building Blocks of Semantic Kernel_
 
 [Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
 
+[Getting Started with LMStudio & Semantic Kernel](/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel)
+
+
 So far, we have covered the theoretical aspects of Gen AI and LLM. We will continue to explore the theoretical aspects of Semantic Kernel in this post.
 
 Let me reiterate what I have said in [Part 1](/post/getting-started-with-semantic-kernel) **{{< hl-text cyan >}}Semantic Kernel{{< /hl-text >}}** is a **{{< hl-text red >}}development kit{{< /hl-text >}}**.

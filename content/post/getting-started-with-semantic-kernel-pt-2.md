@@ -47,7 +47,7 @@ keywords:
 ---
  
 Hi Everyone! 
-This post is continuation of a series about **{{< hl-text cyan >}}Semantic Kernel{{< /hl-text >}}**. Over the time, I will updated this page with links to individual posts : 4
+This post is continuation of a series about **{{< hl-text cyan >}}Semantic Kernel{{< /hl-text >}}**. Over the time, I will updated this page with links to individual posts : 
 
 [Getting Started with Semantic Kernel (Part 1)](/post/getting-started-with-semantic-kernel)
 
@@ -59,6 +59,7 @@ _This Post - Getting Started with Semantic Kernel (Part 2)_
 
 [Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
 
+[Getting Started with LMStudio & Semantic Kernel](/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel)
 We now have a basic understanding of Gen AI and how LLM works. However, before we dive into Semantic Kernel, Let's take a moment to understand some of the key components and tools that will be important as we move forward.
 
 ## SLM vs LLM

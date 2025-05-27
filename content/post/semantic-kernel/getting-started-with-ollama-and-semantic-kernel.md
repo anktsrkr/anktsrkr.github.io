@@ -59,6 +59,9 @@ This post is continuation of a series about **{{< hl-text cyan >}}Semantic Kerne
 
 _This Post - Getting Started with Ollama & Semantic Kernel_
 
+[Getting Started with LMStudio & Semantic Kernel](/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel)
+
+
 Now, we have a basic understanding how to integrate with local LLM using **{{< hl-text cyan >}}Semantic Kernel{{< /hl-text >}}**.  In this post we will continue our journey with another local LLM tool **{{< hl-text cyan >}}Ollama{{< /hl-text >}}**. 
 
 ### What is Ollama?
@@ -115,7 +118,7 @@ For example, to run the `qwen3:0.6b` model, you can use the following command:
 ollama run qwen3:0.6b
 ```
 
-Once you run the command, under the hood, it will download the model in your local machine and keep it `C:\Users\ankts\.ollama\models` and can be used for future reference. 
+Once you run the command, under the hood, it will download the model in your local machine and keep it `C:\Users\%USERNAME%\.ollama\models` and can be used for future reference. 
 
 If you want to download the model without running it, you can use the following command:
 
@@ -239,7 +242,7 @@ Let's see it in action.
 
 {{< image classes="center nocaption fancybox" src="/images/semantic-kernel/ollama.gif" title="ollama" >}}
 
-The UI is a chat application built using Blazor which supports thinking step as well, will explain it in detail in some future post. For now, you can see that we are able to get the response from the LLM using Foundry Local and Semantic Kernel.
+The UI is a chat application built using Blazor which supports thinking step as well, will explain it in detail in some future post. For now, you can see that we are able to get the response from the LLM using Ollama and Semantic Kernel.
 
 Probably, you have noticed that the follow up question do not makes sense if the user is not providing any context. Since we are using `ChatHistory` to keep track of the chat history, we can use it to provide context to the LLM.
 
@@ -247,8 +250,8 @@ Probably, you have noticed that the follow up question do not makes sense if the
 In this post, we have discussed how to use Ollama with Semantic Kernel. We have seen how to install Ollama, run a model, and use it with Semantic Kernel.
 
 Will I be using Ollama in my future posts? For Chat completion, we will not be using Ollama as streaming is not supported yet with function call. Instead, we will be using **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. However other task like Text embedding, we will use Ollama.
- 
-Ollama team is working to support streaming with function call, releated discussiono can be found [here](https://github.com/ollama/ollama/pull/10415) and as soons as it is available, I will update this post.
+
+Ollama team is working to support streaming with function call, releated discussion can be found [here](https://github.com/ollama/ollama/pull/10415) and as soons as it is available, I will update this post.
 
 Next post will talk about **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. We will see how to use it with Semantic Kernel and build a chat application.
 

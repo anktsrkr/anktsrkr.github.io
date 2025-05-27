@@ -59,6 +59,9 @@ _This Post - Getting Started with Foundry Local & Semantic Kernel_
 
 [Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
 
+[Getting Started with LMStudio & Semantic Kernel](/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel)
+
+
 So far, we have discussed theorical aspects of Semantic Kernel. In this post, we will focus on practical aspects of using Semantic Kernel with Foundry Local.
 
 Initially, I had a plan to start this technical part with **{{< hl-text cyan >}}Ollama{{< /hl-text >}}** and **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. However, I have decided to start with **{{< hl-text cyan >}}Foundry Local{{< /hl-text >}}**, as this is something Microsoft just announced in Build 2025. You can find more information about Foundry Local [here](https://build.microsoft.com/en-US/sessions/BRK146).
@@ -138,7 +141,7 @@ First, we need to install following nuget packages:
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
-    <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.53.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.54.0" />
   </ItemGroup>
 </Project>
 {{</codeblock>}}
@@ -155,7 +158,6 @@ builder.Services.AddKernel();
 builder.Services.AddOpenAIChatCompletion("qwen2.5-0.5b-instruct-cuda-gpu", new Uri("http://localhost:5273/v1"), serviceId: "qwen2.5"); 
 {{</codeblock>}}
 
-Use Model Id (not the alias) and the endpoint `http://localhost:5273/v1` from __Foundry Local__.
 
 #### Add Chat Completion Endpoint
 Next step is to add the chat completion endpoint to the `Program.cs` file. You can use the following code to do that:
