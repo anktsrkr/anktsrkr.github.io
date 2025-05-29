@@ -591,8 +591,14 @@ app.MapPost(&#34;/api/chat&#34;,async (Kernel kernel, ChatRequest request, HttpC
 <p>Probably, you have noticed that the follow up question do not makes sense if the user is not providing any context. Since we are using <code>ChatHistory</code> to keep track of the chat history, we can use it to provide context to the LLM.</p>
 <h3 id="outro">Outro</h3>
 <p>In this post, we have discussed how to use Ollama with Semantic Kernel. We have seen how to install Ollama, run a model, and use it with Semantic Kernel.</p>
-<p>Will I be using Ollama in my future posts? For Chat completion, we will not be using Ollama as streaming is not supported yet with function call. Instead, we will be using <strong><span class="highlight-text cyan">LM Studio</span></strong>. However other task like Text embedding, we will use Ollama.</p>
-<p>Ollama team is working to support streaming with function call, releated discussion can be found <a href="https://github.com/ollama/ollama/pull/10415">here</a> and as soons as it is available, I will update this post.</p>
+<p><div class="alert info no-icon ">
+  <p>Update on : 29th May 2025</p>
+</div>
+Will I be using Ollama in my future posts? For Chat completion and text embeddings, we will be using (<del>not be</del>) Ollama as streaming is now supported (<del>is not supported yet</del>) with function call.</p>
+<p><del>Ollama team is working to support streaming with function call, releated discussion can be found <a href="https://github.com/ollama/ollama/pull/10415">here</a> and as soons as it is available, I will update this post.</del>
+<div class="alert danger no-icon ">
+  <p>Now, Ollama supports streaming with function call since v0.8.0. More information can be found <a href="https://ollama.com/blog/streaming-tools">here</a>.</p>
+</div></p>
 <p>Next post will talk about <strong><span class="highlight-text cyan">LM Studio</span></strong>. We will see how to use it with Semantic Kernel and build a chat application.</p>
 <div class="alert info no-icon ">
   <p>Ollama Icon used in this post is property of <a href="https://ollama.com/">Ollama</a>.</p>
