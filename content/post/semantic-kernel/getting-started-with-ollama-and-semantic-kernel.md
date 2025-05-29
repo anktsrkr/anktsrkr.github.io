@@ -249,9 +249,15 @@ Probably, you have noticed that the follow up question do not makes sense if the
 ### Outro
 In this post, we have discussed how to use Ollama with Semantic Kernel. We have seen how to install Ollama, run a model, and use it with Semantic Kernel.
 
-Will I be using Ollama in my future posts? For Chat completion, we will not be using Ollama as streaming is not supported yet with function call. Instead, we will be using **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. However other task like Text embedding, we will use Ollama.
+{{<alert info no-icon>}}
+Update on : 29th May 2025
+{{< /alert >}}
+Will I be using Ollama in my future posts? For Chat completion and text embeddings, we will be using (~~not be~~) Ollama as streaming is now supported (~~is not supported yet~~) with function call. 
 
-Ollama team is working to support streaming with function call, releated discussion can be found [here](https://github.com/ollama/ollama/pull/10415) and as soons as it is available, I will update this post.
+~~Ollama team is working to support streaming with function call, releated discussion can be found [here](https://github.com/ollama/ollama/pull/10415) and as soons as it is available, I will update this post.~~
+{{<alert danger no-icon>}}
+Now, Ollama supports streaming with function call since v0.8.0. More information can be found [here](https://ollama.com/blog/streaming-tools).
+{{< /alert >}}
 
 Next post will talk about **{{< hl-text cyan >}}LM Studio{{< /hl-text >}}**. We will see how to use it with Semantic Kernel and build a chat application.
 
