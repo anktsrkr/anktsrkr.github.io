@@ -6,8 +6,15 @@
     <description>Recent content on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 23 May 2025 19:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 02 Oct 2025 05:00:00 +0100</lastBuildDate>
     <atom:link href="https://anktsrkr.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Getting Started with LM Studio &amp; Agent Framework for .NET Developers</title>
+      <link>https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/</link>
+      <pubDate>Thu, 02 Oct 2025 05:00:00 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/</guid>
+      <description>Microsoft has announced the Microsoft Agent Framework, an open-source SDK and runtime that makes it easier for developers to build, deploy, and manage multi-agent systems. If you’ve worked with Semantic Kernel or experimented with AutoGen, this framework brings the best of both worlds into a single, unified foundation.&#xA;Instead of choosing between enterprise-ready stability (Semantic Kernel) or research-driven orchestration patterns (AutoGen), C# developers can now leverage one framework that combines innovation with production-grade reliability.</description>
+    </item>
     <item>
       <title>Getting Started with LMStudio &amp; Semantic Kernel</title>
       <link>https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel/</link>
