@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <script type="application/ld+json">
+
+{  
+  "@context":"http://schema.org",
+  "@type":"Website",
+  "@id":"https:\/\/anktsrkr.github.io\/",
+  "author": {
+    "@type": "Person",
+    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+    
+    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
+    
+  },
+  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
+  "description":"Build smart agents in LM Studio with the new \/v1\/responses API and Microsoft Agent Framework—master previous_response_id for seamless conversations \u0026 remote tool use.",
+  "url":"https:\/\/anktsrkr.github.io\/post\/agent-framework\/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api\/",
+  "keywords":"[Semantic Kernel, Agent Framework, AI development, LM Studio smart agent tutorial, Microsoft Agent Framework examples, \/v1\/responses API example, GPT‑OSS local deployment, Ollama, Foundry Local, LM Studio, Local AI, Local LLM]"
+}
+
+</script>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
+<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta name="keywords" content="Semantic Kernel, Agent Framework, AI development, LM Studio smart agent tutorial, Microsoft Agent Framework examples, /v1/responses API example, GPT‑OSS local deployment, Ollama, Foundry Local, LM Studio, Local AI, Local LLM">
+<meta name="description" content="Build smart agents in LM Studio with the new /v1/responses API and Microsoft Agent Framework—master previous_response_id for seamless conversations &amp; remote tool use.">
+
+
+<meta property="og:description" content="Build smart agents in LM Studio with the new /v1/responses API and Microsoft Agent Framework—master previous_response_id for seamless conversations &amp; remote tool use.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API">
+<meta name="twitter:title" content="Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API">
+<meta property="og:url" content="https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/">
+<meta property="twitter:url" content="https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/">
+<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
+<meta property="og:description" content="Build smart agents in LM Studio with the new /v1/responses API and Microsoft Agent Framework—master previous_response_id for seamless conversations &amp; remote tool use.">
+<meta name="twitter:description" content="Build smart agents in LM Studio with the new /v1/responses API and Microsoft Agent Framework—master previous_response_id for seamless conversations &amp; remote tool use.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2025-10-09T05:00:00">
+  
+  
+    <meta property="article:modified_time" content="2025-10-09T05:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="Agent Framework">
+    
+      <meta property="article:section" content="AI">
+    
+      <meta property="article:section" content="LLM">
+    
+      <meta property="article:section" content=".NET 10">
+    
+  
+  
+    
+      <meta property="article:tag" content="genai">
+    
+      <meta property="article:tag" content="lmstudio">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@anktsrkr">
+
+
+  <meta name="twitter:creator" content="@anktsrkr">
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png">
+  <meta property="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png">
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
+
+    <title>Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API</title>
+
+    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/">
+
+    
+    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+   
+    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    
+    
+    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
+    
+    
+    
+
+    
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-176781214-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
+     crossorigin="anonymous"></script>
+<script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="9gZ8D7m_t9Y2oK" async></script>
+     
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TY8ZMTBGSM');
+</script>
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+        
+          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Linkedin</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
+    
+      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
+    
+      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" id="top">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title">
+      Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time datetime="2025-10-09T05:00:00&#43;01:00">
+        
+  October 9, 2025
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/agent-framework">Agent Framework</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/ai">AI</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/llm">LLM</a>, 
+    
+      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-10">.NET 10</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown">
+            <div class="main-content-wrap">
+              <p>In my previous post, <a href="https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/">Getting Started with LM Studio &amp; Agent Framework for .NET Developers</a>, we built a simple yet capable smart agent using Microsoft’s Agent Framework and LM Studio as local llm inference engine.</p>
+<p>Now, there’s <strong>exciting news</strong>: LM Studio 0.3.29 has been released as a stable build — and it introduces full support for <strong>OpenAI’s <code>/v1/responses</code></strong> API through the LM Studio REST server.</p>
+<p>This new API unlocks a major step forward for developers building intelligent agents locally. It enables context retention across multiple interactions, seamless multi-turn conversations, and even remote tool usage — all through a unified interface.</p>
+<p>In this post, we’ll dive into how to use the <code>/v1/responses</code> API inside LM Studio together with the Microsoft Agent Framework to build context-aware, tool-enabled agents. We’ll break down how <code>previous_response_id</code> works, show practical examples, and explore how you can turn simple chatbots into persistent, smart conversational systems.</p>
+<h2 id="recap-chat-completions-api">Recap: Chat Completions API</h2>
+<p>Before we jump into the Responses API, let’s quickly recap how the traditional Chat Completions API offers.</p>
+<ul>
+<li>
+<p>You supply a list of message objects (e.g. role &ldquo;user&rdquo; / &ldquo;assistant&rdquo; / &ldquo;system&rdquo;).</p>
+</li>
+<li>
+<p>The model returns a next message (or a completion) as a response.</p>
+</li>
+<li>
+<p>You must yourself maintain the conversation history (i.e. store messages client-side or in a database).</p>
+</li>
+<li>
+<p>It is stateless on OpenAI’s/server side — each request is independent.</p>
+</li>
+<li>
+<p>Tool integration (if needed) must be orchestrated by your application (i.e. call APIs, wrap them, feed results back into chat).</p>
+</li>
+</ul>
+<p>It is simple, straightforward, and works well for many classic chatbot / conversational assistant scenarios.</p>
+<h2 id="understanding-the-responses-api">Understanding the Responses API</h2>
+<p>The Responses API is a newer interface OpenAI is pushing as a more expressive, capable primitive for conversational and agentic use cases. It is designed to give developers higher-level building blocks for workflows that go beyond simple chat, especially when tool use, structured reasoning, or modality mixing is involved.</p>
+<h3 id="key-features-of-the-responses-api-include">Key features of the Responses API include:</h3>
+<ul>
+<li>
+<p><strong>Server-managed state / conversation context</strong>
+You can pass a <code>previous_response_id</code> rather than always sending full message history, simplifying context tracking.</p>
+</li>
+<li>
+<p><strong>Native support for tool / function calling</strong>
+Unlike pure chat, Responses supports built-in or custom tools (e.g. web search, file lookup, code execution) more directly.</p>
+</li>
+<li>
+<p><strong>Streaming and synchronous modes</strong>
+You can choose to stream partial outputs or get a composed full response.</p>
+</li>
+<li>
+<p><strong>Reasoning control</strong>
+You can configure <em>“reasoning effort”</em> or parse reasoning output in models that support it.</p>
+</li>
+<li>
+<p><strong>Mixed modalities</strong>
+Responder interactions may include image inputs/outputs where supported (depending on model).</p>
+</li>
+<li>
+<p><strong>Backward compatibility</strong>
+OpenAI intends to maintain support for Chat Completions for simpler use cases, even as Responses becomes a more powerful option.</p>
+</li>
+</ul>
+<h2 id="lm-studio--responses-api-whats-new-in-v0329">LM Studio &amp; Responses API: What’s New in v0.3.29</h2>
+<p>Here’s where LM Studio enters the picture: as of version 0.3.29, LM Studio has added support for the OpenAI-compatible <code>/v1/responses API</code> endpoint.</p>
+<p>This integration means that if you run OpenAI’s OSS models locally through LM Studio, you can expose them using the same API semantics as OpenAI’s Responses. This brings several advantages:</p>
+<ul>
+<li>
+<p><strong>Stateful interactions</strong>
+You can pass a <code>previous_response_id</code> to continue a conversation without the client needing to track full message history.</p>
+</li>
+<li>
+<p><strong>Custom function (tool) calling</strong>
+You can define your own function tools locally, similar to the function-calling features in Chat Completions or Responses.
+LM Studio</p>
+</li>
+<li>
+<p><strong>Remote MCP (Model Capability Proxy) usage</strong>
+LM Studio can optionally call tools from remote MCP servers (if you enable that in settings), so even your local model can leverage remote tool backends.
+LM Studio</p>
+</li>
+<li>
+<p><strong>Reasoning support and effort control</strong>
+For models like openai/gpt-oss-20b, you can parse reasoning output and configure the “effort” level (low / medium / high) for reasoning computation.
+LM Studio</p>
+</li>
+<li>
+<p><strong>Streaming or synchronous modes</strong>
+You may choose stream: true (receiving SSE events for incremental output) or not (just a JSON reply).</p>
+</li>
+</ul>
+<p>Now that we’ve explored what the Responses API is, how it differs from the Chat Completions API, and how LM Studio 0.3.29 brings this functionality to local models, let’s take it a step further.</p>
+<p>In the next section, I’ll walk through a hands-on implementation that demonstrates how to use the Responses API (either via LM Studio locally or OpenAI’s cloud endpoint) inside Microsoft’s Agent Framework. This practical example shows how you can build a stateful, reasoning-aware AI agent capable of streaming intermediate reasoning steps, remembering previous interactions, and switching effortlessly between local and hosted models — all with just a few lines of C# code.</p>
+<h2 id="practical-example-building-a-context-aware-agent">Practical Example: Building a Context-Aware Agent</h2>
+<p>Before you begin, make sure you have:</p>
+<ul>
+<li>
+<p>LM Studio 0.3.29 or later 👉 <a href="https://lmstudio.ai/">Download from LM Studio</a></p>
+<p>Run it locally, and enable its HTTP server via the <em>Developer</em> tab.</p>
+</li>
+</ul>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="https://anktsrkr.github.io/images/agent-framework/lmstudio-responseapi.gif" title="lmstudio-in-action" data-fancybox="">
+  
+    <img class="fig-img" src="https://anktsrkr.github.io/images/agent-framework/lmstudio-responseapi.gif"  alt="lmstudio-in-action">
+  
+    </a>
+  
+  
+</div>
+
+<ul>
+<li>A model that supports the /v1/responses endpoint (e.g. <code>openai/gpt-oss-20b</code>).</li>
+</ul>
+<p>This will expose OpenAI API compatible endpoint on <code>http://localhost:11435</code>. Copy or note the server URL — you’ll use it in your application.</p>
+<h4 id="create-a-net-console-application">Create a .NET Console Application</h4>
+<p>Now, let’s create a simple .NET console application that uses the Microsoft Agent Framework to interact with a local LLM via LM Studio.</p>
+<ol>
+<li>Open your terminal or command prompt. Create a new console app targeting .NET 10:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet new console -n AgentFrameworkLMStudioDemo -f net10.0
+</span></span><span style="display:flex;"><span>cd AgentFrameworkLMStudioDemo
+</span></span></code></pre></div></li>
+<li>Add the necessary NuGet packages for Microsoft Agent Framework and any other dependencies:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet add package Microsoft.Agents.AI.OpenAI
+</span></span></code></pre></div></li>
+<li>Restore the packages:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet restore
+</span></span></code></pre></div></li>
+</ol>
+<h4 id="write-your--agent">Write Your  Agent</h4>
+<p>Open the <code>Program.cs</code> file and replace its contents with the following code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> Microsoft.Agents.AI;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> OpenAI;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> OpenAI.Chat;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.ClientModel;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> endPoint = Environment.GetEnvironmentVariable(<span style="color:#e6db74">&#34;OPENAI_ENDPOINT&#34;</span>) ?? <span style="color:#e6db74">&#34;http://localhost:11435/v1&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> apiKey = Environment.GetEnvironmentVariable(<span style="color:#e6db74">&#34;OPENAI_API_KEY&#34;</span>) ?? <span style="color:#e6db74">&#34;apiKey&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> model = Environment.GetEnvironmentVariable(<span style="color:#e6db74">&#34;OPENAI_MODEL&#34;</span>) ?? <span style="color:#e6db74">&#34;openai/gpt-oss-20b&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">string</span> AgentName = <span style="color:#e6db74">&#34;Math Teacher&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">string</span> AgentInstructions = <span style="color:#e6db74">&#34;You are my math teacher.&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Create an OpenAI Response Client that supports the Responses API</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#pragma</span> warning disable OPENAI001
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> chatClient = <span style="color:#66d9ef">new</span> OpenAIClient(
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">new</span> ApiKeyCredential(apiKey),
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">new</span> OpenAIClientOptions { Endpoint = <span style="color:#66d9ef">new</span> Uri(endPoint) })
+</span></span><span style="display:flex;"><span>    .GetOpenAIResponseClient(model)
+</span></span><span style="display:flex;"><span>    .AsIChatClient()
+</span></span><span style="display:flex;"><span>    .AsBuilder()
+</span></span><span style="display:flex;"><span>    .ConfigureOptions(o =&gt;
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Enable reasoning summaries and effort levels</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> existingFactory = o.RawRepresentationFactory;
+</span></span><span style="display:flex;"><span>        o.RawRepresentationFactory = chatClient =&gt;
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">var</span> rco = existingFactory?.Invoke(chatClient) <span style="color:#66d9ef">as</span> ResponseCreationOptions ?? <span style="color:#66d9ef">new</span>();
+</span></span><span style="display:flex;"><span>            rco.ReasoningOptions = <span style="color:#66d9ef">new</span>()
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                ReasoningEffortLevel = rco.ReasoningOptions?.ReasoningEffortLevel ?? ResponseReasoningEffortLevel.Low,
+</span></span><span style="display:flex;"><span>                ReasoningSummaryVerbosity = rco.ReasoningOptions?.ReasoningSummaryVerbosity ?? ResponseReasoningSummaryVerbosity.Detailed
+</span></span><span style="display:flex;"><span>            };
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> rco;
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    .Build();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>AIAgent agent = <span style="color:#66d9ef">new</span> ChatClientAgent(chatClient);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">string?</span> responseId = <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Ask the first question</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">await</span> <span style="color:#66d9ef">foreach</span> (<span style="color:#66d9ef">var</span> update <span style="color:#66d9ef">in</span> agent.RunStreamingAsync(<span style="color:#e6db74">&#34;What is 1+1?&#34;</span>))
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    responseId = update.ResponseId;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">foreach</span> (<span style="color:#66d9ef">var</span> item <span style="color:#66d9ef">in</span> update.Contents)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">if</span> (item <span style="color:#66d9ef">is</span> TextContent textContent)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Console.Write(textContent.Text);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Ask a follow-up question referencing the last response</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">await</span> <span style="color:#66d9ef">foreach</span> (<span style="color:#66d9ef">var</span> update <span style="color:#66d9ef">in</span> agent.RunStreamingAsync(<span style="color:#e6db74">&#34;What was the last question?&#34;</span>, options: <span style="color:#66d9ef">new</span> ChatClientAgentRunOptions
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    ChatOptions = <span style="color:#66d9ef">new</span> ChatOptions
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        RawRepresentationFactory = _ =&gt; <span style="color:#66d9ef">new</span> ResponseCreationOptions()
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            PreviousResponseId = responseId,
+</span></span><span style="display:flex;"><span>            ReasoningOptions = <span style="color:#66d9ef">new</span>()
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                ReasoningEffortLevel = ResponseReasoningEffortLevel.High,
+</span></span><span style="display:flex;"><span>                ReasoningSummaryVerbosity = ResponseReasoningSummaryVerbosity.Detailed
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}))
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">foreach</span> (<span style="color:#66d9ef">var</span> item <span style="color:#66d9ef">in</span> update.Contents)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">if</span> (item <span style="color:#66d9ef">is</span> TextContent textContent)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Console.Write(textContent.Text);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="run-the-application">Run the Application</h3>
+<p>Before running the application, ensure that LM Studio is running and the OpenAI-compatible API is enabled.
+Set the necessary environment variables for the API endpoint, API key (for LM Studio, API Key is not needed, however to make it work with other OpenAI APIs, you need to set a dummy one), and model name. You can do this in your terminal:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>export OPENAI_ENDPOINT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://localhost:11435/v1&#34;</span>
+</span></span><span style="display:flex;"><span>export OPENAI_API_KEY<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;api-Key&#34;</span>
+</span></span><span style="display:flex;"><span>export OPENAI_MODEL<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;openai/gpt-oss-20b&#34;</span>
+</span></span></code></pre></div><p>Now, run your application:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet run
+</span></span></code></pre></div><p>If configured correctly, you’ll see the agent’s streamed reasoning process:</p>
+<p><code>1+1 = 2</code></p>
+<p><code>The last question was &quot;What is 1+1?&quot;</code></p>
+<h4 id="understanding-how-this-example-works">Understanding how this example works</h4>
+<h5 id="creating-the-openai-response-client">Creating the OpenAI Response Client</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> chatClient = <span style="color:#66d9ef">new</span> OpenAIClient(<span style="color:#66d9ef">new</span> ApiKeyCredential(apiKey), <span style="color:#66d9ef">new</span> OpenAIClientOptions { Endpoint = <span style="color:#66d9ef">new</span> Uri(endPoint) })
+</span></span><span style="display:flex;"><span>    .GetOpenAIResponseClient(model)
+</span></span><span style="display:flex;"><span>    .AsIChatClient().AsBuilder()
+</span></span></code></pre></div><p>This part does the following:</p>
+<ul>
+<li>
+<p>Creates an OpenAI client that connects to either OpenAI’s hosted API or a local LM Studio endpoint.</p>
+</li>
+<li>
+<p>Calls <code>.GetOpenAIResponseClient(model)</code> to access the Responses API interface, which is different from the traditional Chat Completions API.</p>
+</li>
+<li>
+<p>Converts that client into an <code>IChatClient</code> — a common interface used across the Microsoft Agent framework.</p>
+</li>
+<li>
+<p>Calls <code>.AsBuilder()</code> so you can fluently configure options before finalizing the client.</p>
+</li>
+</ul>
+<p>This design allows you to inject custom configuration logic — which is where <code>ConfigureOptions</code> comes into play.</p>
+<h5 id="configuring-default-response-options-with-configureoptions">Configuring Default Response Options with ConfigureOptions</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span>.ConfigureOptions(o =&gt;
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> existingFactory = o.RawRepresentationFactory;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    o.RawRepresentationFactory = chatClient =&gt;
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> rco = existingFactory?.Invoke(chatClient) <span style="color:#66d9ef">as</span> ResponseCreationOptions ?? <span style="color:#66d9ef">new</span>();
+</span></span><span style="display:flex;"><span>        rco.ReasoningOptions = <span style="color:#66d9ef">new</span>()
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            ReasoningEffortLevel = rco.ReasoningOptions?.ReasoningEffortLevel ?? ResponseReasoningEffortLevel.Low,
+</span></span><span style="display:flex;"><span>            ReasoningSummaryVerbosity = rco.ReasoningOptions?.ReasoningSummaryVerbosity ?? ResponseReasoningSummaryVerbosity.Detailed
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> rco;
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>.Build();
+</span></span></code></pre></div><p>Here’s what’s happening:</p>
+<ul>
+<li>
+<p><code>ConfigureOptions</code> allows you to override or extend the default configuration logic used by the chat client.</p>
+</li>
+<li>
+<p>The <code>RawRepresentationFactory</code> is a delegate that defines how raw request options — in this case, <code>ResponseCreationOptions</code> — are created for each chat request.</p>
+</li>
+<li>
+<p>We capture the existing factory (existingFactory) to preserve any prior setup.</p>
+</li>
+<li>
+<p>Then, we wrap it with a new function that:</p>
+<ul>
+<li>
+<p>Reuses or initializes a new <code>ResponseCreationOptions</code> object.</p>
+</li>
+<li>
+<p>Sets the <code>ReasoningOptions</code>, which determine how deeply the model reasons and how verbose its reasoning summaries are.</p>
+</li>
+<li>
+<p>The <code>ReasoningEffortLevel</code> can be Low, Medium, or High, which tells the model how much internal reasoning to apply before producing an answer.</p>
+</li>
+<li>
+<p>The <code>ReasoningSummaryVerbosity</code> controls how much of that reasoning is shown back in the response stream.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>In short, <code>ConfigureOptions</code> acts like a <strong>global configuration hook</strong> — it ensures every request made by the agent uses consistent reasoning settings unless explicitly overridden.</p>
+<h5 id="streaming-responses-with-context-memory">Streaming Responses with Context Memory</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">await</span> <span style="color:#66d9ef">foreach</span> (<span style="color:#66d9ef">var</span> update <span style="color:#66d9ef">in</span> agent.RunStreamingAsync(<span style="color:#e6db74">&#34;What is 1+1?&#34;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">await</span> <span style="color:#66d9ef">foreach</span> (<span style="color:#66d9ef">var</span> update <span style="color:#66d9ef">in</span> agent.RunStreamingAsync(<span style="color:#e6db74">&#34;What was the last question?&#34;</span>, options: <span style="color:#66d9ef">new</span> ChatClientAgentRunOptions { ... }))
+</span></span></code></pre></div><ul>
+<li>The code uses <code>RunStreamingAsync</code> to send a query and receive a stream of incremental updates</li>
+<li>Each update also contains a <code>ResponseId</code>, which you can pass back into later calls using <code>PreviousResponseId</code> to preserve conversational context.</li>
+</ul>
+<p>This pattern lets your agent <strong>“remember”</strong> previous responses — making follow-up questions like <em>“What was the last question?”</em> possible even across separate runs.</p>
+<div class="alert info ">
+  <p>Currently OpenAI SDK does not support <code>response.reasoning_text.delta</code> which is emitted by gpt-oss, hence reasoning can not be captured directly via SDK. You can learn more about this -
+<a href="https://github.com/openai/openai-dotnet/issues/748">openai/openai-dotnet#748</a></p>
+</div>
+<h2 id="conclusion">Conclusion</h2>
+<p>The Responses API marks a significant step forward in how we build conversational systems — making it easier to embed tool usage, manage state, and handle more sophisticated workflows. LM Studio’s recent adoption of Responses is especially exciting because it brings the same API semantics to local models, letting developers build flexible, portable, hybrid systems.</p>
+
+              
+              
+
+
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/genai/">genai</a>
+
+  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/lmstudio/">lmstudio</a>
+
+                  </div>
+                
+              
+            
+            
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/" data-tooltip="Getting Started with LM Studio &amp; Agent Framework for .NET Developers" aria-label="PREVIOUS: Getting Started with LM Studio &amp; Agent Framework for .NET Developers">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+            
+  
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+    <script type="text/javascript">
+      var disqus_config = function() {
+        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/agent-framework\/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api\/';
+        
+          this.page.identifier = '\/post\/agent-framework\/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api\/'
+        
+      };
+      (function() {
+        
+        
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+          return;
+        }
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'anktsrkr-github-io';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  
+
+
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2025 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+<div class="post-actions-wrap">
+  <nav >
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+              <i class="fa fa-angle-left"></i>
+              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+            </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/" data-tooltip="Getting Started with LM Studio &amp; Agent Framework for .NET Developers" aria-label="PREVIOUS: Getting Started with LM Studio &amp; Agent Framework for .NET Developers">
+          
+              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+      
+    </ul>
+  </nav>
+<ul class="post-actions post-action-share" >
+  
+    <li class="post-action hide-lg hide-md hide-sm">
+      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </a>
+    </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/" title="Share on Facebook" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/" title="Share on Twitter" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/" title="Share on Linkedin" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+      </li>
+    
+  
+  
+    <li class="post-action">
+      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
+        <i class="far fa-comment"></i>
+      </a>
+    </li>
+  
+  <li class="post-action">
+    
+      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    
+    </a>
+  </li>
+</ul>
+</div>
+
+
+      </div>
+      
+<div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-times"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fbuilding-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api%2F" aria-label="Share on Facebook">
+          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fbuilding-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api%2F" aria-label="Share on Twitter">
+          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fbuilding-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api%2F" aria-label="Share on Linkedin">
+          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+
+
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-times"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
+    
+      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Technical Architect
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker-alt"></i>
+        <br/>
+        Leeds
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script src="https://anktsrkr.github.io/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
+
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js"></script>
+  
+
+  
+    <script async crossorigin="anonymous" defer integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js"></script>
+  
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightElement(block);
+  });
+});
+</script>
+
+
+
+
+
+
+<script>
+    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
+   </script>
+   
+   
+
+<script>
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+            });
+  
+        navigator.serviceWorker
+            .ready
+            .then(function(registration) {
+            });
+    }
+  </script>
+  
+<script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
+</script>
+
+<a id="Setmore_button_iframe" style="position: fixed;
+ right: 20px;
+ bottom: 15px;
+ z-index: 9998;text-decoration: none"
+    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
+    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
+display: table-cell;
+width: auto;
+height: 45px;
+padding: 0 30px;
+border-radius: 25px;
+box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
+font-family: sans-serif;
+text-align: center;
+vertical-align: middle;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+cursor: pointer;">#TalkWithMe</div>
+</a>
+
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ro6zx9o7jl");
+</script>
+
+    
+  </body>
+</html>
+

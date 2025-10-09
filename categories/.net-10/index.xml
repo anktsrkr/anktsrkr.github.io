@@ -6,8 +6,15 @@
     <description>Recent content in .NET 10 on Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Oct 2025 05:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 09 Oct 2025 05:00:00 +0100</lastBuildDate>
     <atom:link href="https://anktsrkr.github.io/categories/.net-10/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API</title>
+      <link>https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/</link>
+      <pubDate>Thu, 09 Oct 2025 05:00:00 +0100</pubDate>
+      <guid>https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/</guid>
+      <description>In my previous post, Getting Started with LM Studio &amp;amp; Agent Framework for .NET Developers, we built a simple yet capable smart agent using Microsoft’s Agent Framework and LM Studio as local llm inference engine.&#xA;Now, there’s exciting news: LM Studio 0.3.29 has been released as a stable build — and it introduces full support for OpenAI’s /v1/responses API through the LM Studio REST server.&#xA;This new API unlocks a major step forward for developers building intelligent agents locally.</description>
+    </item>
     <item>
       <title>Getting Started with LM Studio &amp; Agent Framework for .NET Developers</title>
       <link>https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/</link>
