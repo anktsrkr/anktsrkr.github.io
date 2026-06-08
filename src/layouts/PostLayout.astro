@@ -1,0 +1,72 @@
+---
+import Disqus from '../components/Disqus.astro';
+import MermaidRenderer from '../components/MermaidRenderer.astro';
+import ShareLinks from '../components/ShareLinks.astro';
+import BaseLayout from './BaseLayout.astro';
+import type { Post } from '../lib/content';
+import { formatDate, getShareImage, postUrlFromId, site, termUrl } from '../lib/site';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  post: Post;
+  headings: Heading[];
+  hasMermaid?: boolean;
+}
+
+const { post, headings, hasMermaid = false } = Astro.props;
+const url = postUrlFromId(post.id);
+const absoluteUrl = new URL(url, site.url).toString();
+const image = getShareImage(post.data.shareImage, post.data.thumbnailImage);
+const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={image}
+  canonical={url}
+  type="article"
+>
+  <article class="article-shell">
+    <header class="article-hero">
+      <div class="article-kicker">
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <span>{post.data.categories?.[0] ?? 'Technical Notes'}</span>
+      </div>
+      <h1>{post.data.title}</h1>
+      {post.data.description && <p>{post.data.description}</p>}
+      <div class="article-tags">
+        {post.data.categories?.map((category) => <a href={termUrl('categories', category)}>{category}</a>)}
+      </div>
+      {image && <img class="article-cover" src={image} alt="" loading="eager" />}
+    </header>
+
+    <div class="article-grid">
+      <aside class="article-aside">
+        <div class="aside-panel">
+          <span class="aside-label">Filed under</span>
+          <div class="aside-tags">
+            {post.data.tags?.map((tag) => <a href={termUrl('tags', tag)}>#{tag}</a>)}
+          </div>
+        </div>
+        {toc.length > 0 && (
+          <nav class="toc" aria-label="Table of contents">
+            <span class="aside-label">On this page</span>
+            {toc.map((heading) => <a class={`toc-depth-${heading.depth}`} href={`#${heading.slug}`}>{heading.text}</a>)}
+          </nav>
+        )}
+      </aside>
+      <div class="article-content">
+        <slot />
+        {hasMermaid && <MermaidRenderer />}
+        {post.data.showSocial !== false && <ShareLinks title={post.data.title} url={absoluteUrl} />}
+        {post.data.comments !== false && <Disqus identifier={url} title={post.data.title} url={absoluteUrl} />}
+      </div>
+    </div>
+  </article>
+</BaseLayout>

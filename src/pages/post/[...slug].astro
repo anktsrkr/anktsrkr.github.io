@@ -1,0 +1,21 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPublishedPosts } from '../../lib/content';
+import { postSlugFromId } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({
+    params: { slug: postSlugFromId(post.id) },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+const hasMermaid = post.body.includes('```mermaid');
+---
+
+<PostLayout post={post} headings={headings} hasMermaid={hasMermaid}>
+  <Content />
+</PostLayout>

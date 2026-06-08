@@ -1,0 +1,25 @@
+{
+  "name": "anktsrkr-technical-blog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "check": "astro check",
+    "validate:content": "node scripts/validate-content.mjs"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.12",
+    "astro": "^5.10.0",
+    "gray-matter": "^4.0.3",
+    "mermaid": "^11.15.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "aria-query": "^5.3.2",
+    "axobject-query": "^4.1.0",
+    "cssesc": "^3.0.0",
+    "typescript": "^5.8.3"
+  }
+}

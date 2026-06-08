@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllTerms, getPublishedPosts } from '../../lib/content';
+import { termUrl } from '../../lib/site';
+
+const posts = await getPublishedPosts();
+const categories = getAllTerms(posts, 'categories');
+---
+
+<BaseLayout title="Categories" description="Browse posts by category" canonical="/categories/">
+  <main>
+    <header class="article-hero">
+      <p class="eyebrow">Topic map</p>
+      <h1 class="page-title">Categories</h1>
+      <p class="page-intro">Follow the major themes across Azure, .NET, testing, automation, and applied AI.</p>
+    </header>
+    <div class="terms-grid">
+      {categories.map((category) => (
+        <a class="term-pill" href={termUrl('categories', category.name)}>
+          <span>{category.name}</span>
+          <strong>{category.count}</strong>
+        </a>
+      ))}
+    </div>
+  </main>
+</BaseLayout>

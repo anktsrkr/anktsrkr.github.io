@@ -1,0 +1,30 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import LegacyIntegrations from '../components/LegacyIntegrations.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  type?: 'website' | 'article';
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead {...Astro.props} />
+  </head>
+  <body>
+    <div class="page-shell">
+      <SiteHeader />
+      <slot />
+      <SiteFooter />
+      <LegacyIntegrations />
+    </div>
+  </body>
+</html>

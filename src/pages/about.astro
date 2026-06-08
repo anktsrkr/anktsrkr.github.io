@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutContent from '../content/about.md';
+import { site } from '../lib/site';
+---
+
+<BaseLayout title="About" description="About Ankit Sarkar" canonical="/about/">
+  <main class="article-shell">
+    <header class="article-hero">
+      <p class="eyebrow">About</p>
+      <h1>{site.title}</h1>
+      <p>{site.description}</p>
+    </header>
+    <div class="article-content">
+      <AboutContent />
+    </div>
+  </main>
+</BaseLayout>

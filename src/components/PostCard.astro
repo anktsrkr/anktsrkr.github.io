@@ -1,0 +1,29 @@
+---
+import type { Post } from '../lib/content';
+import { formatDate, getShareImage, postUrlFromId, termUrl } from '../lib/site';
+
+interface Props {
+  post: Post;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const image = getShareImage(post.data.thumbnailImage, post.data.thumbnailImage);
+---
+
+<article class:list={['post-card', { 'post-card-featured': featured }]}>
+  <a class="post-card-media" href={postUrlFromId(post.id)} aria-label={`Read ${post.data.title}`}>
+    <img src={image} alt="" loading="lazy" />
+  </a>
+  <div class="post-card-body">
+    <div class="eyebrow">
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+      {post.data.categories?.[0] && <a href={termUrl('categories', post.data.categories[0])}>{post.data.categories[0]}</a>}
+    </div>
+    <h2><a href={postUrlFromId(post.id)}>{post.data.title}</a></h2>
+    {post.data.description && <p>{post.data.description}</p>}
+    <div class="tag-row">
+      {post.data.tags?.slice(0, 4).map((tag) => <a href={termUrl('tags', tag)}>#{tag}</a>)}
+    </div>
+  </div>
+</article>

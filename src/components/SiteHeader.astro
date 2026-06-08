@@ -1,0 +1,16 @@
+---
+import { navItems, site } from '../lib/site';
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Ankit Sarkar home">
+    <span class="brand-mark">AS</span>
+    <span>
+      <strong>{site.title}</strong>
+      <small>.NET / Azure / AI Notes</small>
+    </span>
+  </a>
+  <nav class="primary-nav" aria-label="Primary navigation">
+    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+</header>

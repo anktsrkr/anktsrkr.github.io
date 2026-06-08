@@ -1,0 +1,28 @@
+---
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllTerms, getPublishedPosts, postsForTerm } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return getAllTerms(posts, 'tags').map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag, posts: postsForTerm(posts, 'tags', tag.slug) }
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag.name}`} description={`Posts tagged ${tag.name}`} canonical={`/tags/${tag.slug}/`}>
+  <main>
+    <header class="article-hero">
+      <p class="eyebrow">Tag</p>
+      <h1 class="page-title">#{tag.name}</h1>
+      <p class="page-intro">{tag.count} posts with this tag.</p>
+    </header>
+    <div class="post-grid">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,33 @@
+---
+import { getPublishedPosts } from '../../../lib/content';
+import { postSlugFromId, postUrlFromId, site } from '../../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({
+    params: {
+      year: String(post.data.date.getFullYear()),
+      month: String(post.data.date.getMonth() + 1).padStart(2, '0'),
+      slug: postSlugFromId(post.id).split('/').at(-1)
+    },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const target = postUrlFromId(post.id);
+const absoluteTarget = new URL(target, site.url).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={absoluteTarget} />
+    <title>Redirecting to {post.data.title}</title>
+  </head>
+  <body>
+    <p>Redirecting to <a href={target}>{post.data.title}</a>.</p>
+  </body>
+</html>
