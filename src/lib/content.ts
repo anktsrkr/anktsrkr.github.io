@@ -47,6 +47,20 @@ export function getArchiveGroups(posts: Post[]) {
   return [...map.values()].sort((a, b) => Number(b.label) - Number(a.label));
 }
 
+export function paginateItems<T>(items: T[], currentPage: number, pageSize: number) {
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+  const safePage = Math.min(Math.max(currentPage, 1), totalPages);
+  const start = (safePage - 1) * pageSize;
+
+  return {
+    currentPage: safePage,
+    items: items.slice(start, start + pageSize),
+    pageSize,
+    totalItems: items.length,
+    totalPages
+  };
+}
+
 export function findPostBySlug(posts: Post[], slug: string): Post | undefined {
   return posts.find((post) => postSlugFromId(post.id) === slug);
 }

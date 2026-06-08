@@ -23,6 +23,8 @@ const url = postUrlFromId(post.id);
 const absoluteUrl = new URL(url, site.url).toString();
 const image = getShareImage(post.data.shareImage, post.data.thumbnailImage);
 const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4);
+const tags = post.data.tags ?? [];
+const hasToc = toc.length > 0;
 ---
 
 <BaseLayout
@@ -43,27 +45,28 @@ const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4)
       <div class="article-tags">
         {post.data.categories?.map((category) => <a href={termUrl('categories', category)}>{category}</a>)}
       </div>
-      {image && <img class="article-cover" src={image} alt="" loading="eager" />}
     </header>
 
     <div class="article-grid">
-      <aside class="article-aside">
-        <div class="aside-panel">
-          <span class="aside-label">Filed under</span>
-          <div class="aside-tags">
-            {post.data.tags?.map((tag) => <a href={termUrl('tags', tag)}>#{tag}</a>)}
-          </div>
-        </div>
-        {toc.length > 0 && (
-          <nav class="toc" aria-label="Table of contents">
-            <span class="aside-label">On this page</span>
-            {toc.map((heading) => <a class={`toc-depth-${heading.depth}`} href={`#${heading.slug}`}>{heading.text}</a>)}
-          </nav>
-        )}
-      </aside>
       <div class="article-content">
+        {hasToc && (
+          <details class="toc-inline" open>
+            <summary>On this page</summary>
+            <nav class="toc-links" aria-label="Table of contents">
+              {toc.map((heading) => <a class={`toc-depth-${heading.depth}`} href={`#${heading.slug}`}>{heading.text}</a>)}
+            </nav>
+          </details>
+        )}
         <slot />
         {hasMermaid && <MermaidRenderer />}
+        {tags.length > 0 && (
+          <footer class="article-footer-tags" aria-label="Post tags">
+            <span class="aside-label">Tagged with</span>
+            <div class="article-tags">
+              {tags.map((tag) => <a href={termUrl('tags', tag)}>#{tag}</a>)}
+            </div>
+          </footer>
+        )}
         {post.data.showSocial !== false && <ShareLinks title={post.data.title} url={absoluteUrl} />}
         {post.data.comments !== false && <Disqus identifier={url} title={post.data.title} url={absoluteUrl} />}
       </div>

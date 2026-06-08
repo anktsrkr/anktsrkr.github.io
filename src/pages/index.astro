@@ -1,57 +1,43 @@
 ---
+import Pagination from '../components/Pagination.astro';
 import PostCard from '../components/PostCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAllTerms, getFeaturedPosts, getPublishedPosts } from '../lib/content';
-import { site, termUrl } from '../lib/site';
+import { getFeaturedPosts, getPublishedPosts, paginateItems } from '../lib/content';
+import { site } from '../lib/site';
 
+const PAGE_SIZE = 9;
+const FEATURED_LIMIT = 4;
 const posts = await getPublishedPosts();
-const featuredPosts = getFeaturedPosts(posts, 4);
-const recentPosts = posts.slice(0, 9);
-const categories = getAllTerms(posts, 'categories').sort((a, b) => b.count - a.count).slice(0, 4);
+const featuredPosts = getFeaturedPosts(posts, FEATURED_LIMIT);
+const pagination = paginateItems(posts, 1, PAGE_SIZE);
 ---
 
 <BaseLayout title={site.fullTitle} description={site.description} canonical="/">
-  <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">Technical Atlas</p>
-        <h1>.NET, Azure, and AI field notes.</h1>
-        <p>
-          Practical engineering notes from cloud migrations, distributed systems, testing,
-          resilient HTTP clients, Semantic Kernel, and Microsoft Agent Framework experiments.
-        </p>
-      </div>
-      <aside class="atlas-panel" aria-label="Topic map">
-        <p class="eyebrow">Topic map</p>
-        <div class="atlas-grid">
-          {categories.map((category) => (
-            <a class="atlas-cell" href={termUrl('categories', category.name)}>
-              <strong>{category.name}</strong>
-              <small>{category.count} posts</small>
-            </a>
-          ))}
-        </div>
-      </aside>
-    </section>
-
-    <section aria-labelledby="featured-heading">
+  <main class="home-layout">
+    <section class="content-section content-section-first" aria-labelledby="featured-heading">
       <div class="section-header">
-        <h2 id="featured-heading">Featured Notes</h2>
+        <h2 id="featured-heading">Featured Posts</h2>
         <a href="/archives/">All posts</a>
       </div>
-      <div class="post-grid">
+      <div class="featured-list">
         {featuredPosts.map((post, index) => <PostCard post={post} featured={index === 0} />)}
       </div>
     </section>
 
-    <section aria-labelledby="recent-heading">
+    <section class="content-section recent-section" aria-labelledby="recent-heading">
       <div class="section-header">
         <h2 id="recent-heading">Recent Posts</h2>
         <a href="/index.xml">RSS</a>
       </div>
-      <div class="post-grid">
-        {recentPosts.map((post) => <PostCard post={post} />)}
+      <div class="post-grid post-grid-compact">
+        {pagination.items.map((post) => <PostCard post={post} />)}
       </div>
+      <Pagination
+        basePath="/"
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        label="Recent post pages"
+      />
     </section>
   </main>
 </BaseLayout>

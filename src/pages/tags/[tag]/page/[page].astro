@@ -1,32 +1,42 @@
 ---
-import Pagination from '../../components/Pagination.astro';
-import PostCard from '../../components/PostCard.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAllTerms, getPublishedPosts, paginateItems, postsForTerm } from '../../lib/content';
+import Pagination from '../../../../components/Pagination.astro';
+import PostCard from '../../../../components/PostCard.astro';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getAllTerms, getPublishedPosts, paginateItems, postsForTerm } from '../../../../lib/content';
 
 export async function getStaticPaths() {
   const pageSize = 9;
   const posts = await getPublishedPosts();
-  return getAllTerms(posts, 'tags').map((tag) => {
-    const termPosts = postsForTerm(posts, 'tags', tag.slug);
-    const pagination = paginateItems(termPosts, 1, pageSize);
 
-    return {
-      params: { tag: tag.slug },
-      props: { pagePosts: pagination.items, pagination, posts: termPosts, tag }
-    };
+  return getAllTerms(posts, 'tags').flatMap((tag) => {
+    const termPosts = postsForTerm(posts, 'tags', tag.slug);
+    const totalPages = Math.ceil(termPosts.length / pageSize);
+
+    return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+      const pageNumber = index + 2;
+      const pagination = paginateItems(termPosts, pageNumber, pageSize);
+
+      return {
+        params: { page: String(pageNumber), tag: tag.slug },
+        props: { pagePosts: pagination.items, pagination, posts: termPosts, tag }
+      };
+    });
   });
 }
 
 const { pagePosts, pagination, posts, tag } = Astro.props;
 ---
 
-<BaseLayout title={`#${tag.name}`} description={`Posts tagged ${tag.name}`} canonical={`/tags/${tag.slug}/`}>
+<BaseLayout
+  title={`#${tag.name} - Page ${pagination.currentPage}`}
+  description={`Posts tagged ${tag.name}, page ${pagination.currentPage}`}
+  canonical={`/tags/${tag.slug}/page/${pagination.currentPage}/`}
+>
   <main class="listing-layout">
     <header class="page-hero">
       <p class="eyebrow">Tag</p>
       <h1 class="page-title">#{tag.name}</h1>
-      <p class="page-intro">{tag.count} posts with this tag.</p>
+      <p class="page-intro">Page {pagination.currentPage} of {pagination.totalPages}. {posts.length} posts with this tag.</p>
     </header>
     <div class="listing-grid">
       <aside class="directory-rail" aria-label="Tag tools">
