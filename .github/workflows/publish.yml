@@ -34,6 +34,9 @@ jobs:
         run: cd main && npm run validate:content
 
       - name: Astro Build
+        env:
+          PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID || secrets.PUBLIC_GA_MEASUREMENT_ID }}
+          PUBLIC_ADSENSE_CLIENT: ${{ vars.PUBLIC_ADSENSE_CLIENT || secrets.PUBLIC_ADSENSE_CLIENT || 'ca-pub-2534759648571863' }}
         run: cd main && npm run build
 
       - name: Copy files
