@@ -37,7 +37,7 @@ jobs:
         run: cd main && npm run build
 
       - name: Copy files
-        run: cp -rf main/dist/* gh-pages/
+        run: cp -rf main/dist/. gh-pages/
 
       - name: Commit changes
         run: |
