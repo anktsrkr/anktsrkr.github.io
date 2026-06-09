@@ -1,0 +1,30 @@
+---
+import { site } from '../lib/site';
+
+interface Props {
+  identifier: string;
+  title: string;
+  url: string;
+}
+
+const { identifier, title, url } = Astro.props;
+---
+
+<section class="comments" aria-label="Comments">
+  <h2>Comments</h2>
+  <div id="disqus_thread"></div>
+  <script is:inline define:vars={{ shortname: site.disqusShortname, identifier, title, url }}>
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view comments.</noscript>
+</section>

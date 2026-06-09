@@ -5,37 +5,39 @@ on:
 
 jobs:
   build:
-    name: Build Hugo Site
+    name: Build Astro Site
     runs-on: ubuntu-latest
     steps:
-      - name: Install Hugo
-        env:
-          HUGO_VERSION: 0.121.1
-        run: |
-          mkdir ~/hugo
-          cd ~/hugo
-          curl -L "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz" --output hugo.tar.gz
-          tar -xvzf hugo.tar.gz
-          sudo mv hugo /usr/local/bin
-
       - name: Checkout master branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: master
           path: main
-          submodules: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: main/package-lock.json
 
       - name: Checkout gh-pages branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages
 
-      - name: Hugo Build
-        run: cd main && hugo
+      - name: Install dependencies
+        run: cd main && npm ci
+
+      - name: Validate content
+        run: cd main && npm run validate:content
+
+      - name: Astro Build
+        run: cd main && npm run build
 
       - name: Copy files
-        run: cp -rf main/public/* gh-pages/
+        run: cp -rf main/dist/* gh-pages/
 
       - name: Commit changes
         run: |
@@ -49,6 +51,6 @@ jobs:
           if git diff-index --quiet HEAD --; then
             echo "No changes..."
           else
-            git commit -m "[CI] build hugo static site"
+            git commit -m "[CI] build astro static site"
             git push
           fi

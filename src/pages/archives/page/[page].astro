@@ -1,0 +1,78 @@
+---
+import Pagination from '../../../components/Pagination.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getArchiveGroups, getPublishedPosts, paginateItems } from '../../../lib/content';
+import { formatDate, postUrlFromId } from '../../../lib/site';
+
+export async function getStaticPaths() {
+  const pageSize = 12;
+  const posts = await getPublishedPosts();
+  const totalPages = Math.ceil(posts.length / pageSize);
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+    const pageNumber = index + 2;
+    const pagination = paginateItems(posts, pageNumber, pageSize);
+
+    return {
+      params: { page: String(pageNumber) },
+      props: {
+        allGroups: getArchiveGroups(posts),
+        groups: getArchiveGroups(pagination.items),
+        pagination,
+        posts
+      }
+    };
+  });
+}
+
+const { allGroups, groups, pagination, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`Archives - Page ${pagination.currentPage}`}
+  description={`Chronological archive of posts, page ${pagination.currentPage}`}
+  canonical={`/archives/page/${pagination.currentPage}/`}
+>
+  <main class="directory-layout">
+    <header class="page-hero">
+      <p class="eyebrow">Chronology</p>
+      <h1 class="page-title">Archives</h1>
+      <p class="page-intro">Page {pagination.currentPage} of {pagination.totalPages}. Every published technical note, newest first.</p>
+    </header>
+    <div class="directory-grid">
+      <aside class="directory-rail" aria-label="Archive summary">
+        <div class="rail-panel">
+          <span class="aside-label">Archive</span>
+          <strong>{posts.length} notes across {allGroups.length} years</strong>
+        </div>
+        <div class="rail-panel">
+          <span class="aside-label">Jump years</span>
+          <div class="mini-chip-list">
+            {groups.map((group) => <a href={`#year-${group.label}`}>{group.label}</a>)}
+          </div>
+        </div>
+      </aside>
+      <div class="listing-main">
+        <div class="archive-list">
+          {groups.map((group) => (
+            <section class="archive-year" id={`year-${group.label}`}>
+              <h2>{group.label}</h2>
+              {group.posts.map((post) => (
+                <a href={postUrlFromId(post.id)}>
+                  <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+                  <span>{post.data.title}</span>
+                </a>
+              ))}
+            </section>
+          ))}
+        </div>
+        <Pagination
+          basePath="/archives/"
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          label="Archive pages"
+        />
+      </div>
+    </div>
+  </main>
+</BaseLayout>

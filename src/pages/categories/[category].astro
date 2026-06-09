@@ -1,0 +1,55 @@
+---
+import Pagination from '../../components/Pagination.astro';
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllTerms, getPublishedPosts, paginateItems, postsForTerm } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const pageSize = 9;
+  const posts = await getPublishedPosts();
+  return getAllTerms(posts, 'categories').map((category) => {
+    const termPosts = postsForTerm(posts, 'categories', category.slug);
+    const pagination = paginateItems(termPosts, 1, pageSize);
+
+    return {
+      params: { category: category.slug },
+      props: { category, pagePosts: pagination.items, pagination, posts: termPosts }
+    };
+  });
+}
+
+const { category, pagePosts, pagination, posts } = Astro.props;
+---
+
+<BaseLayout title={category.name} description={`Posts in ${category.name}`} canonical={`/categories/${category.slug}/`}>
+  <main class="listing-layout">
+    <header class="page-hero">
+      <p class="eyebrow">Category</p>
+      <h1 class="page-title">{category.name}</h1>
+      <p class="page-intro">{category.count} posts in this topic.</p>
+    </header>
+    <div class="listing-grid">
+      <aside class="directory-rail" aria-label="Category tools">
+        <div class="rail-panel">
+          <span class="aside-label">Reading queue</span>
+          <strong>{posts.length} notes</strong>
+        </div>
+        <div class="rail-panel">
+          <a class="button-link" href="/categories/">All categories</a>
+          <a class="button-link" href="/archives/">Archives</a>
+        </div>
+      </aside>
+      <div class="listing-main">
+        <div class="post-grid post-grid-compact">
+          {pagePosts.map((post) => <PostCard post={post} />)}
+        </div>
+        <Pagination
+          basePath={`/categories/${category.slug}/`}
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          label={`${category.name} pages`}
+        />
+      </div>
+    </div>
+  </main>
+</BaseLayout>

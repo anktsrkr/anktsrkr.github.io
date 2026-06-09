@@ -1,0 +1,57 @@
+---
+import Pagination from '../../components/Pagination.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getArchiveGroups, getPublishedPosts, paginateItems } from '../../lib/content';
+import { formatDate, postUrlFromId } from '../../lib/site';
+
+const PAGE_SIZE = 12;
+const posts = await getPublishedPosts();
+const allGroups = getArchiveGroups(posts);
+const pagination = paginateItems(posts, 1, PAGE_SIZE);
+const groups = getArchiveGroups(pagination.items);
+---
+
+<BaseLayout title="Archives" description="Chronological archive of posts" canonical="/archives/">
+  <main class="directory-layout">
+    <header class="page-hero">
+      <p class="eyebrow">Chronology</p>
+      <h1 class="page-title">Archives</h1>
+      <p class="page-intro">Every published technical note, newest first.</p>
+    </header>
+    <div class="directory-grid">
+      <aside class="directory-rail" aria-label="Archive summary">
+        <div class="rail-panel">
+          <span class="aside-label">Archive</span>
+          <strong>{posts.length} notes across {allGroups.length} years</strong>
+        </div>
+        <div class="rail-panel">
+          <span class="aside-label">Jump years</span>
+          <div class="mini-chip-list">
+            {groups.map((group) => <a href={`#year-${group.label}`}>{group.label}</a>)}
+          </div>
+        </div>
+      </aside>
+      <div class="listing-main">
+        <div class="archive-list">
+          {groups.map((group) => (
+            <section class="archive-year" id={`year-${group.label}`}>
+              <h2>{group.label}</h2>
+              {group.posts.map((post) => (
+                <a href={postUrlFromId(post.id)}>
+                  <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+                  <span>{post.data.title}</span>
+                </a>
+              ))}
+            </section>
+          ))}
+        </div>
+        <Pagination
+          basePath="/archives/"
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          label="Archive pages"
+        />
+      </div>
+    </div>
+  </main>
+</BaseLayout>

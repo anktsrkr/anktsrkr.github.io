@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllTerms, getPublishedPosts } from '../../lib/content';
+import { termUrl } from '../../lib/site';
+
+const posts = await getPublishedPosts();
+const tags = getAllTerms(posts, 'tags');
+const topTags = [...tags].sort((a, b) => b.count - a.count).slice(0, 8);
+---
+
+<BaseLayout title="Tags" description="Browse posts by tag" canonical="/tags/">
+  <main class="directory-layout">
+    <header class="page-hero">
+      <p class="eyebrow">Index</p>
+      <h1 class="page-title">Tags</h1>
+      <p class="page-intro">A quick index of technologies, tools, and patterns covered in the blog.</p>
+    </header>
+    <div class="directory-grid">
+      <aside class="directory-rail" aria-label="Tag summary">
+        <div class="rail-panel">
+          <span class="aside-label">Index depth</span>
+          <strong>{tags.length} tags for {posts.length} notes</strong>
+        </div>
+        <div class="rail-panel">
+          <span class="aside-label">Common tags</span>
+          <div class="mini-chip-list">
+            {topTags.map((tag) => <a href={termUrl('tags', tag.name)}>#{tag.name}</a>)}
+          </div>
+        </div>
+      </aside>
+      <div class="terms-grid">
+        {tags.map((tag) => (
+          <a class="term-pill" href={termUrl('tags', tag.name)}>
+            <span>#{tag.name}</span>
+            <strong>{tag.count}</strong>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+</BaseLayout>

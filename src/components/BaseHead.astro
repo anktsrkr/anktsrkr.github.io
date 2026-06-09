@@ -1,0 +1,55 @@
+---
+import { getShareImage, site } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title = site.fullTitle,
+  description = site.description,
+  image,
+  canonical = '/',
+  type = 'website'
+} = Astro.props;
+
+const pageTitle = title === site.fullTitle ? title : `${title} | ${site.title}`;
+const canonicalUrl = new URL(canonical, site.url).toString();
+const socialImage = new URL(getShareImage(image), site.url).toString();
+const gaId = site.googleAnalyticsId;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<link rel="alternate" type="application/rss+xml" title={site.fullTitle} href="/index.xml" />
+<link rel="manifest" href="/manifest.json" />
+<link rel="icon" href="/appicons/favicon-196x196.png" />
+<meta property="og:type" content={type} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={socialImage} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@ankt_srkr" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImage} />
+{gaId && (
+  <>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script is:inline define:vars={{ gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </>
+)}
