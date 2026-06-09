@@ -1,383 +1,58 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    
-    <script type="application/ld+json">
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Getting Started with LM Studio &amp; Agent Framework for .NET Developers | Ankit Sarkar</title><meta name="description" content="How to use Agent Framework in AI development using LM Studio / OpenAI using C#"><link rel="canonical" href="https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Getting Started with LM Studio &#38; Agent Framework for .NET Developers | Ankit Sarkar"><meta property="og:description" content="How to use Agent Framework in AI development using LM Studio / OpenAI using C#"><meta property="og:url" content="https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Getting Started with LM Studio &#38; Agent Framework for .NET Developers | Ankit Sarkar"><meta name="twitter:description" content="How to use Agent Framework in AI development using LM Studio / OpenAI using C#"><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=UA-176781214-1"></script><script>(function(){const gaId = "UA-176781214-1";
 
-{  
-  "@context":"http://schema.org",
-  "@type":"Website",
-  "@id":"https:\/\/anktsrkr.github.io\/",
-  "author": {
-    "@type": "Person",
-    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-    
-    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
-    
-  },
-  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-  "description":"How to use Agent Framework in AI development using LM Studio \/ OpenAI using C#",
-  "url":"https:\/\/anktsrkr.github.io\/post\/agent-framework\/getting-started-with-lmstudio-and-agent-framework\/",
-  "keywords":"[Semantic Kernel, Agent Framework, AI development, Machine learning, Microsoft AI, Natural language processing (NLP), OpenAI integration, .NET AI framework, Python AI tools, AI-powered applications, Prompt engineering, AI agent creation, Large language models (LLMs), AI automation, Cognitive computing, AI SDK, Gen AI, .NET 9, LLM, Ollama, Foundry Local, LM Studio]"
-}
-
-</script>
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
-<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta name="keywords" content="Semantic Kernel, Agent Framework, AI development, Machine learning, Microsoft AI, Natural language processing (NLP), OpenAI integration, .NET AI framework, Python AI tools, AI-powered applications, Prompt engineering, AI agent creation, Large language models (LLMs), AI automation, Cognitive computing, AI SDK, Gen AI, .NET 9, LLM, Ollama, Foundry Local, LM Studio">
-<meta name="description" content="How to use Agent Framework in AI development using LM Studio / OpenAI using C#">
-
-
-<meta property="og:description" content="How to use Agent Framework in AI development using LM Studio / OpenAI using C#">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Getting Started with LM Studio &amp; Agent Framework for .NET Developers">
-<meta name="twitter:title" content="Getting Started with LM Studio &amp; Agent Framework for .NET Developers">
-<meta property="og:url" content="https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/">
-<meta property="twitter:url" content="https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/">
-<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta property="og:description" content="How to use Agent Framework in AI development using LM Studio / OpenAI using C#">
-<meta name="twitter:description" content="How to use Agent Framework in AI development using LM Studio / OpenAI using C#">
-<meta property="og:locale" content="en-us">
-
-  
-    <meta property="article:published_time" content="2025-10-02T05:00:00">
-  
-  
-    <meta property="article:modified_time" content="2025-10-02T05:00:00">
-  
-  
-  
-    
-      <meta property="article:section" content="Agent Framework">
-    
-      <meta property="article:section" content="AI">
-    
-      <meta property="article:section" content="LLM">
-    
-      <meta property="article:section" content=".NET 10">
-    
-  
-  
-    
-      <meta property="article:tag" content="genai">
-    
-      <meta property="article:tag" content="lmstudio">
-    
-  
-
-
-<meta name="twitter:card" content="summary">
-
-  <meta name="twitter:site" content="@anktsrkr">
-
-
-  <meta name="twitter:creator" content="@anktsrkr">
-
-
-
-
-
-
-
-
-
-
-  <meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png">
-
-
-  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-
-    <title>Getting Started with LM Studio &amp; Agent Framework for .NET Developers</title>
-
-    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
-    
-
-    
-
-    <link rel="canonical" href="https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/">
-
-    
-    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
-    
-   
-    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    
-    
-    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
-    
-    
-    
-
-    
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-176781214-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
-     crossorigin="anonymous"></script>
-<script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="9gZ8D7m_t9Y2oK" async></script>
-     
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TY8ZMTBGSM');
-</script>
-    
-  </head>
-
-  <body>
-    <div id="blog">
-      <header id="header" data-behavior="5">
-  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-  <div class="header-title">
-    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
-  </div>
-  
-    
-      <a class="header-right-picture "
-         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
-    
-    
-    
-      
-        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
-      
-    
-    </a>
-  
-</header>
-
-      <nav id="sidebar" data-behavior="5">
-  <div class="sidebar-container">
-    
-      <div class="sidebar-profile">
-        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
-          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-        </a>
-        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-        
-          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
-        
-      </div>
-    
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Home</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Categories</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Tags</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Archives</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">About</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">GitHub</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Linkedin</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Twitter</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">RSS</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-
-    </ul>
-  </div>
-</nav>
-
-      
-
-      <div id="main" data-behavior="5"
-        class="
-               hasCoverMetaIn
-               ">
-        <article class="post" id="top">
-          
-          
-            <div class="post-header main-content-wrap text-left">
-  
-    <h1 class="post-title">
-      Getting Started with LM Studio &amp; Agent Framework for .NET Developers
-    </h1>
-  
-  
-  <div class="postShorten-meta post-meta">
-    
-      <time datetime="2025-10-02T05:00:00&#43;01:00">
-        
-  October 2, 2025
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/agent-framework">Agent Framework</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/ai">AI</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/llm">LLM</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-10">.NET 10</a>
-    
-  
-
-  </div>
-
-</div>
-          
-          <div class="post-content markdown">
-            <div class="main-content-wrap">
-              <p>Microsoft has announced the <strong>Microsoft Agent Framework</strong>, an open-source SDK and runtime that makes it easier for developers to build, deploy, and manage multi-agent systems. If you’ve worked with <strong>Semantic Kernel</strong> or experimented with <strong>AutoGen</strong>, this framework brings the best of both worlds into a single, unified foundation.</p>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><link rel="stylesheet" href="/_astro/_slug_.C7rzXrsf.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2025-10-02T04:00:00.000Z">02 Oct 2025</time> <span>Agent Framework</span> </div> <h1>Getting Started with LM Studio &amp; Agent Framework for .NET Developers</h1> <p>How to use Agent Framework in AI development using LM Studio / OpenAI using C#</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/llm/">LLM</a><a href="/categories/.net-10/">.NET 10</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#from-semantic-kernel-and-autogen--to-microsoft-agent-framework">From Semantic Kernel and AutoGen → To Microsoft Agent Framework</a> <div class="toc-sublinks"> <a href="#why-it-matters-for-net-developers">Why It Matters for .NET Developers?</a><a href="#orchestration-options-flexible-or-deterministic">Orchestration Options: Flexible or Deterministic</a><a href="#what-is-lm-studio">What is LM Studio?</a><a href="#install-lm-studio">Install LM Studio</a><a href="#enable-openai-compatible-api--run-your-first-model">Enable OpenAI-Compatible API &amp; Run your first model</a><a href="#create-a-net-console-application">Create a .NET Console Application</a><a href="#write-your-first-agent">Write Your First Agent</a><a href="#run-the-application">Run the Application</a><a href="#big-picture-from-local-testing-to-enterprise-deployment">Big Picture: From Local Testing to Enterprise Deployment</a> </div> </div> </nav> </details>   <p>Microsoft has announced the <strong>Microsoft Agent Framework</strong>, an open-source SDK and runtime that makes it easier for developers to build, deploy, and manage multi-agent systems. If you’ve worked with <strong>Semantic Kernel</strong> or experimented with <strong>AutoGen</strong>, this framework brings the best of both worlds into a single, unified foundation.</p>
 <p>Instead of choosing between <em>enterprise-ready stability (Semantic Kernel)</em> or <em>research-driven orchestration patterns (AutoGen)</em>, C# developers can now leverage one framework that combines innovation with production-grade reliability.</p>
 <h3 id="from-semantic-kernel-and-autogen--to-microsoft-agent-framework">From Semantic Kernel and AutoGen → To Microsoft Agent Framework</h3>
 <p>Here’s a quick comparison:</p>
-<table>
-<thead>
-<tr>
-<th>Feature</th>
-<th>Semantic Kernel</th>
-<th>AutoGen</th>
-<th>Microsoft Agent Framework</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Focus</strong></td>
-<td>Stable SDK with enterprise connectors, workflows, observability</td>
-<td>Experimental multi-agent orchestration from research</td>
-<td>Unified SDK: innovation + enterprise readiness</td>
-</tr>
-<tr>
-<td><strong>Interop</strong></td>
-<td>Plugins, connectors, MCP, A2A, OpenAPI</td>
-<td>Tool integration but no standard cross-runtime protocols</td>
-<td>Built-in connectors, full support for MCP + A2A + OpenAPI</td>
-</tr>
-<tr>
-<td><strong>Memory</strong></td>
-<td>Multiple vector store connectors, memory abstraction (e.g., Elasticsearch, MongoDB)</td>
-<td>In-memory history, external vector stores (ChromaDB, Mem0, etc.)</td>
-<td>Pluggable memory across first/third-party stores, persistent + adaptive retrieval</td>
-</tr>
-<tr>
-<td><strong>Orchestration</strong></td>
-<td>Deterministic + dynamic orchestration (Process Framework, Agent Framework)</td>
-<td>Dynamic LLM orchestration (debate, reflection, facilitator/worker, group chat)</td>
-<td>Both: deterministic workflow + dynamic LLM orchestration</td>
-</tr>
-<tr>
-<td><strong>Enterprise Readiness</strong></td>
-<td>Telemetry, observability, compliance</td>
-<td>Minimal</td>
-<td>Full stack: observability, approvals, CI/CD, long-running durability, hydration</td>
-</tr>
-</tbody>
-</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Feature</th><th>Semantic Kernel</th><th>AutoGen</th><th>Microsoft Agent Framework</th></tr></thead><tbody><tr><td><strong>Focus</strong></td><td>Stable SDK with enterprise connectors, workflows, observability</td><td>Experimental multi-agent orchestration from research</td><td>Unified SDK: innovation + enterprise readiness</td></tr><tr><td><strong>Interop</strong></td><td>Plugins, connectors, MCP, A2A, OpenAPI</td><td>Tool integration but no standard cross-runtime protocols</td><td>Built-in connectors, full support for MCP + A2A + OpenAPI</td></tr><tr><td><strong>Memory</strong></td><td>Multiple vector store connectors, memory abstraction (e.g., Elasticsearch, MongoDB)</td><td>In-memory history, external vector stores (ChromaDB, Mem0, etc.)</td><td>Pluggable memory across first/third-party stores, persistent + adaptive retrieval</td></tr><tr><td><strong>Orchestration</strong></td><td>Deterministic + dynamic orchestration (Process Framework, Agent Framework)</td><td>Dynamic LLM orchestration (debate, reflection, facilitator/worker, group chat)</td><td>Both: deterministic workflow + dynamic LLM orchestration</td></tr><tr><td><strong>Enterprise Readiness</strong></td><td>Telemetry, observability, compliance</td><td>Minimal</td><td>Full stack: observability, approvals, CI/CD, long-running durability, hydration</td></tr></tbody></table>
 <h3 id="why-it-matters-for-net-developers">Why It Matters for .NET Developers?</h3>
 <p>With Microsoft Agent Framework, you get:</p>
-<p><strong>Open standards &amp; interoperability</strong> — MCP, A2A, and OpenAPI ensure your agents are portable, vendor-neutral, and easy to integrate into existing .NET solutions.</p>
+<p><strong>Open standards &#x26; interoperability</strong> — MCP, A2A, and OpenAPI ensure your agents are portable, vendor-neutral, and easy to integrate into existing .NET solutions.</p>
 <p><strong>Research-to-production pipeline</strong> — bleeding-edge orchestration patterns from Microsoft Research are now packaged for real-world enterprise use.</p>
 <p><strong>Extensibility by design</strong> — modular connectors, pluggable memory stores, and declarative agent definitions mean you can integrate it with your own C# applications.</p>
 <p><strong>Enterprise readiness</strong> — built-in observability, approvals, security, and support for long-running, durable workflows fit right into modern DevOps pipelines.</p>
@@ -398,520 +73,133 @@ if (!doNotTrack) {
 <li>Follow the installation instructions provided on the website.</li>
 <li>Once installed, launch LM Studio and start experimenting with local LLMs!</li>
 </ol>
-<h3 id="enable-openai-compatible-api--run-your-first-model">Enable OpenAI-Compatible API &amp; Run your first model</h3>
+<h3 id="enable-openai-compatible-api--run-your-first-model">Enable OpenAI-Compatible API &#x26; Run your first model</h3>
 <p>To expose OpenAI compatible API, swich to <code>Power User</code> mode and Start the server. You can also tweak the settings as per your requirements but make sure <code>Just-in-Time Model Loading</code> is enabled. When this is enabled, if a request specified a model that is not loaded, it will be automatically loaded and used.</p>
-
-
- 
-  
-  
-  
-  
-    
-      
-    
-  
-    
-      
-    
-  
-    
-  
-
-<div class="figure center nocaption" >
-  
-    <a class="fancybox" href="https://anktsrkr.github.io/images/semantic-kernel/lmstudio_power_user_mode.gif" title="lmstudio_power_user_mode" data-fancybox="">
-  
-    <img class="fig-img" src="https://anktsrkr.github.io/images/semantic-kernel/lmstudio_power_user_mode.gif"  alt="lmstudio_power_user_mode">
-  
-    </a>
-  
-  
-</div>
-
+<figure class="post-figure center nocaption fancybox">
+  <img src="/images/semantic-kernel/lmstudio_power_user_mode.gif" alt="lmstudio_power_user_mode" loading="lazy">
+</figure>
 <p>This will expose OpenAI API compatible endpoint on <code>http://localhost:11435</code>. Copy or note the server URL — you’ll use it in your application.</p>
 <h3 id="create-a-net-console-application">Create a .NET Console Application</h3>
 <p>Now, let’s create a simple .NET console application that uses the Microsoft Agent Framework to interact with a local LLM via LM Studio.</p>
 <ol>
 <li>Open your terminal or command prompt. Create a new console app targeting .NET 10:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet new console -n AgentFrameworkLMStudioDemo -f net10.0
-</span></span><span style="display:flex;"><span>cd AgentFrameworkLMStudioDemo
-</span></span></code></pre></div></li>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> new</span><span style="color:#9ECBFF"> console</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> AgentFrameworkLMStudioDemo</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> net10.0</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> AgentFrameworkLMStudioDemo</span></span></code></pre>
+</li>
 <li>Add the necessary NuGet packages for Microsoft Agent Framework and any other dependencies:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet add package Microsoft.Agents.AI.OpenAI
-</span></span></code></pre></div></li>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span></code></pre>
+</li>
 <li>Restore the packages:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet restore
-</span></span></code></pre></div></li>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+</li>
 </ol>
 <h3 id="write-your-first-agent">Write Your First Agent</h3>
 <p>Open the <code>Program.cs</code> file and replace its contents with the following code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> Microsoft.Agents.AI;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> OpenAI;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> OpenAI.Chat;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.ClientModel;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> endPoint = Environment.GetEnvironmentVariable(<span style="color:#e6db74">&#34;OPENAI_ENDPOINT&#34;</span>) ?? <span style="color:#e6db74">&#34;http://localhost:11435/v1&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> apiKey = Environment.GetEnvironmentVariable(<span style="color:#e6db74">&#34;OPENAI_API_KEY&#34;</span>) ?? <span style="color:#e6db74">&#34;apiKey&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> model = Environment.GetEnvironmentVariable(<span style="color:#e6db74">&#34;OPENAI_MODEL&#34;</span>) ?? <span style="color:#e6db74">&#34;qwen/qwen3-4b-2507&#34;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">string</span> JokerName = <span style="color:#e6db74">&#34;Joker&#34;</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">string</span> JokerInstructions = <span style="color:#e6db74">&#34;You are good at telling jokes.&#34;</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Create an agent backed by LM Studio</span>
-</span></span><span style="display:flex;"><span>AIAgent agent = <span style="color:#66d9ef">new</span> OpenAIClient(
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">new</span> ApiKeyCredential(apiKey),
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">new</span> OpenAIClientOptions { Endpoint = <span style="color:#66d9ef">new</span> Uri(endPoint) })
-</span></span><span style="display:flex;"><span>    .GetChatClient(model)
-</span></span><span style="display:flex;"><span>    .CreateAIAgent(JokerInstructions, JokerName);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Example chat message</span>
-</span></span><span style="display:flex;"><span>UserChatMessage chatMessage = <span style="color:#66d9ef">new</span>(<span style="color:#e6db74">&#34;Tell me a joke about a pirate.&#34;</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Non-streaming invocation</span>
-</span></span><span style="display:flex;"><span>ChatCompletion chatCompletion = <span style="color:#66d9ef">await</span> agent.RunAsync([chatMessage]);
-</span></span><span style="display:flex;"><span>Console.WriteLine(<span style="color:#e6db74">&#34;Non-streaming response:&#34;</span>);
-</span></span><span style="display:flex;"><span>Console.WriteLine(chatCompletion.Content.Last().Text);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Streaming invocation</span>
-</span></span><span style="display:flex;"><span>Console.WriteLine(<span style="color:#e6db74">&#34;\nStreaming response:&#34;</span>);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> completionUpdates = agent.RunStreamingAsync([chatMessage]);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">await</span> <span style="color:#66d9ef">foreach</span> (StreamingChatCompletionUpdate completionUpdate <span style="color:#66d9ef">in</span> completionUpdates)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (completionUpdate.ContentUpdate.Count &gt; <span style="color:#ae81ff">0</span>)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        Console.Write(completionUpdate.ContentUpdate[<span style="color:#ae81ff">0</span>].Text);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="run-the-application">Run the Application</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endPoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "http://localhost:11435/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> apiKey</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_API_KEY"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "apiKey"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> model</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "qwen/qwen3-4b-2507"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> JokerName</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "Joker"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> JokerInstructions</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "You are good at telling jokes."</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Create an agent backed by LM Studio</span></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAIClient</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#F97583">        new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(apiKey),</span></span>
+<span class="line"><span style="color:#F97583">        new</span><span style="color:#B392F0"> OpenAIClientOptions</span><span style="color:#E1E4E8"> { Endpoint </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endPoint) })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(model)</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">CreateAIAgent</span><span style="color:#E1E4E8">(JokerInstructions, JokerName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Example chat message</span></span>
+<span class="line"><span style="color:#B392F0">UserChatMessage</span><span style="color:#B392F0"> chatMessage</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Tell me a joke about a pirate."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Non-streaming invocation</span></span>
+<span class="line"><span style="color:#B392F0">ChatCompletion</span><span style="color:#B392F0"> chatCompletion</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">([chatMessage]);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Non-streaming response:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(chatCompletion.Content.</span><span style="color:#B392F0">Last</span><span style="color:#E1E4E8">().Text);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Streaming invocation</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">Streaming response:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> completionUpdates</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">([chatMessage]);</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">StreamingChatCompletionUpdate</span><span style="color:#B392F0"> completionUpdate</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> completionUpdates)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#B392F0">    if</span><span style="color:#E1E4E8"> (completionUpdate.ContentUpdate.Count </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(completionUpdate.ContentUpdate[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">].Text);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="run-the-application">Run the Application</h3>
 <p>Before running the application, ensure that LM Studio is running and the OpenAI-compatible API is enabled.
 Set the necessary environment variables for the API endpoint, API key (for LM Studio, API Key is not needed, however to make it work with other OpenAI APIs, you need to set a dummy one), and model name. You can do this in your terminal:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>export OPENAI_ENDPOINT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://localhost:11435/v1&#34;</span>
-</span></span><span style="display:flex;"><span>export OPENAI_API_KEY<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;api-Key&#34;</span>
-</span></span><span style="display:flex;"><span>export OPENAI_MODEL<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;qwen/qwen3-4b-2507&#34;</span>
-</span></span></code></pre></div><p>Now, run your application:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet run
-</span></span></code></pre></div><p>You should see the agent generate a pirate joke by the local LLM running in LM Studio! — first via a normal response, then streamed word by word.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> OPENAI_ENDPOINT</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"http://localhost:11435/v1"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> OPENAI_API_KEY</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"api-Key"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> OPENAI_MODEL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"qwen/qwen3-4b-2507"</span></span></code></pre>
+<p>Now, run your application:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span></span></code></pre>
+<p>You should see the agent generate a pirate joke by the local LLM running in LM Studio! — first via a normal response, then streamed word by word.</p>
 <h3 id="big-picture-from-local-testing-to-enterprise-deployment">Big Picture: From Local Testing to Enterprise Deployment</h3>
 <p>With Microsoft Agent Framework, .NET developers no longer need to choose between the stability of Semantic Kernel and the innovative orchestration from AutoGen—both come together in a single, unified SDK. Whether you’re experimenting locally with LM Studio or deploying enterprise-ready applications, the framework empowers you to combine flexible Agent Orchestration with deterministic Workflow Orchestration.</p>
 <p>The result is a foundation that supports your journey from prototype to production, bringing open standards, extensibility, and enterprise durability into every stage of your agentic applications.</p>
-<p>This post focused on getting started with a single agent in LM Studio, but we’re just scratching the surface. In upcoming blogs, we’ll dive into <strong>multi-agent collaboration</strong>, <strong>workflow orchestration</strong>, and <strong>enterprise integration patterns</strong>—so you’ll see how to scale from simple examples to sophisticated agent ecosystems running in .NET.</p>
+<p>This post focused on getting started with a single agent in LM Studio, but we’re just scratching the surface. In upcoming blogs, we’ll dive into <strong>multi-agent collaboration</strong>, <strong>workflow orchestration</strong>, and <strong>enterprise integration patterns</strong>—so you’ll see how to scale from simple examples to sophisticated agent ecosystems running in .NET.</p>   <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/genai/">#genai</a><a href="/tags/lmstudio/">#lmstudio</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fgetting-started-with-lmstudio-and-agent-framework%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Getting%20Started%20with%20LM%20Studio%20%26%20Agent%20Framework%20for%20.NET%20Developers&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fgetting-started-with-lmstudio-and-agent-framework%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fgetting-started-with-lmstudio-and-agent-framework%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/";
+const title = "Getting Started with LM Studio & Agent Framework for .NET Developers";
+const url = "https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/";
 
-              
-              
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/ankit-sarkar/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
 
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    navigator.serviceWorker.ready.then(function() {});
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
 
-            </div>
-          </div>
-          <div id="post-footer" class="post-footer main-content-wrap">
-            
-              
-                
-                
-                  <div class="post-footer-tags">
-                    <span class="text-color-light text-small">TAGGED IN</span><br/>
-                    
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/genai/">genai</a>
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
 
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/lmstudio/">lmstudio</a>
-
-                  </div>
-                
-              
-            
-            
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/" data-tooltip="Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API" aria-label="NEXT: Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel/" data-tooltip="Getting Started with LMStudio &amp; Semantic Kernel" aria-label="PREVIOUS: Getting Started with LMStudio &amp; Semantic Kernel">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-            
-  
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-    <script type="text/javascript">
-      var disqus_config = function() {
-        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/agent-framework\/getting-started-with-lmstudio-and-agent-framework\/';
-        
-          this.page.identifier = '\/post\/agent-framework\/getting-started-with-lmstudio-and-agent-framework\/'
-        
-      };
-      (function() {
-        
-        
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-          return;
-        }
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'anktsrkr-github-io';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
-  
-
-
-          </div>
-        </article>
-        <footer id="footer" class="main-content-wrap">
-  <span class="copyrights">
-    &copy; 2025 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
-  </span>
-</footer>
-
-      </div>
-      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-        
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/" data-tooltip="Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API" aria-label="NEXT: Building Smart Agents with LM Studio: A Complete Walkthrough of the Microsoft Agent Framework and /v1/responses API">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel/" data-tooltip="Getting Started with LMStudio &amp; Semantic Kernel" aria-label="PREVIOUS: Getting Started with LMStudio &amp; Semantic Kernel">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-      </div>
-      
-<div id="share-options-bar" class="share-options-bar" data-behavior="5">
-  <i id="btn-close-shareoptions" class="fa fa-times"></i>
-  <ul class="share-options">
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fgetting-started-with-lmstudio-and-agent-framework%2F" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fgetting-started-with-lmstudio-and-agent-framework%2F" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Fgetting-started-with-lmstudio-and-agent-framework%2F" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
-        </a>
-      </li>
-    
-  </ul>
-</div>
-<div id="share-options-mask" class="share-options-mask"></div>
-
-
-    </div>
-    
-    <div id="about">
-  <div id="about-card">
-    <div id="about-btn-close">
-      <i class="fa fa-times"></i>
-    </div>
-    
-      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-    
-    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-    
-      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
-    
-    
-      <div id="about-card-job">
-        <i class="fa fa-briefcase"></i>
-        <br/>
-        Technical Architect
-      </div>
-    
-    
-      <div id="about-card-location">
-        <i class="fa fa-map-marker-alt"></i>
-        <br/>
-        Leeds
-      </div>
-    
-  </div>
-</div>
-
-    
-
-    
-  
-    
-      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
-    
-  
-
-
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-  integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
-  integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-<script src="https://anktsrkr.github.io/%20/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
-
-
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js">
-  </script>
-  
-  
-  
-  <script>
-    $(document).ready(function () {
-      hljs.configure({ classPrefix: '', useBR: false });
-      $('pre.code-highlight > code, pre > code').each(function (i, block) {
-        if (!$(this).hasClass('codeblock')) {
-          $(this).addClass('codeblock');
-        }
-        hljs.highlightElement(block);
-      });
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
     });
-  </script>
-  
-  
-  
-
-  
-
-<script>
-    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
-   </script>
-   
-   
-  
-<script>
-    if('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('/sw.js', { scope: '/' })
-            .then(function(registration) {
-            });
-  
-        navigator.serviceWorker
-            .ready
-            .then(function(registration) {
-            });
-    }
-  </script>
-  
-  <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
-</script>
-
-<a id="Setmore_button_iframe" style="position: fixed;
- right: 20px;
- bottom: 15px;
- z-index: 9998;text-decoration: none"
-    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
-    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
-display: table-cell;
-width: auto;
-height: 45px;
-padding: 0 30px;
-border-radius: 25px;
-box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
-font-family: sans-serif;
-text-align: center;
-vertical-align: middle;
-font-weight: bold;
-font-size: 14px;
-color: #fff;
-cursor: pointer;">#TalkWithMe</div>
-</a>
-  
-<script>
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ro6zx9o7jl");
-</script>
-  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('ankitsarkar', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#ffffff',
-    'floating-chat.donateButton.text-color': '#323842'
-  });
-</script>
-    
-  </body>
-</html>
-
+  }
+})();</script> </div> </body></html>

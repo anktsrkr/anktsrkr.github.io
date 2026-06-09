@@ -1,984 +1,156 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    
-    <script type="application/ld+json">
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy | Ankit Sarkar</title><meta name="description" content="Perform unit &#38; integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy"><link rel="canonical" href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy | Ankit Sarkar"><meta property="og:description" content="Perform unit &#38; integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy"><meta property="og:url" content="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/"><meta property="og:image" content="https://anktsrkr.github.io/images/azstorage/fie.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy | Ankit Sarkar"><meta name="twitter:description" content="Perform unit &#38; integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy"><meta name="twitter:image" content="https://anktsrkr.github.io/images/azstorage/fie.png"><script async src="https://www.googletagmanager.com/gtag/js?id=UA-176781214-1"></script><script>(function(){const gaId = "UA-176781214-1";
 
-{  
-  "@context":"http://schema.org",
-  "@type":"Website",
-  "@id":"https:\/\/anktsrkr.github.io\/",
-  "author": {
-    "@type": "Person",
-    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-    
-    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
-    
-  },
-  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-  "description":"Perform unit \u0026 integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy",
-  "url":"https:\/\/anktsrkr.github.io\/post\/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy\/",
-  "keywords":"[azure storage unit test, azure storage unit testing, azure storage integration test, azure storage integration testing, azure storage test containers, azure storage testcontainers, azure storage fakeiteasy, azure storage xunit, azure storage .net 7, azure storage azurite, azure storage azurite test containers, azure storage azurite fakeiteasy, azure storage azurite xunit, azure storage azurite .net 7, azure storage azurite unit testing, azure storage azurite integration testing, azure storage azurite test containers, azure storage azurite testcontainers, azure storage unit testing, azure storage blob integration testing, azure storage blob test containers, azure storage blob fakeiteasy, azure storage blob xunit, azure storage blob .net 7, azure storage blob azurite, azure storage blob azurite test containers, azure storage blob azurite fakeiteasy, azure storage blob azurite xunit, azure storage blob azurite .net 7, azure storage blob azurite unit testing, azure storage blob azurite integration testing, azure storage blob azurite test containers, azure storage blob azurite testcontainers, azurite integration testing, azurite test containers, azurite fakeiteasy, azurite xunit, azurite .net 7, azurite unit testing, unit and integration testing for azure blob storage, unit and integration testing for azure blob storage using azurite test containers, unit and integration testing for azure blob storage using azurite testcontainers, unit and integration testing for azure blob storage using xunit fakeiteasy, unit and integration testing for azure blob storage using .net 7, unit and integration testing for azure blob storage using azurite, BlobContainerClient, BlobContainerClient dependency injection, BlobClient, BlobServiceClient, Azure.Storage.Blobs, Azure.Storage.Blobs v12 unit testing, Azure.Storage.Blobs v12 integration testing, Dependency injection, azure storage blob dependency injection, azure storage dependency injection, azure storage testing, azurite, moving solutions to Azure Cloud, How to Test Azure Blob Storage, How to make integration test for Azure Storage, azure, integration test for azure storage,, storage, unit test, getting started with testing for azure blob storage, getting started with testing for azure blob storage dependency injection, getting started with testing for azure blob storage unit test, getting started with testing for azure blob storage unit test with fakeiteasy, getting started with testing for azure blob storage integration test, getting started with testing for azure blob storage integration test with azurite test containers, getting started with testing for azure blob storage integration test with azurite testcontainers, class fixture, collection fixture, IAsyncLifetime, xunit class fixture, xunit collection fixture, xunit IAsyncLifetime, azurite IAsyncLifetime]"
-}
-
-</script>
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
-<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta name="keywords" content="azure storage unit test, azure storage unit testing, azure storage integration test, azure storage integration testing, azure storage test containers, azure storage testcontainers, azure storage fakeiteasy, azure storage xunit, azure storage .net 7, azure storage azurite, azure storage azurite test containers, azure storage azurite fakeiteasy, azure storage azurite xunit, azure storage azurite .net 7, azure storage azurite unit testing, azure storage azurite integration testing, azure storage azurite test containers, azure storage azurite testcontainers, azure storage unit testing, azure storage blob integration testing, azure storage blob test containers, azure storage blob fakeiteasy, azure storage blob xunit, azure storage blob .net 7, azure storage blob azurite, azure storage blob azurite test containers, azure storage blob azurite fakeiteasy, azure storage blob azurite xunit, azure storage blob azurite .net 7, azure storage blob azurite unit testing, azure storage blob azurite integration testing, azure storage blob azurite test containers, azure storage blob azurite testcontainers, azurite integration testing, azurite test containers, azurite fakeiteasy, azurite xunit, azurite .net 7, azurite unit testing, unit and integration testing for azure blob storage, unit and integration testing for azure blob storage using azurite test containers, unit and integration testing for azure blob storage using azurite testcontainers, unit and integration testing for azure blob storage using xunit fakeiteasy, unit and integration testing for azure blob storage using .net 7, unit and integration testing for azure blob storage using azurite, BlobContainerClient, BlobContainerClient dependency injection, BlobClient, BlobServiceClient, Azure.Storage.Blobs, Azure.Storage.Blobs v12 unit testing, Azure.Storage.Blobs v12 integration testing, Dependency injection, azure storage blob dependency injection, azure storage dependency injection, azure storage testing, azurite, moving solutions to Azure Cloud, How to Test Azure Blob Storage, How to make integration test for Azure Storage, azure, integration test for azure storage,, storage, unit test, getting started with testing for azure blob storage, getting started with testing for azure blob storage dependency injection, getting started with testing for azure blob storage unit test, getting started with testing for azure blob storage unit test with fakeiteasy, getting started with testing for azure blob storage integration test, getting started with testing for azure blob storage integration test with azurite test containers, getting started with testing for azure blob storage integration test with azurite testcontainers, class fixture, collection fixture, IAsyncLifetime, xunit class fixture, xunit collection fixture, xunit IAsyncLifetime, azurite IAsyncLifetime">
-<meta name="description" content="Perform unit &amp; integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy">
-
-
-<meta property="og:description" content="Perform unit &amp; integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy">
-<meta name="twitter:title" content="Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy">
-<meta property="og:url" content="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/">
-<meta property="twitter:url" content="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/">
-<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta property="og:description" content="Perform unit &amp; integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy">
-<meta name="twitter:description" content="Perform unit &amp; integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy">
-<meta property="og:locale" content="en-us">
-
-  
-    <meta property="article:published_time" content="2023-10-11T08:00:35">
-  
-  
-    <meta property="article:modified_time" content="2023-10-11T08:00:35">
-  
-  
-  
-    
-      <meta property="article:section" content="Azure">
-    
-      <meta property="article:section" content="Azurite">
-    
-      <meta property="article:section" content="Unit Testing">
-    
-      <meta property="article:section" content="Integration Testing">
-    
-      <meta property="article:section" content="Test Containers">
-    
-      <meta property="article:section" content="FakeItEasy">
-    
-      <meta property="article:section" content="xUnit">
-    
-      <meta property="article:section" content=".NET 7">
-    
-  
-  
-    
-      <meta property="article:tag" content="azure">
-    
-      <meta property="article:tag" content="testing">
-    
-      <meta property="article:tag" content="c#">
-    
-  
-
-
-<meta name="twitter:card" content="summary">
-
-  <meta name="twitter:site" content="@anktsrkr">
-
-
-  <meta name="twitter:creator" content="@anktsrkr">
-
-
-
-
-
-
-
-
-
-
-  <meta property="og:image" content="https://anktsrkr.github.io/images/azstorage/fie.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/azstorage/fie.png">
-
-
-  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-
-    <title>Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy</title>
-
-    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
-    
-
-    
-
-    <link rel="canonical" href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/">
-
-    
-    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
-    
-   
-    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    
-    
-    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
-    
-    
-    
-
-    
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-176781214-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
-     crossorigin="anonymous"></script>
-<script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="9gZ8D7m_t9Y2oK" async></script>
-     
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TY8ZMTBGSM');
-</script>
-    
-  </head>
-
-  <body>
-    <div id="blog">
-      <header id="header" data-behavior="5">
-  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-  <div class="header-title">
-    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
-  </div>
-  
-    
-      <a class="header-right-picture "
-         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
-    
-    
-    
-      
-        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
-      
-    
-    </a>
-  
-</header>
-
-      <nav id="sidebar" data-behavior="5">
-  <div class="sidebar-container">
-    
-      <div class="sidebar-profile">
-        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
-          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-        </a>
-        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-        
-          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
-        
-      </div>
-    
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Home</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Categories</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Tags</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Archives</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">About</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">GitHub</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Linkedin</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Twitter</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">RSS</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-
-    </ul>
-  </div>
-</nav>
-
-      
-
-      <div id="main" data-behavior="5"
-        class="
-               hasCoverMetaIn
-               ">
-        <article class="post" id="top">
-          
-          
-            <div class="post-header main-content-wrap text-left">
-  
-    <h1 class="post-title">
-      Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy
-    </h1>
-  
-  
-  <div class="postShorten-meta post-meta">
-    
-      <time datetime="2023-10-11T08:00:35&#43;01:00">
-        
-  October 11, 2023
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/azure">Azure</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/azurite">Azurite</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/unit-testing">Unit Testing</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/integration-testing">Integration Testing</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/test-containers">Test Containers</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/fakeiteasy">FakeItEasy</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/xunit">xUnit</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-7">.NET 7</a>
-    
-  
-
-  </div>
-
-</div>
-          
-          <div class="post-content markdown">
-            <div class="main-content-wrap">
-              <p>Hi Everyone!</p>
-<p>In this post, we will discuss about the alternative framework for mocking. This post is adoptation of <a href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq">this</a> which is using <strong>Moq</strong>.</p>
-<p>You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.</p>
-<p><a href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection">Getting started with testing for Azure Blob Storage : Dependency Injection</a></p>
-<p><a href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq">Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</a></p>
-<p><em>This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)</em></p>
-<p><a href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite">Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite</a></p>
-<p><a href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk">Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK</a></p>
-<p>Let&rsquo;s get started.</p>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><link rel="stylesheet" href="/_astro/_slug_.C7rzXrsf.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2023-10-11T07:00:35.000Z">11 Oct 2023</time> <span>Azure</span> </div> <h1>Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy</h1> <p>Perform unit &amp; integration tests for Azure Blob Storage: Unit Test with help of FakeItEasy</p> <div class="article-tags"> <a href="/categories/azure/">Azure</a><a href="/categories/azurite/">Azurite</a><a href="/categories/unit-testing/">Unit Testing</a><a href="/categories/integration-testing/">Integration Testing</a><a href="/categories/test-containers/">Test Containers</a><a href="/categories/fakeiteasy/">FakeItEasy</a><a href="/categories/xunit/">xUnit</a><a href="/categories/.net-7/">.NET 7</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#writing-unit-test">Writing Unit Test</a> <div class="toc-sublinks"> <a href="#test-case-1---file-upload-success">Test case 1 - File upload success</a><a href="#test-case-2---file-upload-failure">Test case 2 - File upload failure</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#outro">Outro</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Azure Blob Storage Testing series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Azure Blob Storage Testing</h2> <p>Follow the Azure Blob Storage testing series from dependency injection to unit and integration tests.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/">Getting started with testing for Azure Blob Storage : Dependency Injection</a> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/">Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">03</span> <span class="series-nav-current"> <span>Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite/">Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite</a> </li><li class="series-nav-item"> <span class="series-nav-index">05</span> <a href="/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk/">Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK</a> </li><li class="series-nav-item"> <span class="series-nav-index">06</span> <a href="/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy/">Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK Using FakeItEasy</a> </li> </ol> </nav>  <p>Hi Everyone!</p>
+<p>In this post, we will discuss about the alternative framework for mocking. This post is adoptation of <a href="/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq">this</a> which is using <strong>Moq</strong>.</p>
+<p>Let’s get started.</p>
 <p>I am late in the party, but you must be aware of the fuss around the <strong>Moq</strong>. If you are not aware, let me give you a brief detail about it.</p>
 <p><strong>Moq</strong> maintainer <a href="https://twitter.com/kzu">Daniel Cazzulino</a> has introduced a spyware in the <strong>Moq</strong> library from version 4.20.0, which sends your hashed email address to the <strong>SponsorLink</strong> CDN. You can find the full story <a href="https://www.bleepingcomputer.com/news/security/popular-open-source-project-moq-criticized-for-quietly-collecting-data/">here</a></p>
 <p>As of today, latest version of <strong>Moq</strong> is 4.20.69. In which, the spyware is removed. However, the damage is already done. Also, not sure about the future if they will introduce the spyware again or not. So, I have decided to move away from <strong>Moq</strong> and use some other mocking framework like <strong>FakeItEasy</strong> or <strong>NSubstitute</strong>.</p>
-<p>In this post, we will use <strong>FakeItEasy</strong> to perform unit test for Azure Blob Storage. FakeItEasy and NSubstitute are the two most popular mocking framework alongwith <strong>Moq</strong>. I have decided to use <strong>FakeItEasy</strong> because of it&rsquo;s license. <strong>FakeItEasy</strong> is licensed under <em>MIT</em> and <em>NSubstitute</em> is licensed under <em>2-Clause BSD</em>. I am not a lawyer, but seems like there not much difference between these two licenses. However, I am more comfortable with <em>MIT</em> license.</p>
-<p>We will use the same code base we used in the <a href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq">previous</a> post. So, if you have not read the previous post, I would recommend to read it first before proceeding further as we will skip the code part and focus on the testing part.</p>
+<p>In this post, we will use <strong>FakeItEasy</strong> to perform unit test for Azure Blob Storage. FakeItEasy and NSubstitute are the two most popular mocking framework alongwith <strong>Moq</strong>. I have decided to use <strong>FakeItEasy</strong> because of it’s license. <strong>FakeItEasy</strong> is licensed under <em>MIT</em> and <em>NSubstitute</em> is licensed under <em>2-Clause BSD</em>. I am not a lawyer, but seems like there not much difference between these two licenses. However, I am more comfortable with <em>MIT</em> license.</p>
+<p>We will use the same code base we used in the <a href="/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq">previous</a> post. So, if you have not read the previous post, I would recommend to read it first before proceeding further as we will skip the code part and focus on the testing part.</p>
 <p>First, we will remove the reference of <strong>Moq</strong> from the project. Then we will add <strong>FakeItEasy</strong> as nuget package. Here is the code snippet of <em>csproj</em> for the project <em>SystemUnderTest</em> -</p>
-
-  
-    
-  
-  
-    
-  
-  
-  
-
-
-<figure class="highlight xml language-xml">
-  <figcaption>
-    
-      <span>SystemUnderTest.UnitTest.csproj</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language-xml xml"><code class="xml">&lt;Project Sdk=&#34;Microsoft.NET.Sdk&#34;&gt;
-
-  &lt;PropertyGroup&gt;
-    &lt;TargetFramework&gt;net7.0&lt;/TargetFramework&gt;
-    &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
-    &lt;Nullable&gt;enable&lt;/Nullable&gt;
-
-    &lt;IsPackable&gt;false&lt;/IsPackable&gt;
-  &lt;/PropertyGroup&gt;
-
-  &lt;ItemGroup&gt;
-    &lt;PackageReference Include=&#34;Microsoft.NET.Test.Sdk&#34; Version=&#34;17.3.2&#34; /&gt;
-    &lt;PackageReference Include=&#34;FakeItEasy&#34; Version=&#34;7.4.0&#34; /&gt;
-    &lt;PackageReference Include=&#34;xunit&#34; Version=&#34;2.4.2&#34; /&gt;
-    &lt;PackageReference Include=&#34;xunit.runner.visualstudio&#34; Version=&#34;2.4.5&#34;&gt;
-      &lt;IncludeAssets&gt;runtime; build; native; contentfiles; analyzers; buildtransitive&lt;/IncludeAssets&gt;
-      &lt;PrivateAssets&gt;all&lt;/PrivateAssets&gt;
-    &lt;/PackageReference&gt;
-    &lt;PackageReference Include=&#34;coverlet.collector&#34; Version=&#34;3.1.2&#34;&gt;
-      &lt;IncludeAssets&gt;runtime; build; native; contentfiles; analyzers; buildtransitive&lt;/IncludeAssets&gt;
-      &lt;PrivateAssets&gt;all&lt;/PrivateAssets&gt;
-    &lt;/PackageReference&gt;
-  &lt;/ItemGroup&gt;
-
-  &lt;ItemGroup&gt;
-    &lt;ProjectReference Include=&#34;..\..\src\SystemUnderTest\SystemUnderTest.csproj&#34; /&gt;
-  &lt;/ItemGroup&gt;
-
-&lt;/Project&gt;</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
+<div class="code-title">SystemUnderTest.UnitTest.csproj</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="xml"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">Project</span><span style="color:#B392F0"> Sdk</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"Microsoft.NET.Sdk"</span><span style="color:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">PropertyGroup</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">TargetFramework</span><span style="color:#E1E4E8">>net7.0&#x3C;/</span><span style="color:#85E89D">TargetFramework</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">ImplicitUsings</span><span style="color:#E1E4E8">>enable&#x3C;/</span><span style="color:#85E89D">ImplicitUsings</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">Nullable</span><span style="color:#E1E4E8">>enable&#x3C;/</span><span style="color:#85E89D">Nullable</span><span style="color:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">IsPackable</span><span style="color:#E1E4E8">>false&#x3C;/</span><span style="color:#85E89D">IsPackable</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">PropertyGroup</span><span style="color:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">ItemGroup</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">PackageReference</span><span style="color:#B392F0"> Include</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"Microsoft.NET.Test.Sdk"</span><span style="color:#B392F0"> Version</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"17.3.2"</span><span style="color:#E1E4E8"> /></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">PackageReference</span><span style="color:#B392F0"> Include</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"FakeItEasy"</span><span style="color:#B392F0"> Version</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"7.4.0"</span><span style="color:#E1E4E8"> /></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">PackageReference</span><span style="color:#B392F0"> Include</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"xunit"</span><span style="color:#B392F0"> Version</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"2.4.2"</span><span style="color:#E1E4E8"> /></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">PackageReference</span><span style="color:#B392F0"> Include</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"xunit.runner.visualstudio"</span><span style="color:#B392F0"> Version</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"2.4.5"</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">      &#x3C;</span><span style="color:#85E89D">IncludeAssets</span><span style="color:#E1E4E8">>runtime; build; native; contentfiles; analyzers; buildtransitive&#x3C;/</span><span style="color:#85E89D">IncludeAssets</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">      &#x3C;</span><span style="color:#85E89D">PrivateAssets</span><span style="color:#E1E4E8">>all&#x3C;/</span><span style="color:#85E89D">PrivateAssets</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;/</span><span style="color:#85E89D">PackageReference</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">PackageReference</span><span style="color:#B392F0"> Include</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"coverlet.collector"</span><span style="color:#B392F0"> Version</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"3.1.2"</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">      &#x3C;</span><span style="color:#85E89D">IncludeAssets</span><span style="color:#E1E4E8">>runtime; build; native; contentfiles; analyzers; buildtransitive&#x3C;/</span><span style="color:#85E89D">IncludeAssets</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">      &#x3C;</span><span style="color:#85E89D">PrivateAssets</span><span style="color:#E1E4E8">>all&#x3C;/</span><span style="color:#85E89D">PrivateAssets</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;/</span><span style="color:#85E89D">PackageReference</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">ItemGroup</span><span style="color:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">ItemGroup</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">ProjectReference</span><span style="color:#B392F0"> Include</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"..\..\src\SystemUnderTest\SystemUnderTest.csproj"</span><span style="color:#E1E4E8"> /></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">ItemGroup</span><span style="color:#E1E4E8">></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">Project</span><span style="color:#E1E4E8">></span></span></code></pre>
 <h2 id="writing-unit-test">Writing Unit Test</h2>
-<p>We have setup all tools and framework and ready to write our first test case. Let&rsquo;s try to understand what are the scenarios we want to test. We have two scenarios in our mind, one is when the file is uploaded successfully and another is when the file upload fails. We will write test cases for each scenario.</p>
-<p>If you notice  <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong> writes the result to <em>console</em>. so,let&rsquo;s prepare our <em>UnitTests.cs</em> to handle this -</p>
-
-  
-    
-  
-  
-    
-  
-  
-  
-
-
-<figure class="highlight csharp language-csharp">
-  <figcaption>
-    
-      <span>UnitTests.cs</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language-csharp csharp"><code class="csharp">using Moq;
-using SystemUnderTest.Interface;
-
-namespace SystemUnderTest.UnitTest;
-
-public class UnitTests
-{
-   private readonly StringWriter Output = new StringWriter();
-    public UnitTests()
-    {
-        Console.SetOut(Output);
-    }
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<p>All set. Let&rsquo;s write our first test case.</p>
+<p>We have setup all tools and framework and ready to write our first test case. Let’s try to understand what are the scenarios we want to test. We have two scenarios in our mind, one is when the file is uploaded successfully and another is when the file upload fails. We will write test cases for each scenario.</p>
+<p>If you notice  <strong><span class="hl hl-blue">UploadFileToAzBlob</span></strong> writes the result to <em>console</em>. so,let’s prepare our <em>UnitTests.cs</em> to handle this -</p>
+<div class="code-title">UnitTests.cs</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Moq</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> SystemUnderTest</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Interface</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">namespace</span><span style="color:#B392F0"> SystemUnderTest</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">UnitTest</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> UnitTests</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">   private</span><span style="color:#F97583"> readonly</span><span style="color:#B392F0"> StringWriter</span><span style="color:#B392F0"> Output</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringWriter</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#B392F0"> UnitTests</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">SetOut</span><span style="color:#E1E4E8">(Output);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>All set. Let’s write our first test case.</p>
 <h3 id="test-case-1---file-upload-success">Test case 1 - File upload success</h3>
-<p>If you remember, very beginning of this post we made a change in <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong> method. We removed the dependency on <strong><span class="highlight-text purple">IServiceProvider</span></strong> and added dependency on <strong><span class="highlight-text yellow">IAzBlobService</span></strong>.</p>
-<p>So, we will create a fake object of <strong><span class="highlight-text yellow">IAzBlobService</span></strong> and pass it to <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong> method.</p>
-
-  
-    
-  
-  
-    
-  
-  
-  
-
-
-<figure class="highlight csharp language-csharp">
-  <figcaption>
-    
-      <span>UnitTests.cs</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language-csharp csharp"><code class="csharp">[Fact]
-public async Task File_Upload_Success()
-{
-  var azBlobService = A.Fake&lt;IAzBlobService&gt;();
-  A.CallTo(() =&gt; azBlobService.UploadFileToAzBlobAsync(A&lt;string&gt;._)).Returns(true);
-  await Program.UploadFileToAzBlobAsync(azBlobService);
-  Assert.Contains(&#34;File uploaded successfully&#34;, Output.ToString());
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<p><span class="highlight-text cyan">At line 4</span>, we are creating a fake object of <strong><span class="highlight-text yellow">IAzBlobService</span></strong>.</p>
-<p><span class="highlight-text cyan">At line 5</span>, we are setting up the fake object to return <em>true</em> when <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong> method is called.</p>
-<p><span class="highlight-text cyan">At line 6</span> we are calling <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong> method and passing the fake object of <strong><span class="highlight-text yellow">IAzBlobService</span></strong>.</p>
-<p><span class="highlight-text cyan">At line 7</span>, we are asserting that the output contains the string <em>File uploaded successfully</em>.</p>
-<p>At this stage, we have completely ignoring the implementation of <strong><span class="highlight-text blue">UploadFileToAzBlob</span></strong> method. We are only testing the output of the method and not the implementation. This is the beauty of mocking framework. We can test the output of the method without worrying about the implementation.</p>
+<p>If you remember, very beginning of this post we made a change in <strong><span class="hl hl-blue">UploadFileToAzBlob</span></strong> method. We removed the dependency on <strong><span class="hl hl-purple">IServiceProvider</span></strong> and added dependency on <strong><span class="hl hl-yellow">IAzBlobService</span></strong>.</p>
+<p>So, we will create a fake object of <strong><span class="hl hl-yellow">IAzBlobService</span></strong> and pass it to <strong><span class="hl hl-blue">UploadFileToAzBlob</span></strong> method.</p>
+<div class="code-title">UnitTests.cs</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Fact</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> Task</span><span style="color:#B392F0"> File_Upload_Success</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> azBlobService</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> A.</span><span style="color:#B392F0">Fake</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">IAzBlobService</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#E1E4E8">  A.</span><span style="color:#B392F0">CallTo</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> azBlobService.</span><span style="color:#B392F0">UploadFileToAzBlobAsync</span><span style="color:#E1E4E8">(A&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>._)).</span><span style="color:#B392F0">Returns</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  await</span><span style="color:#E1E4E8"> Program.</span><span style="color:#B392F0">UploadFileToAzBlobAsync</span><span style="color:#E1E4E8">(azBlobService);</span></span>
+<span class="line"><span style="color:#E1E4E8">  Assert.</span><span style="color:#B392F0">Contains</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"File uploaded successfully"</span><span style="color:#E1E4E8">, Output.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><span class="hl hl-cyan">At line 4</span>, we are creating a fake object of <strong><span class="hl hl-yellow">IAzBlobService</span></strong>.</p>
+<p><span class="hl hl-cyan">At line 5</span>, we are setting up the fake object to return <em>true</em> when <strong><span class="hl hl-blue">UploadFileToAzBlob</span></strong> method is called.</p>
+<p><span class="hl hl-cyan">At line 6</span> we are calling <strong><span class="hl hl-blue">UploadFileToAzBlob</span></strong> method and passing the fake object of <strong><span class="hl hl-yellow">IAzBlobService</span></strong>.</p>
+<p><span class="hl hl-cyan">At line 7</span>, we are asserting that the output contains the string <em>File uploaded successfully</em>.</p>
+<p>At this stage, we have completely ignoring the implementation of <strong><span class="hl hl-blue">UploadFileToAzBlob</span></strong> method. We are only testing the output of the method and not the implementation. This is the beauty of mocking framework. We can test the output of the method without worrying about the implementation.</p>
 <h3 id="test-case-2---file-upload-failure">Test case 2 - File upload failure</h3>
 <p>Similarly, we can write the test case for the scenario when the file upload fails.</p>
-
-  
-    
-  
-  
-    
-  
-  
-  
-
-
-<figure class="highlight csharp language-csharp">
-  <figcaption>
-    
-      <span>UnitTests.cs</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language-csharp csharp"><code class="csharp">[Fact]
-public async Task File_Upload_Failure ()
-{
-  var azBlobService = A.Fake&lt;IAzBlobService&gt;();
-  A.CallTo(() =&gt; azBlobService.UploadFileToAzBlobAsync(A&lt;string&gt;._)).Returns(false);
-  await Program.UploadFileToAzBlobAsync(azBlobService);
-  Assert.Contains(&#34;File upload failed&#34;, Output.ToString());
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<p>Here, the only difference is we are setting up the fake object to return <em>false</em> when <strong><span class="highlight-text blue">UploadFileToAzBlobAsync</span></strong> method is called.</p>
+<div class="code-title">UnitTests.cs</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Fact</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> Task</span><span style="color:#B392F0"> File_Upload_Failure</span><span style="color:#E1E4E8"> ()</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> azBlobService</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> A.</span><span style="color:#B392F0">Fake</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">IAzBlobService</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#E1E4E8">  A.</span><span style="color:#B392F0">CallTo</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> azBlobService.</span><span style="color:#B392F0">UploadFileToAzBlobAsync</span><span style="color:#E1E4E8">(A&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>._)).</span><span style="color:#B392F0">Returns</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  await</span><span style="color:#E1E4E8"> Program.</span><span style="color:#B392F0">UploadFileToAzBlobAsync</span><span style="color:#E1E4E8">(azBlobService);</span></span>
+<span class="line"><span style="color:#E1E4E8">  Assert.</span><span style="color:#B392F0">Contains</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"File upload failed"</span><span style="color:#E1E4E8">, Output.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Here, the only difference is we are setting up the fake object to return <em>false</em> when <strong><span class="hl hl-blue">UploadFileToAzBlobAsync</span></strong> method is called.</p>
 <h2 id="outro">Outro</h2>
-<p>That&rsquo;s it. We have written two test cases for the method <strong><span class="highlight-text blue">UploadFileToAzBlobAsync</span></strong>. We have used <strong>FakeItEasy</strong> to mock the dependency <strong><span class="highlight-text yellow">IAzBlobService</span></strong> and <strong>xUnit</strong> to write the test cases.</p>
-<p>However, we have not tested the implementation of <strong><span class="highlight-text blue">UploadFileToAzBlobAsync</span></strong> method. We have only tested the output of the method.</p>
-<p>We will write the test cases for the implementation of <strong><span class="highlight-text blue">UploadFileToAzBlobAsync</span></strong> method using <strong>FakeItEasy</strong> in another post.</p>
+<p>That’s it. We have written two test cases for the method <strong><span class="hl hl-blue">UploadFileToAzBlobAsync</span></strong>. We have used <strong>FakeItEasy</strong> to mock the dependency <strong><span class="hl hl-yellow">IAzBlobService</span></strong> and <strong>xUnit</strong> to write the test cases.</p>
+<p>However, we have not tested the implementation of <strong><span class="hl hl-blue">UploadFileToAzBlobAsync</span></strong> method. We have only tested the output of the method.</p>
+<p>We will write the test cases for the implementation of <strong><span class="hl hl-blue">UploadFileToAzBlobAsync</span></strong> method using <strong>FakeItEasy</strong> in another post.</p>
 <p><strong>FakeItEasy</strong> has great documentation. You can find it <a href="https://fakeiteasy.github.io/">here</a>.</p>
-<p>You can find the source code <a href="https://github.com/sundryoss/Sundry.AzStorageTest"><strong>here</strong></a>.</p>
+<p>You can find the source code <a href="https://github.com/sundryoss/Sundry.AzStorageTest"><strong>here</strong></a>.</p>   <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/azure/">#azure</a><a href="/tags/testing/">#testing</a><a href="/tags/c/">#c#</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Getting%20started%20with%20testing%20for%20Azure%20Blob%20Storage%20%3A%20Unit%20Test%20with%20help%20of%20FakeItEasy&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/";
+const title = "Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy";
+const url = "https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/";
 
-              
-              
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/ankit-sarkar/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
 
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    navigator.serviceWorker.ready.then(function() {});
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
 
-            </div>
-          </div>
-          <div id="post-footer" class="post-footer main-content-wrap">
-            
-              
-                
-                
-                  <div class="post-footer-tags">
-                    <span class="text-color-light text-small">TAGGED IN</span><br/>
-                    
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azure/">azure</a>
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
 
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/testing/">testing</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
-
-                  </div>
-                
-              
-            
-            
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy/" data-tooltip="Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK Using FakeItEasy" aria-label="NEXT: Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK Using FakeItEasy">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/" data-tooltip="Do not throw exceptions...Everywhere" aria-label="PREVIOUS: Do not throw exceptions...Everywhere">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-            
-  
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-    <script type="text/javascript">
-      var disqus_config = function() {
-        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy\/';
-        
-          this.page.identifier = '\/post\/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy\/'
-        
-      };
-      (function() {
-        
-        
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-          return;
-        }
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'anktsrkr-github-io';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
-  
-
-
-          </div>
-        </article>
-        <footer id="footer" class="main-content-wrap">
-  <span class="copyrights">
-    &copy; 2025 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
-  </span>
-</footer>
-
-      </div>
-      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-        
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk-fakeiteasy/" data-tooltip="Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK Using FakeItEasy" aria-label="NEXT: Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK Using FakeItEasy">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/do-not-throw-exceptions...everywhere/" data-tooltip="Do not throw exceptions...Everywhere" aria-label="PREVIOUS: Do not throw exceptions...Everywhere">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-      </div>
-      
-<div id="share-options-bar" class="share-options-bar" data-behavior="5">
-  <i id="btn-close-shareoptions" class="fa fa-times"></i>
-  <ul class="share-options">
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy%2F" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy%2F" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fgetting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy%2F" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
-        </a>
-      </li>
-    
-  </ul>
-</div>
-<div id="share-options-mask" class="share-options-mask"></div>
-
-
-    </div>
-    
-    <div id="about">
-  <div id="about-card">
-    <div id="about-btn-close">
-      <i class="fa fa-times"></i>
-    </div>
-    
-      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-    
-    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-    
-      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
-    
-    
-      <div id="about-card-job">
-        <i class="fa fa-briefcase"></i>
-        <br/>
-        Technical Architect
-      </div>
-    
-    
-      <div id="about-card-location">
-        <i class="fa fa-map-marker-alt"></i>
-        <br/>
-        Leeds
-      </div>
-    
-  </div>
-</div>
-
-    
-
-    
-  
-    
-      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
-    
-  
-
-
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-  integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
-  integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-<script src="https://anktsrkr.github.io/%20/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
-
-
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js">
-  </script>
-  
-  
-  
-  <script>
-    $(document).ready(function () {
-      hljs.configure({ classPrefix: '', useBR: false });
-      $('pre.code-highlight > code, pre > code').each(function (i, block) {
-        if (!$(this).hasClass('codeblock')) {
-          $(this).addClass('codeblock');
-        }
-        hljs.highlightElement(block);
-      });
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
     });
-  </script>
-  
-  
-  
-
-  
-
-<script>
-    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
-   </script>
-   
-   
-  
-<script>
-    if('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('/sw.js', { scope: '/' })
-            .then(function(registration) {
-            });
-  
-        navigator.serviceWorker
-            .ready
-            .then(function(registration) {
-            });
-    }
-  </script>
-  
-  <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
-</script>
-
-<a id="Setmore_button_iframe" style="position: fixed;
- right: 20px;
- bottom: 15px;
- z-index: 9998;text-decoration: none"
-    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
-    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
-display: table-cell;
-width: auto;
-height: 45px;
-padding: 0 30px;
-border-radius: 25px;
-box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
-font-family: sans-serif;
-text-align: center;
-vertical-align: middle;
-font-weight: bold;
-font-size: 14px;
-color: #fff;
-cursor: pointer;">#TalkWithMe</div>
-</a>
-  
-<script>
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ro6zx9o7jl");
-</script>
-  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('ankitsarkar', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#ffffff',
-    'floating-chat.donateButton.text-color': '#323842'
-  });
-</script>
-    
-  </body>
-</html>
-
+  }
+})();</script> </div> </body></html>

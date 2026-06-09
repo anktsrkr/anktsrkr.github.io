@@ -1,346 +1,11 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    
-    <script type="application/ld+json">
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Deploy App Service Environment (ASE v2) in Microsoft Azure | Ankit Sarkar</title><meta name="description" content="Deploy App Service Environment (ASE v2) in Microsoft Azure"><link rel="canonical" href="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Deploy App Service Environment (ASE v2) in Microsoft Azure | Ankit Sarkar"><meta property="og:description" content="Deploy App Service Environment (ASE v2) in Microsoft Azure"><meta property="og:url" content="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/"><meta property="og:image" content="https://anktsrkr.github.io/images/ase.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Deploy App Service Environment (ASE v2) in Microsoft Azure | Ankit Sarkar"><meta name="twitter:description" content="Deploy App Service Environment (ASE v2) in Microsoft Azure"><meta name="twitter:image" content="https://anktsrkr.github.io/images/ase.png"><script async src="https://www.googletagmanager.com/gtag/js?id=UA-176781214-1"></script><script>(function(){const gaId = "UA-176781214-1";
 
-{  
-  "@context":"http://schema.org",
-  "@type":"Website",
-  "@id":"https:\/\/anktsrkr.github.io\/",
-  "author": {
-    "@type": "Person",
-    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-    
-    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
-    
-  },
-  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-  "description":"Deploy App Service Environment (ASE v2) in Microsoft Azure",
-  "url":"https:\/\/anktsrkr.github.io\/post\/deploy-app-service-environment-v2-in-microsoft-azure\/",
-  "keywords":"[ase,app, service,, app, service, env,, app, service, env, v2,app, service, environment,app, service, environment, v2,deploy, application, in, app, service, environment,app, service, environment, and, private, link,, ase, in, hub, spoke,hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology,app, service, environment, and, private, endpoint,azure, sql,, azure, sql, and, private, endpoint,azure, private, dns, zone,, resolve, azure, internal, DNS, from, your, on, prem,hub, spoke, dns, forwarder,dns, forwarder, in, hub, spoke,dns, forwarder, in, hub, spoke, network, topology,dns, forwarder]"
-}
-
-</script>
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
-<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta name="keywords" content="ase,app, service,, app, service, env,, app, service, env, v2,app, service, environment,app, service, environment, v2,deploy, application, in, app, service, environment,app, service, environment, and, private, link,, ase, in, hub, spoke,hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology,app, service, environment, and, private, endpoint,azure, sql,, azure, sql, and, private, endpoint,azure, private, dns, zone,, resolve, azure, internal, DNS, from, your, on, prem,hub, spoke, dns, forwarder,dns, forwarder, in, hub, spoke,dns, forwarder, in, hub, spoke, network, topology,dns, forwarder">
-<meta name="description" content="Deploy App Service Environment (ASE v2) in Microsoft Azure">
-
-
-<meta property="og:description" content="Deploy App Service Environment (ASE v2) in Microsoft Azure">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Deploy App Service Environment (ASE v2) in Microsoft Azure">
-<meta name="twitter:title" content="Deploy App Service Environment (ASE v2) in Microsoft Azure">
-<meta property="og:url" content="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/">
-<meta property="twitter:url" content="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/">
-<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta property="og:description" content="Deploy App Service Environment (ASE v2) in Microsoft Azure">
-<meta name="twitter:description" content="Deploy App Service Environment (ASE v2) in Microsoft Azure">
-<meta property="og:locale" content="en-us">
-
-  
-    <meta property="article:published_time" content="2020-09-26T01:00:00">
-  
-  
-    <meta property="article:modified_time" content="2020-09-26T01:00:00">
-  
-  
-  
-    
-      <meta property="article:section" content="Cloud">
-    
-      <meta property="article:section" content="App Service Environment">
-    
-      <meta property="article:section" content="Hub-Spoke Topology">
-    
-      <meta property="article:section" content="Azure SQL">
-    
-  
-  
-    
-      <meta property="article:tag" content="Azure">
-    
-      <meta property="article:tag" content="App Service Environment">
-    
-      <meta property="article:tag" content="Azure Private DNS Zone">
-    
-      <meta property="article:tag" content="Azure Private link">
-    
-  
-
-
-<meta name="twitter:card" content="summary">
-
-  <meta name="twitter:site" content="@anktsrkr">
-
-
-  <meta name="twitter:creator" content="@anktsrkr">
-
-
-
-
-
-
-
-
-
-
-  <meta property="og:image" content="https://anktsrkr.github.io/images/ase.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/ase.png">
-
-
-  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-
-    <title>Deploy App Service Environment (ASE v2) in Microsoft Azure</title>
-
-    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
-    
-
-    
-
-    <link rel="canonical" href="https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/">
-
-    
-    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
-    
-   
-    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    
-    
-    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
-    
-    
-    
-
-    
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-176781214-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
-     crossorigin="anonymous"></script>
-<script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="9gZ8D7m_t9Y2oK" async></script>
-     
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TY8ZMTBGSM');
-</script>
-    
-  </head>
-
-  <body>
-    <div id="blog">
-      <header id="header" data-behavior="5">
-  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-  <div class="header-title">
-    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
-  </div>
-  
-    
-      <a class="header-right-picture "
-         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
-    
-    
-    
-      
-        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
-      
-    
-    </a>
-  
-</header>
-
-      <nav id="sidebar" data-behavior="5">
-  <div class="sidebar-container">
-    
-      <div class="sidebar-profile">
-        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
-          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-        </a>
-        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-        
-          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
-        
-      </div>
-    
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Home</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Categories</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Tags</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Archives</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">About</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">GitHub</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Linkedin</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Twitter</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">RSS</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-
-    </ul>
-  </div>
-</nav>
-
-      
-
-      <div id="main" data-behavior="5"
-        class="
-               hasCoverMetaIn
-               ">
-        <article class="post" id="top">
-          
-          
-            <div class="post-header main-content-wrap text-left">
-  
-    <h1 class="post-title">
-      Deploy App Service Environment (ASE v2) in Microsoft Azure
-    </h1>
-  
-  
-  <div class="postShorten-meta post-meta">
-    
-      <time datetime="2020-09-26T01:00:00&#43;05:30">
-        
-  September 26, 2020
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/cloud">Cloud</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/app-service-environment">App Service Environment</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/hub-spoke-topology">Hub-Spoke Topology</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/azure-sql">Azure SQL</a>
-    
-  
-
-  </div>
-
-</div>
-          
-          <div class="post-content markdown">
-            <div class="main-content-wrap">
-              <p>Hi Everyone!</p>
-<p>With this post, I&rsquo;ll start a new series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :</p>
-<p><em>This Post - Deploy App Service Environment in Microsoft Azure</em></p>
-<p><a href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment">Create a WebApp in App Service Environment</a></p>
-<p><a href="https://anktsrkr.github.io/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem">Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</a></p>
-<p><a href="https://anktsrkr.github.io/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint">Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</a></p>
-<p><a href="https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp">Add Custom Domain for App Service Environment Hosted WebApp</a></p>
-<p>Before going into deep details about App Service Environment (v2), we will first look into what is it, when to use it and what are different type of ASE exists in Microsoft Azure. Please note, <em>I am not reinventing the wheel</em>, so many of use cases and definitions are actually taken from Microsoft Docs and I have given the link reference where needed 😊. A lot of things to cover, let&rsquo;s get started.</p>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><link rel="stylesheet" href="/_astro/_slug_.C7rzXrsf.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2020-09-25T19:30:00.000Z">25 Sept 2020</time> <span>Cloud</span> </div> <h1>Deploy App Service Environment (ASE v2) in Microsoft Azure</h1>  <div class="article-tags"> <a href="/categories/cloud/">Cloud</a><a href="/categories/app-service-environment/">App Service Environment</a><a href="/categories/hub-spoke-topology/">Hub-Spoke Topology</a><a href="/categories/azure-sql/">Azure SQL</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#what-is-app-service-environment">What is App Service Environment?</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#when-to-use-app-service-environment">When to use App Service Environment?</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#types-of-ase">Types of ASE</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#footnote-label">Footnotes</a>  </div> </nav> </details> <nav class="series-nav" aria-label="App Service Environment series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>App Service Environment</h2> <p>Follow the App Service Environment posts from ASE setup through private networking and custom domains.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">01</span> <span class="series-nav-current"> <span>Deploy App Service Environment (ASE v2) in Microsoft Azure</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/create-a-webapp-in-app-service-environment/">Create a WebApp in App Service Environment</a> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem/">Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</a> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/">Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</a> </li><li class="series-nav-item"> <span class="series-nav-index">05</span> <a href="/post/add-custom-domain-for-app-service-environment-hosted-webapp/">Add Custom Domain for App Service Environment Hosted WebApp</a> </li> </ol> </nav>  <p>Hi Everyone!</p>
+<p>Before going into deep details about App Service Environment (v2), we will first look into what is it, when to use it and what are different type of ASE exists in Microsoft Azure. Please note, <em>I am not reinventing the wheel</em>, so many of use cases and definitions are actually taken from Microsoft Docs and I have given the link reference where needed 😊. A lot of things to cover, let’s get started.</p>
 <h2 id="what-is-app-service-environment">What is App Service Environment?</h2>
 <p>The Azure App Service Environment is an Azure App Service feature that provides a fully isolated and dedicated environment for securely running App Service apps at high scale. This capability can host your:</p>
 <ul>
@@ -357,7 +22,7 @@ if (!doNotTrack) {
 <li>Isolation and secure network access.</li>
 <li>High memory utilization.</li>
 </ul>
-<p>The ASE is <strong>dedicated exclusively to a single subscription</strong> and can host 100 App Service Plan instances. The range can span 100 instances in a single App Service plan to 100 single-instance App Service plans, and everything in between.<!-- raw HTML omitted --><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup><!-- raw HTML omitted --></p>
+<p>The ASE is <strong>dedicated exclusively to a single subscription</strong> and can host 100 App Service Plan instances. The range can span 100 instances in a single App Service plan to 100 single-instance App Service plans, and everything in between.<cite><sup><a href="#user-content-fn-1" id="user-content-fnref-1" data-footnote-ref="" aria-describedby="footnote-label">1</a></sup></cite></p>
 <p>An ASE is composed of front ends and workers. Front ends are responsible for HTTP/HTTPS termination and automatic load balancing of app requests within an ASE. Front ends are automatically added as the App Service plans in the ASE are scaled out.</p>
 <p>Workers are roles that host your apps. Workers are available in three fixed sizes:</p>
 <ul>
@@ -365,480 +30,114 @@ if (!doNotTrack) {
 <li>2 vCPU/7 GB RAM</li>
 <li>4 vCPU/14 GB RAM</li>
 </ul>
-<p>You don&rsquo;t need to manage front ends and workers. All infrastructure is automatically added as you scale out your App Service plans. As App Service plans are created or scaled in an ASE, the required infrastructure is added or removed as appropriate.</p>
+<p>You don’t need to manage front ends and workers. All infrastructure is automatically added as you scale out your App Service plans. As App Service plans are created or scaled in an ASE, the required infrastructure is added or removed as appropriate.</p>
 <p>An ASE always exists in a virtual network, and more precisely, within a subnet of a virtual network. You can use the security features of virtual networks to control inbound and outbound network communications for your apps, e.g Network Security Groups restrict inbound network communications to the subnet where an ASE resides.</p>
 <p>If your apps need to access corporate resources such as internal databases and web services and if you deploy the ASE in a virtual network that has a VPN connection (regardless of whether the VPN is a site-to-site or Azure ExpressRoute VPN) to the on-premises network, the apps in the ASE can access the on-premises resources.</p>
 <h2 id="types-of-ase">Types of ASE</h2>
 <p>There are two types of ASE provided by Microsoft Azure :</p>
 <ul>
-<li>External &ndash; This is internet-facing with a public IP address</li>
-<li>Internal &ndash; This is intranet-facing with only an Azure internal load balancer (ILB) address</li>
+<li>External — This is internet-facing with a public IP address</li>
+<li>Internal — This is intranet-facing with only an Azure internal load balancer (ILB) address</li>
 </ul>
 <p>In this series, we will only focus on <em>Internal ASE</em>. We will deploy internal ASE using Azure Portal but you can use ARM Template, Azure Cli. At the time of writing this post, I guess there are some restrictions with CLI you can not select VNET while creating an ASE. So, choose to go with Azure Portal for this entire series.</p>
-<p><strong>Something to note here, I will assume you already have Hub-Spoke network topology in place and connection is already established with your on-premise over VPN. I will also assume, you do not have any on-premise DNS server and you have a DNS Forwarder setup in <code>hub-vnet</code>. If you are not sure about all of this I will suggest to go though my previous <a href="https://anktsrkr.github.io/categories/hub-spoke-topology/">posts.</a></strong></p>
-<p>First Step is to login into your account and on the top search bar, type App Service Environments and from the dropdown select &ldquo;App Service Environments&rdquo;.
-<img src="https://anktsrkr.github.io/images/ase/Select_ASE.jpg" alt="Select App Service Environment"></p>
+<p><strong>Something to note here, I will assume you already have Hub-Spoke network topology in place and connection is already established with your on-premise over VPN. I will also assume, you do not have any on-premise DNS server and you have a DNS Forwarder setup in <code>hub-vnet</code>. If you are not sure about all of this I will suggest to go though my previous <a href="/categories/hub-spoke-topology/">posts.</a></strong></p>
+<p>First Step is to login into your account and on the top search bar, type App Service Environments and from the dropdown select “App Service Environments”.
+<img src="/images/ase/Select_ASE.jpg" alt="Select App Service Environment"></p>
 <p>Now, click on <strong>Create app service environment</strong>
-<img src="https://anktsrkr.github.io/images/ase/Create_ASE.jpg" alt="Create App Service Environment"></p>
+<img src="/images/ase/Create_ASE.jpg" alt="Create App Service Environment"></p>
 <p>Now, select your Subscription and Resource Group and put details as below:</p>
 <p><em>Resource Group</em> : <code>appservice-sandbox</code></p>
 <p><em>App Service Environment Name</em> : <code>intranet</code></p>
 <p><em>Virtual IP</em> : <code>Internal</code></p>
 <p><em>OS Support</em> : <code>Windows</code>
-<img src="https://anktsrkr.github.io/images/ase/Create_ASE_Basic.jpg" alt="Create App Service Environment">
+<img src="/images/ase/Create_ASE_Basic.jpg" alt="Create App Service Environment">
 Something to note, though we are selecting Windows as OS support but you can add Linux apps later, but this will trigger an upgrade to the environment and will take time.</p>
 <p>Click on <em>Next</em> to configure vnet for your ASE.</p>
 <blockquote>
-<p>ASE needs a dedicated Subnet and you can not change it later once ASE is deployed. So we need to choose it wisely. ILB ASE with no App Service plans at all will use 13 addresses (In case of External ASE, it is 12) before you create an app. When you scale up or down, new roles of the appropriate size are added and then your workloads are migrated from the current size to the target size. The original VMs removed only after the workloads have been migrated. If you had an ASE with 100 ASP instances, there would be a period where you need double the number of VMs. It is for this reason that it is recommend the use of a <code>/24</code> to accommodate any changes you might require.<!-- raw HTML omitted --><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup><!-- raw HTML omitted --></p>
+<p>ASE needs a dedicated Subnet and you can not change it later once ASE is deployed. So we need to choose it wisely. ILB ASE with no App Service plans at all will use 13 addresses (In case of External ASE, it is 12) before you create an app. When you scale up or down, new roles of the appropriate size are added and then your workloads are migrated from the current size to the target size. The original VMs removed only after the workloads have been migrated. If you had an ASE with 100 ASP instances, there would be a period where you need double the number of VMs. It is for this reason that it is recommend the use of a <code>/24</code> to accommodate any changes you might require.<cite><sup><a href="#user-content-fn-2" id="user-content-fnref-2" data-footnote-ref="" aria-describedby="footnote-label">2</a></sup></cite></p>
 </blockquote>
-<p>Our plan is to deploy ASE in <code>spoke1-vnet</code>. As, ASE required dedicated subnet, let&rsquo;s create it with below details:</p>
+<p>Our plan is to deploy ASE in <code>spoke1-vnet</code>. As, ASE required dedicated subnet, let’s create it with below details:</p>
 <p><em>Subnet Name</em> : <code>AseSubnet</code></p>
 <p><em>Virtual Network Address Block</em> : <code>10.20.0.0/19</code></p>
 <p><em>Subnet Address Block</em> : <code>10.20.30.0/24</code>
-<img src="https://anktsrkr.github.io/images/ase/ASE_Subnet.jpg" alt="Create App Service Environment"></p>
+<img src="/images/ase/ASE_Subnet.jpg" alt="Create App Service Environment"></p>
 <p>Now, click on <strong>Review + create</strong>. Overview of ASE should look like as below screenshot:
-<img src="https://anktsrkr.github.io/images/ase/ASE_Overview.jpg" alt="Overview App Service Environment"></p>
+<img src="/images/ase/ASE_Overview.jpg" alt="Overview App Service Environment"></p>
 <p>Click on <strong>Create</strong> to start the deployment, it will take good amount of time. In my case, <code>central-india</code> region took 1hr 49mins, and it varies.</p>
 <p>Once the deployment is complete, click on <strong>ASE Health</strong>, everything should show as green-tick as below, if not I will suggest to check the details why it failed.
-<img src="https://anktsrkr.github.io/images/ase/ASE_Health.jpg" alt="ASE Health">
-Okay, everything looks good here. let&rsquo;s click on <strong>Properties</strong>
-<img src="https://anktsrkr.github.io/images/ase/ASE_Properties.jpg" alt="ASE Properties">
-Here we can see two VIPs, one is Public VIP and another is Private. Let&rsquo;s see what are the use cases of these VIPs.</p>
-<p><strong>Public VIP</strong>  &ndash; It is used for inbound management traffic and as the from address when making calls from the ASE to the internet. The calls from an ASE that go to the internet leave the VNet through the VIP assigned for the ASE. The public IP of this VIP is the source IP for all calls from the ASE that go to the internet.</p>
-<p><strong>Private VIP</strong>  &ndash; If the apps in your ASE make calls to resources in your VNet or across a VPN, the source IP is one of the IPs in the subnet used by your ASE. Because the ASE is within the VNet, it can also access resources within the VNet without any additional configuration. If the VNet is connected to your on-premises network, apps in your ASE also have access to resources there without additional configuration.</p>
-<p>Okay, now we have the ASE ready, in my <a href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment">next post</a>
+<img src="/images/ase/ASE_Health.jpg" alt="ASE Health">
+Okay, everything looks good here. let’s click on <strong>Properties</strong>
+<img src="/images/ase/ASE_Properties.jpg" alt="ASE Properties">
+Here we can see two VIPs, one is Public VIP and another is Private. Let’s see what are the use cases of these VIPs.</p>
+<p><strong>Public VIP</strong>  — It is used for inbound management traffic and as the from address when making calls from the ASE to the internet. The calls from an ASE that go to the internet leave the VNet through the VIP assigned for the ASE. The public IP of this VIP is the source IP for all calls from the ASE that go to the internet.</p>
+<p><strong>Private VIP</strong>  — If the apps in your ASE make calls to resources in your VNet or across a VPN, the source IP is one of the IPs in the subnet used by your ASE. Because the ASE is within the VNet, it can also access resources within the VNet without any additional configuration. If the VNet is connected to your on-premises network, apps in your ASE also have access to resources there without additional configuration.</p>
+<p>Okay, now we have the ASE ready, in my <a href="/post/create-a-webapp-in-app-service-environment">next post</a>
 we will deploy a sample Web App in this environment.</p>
-<div class="footnotes" role="doc-endnotes">
-<hr>
+<section data-footnotes="" class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes</h2>
 <ol>
-<li id="fn:1">
-<p><a href="https://docs.microsoft.com/en-us/azure/app-service/environment/intro">Introduction to the App Service Environments</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="user-content-fn-1">
+<p><a href="https://docs.microsoft.com/en-us/azure/app-service/environment/intro">Introduction to the App Service Environments</a> <a href="#user-content-fnref-1" data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
 </li>
-<li id="fn:2">
-<p><a href="https://docs.microsoft.com/en-us/azure/app-service/environment/network-info">Network Info</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="user-content-fn-2">
+<p><a href="https://docs.microsoft.com/en-us/azure/app-service/environment/network-info">Network Info</a> <a href="#user-content-fnref-2" data-footnote-backref="" aria-label="Back to reference 2" class="data-footnote-backref">↩</a></p>
 </li>
 </ol>
-</div>
+</section>   <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/azure/">#Azure</a><a href="/tags/app-service-environment/">#App Service Environment</a><a href="/tags/azure-private-dns-zone/">#Azure Private DNS Zone</a><a href="/tags/azure-private-link/">#Azure Private link</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdeploy-app-service-environment-v2-in-microsoft-azure%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Deploy%20App%20Service%20Environment%20(ASE%20v2)%20in%20Microsoft%20Azure&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdeploy-app-service-environment-v2-in-microsoft-azure%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdeploy-app-service-environment-v2-in-microsoft-azure%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/deploy-app-service-environment-v2-in-microsoft-azure/";
+const title = "Deploy App Service Environment (ASE v2) in Microsoft Azure";
+const url = "https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/";
 
-              
-              
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/ankit-sarkar/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
 
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    navigator.serviceWorker.ready.then(function() {});
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
 
-            </div>
-          </div>
-          <div id="post-footer" class="post-footer main-content-wrap">
-            
-              
-                
-                
-                  <div class="post-footer-tags">
-                    <span class="text-color-light text-small">TAGGED IN</span><br/>
-                    
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azure/">Azure</a>
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
 
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/app-service-environment/">App Service Environment</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azure-private-dns-zone/">Azure Private DNS Zone</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azure-private-link/">Azure Private link</a>
-
-                  </div>
-                
-              
-            
-            
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/" data-tooltip="Create a WebApp in App Service Environment" aria-label="NEXT: Create a WebApp in App Service Environment">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" data-tooltip="Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem" aria-label="PREVIOUS: Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-            
-  
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-    <script type="text/javascript">
-      var disqus_config = function() {
-        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/deploy-app-service-environment-v2-in-microsoft-azure\/';
-        
-          this.page.identifier = '\/post\/deploy-app-service-environment-v2-in-microsoft-azure\/'
-        
-      };
-      (function() {
-        
-        
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-          return;
-        }
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'anktsrkr-github-io';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
-  
-
-
-          </div>
-        </article>
-        <footer id="footer" class="main-content-wrap">
-  <span class="copyrights">
-    &copy; 2025 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
-  </span>
-</footer>
-
-      </div>
-      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-        
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/create-a-webapp-in-app-service-environment/" data-tooltip="Create a WebApp in App Service Environment" aria-label="NEXT: Create a WebApp in App Service Environment">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" data-tooltip="Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem" aria-label="PREVIOUS: Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/deploy-app-service-environment-v2-in-microsoft-azure/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-      </div>
-      
-<div id="share-options-bar" class="share-options-bar" data-behavior="5">
-  <i id="btn-close-shareoptions" class="fa fa-times"></i>
-  <ul class="share-options">
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdeploy-app-service-environment-v2-in-microsoft-azure%2F" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdeploy-app-service-environment-v2-in-microsoft-azure%2F" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fdeploy-app-service-environment-v2-in-microsoft-azure%2F" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
-        </a>
-      </li>
-    
-  </ul>
-</div>
-<div id="share-options-mask" class="share-options-mask"></div>
-
-
-    </div>
-    
-    <div id="about">
-  <div id="about-card">
-    <div id="about-btn-close">
-      <i class="fa fa-times"></i>
-    </div>
-    
-      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-    
-    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-    
-      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
-    
-    
-      <div id="about-card-job">
-        <i class="fa fa-briefcase"></i>
-        <br/>
-        Technical Architect
-      </div>
-    
-    
-      <div id="about-card-location">
-        <i class="fa fa-map-marker-alt"></i>
-        <br/>
-        Leeds
-      </div>
-    
-  </div>
-</div>
-
-    
-
-    
-  
-    
-      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
-    
-  
-
-
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-  integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
-  integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-<script src="https://anktsrkr.github.io/%20/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
-
-
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js">
-  </script>
-  
-  
-  
-  <script>
-    $(document).ready(function () {
-      hljs.configure({ classPrefix: '', useBR: false });
-      $('pre.code-highlight > code, pre > code').each(function (i, block) {
-        if (!$(this).hasClass('codeblock')) {
-          $(this).addClass('codeblock');
-        }
-        hljs.highlightElement(block);
-      });
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
     });
-  </script>
-  
-  
-  
-
-  
-
-<script>
-    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
-   </script>
-   
-   
-  
-<script>
-    if('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('/sw.js', { scope: '/' })
-            .then(function(registration) {
-            });
-  
-        navigator.serviceWorker
-            .ready
-            .then(function(registration) {
-            });
-    }
-  </script>
-  
-  <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
-</script>
-
-<a id="Setmore_button_iframe" style="position: fixed;
- right: 20px;
- bottom: 15px;
- z-index: 9998;text-decoration: none"
-    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
-    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
-display: table-cell;
-width: auto;
-height: 45px;
-padding: 0 30px;
-border-radius: 25px;
-box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
-font-family: sans-serif;
-text-align: center;
-vertical-align: middle;
-font-weight: bold;
-font-size: 14px;
-color: #fff;
-cursor: pointer;">#TalkWithMe</div>
-</a>
-  
-<script>
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ro6zx9o7jl");
-</script>
-  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('ankitsarkar', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#ffffff',
-    'floating-chat.donateButton.text-color': '#323842'
-  });
-</script>
-    
-  </body>
-</html>
-
+  }
+})();</script> </div> </body></html>

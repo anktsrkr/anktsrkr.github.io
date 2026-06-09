@@ -1,1054 +1,366 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    
-    <script type="application/ld+json">
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Implementing Hub-Spoke network topology in Azure - Part 2 | Ankit Sarkar</title><meta name="description" content="Implementing Hub-Spoke network topology in Azure"><link rel="canonical" href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Implementing Hub-Spoke network topology in Azure - Part 2 | Ankit Sarkar"><meta property="og:description" content="Implementing Hub-Spoke network topology in Azure"><meta property="og:url" content="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/"><meta property="og:image" content="https://anktsrkr.github.io/images/azure.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Implementing Hub-Spoke network topology in Azure - Part 2 | Ankit Sarkar"><meta name="twitter:description" content="Implementing Hub-Spoke network topology in Azure"><meta name="twitter:image" content="https://anktsrkr.github.io/images/azure.png"><script async src="https://www.googletagmanager.com/gtag/js?id=UA-176781214-1"></script><script>(function(){const gaId = "UA-176781214-1";
 
-{  
-  "@context":"http://schema.org",
-  "@type":"Website",
-  "@id":"https:\/\/anktsrkr.github.io\/",
-  "author": {
-    "@type": "Person",
-    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-    
-    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
-    
-  },
-  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-  "description":"Implementing Hub-Spoke network topology in Azure",
-  "url":"https:\/\/anktsrkr.github.io\/post\/implementing-hub-spoke-network-topology-in-azure-part-2\/",
-  "keywords":"[hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology, ,azure, firewall,connectivity, between, spoke,connectivity, between, spoke, vnet, using, azure, firewall,azure, powershell,Point, to, Site,, Site, to, Site,VPN]"
-}
-
-</script>
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
-<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta name="keywords" content="hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology, ,azure, firewall,connectivity, between, spoke,connectivity, between, spoke, vnet, using, azure, firewall,azure, powershell,Point, to, Site,, Site, to, Site,VPN">
-<meta name="description" content="Implementing Hub-Spoke network topology in Azure">
-
-
-<meta property="og:description" content="Implementing Hub-Spoke network topology in Azure">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Implementing Hub-Spoke network topology in Azure - Part 2">
-<meta name="twitter:title" content="Implementing Hub-Spoke network topology in Azure - Part 2">
-<meta property="og:url" content="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/">
-<meta property="twitter:url" content="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/">
-<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta property="og:description" content="Implementing Hub-Spoke network topology in Azure">
-<meta name="twitter:description" content="Implementing Hub-Spoke network topology in Azure">
-<meta property="og:locale" content="en-us">
-
-  
-    <meta property="article:published_time" content="2020-09-08T01:00:00">
-  
-  
-    <meta property="article:modified_time" content="2020-09-08T01:00:00">
-  
-  
-  
-    
-      <meta property="article:section" content="Cloud">
-    
-      <meta property="article:section" content="Azure architecture">
-    
-      <meta property="article:section" content="Hub-Spoke Topology">
-    
-  
-  
-    
-      <meta property="article:tag" content="Azure">
-    
-      <meta property="article:tag" content="Networking">
-    
-  
-
-
-<meta name="twitter:card" content="summary">
-
-  <meta name="twitter:site" content="@anktsrkr">
-
-
-  <meta name="twitter:creator" content="@anktsrkr">
-
-
-
-
-
-
-
-
-
-
-  <meta property="og:image" content="https://anktsrkr.github.io/images/azure.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/azure.png">
-
-
-  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-
-    <title>Implementing Hub-Spoke network topology in Azure - Part 2</title>
-
-    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
-    
-
-    
-
-    <link rel="canonical" href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/">
-
-    
-    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
-    
-   
-    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    
-    
-    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
-    
-    
-    
-
-    
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-176781214-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
-     crossorigin="anonymous"></script>
-<script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="9gZ8D7m_t9Y2oK" async></script>
-     
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TY8ZMTBGSM');
-</script>
-    
-  </head>
-
-  <body>
-    <div id="blog">
-      <header id="header" data-behavior="5">
-  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-  <div class="header-title">
-    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
-  </div>
-  
-    
-      <a class="header-right-picture "
-         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
-    
-    
-    
-      
-        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
-      
-    
-    </a>
-  
-</header>
-
-      <nav id="sidebar" data-behavior="5">
-  <div class="sidebar-container">
-    
-      <div class="sidebar-profile">
-        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
-          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-        </a>
-        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-        
-          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
-        
-      </div>
-    
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Home</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Categories</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Tags</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Archives</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">About</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">GitHub</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Linkedin</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Twitter</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">RSS</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-
-    </ul>
-  </div>
-</nav>
-
-      
-
-      <div id="main" data-behavior="5"
-        class="
-               hasCoverMetaIn
-               ">
-        <article class="post" id="top">
-          
-          
-            <div class="post-header main-content-wrap text-left">
-  
-    <h1 class="post-title">
-      Implementing Hub-Spoke network topology in Azure - Part 2
-    </h1>
-  
-  
-  <div class="postShorten-meta post-meta">
-    
-      <time datetime="2020-09-08T01:00:00&#43;05:30">
-        
-  September 8, 2020
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/cloud">Cloud</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/azure-architecture">Azure architecture</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/hub-spoke-topology">Hub-Spoke Topology</a>
-    
-  
-
-  </div>
-
-</div>
-          
-          <div class="post-content markdown">
-            <div class="main-content-wrap">
-              <p>Hi Everyone!</p>
-<p>This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts :</p>
-<p><a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1">Connect an on-premises network to a Microsoft Azure - Part 1</a></p>
-<p><a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2">Connect an on-premises network to a Microsoft Azure - Part 2</a></p>
-<p><a href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1">Implementing Hub-Spoke network topology in Azure - Part 1</a></p>
-<p><em>This Post - Implementing Hub-Spoke network topology in Azure - Part 2</em></p>
-<p><a href="https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a></p>
-<p><a href="https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure">Implementing Azure Firewall in Hub-Spoke network topology in Azure</a></p>
-<p>Now, we know the context of this topology and architecture let&rsquo;s start to implement it. In this post, I am going to use azure powershell module to create all azure resources.</p>
-<p>In my <a href="https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-2/">second post</a> of this series we have already created <code>hub-vnet</code>.</p>
-<p>Let&rsquo;s create Spoke 1 Virtual Network(<code>spoke1-vnet</code>), with address space <code>10.20.0.0/19</code>. We will also create a subnet <code>WorkloadSubnet</code> under Spoke1 virtual network with address space <code>10.20.1.0/24</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
-</span></span><span style="display:flex;"><span>$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-</span></span><span style="display:flex;"><span>$vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
-</span></span><span style="display:flex;"><span>$defaultSubnet = <span style="color:#e6db74">&#34;WorkloadSubnet&#34;</span>
-</span></span><span style="display:flex;"><span>$vnetAddressSpace = <span style="color:#e6db74">&#34;10.20.0.0/19&#34;</span>
-</span></span><span style="display:flex;"><span>$subnetvnetAddressSpace = <span style="color:#e6db74">&#34;10.20.1.0/24&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$virtualNetwork = New-AzVirtualNetwork `
-</span></span><span style="display:flex;"><span>                     -ResourceGroupName $ResourceGroupName `
-</span></span><span style="display:flex;"><span>                     -Location $LocationName `
-</span></span><span style="display:flex;"><span>                     -Name $vnetName `
-</span></span><span style="display:flex;"><span>                     -AddressPrefix $vnetAddressSpace
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$subnetConfig = Add-AzVirtualNetworkSubnetConfig `
-</span></span><span style="display:flex;"><span>                   -Name $defaultSubnet `
-</span></span><span style="display:flex;"><span>                   -AddressPrefix $subnetvnetAddressSpace `
-</span></span><span style="display:flex;"><span>                   -VirtualNetwork $virtualNetwork
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$virtualNetwork = $virtualNetwork | Set-AzVirtualNetwork</span></span></code></pre></div>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><link rel="stylesheet" href="/_astro/_slug_.C7rzXrsf.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2020-09-07T19:30:00.000Z">07 Sept 2020</time> <span>Cloud</span> </div> <h1>Implementing Hub-Spoke network topology in Azure - Part 2</h1> <p>Implementing Hub-Spoke network topology in Azure</p> <div class="article-tags"> <a href="/categories/cloud/">Cloud</a><a href="/categories/azure-architecture/">Azure architecture</a><a href="/categories/hub-spoke-topology/">Hub-Spoke Topology</a> </div> </header> <div class="article-grid"> <div class="article-content">  <nav class="series-nav" aria-label="Hub-Spoke network topology in Azure series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Hub-Spoke network topology in Azure</h2> <p>Follow the complete Hub-Spoke networking series in order.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/connect-azure-with-your-on-prem-network-part-1/">Connect an on-premises network to a Microsoft Azure - Part 1</a> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/connect-azure-with-your-on-prem-network-part-2/">Connect an on-premises network to a Microsoft Azure - Part 2</a> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/implementing-hub-spoke-network-topology-in-azure-part-1/">Implementing Hub-Spoke network topology in Azure - Part 1</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">04</span> <span class="series-nav-current"> <span>Implementing Hub-Spoke network topology in Azure - Part 2</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">05</span> <a href="/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a> </li><li class="series-nav-item"> <span class="series-nav-index">06</span> <a href="/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/">Implementing Azure Firewall in Hub-Spoke network topology in Azure</a> </li> </ol> </nav>  <p>Hi Everyone!</p>
+<p>Now, we know the context of this topology and architecture let’s start to implement it. In this post, I am going to use azure powershell module to create all azure resources.</p>
+<p>In my <a href="/post/connect-azure-with-your-on-prem-network-part-2/">second post</a> of this series we have already created <code>hub-vnet</code>.</p>
+<p>Let’s create Spoke 1 Virtual Network(<code>spoke1-vnet</code>), with address space <code>10.20.0.0/19</code>. We will also create a subnet <code>WorkloadSubnet</code> under Spoke1 virtual network with address space <code>10.20.1.0/24</code></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$LocationName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "centralindia"</span></span>
+<span class="line"><span style="color:#E1E4E8">$ResourceGroupName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "network-sandbox"</span></span>
+<span class="line"><span style="color:#E1E4E8">$vnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "spoke1-vnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$defaultSubnet </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "WorkloadSubnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$vnetAddressSpace </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "10.20.0.0/19"</span></span>
+<span class="line"><span style="color:#E1E4E8">$subnetvnetAddressSpace </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "10.20.1.0/24"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$virtualNetwork </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzVirtualNetwork</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Location $LocationName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Name $vnetName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">AddressPrefix $vnetAddressSpace</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$subnetConfig </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Add-AzVirtualNetworkSubnetConfig</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">Name $defaultSubnet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">AddressPrefix $subnetvnetAddressSpace </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">VirtualNetwork $virtualNetwork</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$virtualNetwork </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $virtualNetwork </span><span style="color:#F97583">|</span><span style="color:#79B8FF"> Set-AzVirtualNetwork</span></span></code></pre>
 <p>Please note, by default DDoS protection plan as Basic is selected, but it is highly recommended to enable DDoS protection plan for your production environment and this is applicable for all of your virtual networks.</p>
 <p>Next create Spoke 2 Virtual Network(<code>spoke2-vnet</code>), with address space <code>10.30.0.0/19</code>. We will also create a subnet <code>WorkloadSubnet</code> under Spoke1 virtual network with address space <code>10.30.1.0/24</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$LocationName = <span style="color:#e6db74">&#34;centralindia&#34;</span>
-</span></span><span style="display:flex;"><span>$ResourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-</span></span><span style="display:flex;"><span>$vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
-</span></span><span style="display:flex;"><span>$defaultSubnet = <span style="color:#e6db74">&#34;WorkloadSubnet&#34;</span>
-</span></span><span style="display:flex;"><span>$vnetAddressSpace = <span style="color:#e6db74">&#34;10.30.0.0/19&#34;</span>
-</span></span><span style="display:flex;"><span>$subnetvnetAddressSpace =<span style="color:#e6db74">&#34;10.30.1.0/24&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$virtualNetwork = New-AzVirtualNetwork `
-</span></span><span style="display:flex;"><span>                     -ResourceGroupName $ResourceGroupName `
-</span></span><span style="display:flex;"><span>                     -Location $LocationName `
-</span></span><span style="display:flex;"><span>                     -Name $vnetName `
-</span></span><span style="display:flex;"><span>                     -AddressPrefix $vnetAddressSpace
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$subnetConfig = Add-AzVirtualNetworkSubnetConfig `
-</span></span><span style="display:flex;"><span>                   -Name $defaultSubnet `
-</span></span><span style="display:flex;"><span>                   -AddressPrefix $subnetvnetAddressSpace `
-</span></span><span style="display:flex;"><span>                   -VirtualNetwork $virtualNetwork
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$virtualNetwork = $virtualNetwork | Set-AzVirtualNetwork</span></span></code></pre></div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$LocationName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "centralindia"</span></span>
+<span class="line"><span style="color:#E1E4E8">$ResourceGroupName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "network-sandbox"</span></span>
+<span class="line"><span style="color:#E1E4E8">$vnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "spoke2-vnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$defaultSubnet </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "WorkloadSubnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$vnetAddressSpace </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "10.30.0.0/19"</span></span>
+<span class="line"><span style="color:#E1E4E8">$subnetvnetAddressSpace </span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"10.30.1.0/24"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$virtualNetwork </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzVirtualNetwork</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Location $LocationName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Name $vnetName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">AddressPrefix $vnetAddressSpace</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$subnetConfig </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Add-AzVirtualNetworkSubnetConfig</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">Name $defaultSubnet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">AddressPrefix $subnetvnetAddressSpace </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">VirtualNetwork $virtualNetwork</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$virtualNetwork </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $virtualNetwork </span><span style="color:#F97583">|</span><span style="color:#79B8FF"> Set-AzVirtualNetwork</span></span></code></pre>
 <p>Two virtual networks can not talk to each other, so by default <code>hub-vnet</code> will not be able to connect with <code>spoke1-vnet</code> and <code>spoke2-vnet</code>. So, to make it work we need to enable vnet-peering between hub and spokes.</p>
-<p>Let&rsquo;s create vnet peering between hub and spokes:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$hubvnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
-</span></span><span style="display:flex;"><span>$hubVnet = Get-AzVirtualNetwork `
-</span></span><span style="display:flex;"><span>              -Name $hubvnetName
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$spoke1vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
-</span></span><span style="display:flex;"><span>$spoke1Vnet = Get-AzVirtualNetwork `
-</span></span><span style="display:flex;"><span>                 -Name $spoke1vnetName
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$spoke2vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
-</span></span><span style="display:flex;"><span>$spoke2Vnet = Get-AzVirtualNetwork `
-</span></span><span style="display:flex;"><span>                 -Name $spoke2vnetName
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Peer Hub to Spoke 1.</span>
-</span></span><span style="display:flex;"><span>Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkHubToSpoke1&#39;</span> `
-</span></span><span style="display:flex;"><span>                            -VirtualNetwork $hubVnet `
-</span></span><span style="display:flex;"><span>                            -RemoteVirtualNetworkId $spoke1Vnet.Id
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Peer Spoke 1 to Hub.</span>
-</span></span><span style="display:flex;"><span>Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkSpoke1ToHub&#39;</span> `
-</span></span><span style="display:flex;"><span>                            -VirtualNetwork $spoke1Vnet `
-</span></span><span style="display:flex;"><span>                            -RemoteVirtualNetworkId $hubVnet.Id
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Peer Hub to Spoke 2.</span>
-</span></span><span style="display:flex;"><span>Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkHubToSpoke2&#39;</span> `
-</span></span><span style="display:flex;"><span>                            -VirtualNetwork $hubVnet `
-</span></span><span style="display:flex;"><span>                            -RemoteVirtualNetworkId $spoke2Vnet.Id
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Peer Spoke 2 to Hub.</span>
-</span></span><span style="display:flex;"><span>Add-AzVirtualNetworkPeering -Name <span style="color:#e6db74">&#39;LinkSpoke2ToHub&#39;</span> `
-</span></span><span style="display:flex;"><span>                            -VirtualNetwork $spoke2Vnet `
-</span></span><span style="display:flex;"><span>                            -RemoteVirtualNetworkId $hubVnet.Id</span></span></code></pre></div>
+<p>Let’s create vnet peering between hub and spokes:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$hubvnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "hub-vnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$hubVnet </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetwork</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Name $hubvnetName</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$spoke1vnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "spoke1-vnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$spoke1Vnet </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetwork</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                 -</span><span style="color:#E1E4E8">Name $spoke1vnetName</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$spoke2vnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "spoke2-vnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$spoke2Vnet </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetwork</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                 -</span><span style="color:#E1E4E8">Name $spoke2vnetName</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Peer Hub to Spoke 1.</span></span>
+<span class="line"><span style="color:#79B8FF">Add-AzVirtualNetworkPeering</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">'LinkHubToSpoke1'</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                            -</span><span style="color:#E1E4E8">VirtualNetwork $hubVnet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                            -</span><span style="color:#E1E4E8">RemoteVirtualNetworkId $spoke1Vnet.Id</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Peer Spoke 1 to Hub.</span></span>
+<span class="line"><span style="color:#79B8FF">Add-AzVirtualNetworkPeering</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">'LinkSpoke1ToHub'</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                            -</span><span style="color:#E1E4E8">VirtualNetwork $spoke1Vnet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                            -</span><span style="color:#E1E4E8">RemoteVirtualNetworkId $hubVnet.Id</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Peer Hub to Spoke 2.</span></span>
+<span class="line"><span style="color:#79B8FF">Add-AzVirtualNetworkPeering</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">'LinkHubToSpoke2'</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                            -</span><span style="color:#E1E4E8">VirtualNetwork $hubVnet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                            -</span><span style="color:#E1E4E8">RemoteVirtualNetworkId $spoke2Vnet.Id</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Peer Spoke 2 to Hub.</span></span>
+<span class="line"><span style="color:#79B8FF">Add-AzVirtualNetworkPeering</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">'LinkSpoke2ToHub'</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                            -</span><span style="color:#E1E4E8">VirtualNetwork $spoke2Vnet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                            -</span><span style="color:#E1E4E8">RemoteVirtualNetworkId $hubVnet.Id</span></span></code></pre>
 <blockquote>
 <p><strong><em>NOTE:</em></strong>  You can also provide resource id if you do not have read access to the virtual network or subscription you wish to peer with.</p>
 </blockquote>
 <p>Once done, peering status should show as connected :</p>
-<p><img src="https://anktsrkr.github.io/images/hub-spoke/hub-to-spoke1-peering-connected.jpg" alt="hub-vnet to spoke1-vnet peering connected"></p>
-<p>The interesting part is I have created peering between hub and spokes but not between spoke1 and spoke2, so spoke1 and spoke2 can not communicate with each other. you can ask me, can&rsquo;t we create peering between them? Yes! you can but you should not, I will try to explain the reason in next part and will show you how communication will be done between spokes if needed.</p>
+<p><img src="/images/hub-spoke/hub-to-spoke1-peering-connected.jpg" alt="hub-vnet to spoke1-vnet peering connected"></p>
+<p>The interesting part is I have created peering between hub and spokes but not between spoke1 and spoke2, so spoke1 and spoke2 can not communicate with each other. you can ask me, can’t we create peering between them? Yes! you can but you should not, I will try to explain the reason in next part and will show you how communication will be done between spokes if needed.</p>
 <p>Now for testing purpose, we are going to create JumpBox with IIS enabled in 3 different virtual network. None of these virtual machine will have public ip also no ports are open from NSG except the communication within VNet.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create Virtual Machine</span>
-</span></span><span style="display:flex;"><span>$LocationName = Read-Host `
-</span></span><span style="display:flex;"><span>                    -Prompt <span style="color:#e6db74">&#39;Enter Location&#39;</span>
-</span></span><span style="display:flex;"><span>$ResourceGroupName = Read-Host `
-</span></span><span style="display:flex;"><span>                         -Prompt <span style="color:#e6db74">&#39;Enter Resource Group Name&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$VMName = Read-Host `
-</span></span><span style="display:flex;"><span>              -Prompt <span style="color:#e6db74">&#39;Enter Virtual Machine Name&#39;</span>
-</span></span><span style="display:flex;"><span>$ComputerName = $VMName
-</span></span><span style="display:flex;"><span>$VMSize = <span style="color:#e6db74">&#34;Standard_B1ms&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$NetworkName = Read-Host `
-</span></span><span style="display:flex;"><span>                   -Prompt <span style="color:#e6db74">&#39;Enter Virtual Network Name&#39;</span>
-</span></span><span style="display:flex;"><span>$SubnetName = Read-Host `
-</span></span><span style="display:flex;"><span>                  -Prompt <span style="color:#e6db74">&#39;Enter Subnet Name&#39;</span>
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>$NICName = <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-Nic&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$rdpRule = New-AzNetworkSecurityRuleConfig `
-</span></span><span style="display:flex;"><span>              -Name Rdp-Rule `
-</span></span><span style="display:flex;"><span>              -Description <span style="color:#e6db74">&#34;Allow RDP&#34;</span> `
-</span></span><span style="display:flex;"><span>              -Access Allow `
-</span></span><span style="display:flex;"><span>              -Protocol Tcp `
-</span></span><span style="display:flex;"><span>              -Direction Inbound `
-</span></span><span style="display:flex;"><span>              -Priority <span style="color:#ae81ff">1000</span> `
-</span></span><span style="display:flex;"><span>              -SourceAddressPrefix Internet `
-</span></span><span style="display:flex;"><span>              -SourcePortRange * `
-</span></span><span style="display:flex;"><span>              -DestinationAddressPrefix * `
-</span></span><span style="display:flex;"><span>              -DestinationPortRange <span style="color:#ae81ff">3389</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$networkSecurityGroup = New-AzNetworkSecurityGroup `
-</span></span><span style="display:flex;"><span>                           -ResourceGroupName $ResourceGroupName `
-</span></span><span style="display:flex;"><span>                           -Location $LocationName `
-</span></span><span style="display:flex;"><span>                           -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-Nsg&#34;</span> `
-</span></span><span style="display:flex;"><span>                           -SecurityRules $rdpRule
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$Vnet = Get-AzVirtualNetwork `
-</span></span><span style="display:flex;"><span>            -Name $NetworkName
-</span></span><span style="display:flex;"><span>$SingleSubnet = Set-AzVirtualNetworkSubnetConfig `
-</span></span><span style="display:flex;"><span>                   -VirtualNetwork $Vnet `
-</span></span><span style="display:flex;"><span>                   -Name $SubnetName `
-</span></span><span style="display:flex;"><span>                   -NetworkSecurityGroup $networkSecurityGroup
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$Vnet = Set-AzVirtualNetwork `
-</span></span><span style="display:flex;"><span>           -VirtualNetwork $VNET
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$SingleSubnet = Get-AzVirtualNetworkSubnetConfig `
-</span></span><span style="display:flex;"><span>                   -VirtualNetwork $Vnet `
-</span></span><span style="display:flex;"><span>                   -Name $SubnetName `
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$NIC = Get-AzNetworkInterface `
-</span></span><span style="display:flex;"><span>          -Name $NICName
-</span></span><span style="display:flex;"><span>$PipRequired = Read-Host `
-</span></span><span style="display:flex;"><span>                   -Prompt <span style="color:#e6db74">&#39;Do you want to enable public ip for this virtual machine? (Press Y to Yes)&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>($PipRequired <span style="color:#f92672">-eq</span> <span style="color:#e6db74">&#34;Y&#34;</span>){
-</span></span><span style="display:flex;"><span>    $Pip = New-AzPublicIpAddress `
-</span></span><span style="display:flex;"><span>              -ResourceGroupName $ResourceGroupName `
-</span></span><span style="display:flex;"><span>              -Location $LocationName `
-</span></span><span style="display:flex;"><span>              -AllocationMethod Dynamic `
-</span></span><span style="display:flex;"><span>              -Sku Basic `
-</span></span><span style="display:flex;"><span>              -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-PublicIp&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ipconfig = New-AzNetworkInterfaceIpConfig `
-</span></span><span style="display:flex;"><span>               -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-IpConfig&#34;</span> `
-</span></span><span style="display:flex;"><span>               -Subnet $SingleSubnet -PublicIpAddress $Pip
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>$ipconfig = New-AzNetworkInterfaceIpConfig `
-</span></span><span style="display:flex;"><span>               -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-IpConfig&#34;</span> `
-</span></span><span style="display:flex;"><span>               -Subnet $SingleSubnet
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$NIC = New-AzNetworkInterface `
-</span></span><span style="display:flex;"><span>          -Name $NICName `
-</span></span><span style="display:flex;"><span>          -ResourceGroupName $ResourceGroupName `
-</span></span><span style="display:flex;"><span>          -Location $LocationName `
-</span></span><span style="display:flex;"><span>          -IpConfiguration $ipconfig
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$Credential = Get-Credential `
-</span></span><span style="display:flex;"><span>                 -Message <span style="color:#e6db74">&#34;Enter a username and password for the virtual machine&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$VirtualMachine = New-AzVMConfig `
-</span></span><span style="display:flex;"><span>                     -VMName $VMName `
-</span></span><span style="display:flex;"><span>                     -VMSize $VMSize
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$VirtualMachine = Set-AzVMBootDiagnostic `
-</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
-</span></span><span style="display:flex;"><span>                     -Disable
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$VirtualMachine = Set-AzVMOperatingSystem `
-</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
-</span></span><span style="display:flex;"><span>                     -Windows `
-</span></span><span style="display:flex;"><span>                     -ComputerName $ComputerName `
-</span></span><span style="display:flex;"><span>                     -Credential $Credential `
-</span></span><span style="display:flex;"><span>                     -ProvisionVMAgent `
-</span></span><span style="display:flex;"><span>                     -EnableAutoUpdate
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$VirtualMachine = Add-AzVMNetworkInterface `
-</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
-</span></span><span style="display:flex;"><span>                     -Id $NIC.Id
-</span></span><span style="display:flex;"><span>$VirtualMachine = Set-AzVMSourceImage `
-</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
-</span></span><span style="display:flex;"><span>                     -PublisherName <span style="color:#e6db74">&#39;MicrosoftWindowsServer&#39;</span> `
-</span></span><span style="display:flex;"><span>                     -Offer <span style="color:#e6db74">&#39;WindowsServer&#39;</span> `
-</span></span><span style="display:flex;"><span>                     -Skus <span style="color:#e6db74">&#39;2019-Datacenter&#39;</span> `
-</span></span><span style="display:flex;"><span>                     -Version latest
-</span></span><span style="display:flex;"><span>$VirtualMachine = Set-AzVMOSDisk `
-</span></span><span style="display:flex;"><span>                     -VM $VirtualMachine `
-</span></span><span style="display:flex;"><span>                     -Name <span style="color:#e6db74">&#34;</span>$($VMName)<span style="color:#e6db74">-OsDisk&#34;</span> `
-</span></span><span style="display:flex;"><span>                     -StorageAccountType <span style="color:#e6db74">&#34;Standard_LRS&#34;</span> `
-</span></span><span style="display:flex;"><span>                     -Windows `
-</span></span><span style="display:flex;"><span>                     -DiskSizeInGB <span style="color:#ae81ff">127</span> `
-</span></span><span style="display:flex;"><span>                     -CreateOption FromImage 
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>New-AzVM `
-</span></span><span style="display:flex;"><span>   -ResourceGroupName $ResourceGroupName `
-</span></span><span style="display:flex;"><span>   -Location $LocationName `
-</span></span><span style="display:flex;"><span>   -VM $VirtualMachine `
-</span></span><span style="display:flex;"><span>   -Verbose
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Install IIS</span>
-</span></span><span style="display:flex;"><span>$PublicSettings = <span style="color:#e6db74">&#39;{&#34;commandToExecute&#34;:&#34;powershell Add-WindowsFeature Web-Server&#34;}&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Set-AzVMExtension `
-</span></span><span style="display:flex;"><span>        -ExtensionName <span style="color:#e6db74">&#34;IIS&#34;</span> `
-</span></span><span style="display:flex;"><span>        -ResourceGroupName $ResourceGroupName `
-</span></span><span style="display:flex;"><span>        -VMName $VMName `
-</span></span><span style="display:flex;"><span>        -Publisher <span style="color:#e6db74">&#34;Microsoft.Compute&#34;</span> `
-</span></span><span style="display:flex;"><span>        -ExtensionType <span style="color:#e6db74">&#34;CustomScriptExtension&#34;</span> -TypeHandlerVersion <span style="color:#ae81ff">1.4</span> `
-</span></span><span style="display:flex;"><span>        -SettingString $PublicSettings -Location $LocationName</span></span></code></pre></div>
-<p>Once completed, Connect you VPN and let&rsquo;s see how data flows between hub to spokes from you local workspace.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#6A737D"># Create Virtual Machine</span></span>
+<span class="line"><span style="color:#E1E4E8">$LocationName </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Read-Host</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                    -</span><span style="color:#E1E4E8">Prompt </span><span style="color:#9ECBFF">'Enter Location'</span></span>
+<span class="line"><span style="color:#E1E4E8">$ResourceGroupName </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Read-Host</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                         -</span><span style="color:#E1E4E8">Prompt </span><span style="color:#9ECBFF">'Enter Resource Group Name'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VMName </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Read-Host</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Prompt </span><span style="color:#9ECBFF">'Enter Virtual Machine Name'</span></span>
+<span class="line"><span style="color:#E1E4E8">$ComputerName </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $VMName</span></span>
+<span class="line"><span style="color:#E1E4E8">$VMSize </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "Standard_B1ms"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$NetworkName </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Read-Host</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">Prompt </span><span style="color:#9ECBFF">'Enter Virtual Network Name'</span></span>
+<span class="line"><span style="color:#E1E4E8">$SubnetName </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Read-Host</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                  -</span><span style="color:#E1E4E8">Prompt </span><span style="color:#9ECBFF">'Enter Subnet Name'</span></span>
+<span class="line"><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#E1E4E8">$NICName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "</span><span style="color:#F97583">$</span><span style="color:#9ECBFF">(</span><span style="color:#E1E4E8">$VMName</span><span style="color:#9ECBFF">)</span><span style="color:#9ECBFF">-Nic"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$rdpRule </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzNetworkSecurityRuleConfig</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Name Rdp</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">Rule </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Description </span><span style="color:#9ECBFF">"Allow RDP"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Access Allow </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Protocol Tcp </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Direction Inbound </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Priority </span><span style="color:#79B8FF">1000</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">SourceAddressPrefix Internet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">SourcePortRange </span><span style="color:#F97583">*</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">DestinationAddressPrefix </span><span style="color:#F97583">*</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">DestinationPortRange </span><span style="color:#79B8FF">3389</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$networkSecurityGroup </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzNetworkSecurityGroup</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                           -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                           -</span><span style="color:#E1E4E8">Location $LocationName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                           -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"</span><span style="color:#F97583">$</span><span style="color:#9ECBFF">(</span><span style="color:#E1E4E8">$VMName</span><span style="color:#9ECBFF">)</span><span style="color:#9ECBFF">-Nsg"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                           -</span><span style="color:#E1E4E8">SecurityRules $rdpRule</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$Vnet </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetwork</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">            -</span><span style="color:#E1E4E8">Name $NetworkName</span></span>
+<span class="line"><span style="color:#E1E4E8">$SingleSubnet </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Set-AzVirtualNetworkSubnetConfig</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">VirtualNetwork $Vnet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">Name $SubnetName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">NetworkSecurityGroup $networkSecurityGroup</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$Vnet </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Set-AzVirtualNetwork</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">           -</span><span style="color:#E1E4E8">VirtualNetwork $VNET</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$SingleSubnet </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetworkSubnetConfig</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">VirtualNetwork $Vnet </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">Name $SubnetName </span><span style="color:#F97583">`</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$NIC </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzNetworkInterface</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">Name $NICName</span></span>
+<span class="line"><span style="color:#E1E4E8">$PipRequired </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Read-Host</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">Prompt </span><span style="color:#9ECBFF">'Do you want to enable public ip for this virtual machine? (Press Y to Yes)'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8">($PipRequired </span><span style="color:#F97583">-eq</span><span style="color:#9ECBFF"> "Y"</span><span style="color:#E1E4E8">){</span></span>
+<span class="line"><span style="color:#E1E4E8">    $Pip </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzPublicIpAddress</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Location $LocationName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">AllocationMethod Dynamic </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Sku Basic </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"</span><span style="color:#F97583">$</span><span style="color:#9ECBFF">(</span><span style="color:#E1E4E8">$VMName</span><span style="color:#9ECBFF">)</span><span style="color:#9ECBFF">-PublicIp"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$ipconfig </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzNetworkInterfaceIpConfig</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">               -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"</span><span style="color:#F97583">$</span><span style="color:#9ECBFF">(</span><span style="color:#E1E4E8">$VMName</span><span style="color:#9ECBFF">)</span><span style="color:#9ECBFF">-IpConfig"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">               -</span><span style="color:#E1E4E8">Subnet $SingleSubnet </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">PublicIpAddress $Pip</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">$ipconfig </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzNetworkInterfaceIpConfig</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">               -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"</span><span style="color:#F97583">$</span><span style="color:#9ECBFF">(</span><span style="color:#E1E4E8">$VMName</span><span style="color:#9ECBFF">)</span><span style="color:#9ECBFF">-IpConfig"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">               -</span><span style="color:#E1E4E8">Subnet $SingleSubnet</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$NIC </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzNetworkInterface</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">Name $NICName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">Location $LocationName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">IpConfiguration $ipconfig</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$Credential </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-Credential</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                 -</span><span style="color:#E1E4E8">Message </span><span style="color:#9ECBFF">"Enter a username and password for the virtual machine"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> New-AzVMConfig</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VMName $VMName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VMSize $VMSize</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Set-AzVMBootDiagnostic</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Disable</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Set-AzVMOperatingSystem</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Windows </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">ComputerName $ComputerName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Credential $Credential </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">ProvisionVMAgent </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">EnableAutoUpdate</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Add-AzVMNetworkInterface</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Id $NIC.Id</span></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Set-AzVMSourceImage</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">PublisherName </span><span style="color:#9ECBFF">'MicrosoftWindowsServer'</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Offer </span><span style="color:#9ECBFF">'WindowsServer'</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Skus </span><span style="color:#9ECBFF">'2019-Datacenter'</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Version latest</span></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Set-AzVMOSDisk</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"</span><span style="color:#F97583">$</span><span style="color:#9ECBFF">(</span><span style="color:#E1E4E8">$VMName</span><span style="color:#9ECBFF">)</span><span style="color:#9ECBFF">-OsDisk"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">StorageAccountType </span><span style="color:#9ECBFF">"Standard_LRS"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Windows </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">DiskSizeInGB </span><span style="color:#79B8FF">127</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">CreateOption FromImage </span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">New-AzVM</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">   -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">   -</span><span style="color:#E1E4E8">Location $LocationName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">   -</span><span style="color:#E1E4E8">VM $VirtualMachine </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">   -</span><span style="color:#E1E4E8">Verbose</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Install IIS</span></span>
+<span class="line"><span style="color:#E1E4E8">$PublicSettings </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> '{"commandToExecute":"powershell Add-WindowsFeature Web-Server"}'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">Set-AzVMExtension</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">ExtensionName </span><span style="color:#9ECBFF">"IIS"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">VMName $VMName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">Publisher </span><span style="color:#9ECBFF">"Microsoft.Compute"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">ExtensionType </span><span style="color:#9ECBFF">"CustomScriptExtension"</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">TypeHandlerVersion </span><span style="color:#79B8FF">1.4</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">SettingString $PublicSettings </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">Location $LocationName</span></span></code></pre>
+<p>Once completed, Connect you VPN and let’s see how data flows between hub to spokes from you local workspace.</p>
 <h4 id="local-workspace-to-hub">Local workspace To Hub</h4>
 <p>Since, we have established the VPN connection, Hub is reachable from local workspace.</p>
-<p><img src="https://anktsrkr.github.io/images/hub-spoke/over-vpn-hub-reachable.jpg" alt="Hub vnet reachable from Local workspace over VPN"></p>
+<p><img src="/images/hub-spoke/over-vpn-hub-reachable.jpg" alt="Hub vnet reachable from Local workspace over VPN"></p>
 <h4 id="hub-to-spokes">Hub To Spokes</h4>
 <p>Since, we have established the peering between Hub and spokes, these spokes are reachable from hub.</p>
-<p><img src="https://anktsrkr.github.io/images/hub-spoke/hub-to-spokes-reachable.jpg" alt="Spoke vnets are reachable from Hub vnet"></p>
+<p><img src="/images/hub-spoke/hub-to-spokes-reachable.jpg" alt="Spoke vnets are reachable from Hub vnet"></p>
 <h4 id="spokes-to-hub">Spokes To Hub</h4>
 <p>Hub is also reachable from both spokes.</p>
-<p><img src="https://anktsrkr.github.io/images/hub-spoke/spoke1-to-hub-reachable.jpg" alt="Hub vnet is reachable from Spoke 1 vnet"></p>
-<p><img src="https://anktsrkr.github.io/images/hub-spoke/spoke2-to-hub-reachable.jpg" alt="Hub vnet is reachable from Spoke 2 vnet"></p>
+<p><img src="/images/hub-spoke/spoke1-to-hub-reachable.jpg" alt="Hub vnet is reachable from Spoke 1 vnet"></p>
+<p><img src="/images/hub-spoke/spoke2-to-hub-reachable.jpg" alt="Hub vnet is reachable from Spoke 2 vnet"></p>
 <h4 id="local-workspace-to-spokes">Local workspace To Spokes</h4>
 <p>Spokes are not reachable from local workspaces. It supposed to work right? To make it work, you need to perform some more steps -</p>
 <ol>
-<li>
-<p>Configure all peering connections to allow forwarded traffic.</p>
-</li>
-<li>
-<p>Configure the peering connection in the hub to allow gateway transit.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$resourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-</span></span><span style="display:flex;"><span>$hubvnetName = <span style="color:#e6db74">&#34;hub-vnet&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Hub to Spoke 1.</span>
-</span></span><span style="display:flex;"><span>$LinkHubToSpoke1 = Get-AzVirtualNetworkPeering `
-</span></span><span style="display:flex;"><span>                      -VirtualNetworkName $hubvnetName `
-</span></span><span style="display:flex;"><span>                      -ResourceGroupName $resourceGroupName `
-</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#34;LinkHubToSpoke1&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$LinkHubToSpoke1.AllowGatewayTransit = $True
-</span></span><span style="display:flex;"><span>$LinkHubToSpoke1.AllowForwardedTraffic = $True
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkHubToSpoke1
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Hub to Spoke 2.</span>
-</span></span><span style="display:flex;"><span>$LinkHubToSpoke2 = Get-AzVirtualNetworkPeering `
-</span></span><span style="display:flex;"><span>                      -VirtualNetworkName $hubvnetName `
-</span></span><span style="display:flex;"><span>                      -ResourceGroupName $resourceGroupName `
-</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#34;LinkHubToSpoke2&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$LinkHubToSpoke2.AllowGatewayTransit = $True
-</span></span><span style="display:flex;"><span>$LinkHubToSpoke2.AllowForwardedTraffic = $True
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkHubToSpoke2</span></span></code></pre></div></p>
-</li>
-<li>
-<p>Configure the peering connection in each spoke to use remote gateways.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$resourceGroupName = <span style="color:#e6db74">&#34;network-sandbox&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Spoke 1 to Hub.</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$spoke1vnetName = <span style="color:#e6db74">&#34;spoke1-vnet&#34;</span>
-</span></span><span style="display:flex;"><span>$LinkSpoke1ToHub = Get-AzVirtualNetworkPeering `
-</span></span><span style="display:flex;"><span>                      -VirtualNetworkName $spoke1vnetName `
-</span></span><span style="display:flex;"><span>                      -ResourceGroupName $resourceGroupName `
-</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#34;LinkSpoke1ToHub&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$LinkSpoke1ToHub.UseRemoteGateways = $True
-</span></span><span style="display:flex;"><span>$LinkSpoke1ToHub.AllowForwardedTraffic = $True
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkSpoke1ToHub
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Update Spoke 2 to Hub.</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$spoke2vnetName = <span style="color:#e6db74">&#34;spoke2-vnet&#34;</span>
-</span></span><span style="display:flex;"><span>$LinkSpoke2ToHub = Get-AzVirtualNetworkPeering `
-</span></span><span style="display:flex;"><span>                      -VirtualNetworkName $spoke2vnetName `
-</span></span><span style="display:flex;"><span>                      -ResourceGroupName $resourceGroupName `
-</span></span><span style="display:flex;"><span>                      -Name <span style="color:#e6db74">&#34;LinkSpoke2ToHub&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$LinkSpoke2ToHub.UseRemoteGateways = $True
-</span></span><span style="display:flex;"><span>$LinkSpoke2ToHub.AllowForwardedTraffic = $True
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Set-AzVirtualNetworkPeering -VirtualNetworkPeering $LinkSpoke2ToHub</span></span></code></pre></div></p>
-</li>
+<li>Configure all peering connections to allow forwarded traffic.</li>
+<li>Configure the peering connection in the hub to allow gateway transit.</li>
 </ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$resourceGroupName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "network-sandbox"</span></span>
+<span class="line"><span style="color:#E1E4E8">$hubvnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "hub-vnet"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Update Hub to Spoke 1.</span></span>
+<span class="line"><span style="color:#E1E4E8">$LinkHubToSpoke1 </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetworkPeering</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">VirtualNetworkName $hubvnetName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">ResourceGroupName $resourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"LinkHubToSpoke1"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$LinkHubToSpoke1.AllowGatewayTransit </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> $True</span></span>
+<span class="line"><span style="color:#E1E4E8">$LinkHubToSpoke1.AllowForwardedTraffic </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> $True</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">Set-AzVirtualNetworkPeering</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">VirtualNetworkPeering $LinkHubToSpoke1</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Update Hub to Spoke 2.</span></span>
+<span class="line"><span style="color:#E1E4E8">$LinkHubToSpoke2 </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetworkPeering</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">VirtualNetworkName $hubvnetName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">ResourceGroupName $resourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"LinkHubToSpoke2"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$LinkHubToSpoke2.AllowGatewayTransit </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> $True</span></span>
+<span class="line"><span style="color:#E1E4E8">$LinkHubToSpoke2.AllowForwardedTraffic </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> $True</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">Set-AzVirtualNetworkPeering</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">VirtualNetworkPeering $LinkHubToSpoke2</span></span></code></pre>
+<ol start="3">
+<li>Configure the peering connection in each spoke to use remote gateways.</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$resourceGroupName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "network-sandbox"</span></span>
+<span class="line"><span style="color:#6A737D"># Update Spoke 1 to Hub.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$spoke1vnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "spoke1-vnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$LinkSpoke1ToHub </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetworkPeering</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">VirtualNetworkName $spoke1vnetName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">ResourceGroupName $resourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"LinkSpoke1ToHub"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$LinkSpoke1ToHub.UseRemoteGateways </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> $True</span></span>
+<span class="line"><span style="color:#E1E4E8">$LinkSpoke1ToHub.AllowForwardedTraffic </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> $True</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">Set-AzVirtualNetworkPeering</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">VirtualNetworkPeering $LinkSpoke1ToHub</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Update Spoke 2 to Hub.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$spoke2vnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "spoke2-vnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$LinkSpoke2ToHub </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Get-AzVirtualNetworkPeering</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">VirtualNetworkName $spoke2vnetName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">ResourceGroupName $resourceGroupName </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">                      -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"LinkSpoke2ToHub"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$LinkSpoke2ToHub.UseRemoteGateways </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> $True</span></span>
+<span class="line"><span style="color:#E1E4E8">$LinkSpoke2ToHub.AllowForwardedTraffic </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> $True</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">Set-AzVirtualNetworkPeering</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">VirtualNetworkPeering $LinkSpoke2ToHub</span></span></code></pre>
 <p>After virtual network peering is established <strong>download and reinstall</strong> the point-to-site package so that the point-to-site clients get the updated routes to the spoke virtual network.</p>
-<p><img src="https://anktsrkr.github.io/images/hub-spoke/over-vpn-spokes-reachable.jpg" alt="Hub vnet reachable from Local workspace over VPN"></p>
+<p><img src="/images/hub-spoke/over-vpn-spokes-reachable.jpg" alt="Hub vnet reachable from Local workspace over VPN"></p>
 <h4 id="spoke-to-spoke">Spoke To Spoke</h4>
-<p>Interesting! if you see the above screenshot, communication between spokes are not working. Why?  Let&rsquo;s discuss it in the <a href="https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/">next post</a>
+<p>Interesting! if you see the above screenshot, communication between spokes are not working. Why?  Let’s discuss it in the <a href="/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/">next post</a>
 !</p>
 <p>Here is the updated architecture, we just implemented -</p>
-<p><img src="https://anktsrkr.github.io/images/hub-spoke/implemented-hub-spoke-topology.jpg" alt="Updated architecture"></p>
+<p><img src="/images/hub-spoke/implemented-hub-spoke-topology.jpg" alt="Updated architecture"></p>   <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/azure/">#Azure</a><a href="/tags/networking/">#Networking</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fimplementing-hub-spoke-network-topology-in-azure-part-2%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Implementing%20Hub-Spoke%20network%20topology%20in%20Azure%20-%20Part%202&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fimplementing-hub-spoke-network-topology-in-azure-part-2%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fimplementing-hub-spoke-network-topology-in-azure-part-2%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/implementing-hub-spoke-network-topology-in-azure-part-2/";
+const title = "Implementing Hub-Spoke network topology in Azure - Part 2";
+const url = "https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/";
 
-              
-              
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/ankit-sarkar/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
 
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    navigator.serviceWorker.ready.then(function() {});
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
 
-            </div>
-          </div>
-          <div id="post-footer" class="post-footer main-content-wrap">
-            
-              
-                
-                
-                  <div class="post-footer-tags">
-                    <span class="text-color-light text-small">TAGGED IN</span><br/>
-                    
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azure/">Azure</a>
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
 
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/networking/">Networking</a>
-
-                  </div>
-                
-              
-            
-            
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" data-tooltip="Introducing Azure Firewall in Hub-Spoke network topology in Azure" aria-label="NEXT: Introducing Azure Firewall in Hub-Spoke network topology in Azure">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/" data-tooltip="Implementing Hub-Spoke network topology in Azure - Part 1" aria-label="PREVIOUS: Implementing Hub-Spoke network topology in Azure - Part 1">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-            
-  
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-    <script type="text/javascript">
-      var disqus_config = function() {
-        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/implementing-hub-spoke-network-topology-in-azure-part-2\/';
-        
-          this.page.identifier = '\/post\/implementing-hub-spoke-network-topology-in-azure-part-2\/'
-        
-      };
-      (function() {
-        
-        
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-          return;
-        }
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'anktsrkr-github-io';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
-  
-
-
-          </div>
-        </article>
-        <footer id="footer" class="main-content-wrap">
-  <span class="copyrights">
-    &copy; 2025 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
-  </span>
-</footer>
-
-      </div>
-      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-        
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" data-tooltip="Introducing Azure Firewall in Hub-Spoke network topology in Azure" aria-label="NEXT: Introducing Azure Firewall in Hub-Spoke network topology in Azure">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-1/" data-tooltip="Implementing Hub-Spoke network topology in Azure - Part 1" aria-label="PREVIOUS: Implementing Hub-Spoke network topology in Azure - Part 1">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/implementing-hub-spoke-network-topology-in-azure-part-2/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-      </div>
-      
-<div id="share-options-bar" class="share-options-bar" data-behavior="5">
-  <i id="btn-close-shareoptions" class="fa fa-times"></i>
-  <ul class="share-options">
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fimplementing-hub-spoke-network-topology-in-azure-part-2%2F" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fimplementing-hub-spoke-network-topology-in-azure-part-2%2F" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fimplementing-hub-spoke-network-topology-in-azure-part-2%2F" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
-        </a>
-      </li>
-    
-  </ul>
-</div>
-<div id="share-options-mask" class="share-options-mask"></div>
-
-
-    </div>
-    
-    <div id="about">
-  <div id="about-card">
-    <div id="about-btn-close">
-      <i class="fa fa-times"></i>
-    </div>
-    
-      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-    
-    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-    
-      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
-    
-    
-      <div id="about-card-job">
-        <i class="fa fa-briefcase"></i>
-        <br/>
-        Technical Architect
-      </div>
-    
-    
-      <div id="about-card-location">
-        <i class="fa fa-map-marker-alt"></i>
-        <br/>
-        Leeds
-      </div>
-    
-  </div>
-</div>
-
-    
-
-    
-  
-    
-      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
-    
-  
-
-
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-  integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
-  integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-<script src="https://anktsrkr.github.io/%20/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
-
-
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js">
-  </script>
-  
-  
-  
-  <script>
-    $(document).ready(function () {
-      hljs.configure({ classPrefix: '', useBR: false });
-      $('pre.code-highlight > code, pre > code').each(function (i, block) {
-        if (!$(this).hasClass('codeblock')) {
-          $(this).addClass('codeblock');
-        }
-        hljs.highlightElement(block);
-      });
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
     });
-  </script>
-  
-  
-  
-
-  
-
-<script>
-    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
-   </script>
-   
-   
-  
-<script>
-    if('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('/sw.js', { scope: '/' })
-            .then(function(registration) {
-            });
-  
-        navigator.serviceWorker
-            .ready
-            .then(function(registration) {
-            });
-    }
-  </script>
-  
-  <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
-</script>
-
-<a id="Setmore_button_iframe" style="position: fixed;
- right: 20px;
- bottom: 15px;
- z-index: 9998;text-decoration: none"
-    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
-    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
-display: table-cell;
-width: auto;
-height: 45px;
-padding: 0 30px;
-border-radius: 25px;
-box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
-font-family: sans-serif;
-text-align: center;
-vertical-align: middle;
-font-weight: bold;
-font-size: 14px;
-color: #fff;
-cursor: pointer;">#TalkWithMe</div>
-</a>
-  
-<script>
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ro6zx9o7jl");
-</script>
-  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('ankitsarkar', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#ffffff',
-    'floating-chat.donateButton.text-color': '#323842'
-  });
-</script>
-    
-  </body>
-</html>
-
+  }
+})();</script> </div> </body></html>

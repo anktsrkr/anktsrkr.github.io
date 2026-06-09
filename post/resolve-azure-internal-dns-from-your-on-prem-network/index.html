@@ -1,1017 +1,244 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    
-    <script type="application/ld+json">
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Resolve Azure Internal DNS from your on prem network and Spokes vnet | Ankit Sarkar</title><meta name="description" content="Resolve Azure Internal DNS from your on prem network"><link rel="canonical" href="https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Resolve Azure Internal DNS from your on prem network and Spokes vnet | Ankit Sarkar"><meta property="og:description" content="Resolve Azure Internal DNS from your on prem network"><meta property="og:url" content="https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/"><meta property="og:image" content="https://anktsrkr.github.io/images/azure.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Resolve Azure Internal DNS from your on prem network and Spokes vnet | Ankit Sarkar"><meta name="twitter:description" content="Resolve Azure Internal DNS from your on prem network"><meta name="twitter:image" content="https://anktsrkr.github.io/images/azure.png"><script async src="https://www.googletagmanager.com/gtag/js?id=UA-176781214-1"></script><script>(function(){const gaId = "UA-176781214-1";
 
-{  
-  "@context":"http://schema.org",
-  "@type":"Website",
-  "@id":"https:\/\/anktsrkr.github.io\/",
-  "author": {
-    "@type": "Person",
-    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-    
-    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
-    
-  },
-  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-  "description":"Resolve Azure Internal DNS from your on prem network",
-  "url":"https:\/\/anktsrkr.github.io\/post\/resolve-azure-internal-dns-from-your-on-prem-network\/",
-  "keywords":"[hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology, ,azure, private, dns, zone,, resolve, azure, internal, DNS, from, your, on, prem,hub, spoke, dns, forwarder,dns, forwarder, in, hub, spoke,dns, forwarder, in, hub, spoke, network, topology,dns, forwarder,azure, powershell,Point, to, Site,, Site, to, Site,VPN]"
-}
-
-</script>
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
-<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta name="keywords" content="hub, spoke,hub, spoke, network,hub, spoke, network, topology,azure, hub, spoke,azure, hub, spoke, network,azure, hub, spoke, network, topology, ,azure, private, dns, zone,, resolve, azure, internal, DNS, from, your, on, prem,hub, spoke, dns, forwarder,dns, forwarder, in, hub, spoke,dns, forwarder, in, hub, spoke, network, topology,dns, forwarder,azure, powershell,Point, to, Site,, Site, to, Site,VPN">
-<meta name="description" content="Resolve Azure Internal DNS from your on prem network">
-
-
-<meta property="og:description" content="Resolve Azure Internal DNS from your on prem network">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Resolve Azure Internal DNS from your on prem network and Spokes vnet">
-<meta name="twitter:title" content="Resolve Azure Internal DNS from your on prem network and Spokes vnet">
-<meta property="og:url" content="https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/">
-<meta property="twitter:url" content="https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/">
-<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta property="og:description" content="Resolve Azure Internal DNS from your on prem network">
-<meta name="twitter:description" content="Resolve Azure Internal DNS from your on prem network">
-<meta property="og:locale" content="en-us">
-
-  
-    <meta property="article:published_time" content="2020-09-13T01:00:00">
-  
-  
-    <meta property="article:modified_time" content="2020-09-13T01:00:00">
-  
-  
-  
-    
-      <meta property="article:section" content="Cloud">
-    
-      <meta property="article:section" content="Azure architecture">
-    
-      <meta property="article:section" content="Hub-Spoke Topology">
-    
-  
-  
-    
-      <meta property="article:tag" content="Azure">
-    
-      <meta property="article:tag" content="Networking">
-    
-      <meta property="article:tag" content="Azure Private DNS Zone">
-    
-  
-
-
-<meta name="twitter:card" content="summary">
-
-  <meta name="twitter:site" content="@anktsrkr">
-
-
-  <meta name="twitter:creator" content="@anktsrkr">
-
-
-
-
-
-
-
-
-
-
-  <meta property="og:image" content="https://anktsrkr.github.io/images/azure.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/azure.png">
-
-
-  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-
-    <title>Resolve Azure Internal DNS from your on prem network and Spokes vnet</title>
-
-    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
-    
-
-    
-
-    <link rel="canonical" href="https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/">
-
-    
-    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
-    
-   
-    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    
-    
-    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
-    
-    
-    
-
-    
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-176781214-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
-     crossorigin="anonymous"></script>
-<script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="9gZ8D7m_t9Y2oK" async></script>
-     
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TY8ZMTBGSM');
-</script>
-    
-  </head>
-
-  <body>
-    <div id="blog">
-      <header id="header" data-behavior="5">
-  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-  <div class="header-title">
-    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
-  </div>
-  
-    
-      <a class="header-right-picture "
-         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
-    
-    
-    
-      
-        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
-      
-    
-    </a>
-  
-</header>
-
-      <nav id="sidebar" data-behavior="5">
-  <div class="sidebar-container">
-    
-      <div class="sidebar-profile">
-        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
-          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-        </a>
-        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-        
-          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
-        
-      </div>
-    
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Home</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Categories</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Tags</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Archives</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">About</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">GitHub</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Linkedin</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Twitter</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">RSS</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-
-    </ul>
-  </div>
-</nav>
-
-      
-
-      <div id="main" data-behavior="5"
-        class="
-               hasCoverMetaIn
-               ">
-        <article class="post" id="top">
-          
-          
-            <div class="post-header main-content-wrap text-left">
-  
-    <h1 class="post-title">
-      Resolve Azure Internal DNS from your on prem network and Spokes vnet
-    </h1>
-  
-  
-  <div class="postShorten-meta post-meta">
-    
-      <time datetime="2020-09-13T01:00:00&#43;05:30">
-        
-  September 13, 2020
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/cloud">Cloud</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/azure-architecture">Azure architecture</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/hub-spoke-topology">Hub-Spoke Topology</a>
-    
-  
-
-  </div>
-
-</div>
-          
-          <div class="post-content markdown">
-            <div class="main-content-wrap">
-              <p>Hi Everyone!</p>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><link rel="stylesheet" href="/_astro/_slug_.C7rzXrsf.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2020-09-12T19:30:00.000Z">12 Sept 2020</time> <span>Cloud</span> </div> <h1>Resolve Azure Internal DNS from your on prem network and Spokes vnet</h1> <p>Resolve Azure Internal DNS from your on prem network</p> <div class="article-tags"> <a href="/categories/cloud/">Cloud</a><a href="/categories/azure-architecture/">Azure architecture</a><a href="/categories/hub-spoke-topology/">Hub-Spoke Topology</a> </div> </header> <div class="article-grid"> <div class="article-content">  <nav class="series-nav" aria-label="Azure Internal DNS series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Azure Internal DNS</h2> <p>Follow the Azure private DNS and private endpoint posts in order.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">01</span> <span class="series-nav-current"> <span>Resolve Azure Internal DNS from your on prem network and Spokes vnet</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/">Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</a> </li> </ol> </nav>  <p>Hi Everyone!</p>
 <p>We have already implemented Hub-Spoke topology, and we are able to connect all the resources using IP from on premises network. But it is easier to use domain name instead ip directly from your virtual network. Also, If you want to use Azure Private Link, you need something which will resolve private link dns to respective ip. Other example is you have ASE v2 which comes with own domain but for your internal use you want some custom domain name which is easy to remember and also satisfy business need. So you need some service in Azure which can translate domain name to IP.</p>
 <p>Azure provides <strong>Private DNS Zones</strong> as global service which provides a reliable, secure DNS service to manage and resolve domain names in a virtual network without the need to add a custom DNS solution. By using private DNS zones, we can use our own custom domain names rather than the Azure-provided names available today.</p>
 <p>To resolve the records of a private DNS zone from virtual network, we must link the virtual network with the zone. Linked virtual networks have full access and can resolve all DNS records published in the private zone. In our Hub-Spokes topology <code>hub-vnet</code> is the ideal vnet which can be linked with private DNS zone.</p>
 <p>What about spokes vnet? Since they are not linked with private DNS zone they will not be able to resolve domain name. Also from your on-premise network it is not possible to resolve azure internal DNS. In this post we will going to solve this issue so that azure resources can be accessible from both spokes and on-premise.</p>
 <p>To resolve this issue, we need to deploy DNS forwarder in Azure which will be responsible for resolving all the DNS queries via a server-level forwarder to the Azure-provided DNS <code>168.63.129.16</code>. Since this is common service we are going to deploy it in <code>ManagementSubnet</code> of <code>hub-vnet</code>.</p>
-<p>We will start by creating Private DNS Zone which will be linked <code>hub-vnet</code>. For this demo, I am assuming you already have hub-spoke topology setup and connected with on-premise over VPN.
-
-  
-    
-  
-  
-    
-  
-  
-  
-
-
-<figure class="highlight cs language-cs">
-  <figcaption>
-    
-      <span>create_dns_zone_and_link.ps1</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language-cs cs"><code class="cs">$ResourceGroupName = &#34;dns-sandbox&#34;
-$ZoneName =&#34;virtualmachine.internal&#34;
-$hubVnet = Get-AzVirtualNetwork `
-              -Name &#34;hub-vnet&#34;
-
-$zone = New-AzPrivateDnsZone `
-           -ResourceGroupName $ResourceGroupName `
-           -Name $ZoneName
-
-$link  = New-AzPrivateDnsVirtualNetworkLink `
-            -ResourceGroupName $ResourceGroupName `
-            -ZoneName $ZoneName `
-            -Name &#34;LinkWithHub&#34; `
-            -EnableRegistration `
-            -VirtualNetworkId $hubVnet.Id</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-Here I am taking Zone name as <code>virtualmachine.internal</code>, which means all the virtual machine created in <code>hub-vnet</code> will have dns name like <code>*.virtualmachine.internal</code>. Also I have enabled auto registration for this vnet which means any vm created in this vnet will be auto registered with this zone. Auto registration works only for virtual machines. For all other resources, you can create DNS records manually in the private DNS zone linked to the virtual network. Please note, you can enable auto registration process for vnet only for single zone. Once completed, go to resource group from azure portal, click on newly created on private DNS zone and you should have something like this -
-<img src="https://anktsrkr.github.io/images/azure-private-dns-zone/private-dns-zone-linked-hubvnet.jpg" alt="Private DNS Zone linked with hub-vnet"></p>
-<p>As I mentioned earlier, we will need DNS forwarder in <code>hub-vnet</code>. Let&rsquo;s create that now with DNS feature enabled.
-
-  
-    
-  
-  
-    
-  
-  
-  
-
-
-<figure class="highlight cs language-cs">
-  <figcaption>
-    
-      <span>create_dns_forwarder.ps1</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language-cs cs"><code class="cs">$LocationName = &#34;centralindia&#34;
-$ResourceGroupName = &#34;vm-sandbox&#34;
-$VMName = &#34;DNSForwarder&#34;
-$ComputerName = $VMName
-$VMSize = &#34;Standard_B1ms&#34;
-
-$NetworkName = &#34;hub-vnet&#34;
-$SubnetName = &#34;ManagementSubnet&#34;
-$NICName = &#34;$($VMName)-Nic&#34;
-
-$subnetAdressSpace = &#34;10.10.1.0/24&#34;
-
-$networkSecurityGroup = New-AzNetworkSecurityGroup `
-                           -ResourceGroupName $ResourceGroupName `
-                           -Location $LocationName `
-                           -Name &#34;$($VMName)-Nsg&#34;
-
-$Vnet = Get-AzVirtualNetwork `
-            -Name $NetworkName
-$SingleSubnet = Set-AzVirtualNetworkSubnetConfig `
-                   -VirtualNetwork $Vnet `
-                   -AddressPrefix $subnetAdressSpace `
-                   -Name $SubnetName
-
-$Vnet = Set-AzVirtualNetwork `
-           -VirtualNetwork $VNET
-
-$SingleSubnet = Get-AzVirtualNetworkSubnetConfig `
-                   -VirtualNetwork $Vnet `
-                   -Name $SubnetName
-
-$NIC = Get-AzNetworkInterface `
-          -Name $NICName
-$PipRequired = &#34;N&#34;
-if($PipRequired -eq &#34;Y&#34;){
-    $Pip = New-AzPublicIpAddress `
-              -ResourceGroupName $ResourceGroupName `
-              -Location $LocationName `
-              -AllocationMethod Dynamic `
-              -Sku Basic `
-              -Name &#34;$($VMName)-PublicIp&#34;
-
-$ipconfig = New-AzNetworkInterfaceIpConfig `
-               -Name &#34;$($VMName)-IpConfig&#34; `
-               -Subnet $SingleSubnet -PublicIpAddress $Pip
-}
-else {
-$ipconfig = New-AzNetworkInterfaceIpConfig `
-               -Name &#34;$($VMName)-IpConfig&#34; `
-               -Subnet $SingleSubnet
-}
-
-$NIC = New-AzNetworkInterface `
-          -Name $NICName `
-          -ResourceGroupName $ResourceGroupName `
-          -Location $LocationName `
-          -IpConfiguration $ipconfig `
-          -NetworkSecurityGroup $networkSecurityGroup
-
-$Credential = Get-Credential `
-                 -Message &#34;Enter a username and password for the virtual machine&#34;
-
-$VirtualMachine = New-AzVMConfig `
-                     -VMName $VMName `
-                     -VMSize $VMSize
-
-$VirtualMachine = Set-AzVMBootDiagnostic `
-                     -VM $VirtualMachine `
-                     -Disable
-
-$VirtualMachine = Set-AzVMOperatingSystem `
-                     -VM $VirtualMachine `
-                     -Windows `
-                     -ComputerName $ComputerName `
-                     -Credential $Credential `
-                     -ProvisionVMAgent `
-                     -EnableAutoUpdate
-
-$VirtualMachine = Add-AzVMNetworkInterface `
-                     -VM $VirtualMachine `
-                     -Id $NIC.Id
-$VirtualMachine = Set-AzVMSourceImage `
-                     -VM $VirtualMachine `
-                     -PublisherName &#39;MicrosoftWindowsServer&#39; `
-                     -Offer &#39;WindowsServer&#39; `
-                     -Skus &#39;2019-Datacenter&#39; `
-                     -Version latest
-$VirtualMachine = Set-AzVMOSDisk `
-                     -VM $VirtualMachine `
-                     -Name &#34;$($VMName)-OsDisk&#34; `
-                     -StorageAccountType &#34;Standard_LRS&#34; `
-                     -Windows `
-                     -DiskSizeInGB 127 `
-                     -CreateOption FromImage 
-
-New-AzVM `
-   -ResourceGroupName $ResourceGroupName `
-   -Location $LocationName `
-   -VM $VirtualMachine `
-   -Verbose
-
-
-# Install DNS
-$PublicSettings = &#39;{&#34;commandToExecute&#34;:&#34;powershell Install-WindowsFeature -Name DNS -IncludeManagementTools&#34;}&#39;
-
-Set-AzVMExtension `
-        -ExtensionName &#34;DNS&#34; `
-        -ResourceGroupName $ResourceGroupName `
-        -VMName $VMName `
-        -Publisher &#34;Microsoft.Compute&#34; `
-        -ExtensionType &#34;CustomScriptExtension&#34; -TypeHandlerVersion 1.4 `
-        -SettingString $PublicSettings -Location $LocationName</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-Once completed, go to Private DNS Zone dashboard from Azure Portal, and you will see there is <code>A</code> record added for this vm automatically. Thanks to AutoRegistered! If you delete this vm, this record will be deregister automatically as well.</p>
+<p>We will start by creating Private DNS Zone which will be linked <code>hub-vnet</code>. For this demo, I am assuming you already have hub-spoke topology setup and connected with on-premise over VPN.</p>
+<div class="code-title">create_dns_zone_and_link.ps1</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#E1E4E8">$ResourceGroupName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "dns-sandbox"</span></span>
+<span class="line"><span style="color:#E1E4E8">$ZoneName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"virtualmachine.internal"</span></span>
+<span class="line"><span style="color:#E1E4E8">$hubVnet </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Get</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"hub-vnet"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$zone </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzPrivateDnsZone `</span></span>
+<span class="line"><span style="color:#F97583">           -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName `</span></span>
+<span class="line"><span style="color:#F97583">           -</span><span style="color:#E1E4E8">Name $ZoneName</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$link  </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzPrivateDnsVirtualNetworkLink `</span></span>
+<span class="line"><span style="color:#F97583">            -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName `</span></span>
+<span class="line"><span style="color:#F97583">            -</span><span style="color:#E1E4E8">ZoneName $ZoneName `</span></span>
+<span class="line"><span style="color:#F97583">            -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"LinkWithHub"</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">            -</span><span style="color:#E1E4E8">EnableRegistration `</span></span>
+<span class="line"><span style="color:#F97583">            -</span><span style="color:#E1E4E8">VirtualNetworkId $hubVnet.Id</span></span></code></pre>
+<p>Here I am taking Zone name as <code>virtualmachine.internal</code>, which means all the virtual machine created in <code>hub-vnet</code> will have dns name like <code>*.virtualmachine.internal</code>. Also I have enabled auto registration for this vnet which means any vm created in this vnet will be auto registered with this zone. Auto registration works only for virtual machines. For all other resources, you can create DNS records manually in the private DNS zone linked to the virtual network. Please note, you can enable auto registration process for vnet only for single zone. Once completed, go to resource group from azure portal, click on newly created on private DNS zone and you should have something like this -
+<img src="/images/azure-private-dns-zone/private-dns-zone-linked-hubvnet.jpg" alt="Private DNS Zone linked with hub-vnet"></p>
+<p>As I mentioned earlier, we will need DNS forwarder in <code>hub-vnet</code>. Let’s create that now with DNS feature enabled.</p>
+<div class="code-title">create_dns_forwarder.ps1</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#E1E4E8">$LocationName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "centralindia"</span></span>
+<span class="line"><span style="color:#E1E4E8">$ResourceGroupName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "vm-sandbox"</span></span>
+<span class="line"><span style="color:#E1E4E8">$VMName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "DNSForwarder"</span></span>
+<span class="line"><span style="color:#E1E4E8">$ComputerName </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $VMName</span></span>
+<span class="line"><span style="color:#E1E4E8">$VMSize </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "Standard_B1ms"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$NetworkName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "hub-vnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$SubnetName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "ManagementSubnet"</span></span>
+<span class="line"><span style="color:#E1E4E8">$NICName </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "$($VMName)-Nic"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$subnetAdressSpace </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "10.10.1.0/24"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$networkSecurityGroup </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzNetworkSecurityGroup `</span></span>
+<span class="line"><span style="color:#F97583">                           -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName `</span></span>
+<span class="line"><span style="color:#F97583">                           -</span><span style="color:#E1E4E8">Location $LocationName `</span></span>
+<span class="line"><span style="color:#F97583">                           -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"$($VMName)-Nsg"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$Vnet </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Get</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork `</span></span>
+<span class="line"><span style="color:#F97583">            -</span><span style="color:#E1E4E8">Name $NetworkName</span></span>
+<span class="line"><span style="color:#E1E4E8">$SingleSubnet </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetworkSubnetConfig `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">VirtualNetwork $Vnet `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">AddressPrefix $subnetAdressSpace `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">Name $SubnetName</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$Vnet </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork `</span></span>
+<span class="line"><span style="color:#F97583">           -</span><span style="color:#E1E4E8">VirtualNetwork $VNET</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$SingleSubnet </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Get</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetworkSubnetConfig `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">VirtualNetwork $Vnet `</span></span>
+<span class="line"><span style="color:#F97583">                   -</span><span style="color:#E1E4E8">Name $SubnetName</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$NIC </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Get</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzNetworkInterface `</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">Name $NICName</span></span>
+<span class="line"><span style="color:#E1E4E8">$PipRequired </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "N"</span></span>
+<span class="line"><span style="color:#B392F0">if</span><span style="color:#E1E4E8">($PipRequired </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">eq </span><span style="color:#9ECBFF">"Y"</span><span style="color:#E1E4E8">){</span></span>
+<span class="line"><span style="color:#E1E4E8">    $Pip </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzPublicIpAddress `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Location $LocationName `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">AllocationMethod Dynamic `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Sku Basic `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"$($VMName)-PublicIp"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$ipconfig </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzNetworkInterfaceIpConfig `</span></span>
+<span class="line"><span style="color:#F97583">               -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"$($VMName)-IpConfig"</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">               -</span><span style="color:#E1E4E8">Subnet $SingleSubnet </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">PublicIpAddress $Pip</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">else {</span></span>
+<span class="line"><span style="color:#E1E4E8">$ipconfig </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzNetworkInterfaceIpConfig `</span></span>
+<span class="line"><span style="color:#F97583">               -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"$($VMName)-IpConfig"</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">               -</span><span style="color:#E1E4E8">Subnet $SingleSubnet</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$NIC </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzNetworkInterface `</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">Name $NICName `</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName `</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">Location $LocationName `</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">IpConfiguration $ipconfig `</span></span>
+<span class="line"><span style="color:#F97583">          -</span><span style="color:#E1E4E8">NetworkSecurityGroup $networkSecurityGroup</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$Credential </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Get</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">Credential `</span></span>
+<span class="line"><span style="color:#F97583">                 -</span><span style="color:#E1E4E8">Message </span><span style="color:#9ECBFF">"Enter a username and password for the virtual machine"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVMConfig `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VMName $VMName `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VMSize $VMSize</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVMBootDiagnostic `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Disable</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVMOperatingSystem `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Windows `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">ComputerName $ComputerName `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Credential $Credential `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">ProvisionVMAgent `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">EnableAutoUpdate</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Add</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVMNetworkInterface `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Id $NIC.Id</span></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVMSourceImage `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">PublisherName </span><span style="color:#9ECBFF">'MicrosoftWindowsServer'</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Offer </span><span style="color:#9ECBFF">'WindowsServer'</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Skus </span><span style="color:#9ECBFF">'2019-Datacenter'</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Version latest</span></span>
+<span class="line"><span style="color:#E1E4E8">$VirtualMachine </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVMOSDisk `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">VM $VirtualMachine `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"$($VMName)-OsDisk"</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">StorageAccountType </span><span style="color:#9ECBFF">"Standard_LRS"</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">Windows `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">DiskSizeInGB </span><span style="color:#79B8FF">127</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">                     -</span><span style="color:#E1E4E8">CreateOption FromImage </span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">New</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVM `</span></span>
+<span class="line"><span style="color:#F97583">   -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName `</span></span>
+<span class="line"><span style="color:#F97583">   -</span><span style="color:#E1E4E8">Location $LocationName `</span></span>
+<span class="line"><span style="color:#F97583">   -</span><span style="color:#E1E4E8">VM $VirtualMachine `</span></span>
+<span class="line"><span style="color:#F97583">   -</span><span style="color:#E1E4E8">Verbose</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8"># Install DNS</span></span>
+<span class="line"><span style="color:#E1E4E8">$PublicSettings </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> '{"commandToExecute":"powershell Install-WindowsFeature -Name DNS -IncludeManagementTools"}'</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVMExtension `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">ExtensionName </span><span style="color:#9ECBFF">"DNS"</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">ResourceGroupName $ResourceGroupName `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">VMName $VMName `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">Publisher </span><span style="color:#9ECBFF">"Microsoft.Compute"</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">ExtensionType </span><span style="color:#9ECBFF">"CustomScriptExtension"</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">TypeHandlerVersion </span><span style="color:#79B8FF">1.4</span><span style="color:#E1E4E8"> `</span></span>
+<span class="line"><span style="color:#F97583">        -</span><span style="color:#E1E4E8">SettingString $PublicSettings </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">Location $LocationName</span></span></code></pre>
+<p>Once completed, go to Private DNS Zone dashboard from Azure Portal, and you will see there is <code>A</code> record added for this vm automatically. Thanks to AutoRegistered! If you delete this vm, this record will be deregister automatically as well.</p>
 <p>Now connect with this VM from on-prem (assuming you have connected with VPN) and try to connect with <code>dnsforwarder.virtualmachine.internal</code>. Oops! unable to connect. We will get back to this later. but for now lets connect with private ip.</p>
 <p>Once logged in, search for DNS Manager. Right Click on the DNS Server name and click on Properties.
-<img src="https://anktsrkr.github.io/images/azure-private-dns-zone/dns-manager-properties.jpg" alt="DNS Manager Properties"></p>
+<img src="/images/azure-private-dns-zone/dns-manager-properties.jpg" alt="DNS Manager Properties"></p>
 <p>Now go to Forwarder Tab and click on Edit.</p>
-<p><img src="https://anktsrkr.github.io/images/azure-private-dns-zone/dns-manager-forwarders.jpg" alt="Forwarder Tab"></p>
+<p><img src="/images/azure-private-dns-zone/dns-manager-forwarders.jpg" alt="Forwarder Tab"></p>
 <p>Add Azure DNS <code>168.63.129.16</code> and click on OK.</p>
-<p><img src="https://anktsrkr.github.io/images/azure-private-dns-zone/dns-manager-azure-dns.jpg" alt="Azure DNS Added"></p>
+<p><img src="/images/azure-private-dns-zone/dns-manager-azure-dns.jpg" alt="Azure DNS Added"></p>
 <p>We just setup a DNS forwarder, this will help us to resolute any domain name from Azure DNS by azure recursive resolver.</p>
-<p>Next step to setup this DNS forwarder server for all virtual networks so that all the domain name resolution should be done using this server only.
-
-  
-    
-  
-  
-    
-  
-  
-  
-
-
-<figure class="highlight cs language-cs">
-  <figcaption>
-    
-      <span>change_dns_server.ps1</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language-cs cs"><code class="cs">$dnsserver = &#34;10.10.1.4&#34;
-
-$hubVnet = Get-AzVirtualNetwork `
-              -Name &#34;hub-vnet&#34;
-
-$hubVnet.DhcpOptions.DnsServers.Clear();
-$hubVnet.DhcpOptions.DnsServers.Add($dnsserver)
-Set-AzVirtualNetwork -VirtualNetwork $hubVnet
-
-$spoke1Vnet = Get-AzVirtualNetwork `
-              -Name &#34;spoke1-vnet&#34;
-
-$spoke1Vnet.DhcpOptions.DnsServers.Clear();
-$spoke1Vnet.DhcpOptions.DnsServers.Add($dnsserver)
-Set-AzVirtualNetwork -VirtualNetwork $spoke1Vnet
-
-
-$spoke2Vnet = Get-AzVirtualNetwork `
-              -Name &#34;spoke2-vnet&#34;
-
-$spoke2Vnet.DhcpOptions.DnsServers.Clear();
-$spoke2Vnet.DhcpOptions.DnsServers.Add($dnsserver)
-Set-AzVirtualNetwork -VirtualNetwork $spoke2Vnet</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-You need to restart all servers to take this effect. Also you need to delete the existing Point to Site VPN Gateway and reinstall it.</p>
+<p>Next step to setup this DNS forwarder server for all virtual networks so that all the domain name resolution should be done using this server only.</p>
+<div class="code-title">change_dns_server.ps1</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#E1E4E8">$dnsserver </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "10.10.1.4"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$hubVnet </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Get</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"hub-vnet"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$hubVnet.DhcpOptions.DnsServers.</span><span style="color:#B392F0">Clear</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">$hubVnet.DhcpOptions.DnsServers.</span><span style="color:#B392F0">Add</span><span style="color:#E1E4E8">($dnsserver)</span></span>
+<span class="line"><span style="color:#E1E4E8">Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">VirtualNetwork $hubVnet</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$spoke1Vnet </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Get</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"spoke1-vnet"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$spoke1Vnet.DhcpOptions.DnsServers.</span><span style="color:#B392F0">Clear</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">$spoke1Vnet.DhcpOptions.DnsServers.</span><span style="color:#B392F0">Add</span><span style="color:#E1E4E8">($dnsserver)</span></span>
+<span class="line"><span style="color:#E1E4E8">Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">VirtualNetwork $spoke1Vnet</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$spoke2Vnet </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Get</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork `</span></span>
+<span class="line"><span style="color:#F97583">              -</span><span style="color:#E1E4E8">Name </span><span style="color:#9ECBFF">"spoke2-vnet"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$spoke2Vnet.DhcpOptions.DnsServers.</span><span style="color:#B392F0">Clear</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">$spoke2Vnet.DhcpOptions.DnsServers.</span><span style="color:#B392F0">Add</span><span style="color:#E1E4E8">($dnsserver)</span></span>
+<span class="line"><span style="color:#E1E4E8">Set</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">AzVirtualNetwork </span><span style="color:#F97583">-</span><span style="color:#E1E4E8">VirtualNetwork $spoke2Vnet</span></span></code></pre>
+<p>You need to restart all servers to take this effect. Also you need to delete the existing Point to Site VPN Gateway and reinstall it.</p>
 <p>Now connect your VPN and connect the vm using DNS this time (I will assume you do not have any local DNS server setup).</p>
-<p><img src="https://anktsrkr.github.io/images/azure-private-dns-zone/ping-successful.jpg" alt="PING working using DNS">
-<img src="https://anktsrkr.github.io/images/azure-private-dns-zone/rdp-successful.jpg" alt="RDP Working using DNS"></p>
+<p><img src="/images/azure-private-dns-zone/ping-successful.jpg" alt="PING working using DNS">
+<img src="/images/azure-private-dns-zone/rdp-successful.jpg" alt="RDP Working using DNS"></p>
 <p>If you try the same from Spoke virtual networks it will work because all the virtual network is now pointed to DNS forwarder.
 We just implemented below architecture.</p>
-<p><img src="https://anktsrkr.github.io/images/azure-private-dns-zone/private-dns-zone-architecture.jpg" alt="DNS Resolution Flow"></p>
+<p><img src="/images/azure-private-dns-zone/private-dns-zone-architecture.jpg" alt="DNS Resolution Flow"></p>   <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/azure/">#Azure</a><a href="/tags/networking/">#Networking</a><a href="/tags/azure-private-dns-zone/">#Azure Private DNS Zone</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fresolve-azure-internal-dns-from-your-on-prem-network%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Resolve%20Azure%20Internal%20DNS%20from%20your%20on%20prem%20network%20and%20Spokes%20vnet&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fresolve-azure-internal-dns-from-your-on-prem-network%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fresolve-azure-internal-dns-from-your-on-prem-network%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/resolve-azure-internal-dns-from-your-on-prem-network/";
+const title = "Resolve Azure Internal DNS from your on prem network and Spokes vnet";
+const url = "https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/";
 
-              
-              
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/ankit-sarkar/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
 
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    navigator.serviceWorker.ready.then(function() {});
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
 
-            </div>
-          </div>
-          <div id="post-footer" class="post-footer main-content-wrap">
-            
-              
-                
-                
-                  <div class="post-footer-tags">
-                    <span class="text-color-light text-small">TAGGED IN</span><br/>
-                    
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azure/">Azure</a>
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
 
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/networking/">Networking</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/azure-private-dns-zone/">Azure Private DNS Zone</a>
-
-                  </div>
-                
-              
-            
-            
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" data-tooltip="Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem" aria-label="NEXT: Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/" data-tooltip="Implementing Azure Firewall in Hub-Spoke network topology in Azure" aria-label="PREVIOUS: Implementing Azure Firewall in Hub-Spoke network topology in Azure">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-            
-  
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-    <script type="text/javascript">
-      var disqus_config = function() {
-        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/resolve-azure-internal-dns-from-your-on-prem-network\/';
-        
-          this.page.identifier = '\/post\/resolve-azure-internal-dns-from-your-on-prem-network\/'
-        
-      };
-      (function() {
-        
-        
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-          return;
-        }
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'anktsrkr-github-io';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
-  
-
-
-          </div>
-        </article>
-        <footer id="footer" class="main-content-wrap">
-  <span class="copyrights">
-    &copy; 2025 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
-  </span>
-</footer>
-
-      </div>
-      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-        
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/" data-tooltip="Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem" aria-label="NEXT: Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure/" data-tooltip="Implementing Azure Firewall in Hub-Spoke network topology in Azure" aria-label="PREVIOUS: Implementing Azure Firewall in Hub-Spoke network topology in Azure">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/resolve-azure-internal-dns-from-your-on-prem-network/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-      </div>
-      
-<div id="share-options-bar" class="share-options-bar" data-behavior="5">
-  <i id="btn-close-shareoptions" class="fa fa-times"></i>
-  <ul class="share-options">
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fresolve-azure-internal-dns-from-your-on-prem-network%2F" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fresolve-azure-internal-dns-from-your-on-prem-network%2F" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fresolve-azure-internal-dns-from-your-on-prem-network%2F" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
-        </a>
-      </li>
-    
-  </ul>
-</div>
-<div id="share-options-mask" class="share-options-mask"></div>
-
-
-    </div>
-    
-    <div id="about">
-  <div id="about-card">
-    <div id="about-btn-close">
-      <i class="fa fa-times"></i>
-    </div>
-    
-      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-    
-    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-    
-      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
-    
-    
-      <div id="about-card-job">
-        <i class="fa fa-briefcase"></i>
-        <br/>
-        Technical Architect
-      </div>
-    
-    
-      <div id="about-card-location">
-        <i class="fa fa-map-marker-alt"></i>
-        <br/>
-        Leeds
-      </div>
-    
-  </div>
-</div>
-
-    
-
-    
-  
-    
-      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
-    
-  
-
-
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-  integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
-  integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-<script src="https://anktsrkr.github.io/%20/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
-
-
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js">
-  </script>
-  
-  
-  
-  <script>
-    $(document).ready(function () {
-      hljs.configure({ classPrefix: '', useBR: false });
-      $('pre.code-highlight > code, pre > code').each(function (i, block) {
-        if (!$(this).hasClass('codeblock')) {
-          $(this).addClass('codeblock');
-        }
-        hljs.highlightElement(block);
-      });
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
     });
-  </script>
-  
-  
-  
-
-  
-
-<script>
-    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
-   </script>
-   
-   
-  
-<script>
-    if('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('/sw.js', { scope: '/' })
-            .then(function(registration) {
-            });
-  
-        navigator.serviceWorker
-            .ready
-            .then(function(registration) {
-            });
-    }
-  </script>
-  
-  <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
-</script>
-
-<a id="Setmore_button_iframe" style="position: fixed;
- right: 20px;
- bottom: 15px;
- z-index: 9998;text-decoration: none"
-    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
-    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
-display: table-cell;
-width: auto;
-height: 45px;
-padding: 0 30px;
-border-radius: 25px;
-box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
-font-family: sans-serif;
-text-align: center;
-vertical-align: middle;
-font-weight: bold;
-font-size: 14px;
-color: #fff;
-cursor: pointer;">#TalkWithMe</div>
-</a>
-  
-<script>
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ro6zx9o7jl");
-</script>
-  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('ankitsarkar', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#ffffff',
-    'floating-chat.donateButton.text-color': '#323842'
-  });
-</script>
-    
-  </body>
-</html>
-
+  }
+})();</script> </div> </body></html>

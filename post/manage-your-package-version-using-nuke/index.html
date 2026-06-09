@@ -1,394 +1,19 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    
-    <script type="application/ld+json">
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Manage your Package Version using Nuke | Ankit Sarkar</title><meta name="description" content="Manage your Package Version using Nuke."><link rel="canonical" href="https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Manage your Package Version using Nuke | Ankit Sarkar"><meta property="og:description" content="Manage your Package Version using Nuke."><meta property="og:url" content="https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/"><meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Manage your Package Version using Nuke | Ankit Sarkar"><meta name="twitter:description" content="Manage your Package Version using Nuke."><meta name="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png"><script async src="https://www.googletagmanager.com/gtag/js?id=UA-176781214-1"></script><script>(function(){const gaId = "UA-176781214-1";
 
-{  
-  "@context":"http://schema.org",
-  "@type":"Website",
-  "@id":"https:\/\/anktsrkr.github.io\/",
-  "author": {
-    "@type": "Person",
-    "name": "Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-    
-    "image": "https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf"
-    
-  },
-  "name":"Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner",
-  "description":"Manage your Package Version using Nuke.",
-  "url":"https:\/\/anktsrkr.github.io\/post\/manage-your-package-version-using-nuke\/",
-  "keywords":"[nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github feed, github nuget, gitversion]"
-}
-
-</script>
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.121.1 with theme Tranquilpeak 0.5.3-BETA">
-<meta name="author" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta name="keywords" content="nuke, automation, ci, cd, .net6, c#, aspnetcore, github action, nuget, myget, github feed, github nuget, gitversion">
-<meta name="description" content="Manage your Package Version using Nuke.">
-
-
-<meta property="og:description" content="Manage your Package Version using Nuke.">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Manage your Package Version using Nuke">
-<meta name="twitter:title" content="Manage your Package Version using Nuke">
-<meta property="og:url" content="https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/">
-<meta property="twitter:url" content="https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/">
-<meta property="og:site_name" content="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner">
-<meta property="og:description" content="Manage your Package Version using Nuke.">
-<meta name="twitter:description" content="Manage your Package Version using Nuke.">
-<meta property="og:locale" content="en-us">
-
-  
-    <meta property="article:published_time" content="2022-09-03T11:08:35">
-  
-  
-    <meta property="article:modified_time" content="2022-09-03T11:08:35">
-  
-  
-  
-    
-      <meta property="article:section" content="CI/CD">
-    
-      <meta property="article:section" content="Nuke">
-    
-      <meta property="article:section" content="C#">
-    
-      <meta property="article:section" content=".NET 6">
-    
-      <meta property="article:section" content="Nuget">
-    
-      <meta property="article:section" content="Github Action">
-    
-  
-  
-    
-      <meta property="article:tag" content="nuke">
-    
-      <meta property="article:tag" content="automation">
-    
-      <meta property="article:tag" content="ci/cd">
-    
-      <meta property="article:tag" content=".net6">
-    
-      <meta property="article:tag" content="c#">
-    
-      <meta property="article:tag" content="github action">
-    
-      <meta property="article:tag" content="c#">
-    
-      <meta property="article:tag" content="aspnetcore">
-    
-  
-
-
-<meta name="twitter:card" content="summary">
-
-  <meta name="twitter:site" content="@anktsrkr">
-
-
-  <meta name="twitter:creator" content="@anktsrkr">
-
-
-
-
-
-
-
-
-
-  <meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan_full.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan_full.png">
-
-
-  <meta property="og:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png">
-  <meta property="twitter:image" content="https://anktsrkr.github.io/images/nuke/nuke_plan.png">
-
-
-  <meta property="og:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-  <meta property="twitter:image" content="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=640">
-
-    <title>Manage your Package Version using Nuke</title>
-
-    <link rel="icon" href="https://anktsrkr.github.io/favicon.png">
-    
-
-    
-
-    <link rel="canonical" href="https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/">
-
-    
-    <link rel="preload"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
-    
-   
-    <link rel="stylesheet" rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    
-    
-    <link rel="stylesheet" href="https://anktsrkr.github.io/css/style-h6ccsoet3mzkbb0wngshlfbaweimexgqcxj0h5hu4h82olsdzz6wmqdkajm.min.css"/>
-    
-    
-    
-
-    
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-176781214-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-    <link rel="manifest" href="https://anktsrkr.github.io/manifest.json">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863"
-     crossorigin="anonymous"></script>
-<script id="usercentrics-cmp" src="https://app.usercentrics.eu/browser-ui/latest/loader.js" data-settings-id="9gZ8D7m_t9Y2oK" async></script>
-     
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TY8ZMTBGSM');
-</script>
-    
-  </head>
-
-  <body>
-    <div id="blog">
-      <header id="header" data-behavior="5">
-  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-  <div class="header-title">
-    <a class="header-title-link" href="https://anktsrkr.github.io/" aria-label="Go to homepage">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</a>
-  </div>
-  
-    
-      <a class="header-right-picture "
-         href="https://anktsrkr.github.io/#about" aria-label="Open the link: /#about">
-    
-    
-    
-      
-        <img class="header-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=90" alt="Author&#39;s picture" />
-      
-    
-    </a>
-  
-</header>
-
-      <nav id="sidebar" data-behavior="5">
-  <div class="sidebar-container">
-    
-      <div class="sidebar-profile">
-        <a href="https://anktsrkr.github.io/#about" aria-label="Read more about the author">
-          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-        </a>
-        <h4 class="sidebar-profile-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-        
-          <h5 class="sidebar-profile-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></h5>
-        
-      </div>
-    
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/" title="Home">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-home" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Home</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/categories" title="Categories">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-bookmark" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Categories</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/tags" title="Tags">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-tags" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Tags</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/archives" title="Archives">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-archive" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Archives</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/about" title="About">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-question" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">About</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://github.com/anktsrkr" target="_blank" rel="noopener" title="GitHub">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-github" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">GitHub</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://www.linkedin.com/in/ankit-sarkar/" target="_blank" rel="noopener" title="Linkedin">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-linkedin" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Linkedin</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://twitter.com/ankt_srkr" target="_blank" rel="noopener" title="Twitter">
-    
-      <i class="sidebar-button-icon fab fa-lg fa-twitter" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">Twitter</span>
-    </a>
-  </li>
-
-  <li class="sidebar-button">
-    
-      <a class="sidebar-button-link " href="https://anktsrkr.github.io/index.xml" title="RSS">
-    
-      <i class="sidebar-button-icon fas fa-lg fa-rss" aria-hidden="true"></i>
-      
-      <span class="sidebar-button-desc">RSS</span>
-    </a>
-  </li>
-
-
-    </ul>
-    <ul class="sidebar-buttons">
-      
-
-    </ul>
-  </div>
-</nav>
-
-      
-  <div class="post-header-cover
-              text-center
-              "
-       style="background-image:url('/images/nuke/nuke_plan_full.png')"
-       data-behavior="5">
-    
-      <div class="post-header main-content-wrap text-center">
-  
-    <h1 class="post-title">
-      Manage your Package Version using Nuke
-    </h1>
-  
-  
-  <div class="postShorten-meta post-meta">
-    
-      <time datetime="2022-09-03T11:08:35&#43;01:00">
-        
-  September 3, 2022
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/ci/cd">CI/CD</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/nuke">Nuke</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/c">C#</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/.net-6">.NET 6</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/nuget">Nuget</a>, 
-    
-      <a class="category-link" href="https://anktsrkr.github.io/categories/github-action">Github Action</a>
-    
-  
-
-  </div>
-
-</div>
-    
-  </div>
-
-
-      <div id="main" data-behavior="5"
-        class="hasCover
-               hasCoverMetaIn
-               ">
-        <article class="post" id="top">
-          
-          
-          <div class="post-content markdown">
-            <div class="main-content-wrap">
-              <p>Hi Everyone!</p>
-<p>This post is continuation of the series about a build automation tool called <a href="https://nuke.build/"><strong><span class="highlight-text cyan">Nuke</span></strong></a> . Over the time, I will updated this page with links to individual posts :</p>
-<p><a href="https://anktsrkr.github.io/post/getting-started-with-nuke/">Getting Started with Nuke</a></p>
-<p><a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">Write your first building block in Nuke</a></p>
-<p><em>This Post - Manage your Package Version using Nuke</em></p>
-<p><a href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/">Manage your Package Release using Nuke in Github</a></p>
-<p>In our <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">last post</a>, we have completed all the steps to create a new package and publish it to the feed based on where we are running the build. But we have not yet covered the versioning of the package and hence it was not able to run the targets. In this post, we will cover the versioning of the package and how to publish it to the feed.</p>
-<h1 id="table-of-contents">Table of Contents</h1>
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#what-is-gitversion">What is GitVersion?</a></li>
-        <li><a href="#what-is-semantic-versioning">What is Semantic Versioning?</a></li>
-        <li><a href="#installing-gitversion-in-nuke">Installing GitVersion in Nuke</a></li>
-        <li><a href="#run-your-first-nuke-build">Run your first Nuke build</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><link rel="stylesheet" href="/_astro/_slug_.C7rzXrsf.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2022-09-03T10:08:35.000Z">03 Sept 2022</time> <span>CI/CD</span> </div> <h1>Manage your Package Version using Nuke</h1> <p>Manage your Package Version using Nuke.</p> <div class="article-tags"> <a href="/categories/ci-cd/">CI/CD</a><a href="/categories/nuke/">Nuke</a><a href="/categories/c/">C#</a><a href="/categories/.net-6/">.NET 6</a><a href="/categories/nuget/">Nuget</a><a href="/categories/github-action/">Github Action</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#what-is-gitversion">What is GitVersion?</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#what-is-semantic-versioning">What is Semantic Versioning?</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#installing-gitversion-in-nuke">Installing GitVersion in Nuke</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#run-your-first-nuke-build">Run your first Nuke build</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Nuke series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Nuke</h2> <p>Follow the Nuke build automation series in order.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/getting-started-with-nuke/">Getting Started with Nuke</a> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/write-your-first-building-block-in-nuke/">Write your first building block in Nuke</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">03</span> <span class="series-nav-current"> <span>Manage your Package Version using Nuke</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/manage-your-package-release-using-nuke-in-github/">Manage your Package Release using Nuke in Github</a> </li> </ol> </nav>  <p>Hi Everyone!</p>
+<p>In our <a href="/post/write-your-first-building-block-in-nuke/">last post</a>, we have completed all the steps to create a new package and publish it to the feed based on where we are running the build. But we have not yet covered the versioning of the package and hence it was not able to run the targets. In this post, we will cover the versioning of the package and how to publish it to the feed.</p>
 <h2 id="what-is-gitversion">What is GitVersion?</h2>
-<p><strong><span class="highlight-text success">GitVersion</span></strong> is a tool that generates a Semantic Version number based on your Git history. The version number generated from GitVersion can then be used for various different purposes, such as:</p>
+<p><strong><span class="hl hl-success">GitVersion</span></strong> is a tool that generates a Semantic Version number based on your Git history. The version number generated from GitVersion can then be used for various different purposes, such as:</p>
 <ul>
 <li>
-<p><em>Stamping a version number on artifacts (packages)</em> produced during build. - This is what we did in our <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">last post</a>, check the Target <em><span class="highlight-text purple">Pack</span></em>  in the <strong><span class="highlight-text orange">Build.cs</span></strong> file.</p>
+<p><em>Stamping a version number on artifacts (packages)</em> produced during build. - This is what we did in our <a href="/post/write-your-first-building-block-in-nuke/">last post</a>, check the Target <em><span class="hl hl-purple">Pack</span></em>  in the <strong><span class="hl hl-orange">Build.cs</span></strong> file.</p>
 </li>
 <li>
-<p><em>Patching AssemblyInfo.cs (and similar) files with the version number during the build</em>, so the version number is embedded within the compiled binaries themselves - This is also we did in our <a href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/">last post</a>, check the Target <em><span class="highlight-text purple">Compile</span></em> in the <strong><span class="highlight-text orange">Build.cs</span></strong> file.</p>
+<p><em>Patching AssemblyInfo.cs (and similar) files with the version number during the build</em>, so the version number is embedded within the compiled binaries themselves - This is also we did in our <a href="/post/write-your-first-building-block-in-nuke/">last post</a>, check the Target <em><span class="hl hl-purple">Compile</span></em> in the <strong><span class="hl hl-orange">Build.cs</span></strong> file.</p>
 </li>
 <li>
 <p>Exposing the version number to the build server to version the build itself.</p>
@@ -396,793 +21,257 @@ if (!doNotTrack) {
 </ul>
 <h2 id="what-is-semantic-versioning">What is Semantic Versioning?</h2>
 <p>Semantic Versioning is a standard for versioning software. It is a set of rules and requirements that dictate how version numbers are assigned and incremented.</p>
-<p>A version number is made up of three parts: <strong><span class="highlight-text red">MAJOR.MINOR.PATCH</span></strong> , and they are assigned in that order. For example, the version number <code>1.0.0</code> indicates the first major release of a project. Below table shows when to increment each part of the version number.</p>
-<table>
-<thead>
-<tr>
-<th>Part</th>
-<th>When</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Major</td>
-<td>If you are making incompatible API changes</td>
-</tr>
-<tr>
-<td>Minor</td>
-<td>If you are adding functionality in a backwards compatible manner</td>
-</tr>
-<tr>
-<td>Patch</td>
-<td>If you are making  backwards compatible bug fixes</td>
-</tr>
-</tbody>
-</table>
+<p>A version number is made up of three parts: <strong><span class="hl hl-red">MAJOR.MINOR.PATCH</span></strong> , and they are assigned in that order. For example, the version number <code>1.0.0</code> indicates the first major release of a project. Below table shows when to increment each part of the version number.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Part</th><th>When</th></tr></thead><tbody><tr><td>Major</td><td>If you are making incompatible API changes</td></tr><tr><td>Minor</td><td>If you are adding functionality in a backwards compatible manner</td></tr><tr><td>Patch</td><td>If you are making  backwards compatible bug fixes</td></tr></tbody></table>
 <p>Along with the three parts of the version number, a pre-release version number can be added. For example, the version number <code>1.0.0-alpha</code> indicates that the project is in the alpha stage of development. Below table shows how we use pre-release version number in our project.</p>
-<table>
-<thead>
-<tr>
-<th>Pre-release</th>
-<th>When</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>alpha</td>
-<td>For early, unstable releases</td>
-</tr>
-<tr>
-<td>beta</td>
-<td>For feature complete, but probably stable releases</td>
-</tr>
-</tbody>
-</table>
-<p>Now that we have covered the basics of GitVersion and Semantic Versioning, let&rsquo;s start with the implementation.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Pre-release</th><th>When</th></tr></thead><tbody><tr><td>alpha</td><td>For early, unstable releases</td></tr><tr><td>beta</td><td>For feature complete, but probably stable releases</td></tr></tbody></table>
+<p>Now that we have covered the basics of GitVersion and Semantic Versioning, let’s start with the implementation.</p>
 <h2 id="installing-gitversion-in-nuke">Installing GitVersion in Nuke</h2>
-<p>To install GitVersion in Nuke, go to your root folder from your <span class="highlight-text orange">Window terminal</span>  and run below command:</p>
-
-  
-    
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-      <span>Windows Terminal</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">nuke :add-package GitVersion.Tool</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<div class="alert info no-icon ">
-  <p><p>In many cases, Nuke relies on third-party tools. You can add a NuGet package to a build project by calling: <code>nuke :add-package &lt;package-id&gt; [--version &lt;package-version&gt;]</code>.</p>
+<p>To install GitVersion in Nuke, go to your root folder from your <span class="hl hl-orange">Window terminal</span>  and run below command:</p>
+<div class="code-title">Windows Terminal</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nuke :add-package GitVersion.Tool</span></span></code></pre>
+<aside class="callout callout-info callout-info callout-no-icon">
+<p>In many cases, Nuke relies on third-party tools. You can add a NuGet package to a build project by calling: <code>nuke :add-package &#x3C;package-id> [--version &#x3C;package-version>]</code>. </p>
 <p>The major benefit compared to the <code>dotnet add package</code> command is that Nuke will automatically determine if the package should be referenced through PackageReference, i.e. as a normal library, or through PackageDownload, i.e. without affecting the dependency resolution graph.</p>
-</p>
-</div>
+</aside>
 <h2 id="run-your-first-nuke-build">Run your first Nuke build</h2>
 <p>To make sure that Version is generated as per our expectation, we will add <code>GitVersion.yml</code> file in the root folder of our project. This file will contain the configuration for GitVersion. Below is the content of the file.</p>
-<p>
-  
-    
-  
-  
-    
-  
-  
-  
-
-
-<figure class="highlight yaml language-yaml">
-  <figcaption>
-    
-      <span>GitVersion.yml</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language-yaml yaml"><code class="yaml">next-version: 1.0.0
-assembly-versioning-scheme: MajorMinorPatch
-assembly-file-versioning-scheme: MajorMinorPatch
-mode: ContinuousDelivery
-tag-prefix: &#39;[vV]&#39;
-continuous-delivery-fallback-tag: ci
-major-version-bump-message: &#39;\&#43;semver:\s?(breaking|major)&#39;
-minor-version-bump-message: &#39;\&#43;semver:\s?(feature|minor)&#39;
-patch-version-bump-message: &#39;\&#43;semver:\s?(fix|patch)&#39;
-no-bump-message: &#39;\&#43;semver:\s?(none|skip)&#39;
-legacy-semver-padding: 4
-build-metadata-padding: 4
-commits-since-version-source-padding: 4
-tag-pre-release-weight: 60000
-commit-message-incrementing: Enabled
-branches:
-    develop:
-        mode: ContinuousDeployment
-        tag: alpha
-        increment: Minor
-        prevent-increment-of-merged-branch-version: false
-        track-merge-target: true
-        regex: ^dev(elop)?(ment)?$
-        source-branches: []
-        tracks-release-branches: true
-        is-release-branch: false
-        is-mainline: false
-        pre-release-weight: 0
-    main:
-        mode: ContinuousDelivery
-        tag: &#39;&#39;
-        increment: Patch
-        prevent-increment-of-merged-branch-version: true
-        track-merge-target: false
-        regex: ^master$|^main$
-        source-branches:
-        - develop
-        - release
-        tracks-release-branches: false
-        is-release-branch: true
-        is-mainline: true
-        pre-release-weight: 55000
-    release:
-        mode: ContinuousDelivery
-        tag: beta
-        increment: None
-        prevent-increment-of-merged-branch-version: true
-        track-merge-target: false
-        regex: ^releases?[/-]
-        source-branches:
-        - develop
-        - main
-        - support
-        - release
-        tracks-release-branches: false
-        is-release-branch: true
-        is-mainline: false
-        pre-release-weight: 30000
-    feature:
-        mode: ContinuousDelivery
-        tag: useBranchName
-        increment: Inherit
-        prevent-increment-of-merged-branch-version: false
-        track-merge-target: false
-        regex: ^features?[/-]
-        source-branches:
-        - develop
-        - main
-        - release
-        - feature
-        - support
-        - hotfix
-        tracks-release-branches: false
-        is-release-branch: false
-        is-mainline: false
-        pre-release-weight: 30000
-    pull-request:
-        mode: ContinuousDelivery
-        tag: PullRequest
-        increment: Inherit
-        prevent-increment-of-merged-branch-version: false
-        tag-number-pattern: &#39;[/-](?&lt;number&gt;\d&#43;)&#39;
-        track-merge-target: false
-        regex: ^(pull|pull\-requests|pr)[/-]
-        source-branches:
-        - develop
-        - main
-        - release
-        - feature
-        - support
-        - hotfix
-        tracks-release-branches: false
-        is-release-branch: false
-        is-mainline: false
-        pre-release-weight: 30000
-    hotfix:
-        mode: ContinuousDelivery
-        tag: beta
-        increment: Patch
-        prevent-increment-of-merged-branch-version: false
-        track-merge-target: false
-        regex: ^hotfix(es)?[/-]
-        source-branches:
-        - develop
-        - main
-        - support
-        tracks-release-branches: false
-        is-release-branch: false
-        is-mainline: false
-        pre-release-weight: 30000
-    support:
-        mode: ContinuousDelivery
-        tag: &#39;&#39;
-        increment: Patch
-        prevent-increment-of-merged-branch-version: true
-        track-merge-target: false
-        regex: ^support[/-]
-        source-branches:
-        - main
-        tracks-release-branches: false
-        is-release-branch: false
-        is-mainline: true
-        pre-release-weight: 55000
-ignore:
-    sha: []
-commit-date-format: yyyy-MM-dd
-merge-message-formats: {}
-update-build-number: true</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="code-title">GitVersion.yml</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">next-version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1.0.0</span></span>
+<span class="line"><span style="color:#85E89D">assembly-versioning-scheme</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">MajorMinorPatch</span></span>
+<span class="line"><span style="color:#85E89D">assembly-file-versioning-scheme</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">MajorMinorPatch</span></span>
+<span class="line"><span style="color:#85E89D">mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ContinuousDelivery</span></span>
+<span class="line"><span style="color:#85E89D">tag-prefix</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'[vV]'</span></span>
+<span class="line"><span style="color:#85E89D">continuous-delivery-fallback-tag</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ci</span></span>
+<span class="line"><span style="color:#85E89D">major-version-bump-message</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'\+semver:\s?(breaking|major)'</span></span>
+<span class="line"><span style="color:#85E89D">minor-version-bump-message</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'\+semver:\s?(feature|minor)'</span></span>
+<span class="line"><span style="color:#85E89D">patch-version-bump-message</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'\+semver:\s?(fix|patch)'</span></span>
+<span class="line"><span style="color:#85E89D">no-bump-message</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'\+semver:\s?(none|skip)'</span></span>
+<span class="line"><span style="color:#85E89D">legacy-semver-padding</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">4</span></span>
+<span class="line"><span style="color:#85E89D">build-metadata-padding</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">4</span></span>
+<span class="line"><span style="color:#85E89D">commits-since-version-source-padding</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">4</span></span>
+<span class="line"><span style="color:#85E89D">tag-pre-release-weight</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">60000</span></span>
+<span class="line"><span style="color:#85E89D">commit-message-incrementing</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Enabled</span></span>
+<span class="line"><span style="color:#85E89D">branches</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    develop</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ContinuousDeployment</span></span>
+<span class="line"><span style="color:#85E89D">        tag</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">alpha</span></span>
+<span class="line"><span style="color:#85E89D">        increment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Minor</span></span>
+<span class="line"><span style="color:#85E89D">        prevent-increment-of-merged-branch-version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        track-merge-target</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        regex</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">^dev(elop)?(ment)?$</span></span>
+<span class="line"><span style="color:#85E89D">        source-branches</span><span style="color:#E1E4E8">: []</span></span>
+<span class="line"><span style="color:#85E89D">        tracks-release-branches</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        is-release-branch</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-mainline</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        pre-release-weight</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0</span></span>
+<span class="line"><span style="color:#85E89D">    main</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ContinuousDelivery</span></span>
+<span class="line"><span style="color:#85E89D">        tag</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">''</span></span>
+<span class="line"><span style="color:#85E89D">        increment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Patch</span></span>
+<span class="line"><span style="color:#85E89D">        prevent-increment-of-merged-branch-version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        track-merge-target</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        regex</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">^master$|^main$</span></span>
+<span class="line"><span style="color:#85E89D">        source-branches</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">develop</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">release</span></span>
+<span class="line"><span style="color:#85E89D">        tracks-release-branches</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-release-branch</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        is-mainline</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        pre-release-weight</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">55000</span></span>
+<span class="line"><span style="color:#85E89D">    release</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ContinuousDelivery</span></span>
+<span class="line"><span style="color:#85E89D">        tag</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">beta</span></span>
+<span class="line"><span style="color:#85E89D">        increment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">None</span></span>
+<span class="line"><span style="color:#85E89D">        prevent-increment-of-merged-branch-version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        track-merge-target</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        regex</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">^releases?[/-]</span></span>
+<span class="line"><span style="color:#85E89D">        source-branches</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">develop</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">main</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">support</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">release</span></span>
+<span class="line"><span style="color:#85E89D">        tracks-release-branches</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-release-branch</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        is-mainline</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        pre-release-weight</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">30000</span></span>
+<span class="line"><span style="color:#85E89D">    feature</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ContinuousDelivery</span></span>
+<span class="line"><span style="color:#85E89D">        tag</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">useBranchName</span></span>
+<span class="line"><span style="color:#85E89D">        increment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Inherit</span></span>
+<span class="line"><span style="color:#85E89D">        prevent-increment-of-merged-branch-version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        track-merge-target</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        regex</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">^features?[/-]</span></span>
+<span class="line"><span style="color:#85E89D">        source-branches</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">develop</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">main</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">release</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">feature</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">support</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">hotfix</span></span>
+<span class="line"><span style="color:#85E89D">        tracks-release-branches</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-release-branch</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-mainline</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        pre-release-weight</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">30000</span></span>
+<span class="line"><span style="color:#85E89D">    pull-request</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ContinuousDelivery</span></span>
+<span class="line"><span style="color:#85E89D">        tag</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">PullRequest</span></span>
+<span class="line"><span style="color:#85E89D">        increment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Inherit</span></span>
+<span class="line"><span style="color:#85E89D">        prevent-increment-of-merged-branch-version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        tag-number-pattern</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'[/-](?&#x3C;number>\d+)'</span></span>
+<span class="line"><span style="color:#85E89D">        track-merge-target</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        regex</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">^(pull|pull\-requests|pr)[/-]</span></span>
+<span class="line"><span style="color:#85E89D">        source-branches</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">develop</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">main</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">release</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">feature</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">support</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">hotfix</span></span>
+<span class="line"><span style="color:#85E89D">        tracks-release-branches</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-release-branch</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-mainline</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        pre-release-weight</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">30000</span></span>
+<span class="line"><span style="color:#85E89D">    hotfix</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ContinuousDelivery</span></span>
+<span class="line"><span style="color:#85E89D">        tag</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">beta</span></span>
+<span class="line"><span style="color:#85E89D">        increment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Patch</span></span>
+<span class="line"><span style="color:#85E89D">        prevent-increment-of-merged-branch-version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        track-merge-target</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        regex</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">^hotfix(es)?[/-]</span></span>
+<span class="line"><span style="color:#85E89D">        source-branches</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">develop</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">main</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">support</span></span>
+<span class="line"><span style="color:#85E89D">        tracks-release-branches</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-release-branch</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-mainline</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        pre-release-weight</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">30000</span></span>
+<span class="line"><span style="color:#85E89D">    support</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ContinuousDelivery</span></span>
+<span class="line"><span style="color:#85E89D">        tag</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">''</span></span>
+<span class="line"><span style="color:#85E89D">        increment</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Patch</span></span>
+<span class="line"><span style="color:#85E89D">        prevent-increment-of-merged-branch-version</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        track-merge-target</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        regex</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">^support[/-]</span></span>
+<span class="line"><span style="color:#85E89D">        source-branches</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#9ECBFF">main</span></span>
+<span class="line"><span style="color:#85E89D">        tracks-release-branches</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-release-branch</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#85E89D">        is-mainline</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">        pre-release-weight</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">55000</span></span>
+<span class="line"><span style="color:#85E89D">ignore</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    sha</span><span style="color:#E1E4E8">: []</span></span>
+<span class="line"><span style="color:#85E89D">commit-date-format</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">yyyy-MM-dd</span></span>
+<span class="line"><span style="color:#85E89D">merge-message-formats</span><span style="color:#E1E4E8">: {}</span></span>
+<span class="line"><span style="color:#85E89D">update-build-number</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span></code></pre>
+<p>You can now run the build script by executing the following command in the terminal.</p>
+<div class="code-title">Windows Terminal</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nuke</span></span></code></pre>
+<p>Here is the output of the above command:</p>
+<figure class="post-figure center nocaption fancybox">
+  <img src="/images/nuke/nuke_run_error_2.png" alt="nuke error" loading="lazy">
 </figure>
-
-You can now run the build script by executing the following command in the terminal.
-
-  
-    
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-      <span>Windows Terminal</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">nuke</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<p>Still it fails! 😣 because we have defined to run <em>Pack</em> when the configuration is <code>Release</code>.you can run the same by passing the configuration as <code>Release</code> as below:</p>
+<div class="code-title">Windows Terminal</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>nuke --configuration Release</span></span></code></pre>
+<figure class="post-figure center nocaption fancybox">
+  <img src="/images/nuke/nuke_run_success.png" alt="nuke success" loading="lazy">
 </figure>
-</p>
-<p>Here is the output of the above command:
+<p>In the Next post, we are going to check-in our changes to Github and will create a release note automatically, so that we can easily track the changes in the release along with artifacts.</p>   <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/nuke/">#nuke</a><a href="/tags/automation/">#automation</a><a href="/tags/ci-cd/">#ci/cd</a><a href="/tags/.net6/">#.net6</a><a href="/tags/c/">#c#</a><a href="/tags/github-action/">#github action</a><a href="/tags/c/">#c#</a><a href="/tags/aspnetcore/">#aspnetcore</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fmanage-your-package-version-using-nuke%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Manage%20your%20Package%20Version%20using%20Nuke&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fmanage-your-package-version-using-nuke%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fmanage-your-package-version-using-nuke%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/manage-your-package-version-using-nuke/";
+const title = "Manage your Package Version using Nuke";
+const url = "https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/";
 
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/ankit-sarkar/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
 
- 
-  
-  
-  
-  
-    
-      
-    
-  
-    
-      
-    
-  
-    
-  
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+    navigator.serviceWorker.ready.then(function() {});
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
 
-<div class="figure center nocaption" >
-  
-    <a class="fancybox" href="https://anktsrkr.github.io/images/nuke/nuke_run_error_2.png" title="nuke error" data-fancybox="">
-  
-    <img class="fig-img" src="https://anktsrkr.github.io/images/nuke/nuke_run_error_2.png"  alt="nuke error">
-  
-    </a>
-  
-  
-</div>
-</p>
-<p>Still it fails! 😣 because we have defined to run <em>Pack</em> when the configuration is <code>Release</code>.you can run the same by passing the configuration as <code>Release</code> as below:
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
 
-  
-    
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-      <span>Windows Terminal</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">nuke --configuration Release</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-</p>
-
-
- 
-  
-  
-  
-  
-    
-      
-    
-  
-    
-      
-    
-  
-    
-  
-
-<div class="figure center nocaption" >
-  
-    <a class="fancybox" href="https://anktsrkr.github.io/images/nuke/nuke_run_success.png" title="nuke success" data-fancybox="">
-  
-    <img class="fig-img" src="https://anktsrkr.github.io/images/nuke/nuke_run_success.png"  alt="nuke success">
-  
-    </a>
-  
-  
-</div>
-
-<p>In the Next post, we are going to check-in our changes to Github and will create a release note automatically, so that we can easily track the changes in the release along with artifacts.</p>
-
-              
-              
-
-
-            </div>
-          </div>
-          <div id="post-footer" class="post-footer main-content-wrap">
-            
-              
-                
-                
-                  <div class="post-footer-tags">
-                    <span class="text-color-light text-small">TAGGED IN</span><br/>
-                    
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/nuke/">nuke</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/automation/">automation</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/ci/cd/">ci/cd</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/.net6/">.net6</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/github-action/">github action</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/c/">c#</a>
-
-  <a class="tag tag--primary tag--small" href="https://anktsrkr.github.io/tags/aspnetcore/">aspnetcore</a>
-
-                  </div>
-                
-              
-            
-            
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/" data-tooltip="Manage your Package Release using Nuke in Github" aria-label="NEXT: Manage your Package Release using Nuke in Github">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" data-tooltip="Write your first building block in Nuke" aria-label="PREVIOUS: Write your first building block in Nuke">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-            
-  
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
-    <script type="text/javascript">
-      var disqus_config = function() {
-        this.page.url = 'https:\/\/anktsrkr.github.io\/post\/manage-your-package-version-using-nuke\/';
-        
-          this.page.identifier = '\/post\/manage-your-package-version-using-nuke\/'
-        
-      };
-      (function() {
-        
-        
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-          document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-          return;
-        }
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'anktsrkr-github-io';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      })();
-    </script>
-  
-
-
-          </div>
-        </article>
-        <footer id="footer" class="main-content-wrap">
-  <span class="copyrights">
-    &copy; 2025 Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner. All Rights Reserved
-  </span>
-</footer>
-
-      </div>
-      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-        
-<div class="post-actions-wrap">
-  <nav >
-    <ul class="post-actions post-action-nav">
-      
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/manage-your-package-release-using-nuke-in-github/" data-tooltip="Manage your Package Release using Nuke in Github" aria-label="NEXT: Manage your Package Release using Nuke in Github">
-          
-              <i class="fa fa-angle-left"></i>
-              <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
-            </a>
-        </li>
-        <li class="post-action">
-          
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://anktsrkr.github.io/post/write-your-first-building-block-in-nuke/" data-tooltip="Write your first building block in Nuke" aria-label="PREVIOUS: Write your first building block in Nuke">
-          
-              <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
-              <i class="fa fa-angle-right"></i>
-            </a>
-        </li>
-      
-    </ul>
-  </nav>
-<ul class="post-actions post-action-share" >
-  
-    <li class="post-action hide-lg hide-md hide-sm">
-      <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
-        <i class="fa fa-share-alt" aria-hidden="true"></i>
-      </a>
-    </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/" title="Share on Facebook" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/" title="Share on Twitter" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-      <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https://anktsrkr.github.io/post/manage-your-package-version-using-nuke/" title="Share on Linkedin" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i>
-        </a>
-      </li>
-    
-  
-  
-    <li class="post-action">
-      <a class="post-action-btn btn btn--default" href="#disqus_thread" aria-label="Leave a comment">
-        <i class="far fa-comment"></i>
-      </a>
-    </li>
-  
-  <li class="post-action">
-    
-      <a class="post-action-btn btn btn--default" href="#top" aria-label="Back to top">
-      <i class="fa fa-arrow-up" aria-hidden="true"></i>
-    
-    </a>
-  </li>
-</ul>
-</div>
-
-
-      </div>
-      
-<div id="share-options-bar" class="share-options-bar" data-behavior="5">
-  <i id="btn-close-shareoptions" class="fa fa-times"></i>
-  <ul class="share-options">
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fmanage-your-package-version-using-nuke%2F" aria-label="Share on Facebook">
-          <i class="fab fa-facebook-square" aria-hidden="true"></i><span>Share on Facebook</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fmanage-your-package-version-using-nuke%2F" aria-label="Share on Twitter">
-          <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-        </a>
-      </li>
-    
-      <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fmanage-your-package-version-using-nuke%2F" aria-label="Share on Linkedin">
-          <i class="fab fa-linkedin" aria-hidden="true"></i><span>Share on Linkedin</span>
-        </a>
-      </li>
-    
-  </ul>
-</div>
-<div id="share-options-mask" class="share-options-mask"></div>
-
-
-    </div>
-    
-    <div id="about">
-  <div id="about-card">
-    <div id="about-btn-close">
-      <i class="fa fa-times"></i>
-    </div>
-    
-      <img id="about-card-picture" src="https://www.gravatar.com/avatar/95b5dbc23a1aea8bc95d53efd0a30edf?s=110" alt="Author&#39;s picture" />
-    
-    <h4 id="about-card-name">Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner</h4>
-    
-      <div id="about-card-bio"><strong>Technical Architect, Microsoft Certified Azure Solutions Architect Expert</strong></div>
-    
-    
-      <div id="about-card-job">
-        <i class="fa fa-briefcase"></i>
-        <br/>
-        Technical Architect
-      </div>
-    
-    
-      <div id="about-card-location">
-        <i class="fa fa-map-marker-alt"></i>
-        <br/>
-        Leeds
-      </div>
-    
-  </div>
-</div>
-
-    
-
-    
-  
-    
-      <div id="cover" style="background-image:url('https://anktsrkr.github.io/images/cover.jpg');"></div>
-    
-  
-
-
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-  integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/powershell.min.js" crossorigin="anonymous"
-  referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
-  integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-<script src="https://anktsrkr.github.io/%20/js/script-yqzy9wdlzix4lbbwdnzvwx3egsne77earqmn73v9uno8aupuph8wfguccut.min.js"></script>
-
-
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/apache.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/go.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-GDVzAn0wpx1yVtQsRWmFc6PhJiLBPdUic+h4GWgljBh904O3JU10fk9EKNpVyIoPqkFn54rgL2QBG4BmUTMpiQ==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/http.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-UgZlma8NzkrDb/NWgmLIcTrH7i/CSnLLDRFqCSNF5NGPpjKmzyM25qcoXGOup8+cDakKyaiTDd7N4dyH4YT+IA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/less.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-lot9koe73sfXIrUvIPM/UEhuMciN56RPyBdOyZgfO53P2lkWyyXN7J+njcxIIBRV+nVDQeiWtiXg+bLAJZDTfg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/nginx.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-Zd3e7XxHP00TD0Imr0PIfeM0fl0v95kMWuhyAS3Wn1UTSXTkz0OhtRgBAr4JlmADRgiXr4x7lpeUdqaGN8xIog==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/puppet.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-qtqDO052iXMSP+5d/aE/jMtL9vIIGvONgTJziC2K/ZIB1yEGa55WVxGE9/08rSQ62EoDifS9SWVGZ7ihSLhzMA==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/scss.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-1NmkjnEDnwwwcu28KoQF8vs3oaPFokQHbmbtwGhFfeDsQZtVFI8zW2aE9O8yMYdpdyKV/5blE4pSWw4Z/Sv97w==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/stylus.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-B2wSfruPjr8EJL6IIzQr1eAuDwrsfIfccNf/LCEdxELCgC/S/ZMt/Uvk80aD79m7IqOqW+Sw8nbkvha20yZpzg==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/swift.min.js">
-  </script>
-  
-  
-
-<script async crossorigin=" anonymous" defer integrity=" sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" src=" https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/languages/yaml.min.js">
-  </script>
-  
-  
-  
-  <script>
-    $(document).ready(function () {
-      hljs.configure({ classPrefix: '', useBR: false });
-      $('pre.code-highlight > code, pre > code').each(function (i, block) {
-        if (!$(this).hasClass('codeblock')) {
-          $(this).addClass('codeblock');
-        }
-        hljs.highlightElement(block);
-      });
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
     });
-  </script>
-  
-  
-  
-
-  
-
-<script>
-    (function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0' });
-   </script>
-   
-   
-  
-<script>
-    if('serviceWorker' in navigator) {
-        navigator.serviceWorker
-            .register('/sw.js', { scope: '/' })
-            .then(function(registration) {
-            });
-  
-        navigator.serviceWorker
-            .ready
-            .then(function(registration) {
-            });
-    }
-  </script>
-  
-  <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js">
-</script>
-
-<a id="Setmore_button_iframe" style="position: fixed;
- right: 20px;
- bottom: 15px;
- z-index: 9998;text-decoration: none"
-    href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be">
-    <div style="background: rgb(0, 105, 255); color: rgb(255, 255, 255);
-display: table-cell;
-width: auto;
-height: 45px;
-padding: 0 30px;
-border-radius: 25px;
-box-shadow: rgb(0 0 0 / 25%) 0 2px 5px;
-font-family: sans-serif;
-text-align: center;
-vertical-align: middle;
-font-weight: bold;
-font-size: 14px;
-color: #fff;
-cursor: pointer;">#TalkWithMe</div>
-</a>
-  
-<script>
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ro6zx9o7jl");
-</script>
-  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('ankitsarkar', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#ffffff',
-    'floating-chat.donateButton.text-color': '#323842'
-  });
-</script>
-    
-  </body>
-</html>
-
+  }
+})();</script> </div> </body></html>
