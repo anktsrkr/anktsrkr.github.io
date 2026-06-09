@@ -20,8 +20,28 @@ import { site } from '../lib/site';
 
 <script is:inline>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', { scope: '/' });
-    navigator.serviceWorker.ready.then(function() {});
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
   }
 </script>
 
