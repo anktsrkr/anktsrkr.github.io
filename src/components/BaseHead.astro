@@ -21,6 +21,7 @@ const pageTitle = title === site.fullTitle ? title : `${title} | ${site.title}`;
 const canonicalUrl = new URL(canonical, site.url).toString();
 const socialImage = new URL(getShareImage(image), site.url).toString();
 const gaId = site.googleAnalyticsId;
+const adsenseClient = site.adsenseClient;
 ---
 
 <meta charset="utf-8" />
@@ -52,4 +53,12 @@ const gaId = site.googleAnalyticsId;
       gtag('config', gaId);
     </script>
   </>
+)}
+{adsenseClient && (
+  <script
+    is:inline
+    async
+    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+    crossorigin="anonymous"
+  ></script>
 )}

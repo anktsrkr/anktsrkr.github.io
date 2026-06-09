@@ -8,14 +8,15 @@ export const site = {
   location: 'Leeds',
   disqusShortname: 'anktsrkr-github-io',
   legacyGoogleAnalyticsId: 'UA-176781214-1',
-  googleAnalyticsId: import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'UA-176781214-1',
+  googleAnalyticsId: import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-TY8ZMTBGSM',
+  adsenseClient: import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-2534759648571863',
   webpushrKey: 'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0',
   clarityId: 'ro6zx9o7jl',
   kofiUser: 'ankitsarkar',
   setmoreUrl: 'https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be',
   socials: {
     github: 'https://github.com/anktsrkr',
-    linkedin: 'https://www.linkedin.com/in/ankit-sarkar/',
+    linkedin: 'https://www.linkedin.com/in/sarkaran/',
     twitter: 'https://twitter.com/ankt_srkr',
     rss: '/index.xml'
   }
