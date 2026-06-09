@@ -25,20 +25,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts : 
-
-[Connect an on-premises network to a Microsoft Azure - Part 1](/post/connect-azure-with-your-on-prem-network-part-1)
-
-[Connect an on-premises network to a Microsoft Azure - Part 2](/post/connect-azure-with-your-on-prem-network-part-2)
-
-[Implementing Hub-Spoke network topology in Azure - Part 1](/post/implementing-hub-spoke-network-topology-in-azure-part-1)
-
-_This Post - Implementing Hub-Spoke network topology in Azure - Part 2_
-
-[Introducing Azure Firewall in Hub-Spoke network topology in Azure](/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
-[Implementing Azure Firewall in Hub-Spoke network topology in Azure](/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
 Now, we know the context of this topology and architecture let's start to implement it. In this post, I am going to use azure powershell module to create all azure resources. 
  
 In my [second post](/post/connect-azure-with-your-on-prem-network-part-2/) of this series we have already created `hub-vnet`.

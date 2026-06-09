@@ -25,20 +25,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts : 
-
-[Connect an on-premises network to a Microsoft Azure - Part 1](/post/connect-azure-with-your-on-prem-network-part-1)
-
-[Connect an on-premises network to a Microsoft Azure - Part 2](/post/connect-azure-with-your-on-prem-network-part-2)
-
-_This Post - Implementing Hub-Spoke network topology in Azure - Part 1_
-
-[Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part-2)
-
-[Introducing Azure Firewall in Hub-Spoke network topology in Azure](/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
-[Implementing Azure Firewall in Hub-Spoke network topology in Azure](/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
 Before deep dive into implementation, we need to know what Hub-Spoke topology is all about.
 
 > The spoke-hub distribution paradigm is a form of transport topology optimization in which traffic planners organize routes as a series of "spokes" that connect outlying points to a central "hub" -- Wikipedia

@@ -20,8 +20,8 @@ interface Props {
     <BaseHead {...Astro.props} />
   </head>
   <body>
+    <SiteHeader />
     <div class="page-shell">
-      <SiteHeader />
       <slot />
       <SiteFooter />
       <LegacyIntegrations />

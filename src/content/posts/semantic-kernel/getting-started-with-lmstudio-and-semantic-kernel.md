@@ -11,6 +11,7 @@ shareImage: /images/semantic-kernel/lmstudio.png
 codeMaxLines: 10
 codeLineNumbers: false
 figurePositionShow: true
+series: Semantic Kernel
 categories:
   - Semantic Kernel
   - LLM
@@ -46,19 +47,6 @@ comments: true
 showSocial: true
 ---
 Hi Everyone! 
-This post is continuation of a series about **<span class="hl hl-cyan">Semantic Kernel</span>**. Over the time, I will updated this page with links to individual posts : 
-
-[Getting Started with Semantic Kernel (Part 1)](/post/getting-started-with-semantic-kernel)
-
-[Getting Started with Semantic Kernel (Part 2)](/post/getting-started-with-semantic-kernel-pt-2)
-
-[Building Blocks of Semantic Kernel](/post/semantic-kernel/semantic-kernel-building-blocks)
-
-[Getting Started with Foundry Local & Semantic Kernel](/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel)
-
-[Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
-
-_This Post - Getting Started with LMStudio & Semantic Kernel_
 
 So far, we have seen how to use Semantic Kernel with Ollama and Foundry Local. In this post, we will see how to use Semantic Kernel with **<span class="hl hl-cyan">LM Studio</span>**.
 

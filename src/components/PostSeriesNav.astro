@@ -1,0 +1,39 @@
+---
+import type { PostSeries } from '../lib/series';
+
+interface Props {
+  series: PostSeries;
+  currentUrl: string;
+}
+
+const { series, currentUrl } = Astro.props;
+const normalizedCurrentUrl = currentUrl.endsWith('/') ? currentUrl : `${currentUrl}/`;
+---
+
+<nav class="series-nav" aria-label={`${series.title} series`}>
+  <div class="series-nav-header">
+    <span class="series-nav-kicker">Series</span>
+    <h2>{series.title}</h2>
+    <p>{series.description}</p>
+  </div>
+  <ol class="series-nav-list">
+    {series.items.map((item, index) => {
+      const href = item.href.endsWith('/') ? item.href : `${item.href}/`;
+      const isCurrent = href === normalizedCurrentUrl;
+
+      return (
+        <li class:list={['series-nav-item', { 'series-nav-item-current': isCurrent }]}>
+          <span class="series-nav-index">{String(index + 1).padStart(2, '0')}</span>
+          {isCurrent ? (
+            <span class="series-nav-current">
+              <span>{item.title}</span>
+              <strong>This post</strong>
+            </span>
+          ) : (
+            <a href={item.href}>{item.title}</a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>

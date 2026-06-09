@@ -11,6 +11,7 @@ shareImage: /images/semantic-kernel/sk.png
 codeMaxLines: 10
 codeLineNumbers: false
 figurePositionShow: true
+series: Semantic Kernel
 categories:
   - Semantic Kernel
   - LLM
@@ -46,19 +47,7 @@ comments: true
 showSocial: true
 ---
 Hi Everyone! 
-This post is continuation of a series about **<span class="hl hl-cyan">Semantic Kernel</span>**. Over the time, I will updated this page with links to individual posts : 
 
-[Getting Started with Semantic Kernel (Part 1)](/post/getting-started-with-semantic-kernel)
-
-_This Post - Getting Started with Semantic Kernel (Part 2)_
-
-[Building Blocks of Semantic Kernel](/post/semantic-kernel/semantic-kernel-building-blocks)
-
-[Getting Started with Foundry Local & Semantic Kernel](/post/semantic-kernel/getting-started-with-foundry-local-and-semantic-kernel)
-
-[Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
-
-[Getting Started with LMStudio & Semantic Kernel](/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel)
 We now have a basic understanding of Gen AI and how LLM works. However, before we dive into Semantic Kernel, Let's take a moment to understand some of the key components and tools that will be important as we move forward.
 
 ## SLM vs LLM
@@ -142,4 +131,3 @@ We now have more understanding of the components and tools that will be importan
 <aside class="callout callout-info callout-info callout-no-icon">
 <p>Icon used in this post is property of Microsoft. Story behind the icon is available <a href="https://devblogs.microsoft.com/semantic-kernel/semantic-kernels-new-icon-and-the-art-of-teamwork/">here</a>.</p>
 </aside>
-

@@ -9,6 +9,7 @@ const posts = defineCollection({
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
     toc: z.boolean().default(false),
+    series: z.string().optional(),
     thumbnailImage: z.string().optional(),
     thumbnailImagePosition: z.string().optional(),
     shareImage: z.string().optional(),

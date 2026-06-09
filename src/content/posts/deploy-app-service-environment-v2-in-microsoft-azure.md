@@ -28,18 +28,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-With this post, I'll start a new series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts : 
-
-_This Post - Deploy App Service Environment in Microsoft Azure_
-
-[Create a WebApp in App Service Environment](/post/create-a-webapp-in-app-service-environment)
-
-[Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem)
-
-[Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint)
-
-[Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
-
 Before going into deep details about App Service Environment (v2), we will first look into what is it, when to use it and what are different type of ASE exists in Microsoft Azure. Please note, _I am not reinventing the wheel_, so many of use cases and definitions are actually taken from Microsoft Docs and I have given the link reference where needed 😊. A lot of things to cover, let's get started.
 
 ## What is App Service Environment?

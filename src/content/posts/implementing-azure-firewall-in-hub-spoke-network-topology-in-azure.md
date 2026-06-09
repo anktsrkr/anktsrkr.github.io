@@ -26,20 +26,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts : 
-
-[Connect an on-premises network to a Microsoft Azure - Part 1](/post/connect-azure-with-your-on-prem-network-part-1)
-
-[Connect an on-premises network to a Microsoft Azure - Part 2](/post/connect-azure-with-your-on-prem-network-part-2)
-
-[Implementing Hub-Spoke network topology in Azure - Part 1](/post/implementing-hub-spoke-network-topology-in-azure-part-1)
-
-[Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part-2)
-
-[Introducing Azure Firewall in Hub-Spoke network topology in Azure](/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
-_This Post - Implementing Azure Firewall in Hub-Spoke network topology in Azure_
-
 Now we are able to connect between Hub and Spokes but there is no communication between Spokes. In this post we are going to see how Intra-Region Spokes VNET routing works. 
 
 We will start by creating Azure Firewall. Like gateway subnet, Azure firewall also need dedicated subnet for it. Since azure firewall is shared service, we will put it in hub-vnet. Let's create a subnet called `AzurefirwallSubnet` in hub-vnet. Azure Firewall needs a `/26` subnet size because it ensures that the firewall has enough IP addresses available to provision more virtual machine instances as it scales.

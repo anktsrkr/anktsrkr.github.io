@@ -33,18 +33,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :  
-
-[Deploy App Service Environment in Microsoft Azure](/post/deploy-app-service-environment-v2-in-microsoft-azure)
-
-[Create a WebApp in App Service Environment](/post/create-a-webapp-in-app-service-environment)
-
-_This Post - Access App Service Environment Hosted WebApp from Azure Network and from On-Prem_
-
-[Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint)
-
-[Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
-
 In the [previous post](/post/create-a-webapp-in-app-service-environment) we have deployed a webapp in the ASE, but the webapp is not accessible, more precisely we are not able to resolute the DNS name. In this post we will see how to resolute the ASE hosted webapp DNS, so let's get started. 
 
 In general, when you are deploying any PaaS services in Microsoft Azure, it comes with routeable DNS name. So, once resource is created you can access it using url. But, in case of internal App Service Environment you have to manage your own DNS. you can do it in your own DNS server or you can leverage Azure DNS private zones. 

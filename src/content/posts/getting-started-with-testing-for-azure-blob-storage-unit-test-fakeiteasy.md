@@ -15,6 +15,7 @@ shareImage: /images/azstorage/fie.png
 codeMaxLines: 10
 codeLineNumbers: false
 figurePositionShow: true
+series: Azure Blob Storage Testing
 categories:
   - Azure
   - Azurite
@@ -123,18 +124,6 @@ showSocial: true
 Hi Everyone!
 
 In this post, we will discuss about the alternative framework for mocking. This post is adoptation of [this](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq) which is using **Moq**.
-
-You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.
-
-[Getting started with testing for Azure Blob Storage : Dependency Injection](/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection)
-
-[Getting started with testing for Azure Blob Storage : Unit Test with help of Moq](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq)
-
-_This Post - Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)_
-
-[Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite)
-
-[Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk)
 
 Let's get started.
 

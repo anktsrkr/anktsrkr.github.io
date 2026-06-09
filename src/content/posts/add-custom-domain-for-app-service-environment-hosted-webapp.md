@@ -29,18 +29,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :  
-
-[Deploy App Service Environment in Microsoft Azure](/post/deploy-app-service-environment-v2-in-microsoft-azure)
-
-[Create a WebApp in App Service Environment](/post/create-a-webapp-in-app-service-environment)
-
-[Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem)
-
-[Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint)
-
-_This Post - Add Custom Domain for App Service Environment Hosted WebApp_
-
 In the [previous post](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint) we have migrated a webapp in App Service we are able to access it using subdomain of ase environment.However, our requirement is to set custom domain to access the website. However we will still use ase subdomain to access kudu. Let's get started. 
 
 We will assume, Business wants to access the website using `https://demoapp.internal.xyz`. If you already have `internal.xyz` DNS zone in your own DNS server then you can just add `demoapp` as __CNAME__ that points to `sandbox.intranet.appserviceenvironment.net` else create a DNS zone and after that add CNAME.

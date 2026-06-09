@@ -11,6 +11,7 @@ shareImage: /images/nuke/nuke_plan.png
 codeMaxLines: 10
 codeLineNumbers: false
 figurePositionShow: true
+series: Nuke
 coverImage: /images/nuke/nuke_plan_full.png
 autoThumbnailImage: true
 thumbnailImagePosition: top
@@ -47,16 +48,6 @@ comments: true
 showSocial: true
 ---
 Hi Everyone!
-
-This post is continuation of the series about a build automation tool called [**<span class="hl hl-cyan">Nuke</span>**](https://nuke.build/) . Over the time, I will updated this page with links to individual posts : 
-
-[Getting Started with Nuke](/post/getting-started-with-nuke/)
-
-_This Post - Write your first building block in Nuke_
-
-[Manage your Package Version using Nuke](/post/manage-your-package-version-using-nuke/)
-
-[Manage your Package Release using Nuke in Github](/post/manage-your-package-release-using-nuke-in-github/)
 
 In our [last post](/post/getting-started-with-nuke/), we have created a new build project using **<span class="hl hl-cyan">Nuke</span>**. In this post, _first_ we will see what are the changes in the project structure and then we will write our first building block in **<span class="hl hl-cyan">Nuke</span>**. We will also see how to generate a new workflow for **<span class="hl hl-blue">Github Actions</span>** and _lastly_ we will run our build project from local system.
 

@@ -6,6 +6,7 @@ draft: false
 thumbnailImage: /images/nuke/nuke_plan.png
 shareImage: /images/nuke/nuke_plan.png
 figurePositionShow: true
+series: Nuke
 coverImage: /images/nuke/nuke_plan_full.png
 autoThumbnailImage: true
 thumbnailImagePosition: top
@@ -46,16 +47,6 @@ comments: true
 showSocial: true
 ---
 Hi Everyone!
-
-This post is continuation of the series about a build automation tool called [**<span class="hl hl-cyan">Nuke</span>**](https://nuke.build/) . Over the time, I will updated this page with links to individual posts : 
-
-[Getting Started with Nuke](/post/getting-started-with-nuke/)
-
-[Write your first building block in Nuke](/post/write-your-first-building-block-in-nuke/)
-
-[Manage your Package Version using Nuke](/post/manage-your-package-version-using-nuke/)
-
-_This Post - Manage your Package Release using Nuke in Github_
 
 In our [last post](/post/manage-your-package-version-using-nuke/), we ran the build successfully in our local machine. But before we check-in, we need to make sure that we have all the required secrets in the repository, such as _Myget API key_, _Nuget API key_. 
 

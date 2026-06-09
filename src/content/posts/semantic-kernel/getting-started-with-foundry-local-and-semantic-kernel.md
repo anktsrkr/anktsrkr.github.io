@@ -11,6 +11,7 @@ shareImage: /images/semantic-kernel/local foundry.png
 codeMaxLines: 10
 codeLineNumbers: false
 figurePositionShow: true
+series: Semantic Kernel
 categories:
   - Semantic Kernel
   - LLM
@@ -46,20 +47,6 @@ comments: true
 showSocial: true
 ---
 Hi Everyone! 
-This post is continuation of a series about **<span class="hl hl-cyan">Semantic Kernel</span>**. Over the time, I will updated this page with links to individual posts : 
-
-[Getting Started with Semantic Kernel (Part 1)](/post/getting-started-with-semantic-kernel)
-
-[Getting Started with Semantic Kernel (Part 2)](/post/getting-started-with-semantic-kernel-pt-2)
-
-[Building Blocks of Semantic Kernel](/post/semantic-kernel/semantic-kernel-building-blocks)
-
-_This Post - Getting Started with Foundry Local & Semantic Kernel_
-
-[Getting Started with Ollama & Semantic Kernel](/post/semantic-kernel/getting-started-with-ollama-and-semantic-kernel)
-
-[Getting Started with LMStudio & Semantic Kernel](/post/semantic-kernel/getting-started-with-lmstudio-and-semantic-kernel)
-
 
 So far, we have discussed theorical aspects of Semantic Kernel. In this post, we will focus on practical aspects of using Semantic Kernel with Foundry Local.
 

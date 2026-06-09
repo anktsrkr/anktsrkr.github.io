@@ -29,18 +29,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :  
-
-[Deploy App Service Environment in Microsoft Azure](/post/deploy-app-service-environment-v2-in-microsoft-azure)
-
-_This Post - Create a WebApp in App Service Environment_
-
-[Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem)
-
-[Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint](/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint)
-
-[Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
-
 In the [previous post](/post/deploy-app-service-environment-v2-in-microsoft-azure) we have deployed the ASE. In this post we will see how to create a new webapp, so let's get started. 
 
 First thing first. We need to create a new App Service Plan to deploy a webapp. There is no special steps which is required to deploy a webapp in ASE. However, the main difference between deploying a webapp in ASE and a webapp in multi-tenant is `Region` selection. 

@@ -11,6 +11,7 @@ shareImage: /images/polly/logo.png
 codeMaxLines: 10
 codeLineNumbers: false
 figurePositionShow: true
+series: Polly v8 and HttpClientFactory
 categories:
   - .NET 8
   - Polly
@@ -62,24 +63,6 @@ comments: true
 showSocial: true
 ---
 Hi Everyone!
-
-This is continuation of the series of posts on Polly v8 and .NET 8. 
-
-In this series of posts, I will try to cover some of the new features of Polly v8 and .NET 8. Below are the topics I am planning to cover in this series :
-
-[Implementing Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8](/post/implementing-retry-strategy-using-httpclientfactory-with-pollyv8-and-.net-8/)
-
-_This Post - Re-Authorize Efficiently Using Polly And .NET HttpClientFactory in .NET 8_
-
-[Implementing Timeout Strategy for HttpClientFactory using Polly(v8) and .NET 8](#)
-
-[Implementing CircuitBreaker Strategy for HttpClientFactory using Polly(v8) and .NET 8](#)
-
-[Implementing RateLimiter Strategy for HttpClientFactory using Polly(v8) and .NET 8](#)
-
-[Implementing Multiple Strategy for HttpClientFactory using Polly(v8) and .NET 8](#)
-
-[Implementing Telemetry for HttpClientFactory using Polly(v8) and .NET 8](#)
 
 In the last post, we have seen how to implement Retry Strategy for HttpClientFactory using Polly(v8) and .NET 8. In this post, we will see how to re-authorize efficiently using Polly and .NET HttpClientFactory in .NET 8.
 

@@ -25,21 +25,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts : 
-
-
-[Connect an on-premises network to a Microsoft Azure - Part 1](/post/connect-azure-with-your-on-prem-network-part-1)
-
-_This Post - Connect an on-premises network to a Microsoft Azure - Part 2_
-
-[Implementing Hub-Spoke network topology in Azure - Part 1](/post/implementing-hub-spoke-network-topology-in-azure-part-1)
-
-[Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part-2)
-
-[Introducing Azure Firewall in Hub-Spoke network topology in Azure](/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
-[Implementing Azure Firewall in Hub-Spoke network topology in Azure](/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
 In this post, we are going to create a VPN Gateway and then we will try to connect our on-premise network to Azure cloud over VPN connection. 
 
 Based on your requirement you can either choose Site-to-Site VPN connection or Point-to-Site VPN connection. As I mentioned in [previous post](/post/connect-azure-with-your-on-prem-network-part-1), VPN device is required for S2S connection, here in this post we will implement P2S connection which do not need any device. 

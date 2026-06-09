@@ -6,6 +6,7 @@ draft: false
 thumbnailImage: /images/nuke/nuke_plan.png
 shareImage: /images/nuke/nuke_plan.png
 figurePositionShow: true
+series: Nuke
 coverImage: /images/nuke/nuke_plan_full.png
 autoThumbnailImage: true
 thumbnailImagePosition: top
@@ -46,16 +47,6 @@ comments: true
 showSocial: true
 ---
 Hi Everyone!
-
-This post is continuation of the series about a build automation tool called [**<span class="hl hl-cyan">Nuke</span>**](https://nuke.build/) . Over the time, I will updated this page with links to individual posts : 
-
-[Getting Started with Nuke](/post/getting-started-with-nuke/)
-
-[Write your first building block in Nuke](/post/write-your-first-building-block-in-nuke/)
-
-_This Post - Manage your Package Version using Nuke_
-
-[Manage your Package Release using Nuke in Github](/post/manage-your-package-release-using-nuke-in-github/)
 
 In our [last post](/post/write-your-first-building-block-in-nuke/), we have completed all the steps to create a new package and publish it to the feed based on where we are running the build. But we have not yet covered the versioning of the package and hence it was not able to run the targets. In this post, we will cover the versioning of the package and how to publish it to the feed.
 

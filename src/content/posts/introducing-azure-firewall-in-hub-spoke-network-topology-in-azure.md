@@ -26,20 +26,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts : 
-
-[Connect an on-premises network to a Microsoft Azure - Part 1](/post/connect-azure-with-your-on-prem-network-part-1)
-
-[Connect an on-premises network to a Microsoft Azure - Part 2](/post/connect-azure-with-your-on-prem-network-part-2)
-
-[Implementing Hub-Spoke network topology in Azure - Part 1](/post/implementing-hub-spoke-network-topology-in-azure-part-1)
-
-[Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part-2)
-
-_This Post - Introducing Azure Firewall in Hub-Spoke network topology in Azure_
-
-[Implementing Azure Firewall in Hub-Spoke network topology in Azure](/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
 Now we are able to connect between Hub and Spokes but there is no communication between Spokes. In this post we are going to see how Intra-Region Spokes VNET routing works. 
 
 ## Ways to establish Spoke to Spoke communication 

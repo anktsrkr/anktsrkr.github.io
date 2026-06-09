@@ -25,20 +25,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-With this post, I'll start a new how to series about Hub-Spoke network topology in Azure. Over the time, I will update this page with links to individual posts : 
-
-_This Post - Connect an on-premises network to a Microsoft Azure - Part 1_
-
-[Connect an on-premises network to a Microsoft Azure - Part 2](/post/connect-azure-with-your-on-prem-network-part-2)
-
-[Implementing Hub-Spoke network topology in Azure - Part 1](/post/implementing-hub-spoke-network-topology-in-azure-part-1)
-
-[Implementing Hub-Spoke network topology in Azure - Part 2](/post/implementing-hub-spoke-network-topology-in-azure-part-2)
-
-[Introducing Azure Firewall in Hub-Spoke network topology in Azure](/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
-[Implementing Azure Firewall in Hub-Spoke network topology in Azure](/post/implementing-azure-firewall-in-hub-spoke-network-topology-in-azure)
-
 But before going into details of Hub-Spoke Topology, we will try to figure out why we need to extend an on-premise network to Microsoft Azure, then we will try to figure out what are the possible way we can establish the connection between on-premise network to Microsoft Azure. 
 
 ### Why do we need hybrid connections ?

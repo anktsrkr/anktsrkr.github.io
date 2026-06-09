@@ -11,6 +11,7 @@ shareImage: /images/nuke/nuke_plan.png
 codeMaxLines: 10
 codeLineNumbers: false
 figurePositionShow: true
+series: Nuke
 coverImage: /images/nuke/nuke_plan_full.png
 autoThumbnailImage: true
 thumbnailImagePosition: top
@@ -47,17 +48,6 @@ comments: true
 showSocial: true
 ---
 Hi Everyone!
-
-With this post, I am starting a new series about a build automation tool called [**<span class="hl hl-cyan">Nuke</span>**](https://nuke.build/)  . Over the time, I will updated this page with links to individual posts : 
-
-_This Post - Getting Started with Nuke_
-
-[Write your first building block in Nuke](/post/write-your-first-building-block-in-nuke/)
-
-[Manage your Package Version using Nuke](/post/manage-your-package-version-using-nuke/)
-
-[Manage your Package Release using Nuke in Github](/post/manage-your-package-release-using-nuke-in-github/)
-
 
 ## What we are going to build?
 In this series of posts we are going to build yet another`Hello World` C# library! Sounds interesting?  😇 

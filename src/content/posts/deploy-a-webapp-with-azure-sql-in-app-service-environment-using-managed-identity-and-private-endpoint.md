@@ -34,18 +34,6 @@ showSocial: true
 ---
 Hi Everyone!
 
-This post is continuation of a series about Azure App Service Environment (ASE v2). Over the time, I will updated this page with links to individual posts :  
-
-[Deploy App Service Environment in Microsoft Azure](/post/deploy-app-service-environment-v2-in-microsoft-azure)
-
-[Create a WebApp in App Service Environment](/post/create-a-webapp-in-app-service-environment)
-
-[Access App Service Environment Hosted WebApp from Azure Network and from On-Prem](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem)
-
-_This Post - Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint_
-
-[Add Custom Domain for App Service Environment Hosted WebApp](/post/add-custom-domain-for-app-service-environment-hosted-webapp)
-
 In the [previous post](/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem) we have configured DNS, now we are able to access the website from both on-premise and azure network. 
 
 In this blog post, we are going to migrate a on-prem User Directory application to Azure. This application is build with ASP.NET and Database is in Sql Server. Since we are moving to cloud our choice is to move the web application in WebApp hosted in ASE and we will move database in Azure SQL.

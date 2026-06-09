@@ -1,9 +1,12 @@
 ---
 import Disqus from '../components/Disqus.astro';
+import CodeCopy from '../components/CodeCopy.astro';
 import MermaidRenderer from '../components/MermaidRenderer.astro';
+import PostSeriesNav from '../components/PostSeriesNav.astro';
 import ShareLinks from '../components/ShareLinks.astro';
 import BaseLayout from './BaseLayout.astro';
 import type { Post } from '../lib/content';
+import { getPostSeries } from '../lib/series';
 import { formatDate, getShareImage, postUrlFromId, site, termUrl } from '../lib/site';
 
 interface Heading {
@@ -25,6 +28,17 @@ const image = getShareImage(post.data.shareImage, post.data.thumbnailImage);
 const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4);
 const tags = post.data.tags ?? [];
 const hasToc = toc.length > 0;
+const hasDescription = post.data.description.trim().toLowerCase() !== post.data.title.trim().toLowerCase();
+const series = getPostSeries(post.data.series);
+const tocSections = toc.reduce<{ heading: Heading; children: Heading[] }[]>((sections, heading) => {
+  if (heading.depth === 2 || sections.length === 0) {
+    sections.push({ heading, children: [] });
+    return sections;
+  }
+
+  sections[sections.length - 1].children.push(heading);
+  return sections;
+}, []);
 ---
 
 <BaseLayout
@@ -41,7 +55,7 @@ const hasToc = toc.length > 0;
         <span>{post.data.categories?.[0] ?? 'Technical Notes'}</span>
       </div>
       <h1>{post.data.title}</h1>
-      {post.data.description && <p>{post.data.description}</p>}
+      {hasDescription && <p>{post.data.description}</p>}
       <div class="article-tags">
         {post.data.categories?.map((category) => <a href={termUrl('categories', category)}>{category}</a>)}
       </div>
@@ -50,15 +64,26 @@ const hasToc = toc.length > 0;
     <div class="article-grid">
       <div class="article-content">
         {hasToc && (
-          <details class="toc-inline" open>
+          <details class="toc-inline">
             <summary>On this page</summary>
-            <nav class="toc-links" aria-label="Table of contents">
-              {toc.map((heading) => <a class={`toc-depth-${heading.depth}`} href={`#${heading.slug}`}>{heading.text}</a>)}
+            <nav class="toc-sections" aria-label="Table of contents">
+              {tocSections.map((section) => (
+                <div class="toc-section">
+                  <a class="toc-section-link" href={`#${section.heading.slug}`}>{section.heading.text}</a>
+                  {section.children.length > 0 && (
+                    <div class="toc-sublinks">
+                      {section.children.map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}
+                    </div>
+                  )}
+                </div>
+              ))}
             </nav>
           </details>
         )}
+        {series && <PostSeriesNav series={series} currentUrl={url} />}
         <slot />
         {hasMermaid && <MermaidRenderer />}
+        <CodeCopy />
         {tags.length > 0 && (
           <footer class="article-footer-tags" aria-label="Post tags">
             <span class="aside-label">Tagged with</span>

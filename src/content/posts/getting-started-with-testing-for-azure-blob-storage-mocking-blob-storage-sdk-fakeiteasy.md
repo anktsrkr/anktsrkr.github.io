@@ -15,6 +15,7 @@ shareImage: /images/azstorage/fie.png
 codeMaxLines: 10
 codeLineNumbers: false
 figurePositionShow: true
+series: Azure Blob Storage Testing
 categories:
   - Azure
   - Azurite
@@ -123,21 +124,6 @@ showSocial: true
 Hi Everyone!
 
 As you are aware I have decided to move away from **MOQ** and insted we will use **FakeItEasy** for mocking the Azure Storage SDK.  This post is adoptation of [this](/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk) which is using **Moq**.
-
-You can find the full series of how to perform unit and integration tests for Azure Blob Storage using Azurite Test Containers, and xUnit.
-
-[Getting started with testing for Azure Blob Storage : Dependency Injection](/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection)
-
-[Getting started with testing for Azure Blob Storage : Unit Test with help of Moq](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq)
-
-[Getting started with testing for Azure Blob Storage : Unit Test with help of FakeItEasy (Alternative to MoQ)](/post/getting-started-with-testing-for-azure-blob-storage-unit-test-fakeiteasy)
-
-
-[Getting started with testing for Azure Blob Storage : Integration Test with help of TestContainers and Azurite](/post/getting-started-with-testing-for-azure-blob-storage-integration-test-testcontainers-azurite)
-
-[Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk)
-
-_This Post - Getting started with testing for Azure Blob Storage : Mocking Azure Blob/File Storage SDK Using FakeItEasy (Alternative to MoQ)_
 
  We will use the same code base we used in the [previous](/post/getting-started-with-testing-for-azure-blob-storage-mocking-blob-storage-sdk) post. So, if you have not read the previous post, I would recommend to read it first before proceeding further as we will skip the code part and focus on the testing part.
 
