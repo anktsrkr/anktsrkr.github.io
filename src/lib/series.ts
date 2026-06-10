@@ -10,6 +10,68 @@ export interface PostSeries {
 }
 
 const seriesByTitle: Record<string, PostSeries> = {
+  'Agent Essentials': {
+    title: 'Agent Essentials',
+    description: 'Follow the Microsoft Agent Framework essentials tutorials in order.',
+    items: [
+      {
+        title: 'Build Your First AI Agent',
+        href: '/post/agent-framework/academy/agent-essentials/hello-agent/'
+      },
+      {
+        title: 'Connect Your Agent to External Tools',
+        href: '/post/agent-framework/academy/agent-essentials/add-tools/'
+      },
+      {
+        title: 'Maintain Context with Multi-Turn Conversations',
+        href: '/post/agent-framework/academy/agent-essentials/multi-turn/'
+      },
+      {
+        title: 'Persist Conversations and Smart Memory',
+        href: '/post/agent-framework/academy/agent-essentials/memory/'
+      },
+      {
+        title: 'Expose Your Agent via API',
+        href: '/post/agent-framework/academy/agent-essentials/host-your-agent/'
+      }
+    ]
+  },
+  'Agent Capabilities': {
+    title: 'Agent Capabilities',
+    description: 'Explore advanced Microsoft Agent Framework capabilities and tool patterns.',
+    items: [
+      {
+        title: 'Scale to Thousands of Tools with Semantic Search',
+        href: '/post/agent-framework/academy/agent-capabilities/semantic-tool-search/'
+      },
+      {
+        title: 'Parse Job Postings into Hiring Briefs with ScrapeGraphAI',
+        href: '/post/agent-framework/academy/agent-capabilities/scrapegraphai-research-agent/'
+      }
+    ]
+  },
+  'Advanced Orchestration': {
+    title: 'Advanced Orchestration',
+    description: 'Build compound AI systems with workflows, state, checkpoints, and hosting.',
+    items: [
+      {
+        title: 'Beyond Agents: Compound AI Systems',
+        href: '/post/agent-framework/academy/advanced-orchestration/beyond-agents/'
+      },
+      {
+        title: 'Orchestrate Multi-Step Workflows',
+        href: '/post/agent-framework/academy/advanced-orchestration/orchestrate-workflows/'
+      },
+      {
+        title: 'State & Checkpoints',
+        href: '/post/agent-framework/academy/advanced-orchestration/state-and-checkpoints/'
+      },
+      {
+        title: 'Expose Your Workflow via API',
+        href: '/post/agent-framework/academy/advanced-orchestration/host-your-workflow/'
+      }
+    ]
+  },
   'Semantic Kernel': {
     title: 'Semantic Kernel',
     description: 'Read the posts in this Semantic Kernel learning path.',

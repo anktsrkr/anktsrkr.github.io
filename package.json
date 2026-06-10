@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "check": "astro check",
+    "import:agent-framework": "node scripts/import-agent-framework-tutorials.mjs",
     "validate:content": "node scripts/validate-content.mjs"
   },
   "dependencies": {
