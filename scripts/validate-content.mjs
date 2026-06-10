@@ -43,9 +43,6 @@ function localPublicPath(url) {
 }
 
 const files = walkMarkdown(postsDir);
-if (files.length !== 39) {
-  errors.push(`Expected 39 posts, found ${files.length}`);
-}
 
 const contentFiles = fs.existsSync(aboutFile) ? [...files, aboutFile] : files;
 const postUrls = new Set(files.map(postUrlForFile));

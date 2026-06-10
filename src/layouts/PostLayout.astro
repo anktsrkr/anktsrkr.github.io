@@ -23,6 +23,7 @@ interface Props {
 
 const { post, headings, hasMermaid = false } = Astro.props;
 const url = postUrlFromId(post.id);
+const canonical = post.data.canonicalUrl ?? url;
 const absoluteUrl = new URL(url, site.url).toString();
 const image = getShareImage(post.data.shareImage, post.data.thumbnailImage);
 const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 4);
@@ -45,7 +46,7 @@ const tocSections = toc.reduce<{ heading: Heading; children: Heading[] }[]>((sec
   title={post.data.title}
   description={post.data.description}
   image={image}
-  canonical={url}
+  canonical={canonical}
   type="article"
 >
   <article class="article-shell">
@@ -81,6 +82,14 @@ const tocSections = toc.reduce<{ heading: Heading; children: Heading[] }[]>((sec
           </details>
         )}
         {series && <PostSeriesNav series={series} currentUrl={url} />}
+        {post.data.sourceUrl && (
+          <aside class="source-note">
+            Originally published on{' '}
+            <a href={post.data.sourceUrl} rel="noopener noreferrer">
+              {post.data.sourceName ?? 'the source site'}
+            </a>.
+          </aside>
+        )}
         <slot />
         {hasMermaid && <MermaidRenderer />}
         <CodeCopy />
