@@ -1,0 +1,605 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Expose Your Agent via API | Ankit Sarkar</title><meta name="description" content="Take Jordan Miller's incident triage assistant out of the terminal and host it as a scalable service."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/agent-essentials/host-your-agent/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Expose Your Agent via API | Ankit Sarkar"><meta property="og:description" content="Take Jordan Miller's incident triage assistant out of the terminal and host it as a scalable service."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/agent-essentials/host-your-agent/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Expose Your Agent via API | Ankit Sarkar"><meta name="twitter:description" content="Take Jordan Miller's incident triage assistant out of the terminal and host it as a scalable service."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Expose Your Agent via API</h1> <p>Take Jordan Miller&#39;s incident triage assistant out of the terminal and host it as a scalable service.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/agent-essentials/">Agent Essentials</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#agent-anatomy">Agent Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-infrastructure">Setup Your Infrastructure</a> <div class="toc-sublinks"> <a href="#1-initialize-the-project">1 Initialize the Project</a><a href="#2-install-required-packages">2 Install required packages</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#build-the-host">Build the Host</a> <div class="toc-sublinks"> <a href="#1-register-your-agent">1 Register your Agent</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it">Try it</a> <div class="toc-sublinks"> <a href="#first-interaction-start-a-thread">First Interaction: Start a Thread</a><a href="#continue-the-conversation">Continue the Conversation</a><a href="#survives-system-failures">Survives System Failures</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary--next-steps">Summary &amp; Next Steps</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Agent Essentials series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Agent Essentials</h2> <p>Follow the Microsoft Agent Framework essentials tutorials in order.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/agent-framework/academy/agent-essentials/hello-agent/">Build Your First AI Agent</a> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/agent-framework/academy/agent-essentials/add-tools/">Connect Your Agent to External Tools</a> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/agent-framework/academy/agent-essentials/multi-turn/">Maintain Context with Multi-Turn Conversations</a> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/agent-framework/academy/agent-essentials/memory/">Persist Conversations and Smart Memory</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">05</span> <span class="series-nav-current"> <span>Expose Your Agent via API</span> <strong>This post</strong> </span> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/agent-essentials/host-your-agent/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>Jordan Miller’s assistant is now highly capable: it has a defined <strong>Persona</strong>, a reasoning <strong>Brain</strong>, external <strong>Tools</strong>, and persistent <strong>Memory</strong>. However, it currently lives only in a local console window. To be truly useful, it needs to be accessible by other systems—Slack bots, monitoring dashboards, or mobile apps.</p>
+<p>In this final module of the <strong>Agent Essentials</strong> path, we will host the assistant as a <strong>Service</strong> using Azure Functions. This transforms Jordan’s local logic into a scalable API endpoint that maintains conversation state automatically through the <strong>Durable Task Framework</strong>.</p>
+<h2 id="agent-anatomy">Agent Anatomy</h2>
+<p>We have reached the fifth and final pillar: <strong>Hosting</strong>. This is the bridge that turns a script into a professional, distributed application.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 my-10">
+  <!-- Persona (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🎭</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Persona</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Jordan's on-call identity.</p>
+  </div>
+  <!-- Brain (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-1">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🧠</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Brain</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Reasoning about alerts.</p>
+  </div>
+  <!-- Tools (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-2">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🛠️</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Tools</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">External capabilities.</p>
+  </div>
+  <!-- Memory (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-3">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">💾</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Memory</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">State and persistence.</p>
+  </div>
+  <!-- Hosting (Active) -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in animate-delay-4">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-xl mb-4 border border-indigo-100">☁️</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Hosting</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium">Exposing as a service.</p>
+  </div>
+</div>
+<div class="premium-gradient border border-indigo-100 rounded-3xl p-8 my-12 shadow-sm relative overflow-hidden animate-fade-in animate-delay-4">
+  <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl"></div>
+  <div class="flex gap-5 relative z-10">
+    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    </div>
+    <div>
+      <h4 class="text-indigo-950 font-black text-lg tracking-tight mb-2">Why Durable Agents?</h4>
+      <p class="text-sm leading-relaxed text-indigo-900/70 max-w-2xl">
+        In the previous modules, we used a local console app. If that app crashed or the network blipped during an LLM call, the state was lost. By hosting on <strong>Azure Functions</strong> with <strong>Durable Task</strong>, your agent becomes "durable." It can pause execution while waiting for an LLM response and resume exactly where it left off, ensuring reliable, multi-turn conversations even across server restarts.
+      </p>
+    </div>
+  </div>
+</div>
+<h2 id="setup-your-infrastructure">Setup Your Infrastructure</h2>
+<p>Hosting an agent requires a <strong>Durable Task Scheduler (DTS)</strong> to manage the state of the conversation. This ensures that Jordan’s assistant remembers the conversation history regardless of the underlying server’s lifecycle.</p>
+<div class="flex items-center gap-3 my-12 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Hosting Architecture</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="w-full bg-slate-50/50 rounded-[2rem] p-6 md:p-10 border border-slate-100/80 my-10 transition-all hover:bg-slate-50">
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">graph LR</span></span>
+<span class="line"><span style="color:#E1E4E8">    Client(["HTTP Client"]) -- "POST /run" --> Func["Azure Function"]</span></span>
+<span class="line"><span style="color:#E1E4E8">    Func -- "1. Load" --> DTS[("Durable Task")]</span></span>
+<span class="line"><span style="color:#E1E4E8">    Func -- "2. Execute" --> Brain["🧠 LLM Brain"]</span></span>
+<span class="line"><span style="color:#E1E4E8">    Brain -- "3. Response" --> Func</span></span>
+<span class="line"><span style="color:#E1E4E8">    Func -- "4. Save" --> DTS</span></span>
+<span class="line"><span style="color:#E1E4E8">    Func -- "JSON" --> Client</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    style Func fill:#f9f9ff,stroke:#6366f1,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">    style DTS fill:#f9f9ff,stroke:#6366f1,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">    style Brain fill:#e0e7ff,stroke:#4338ca,stroke-width:2px</span></span></code></pre>
+  <p class="text-xs text-slate-400 mt-6 italic text-center">The request flow through a stateful, hosted agent service.</p>
+</div>
+<details class="premium-details my-8">
+  <summary class="premium-summary">
+    <div class="flex items-center gap-3 mb-1">
+      <span class="px-2 py-0.5 bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-md">Prerequisite</span>
+      <span class="summary-title text-indigo-950 font-black">Infrastructure: Durable Task Scheduler (DTS)</span>
+    </div>
+    <span class="summary-subtitle text-slate-500 text-xs">Essential setup for stateful agent hosting</span>
+  </summary>
+  <div class="premium-details-content">
+    <p class="text-sm text-slate-600 mb-6">
+      The Agent Framework uses the <strong>Durable Task Scheduler (DTS)</strong> to manage the state and coordination of your agents.
+    </p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;div class="solid-callout solid-callout-info mb-6"></span></span>
+<span class="line"><span>  &#x3C;p class="font-bold text-indigo-900 mb-2 text-xs uppercase tracking-wider">Configuration: host.json&#x3C;/p></span></span>
+<span class="line"><span>  &#x3C;p class="text-[11px] text-indigo-900/60 mb-3">Add the following to your project's &#x3C;code>host.json&#x3C;/code> to enable the Durable Task extension:&#x3C;/p></span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "extensions"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "durableTask"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">      "storageProvider"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">        "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"azureManaged"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        "connectionStringName"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"DurableTaskSchedulerConnectionString"</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;/div></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  </span></span></code></pre>
+<h4 id="local-emulator-docker">Local Emulator (Docker)</h4>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">1. Start the Emulator</p>
+<div class="bg-slate-900 rounded-xl p-4 mb-6 border border-slate-800 shadow-inner group relative overflow-hidden">
+  <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+    <div class="flex gap-1.5">
+      <div class="w-2 h-2 rounded-full bg-red-500/40"></div>
+      <div class="w-2 h-2 rounded-full bg-amber-500/40"></div>
+      <div class="w-2 h-2 rounded-full bg-emerald-500/40"></div>
+    </div>
+    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">DTS Emulator</span>
+  </div>
+  <code class="text-indigo-300 text-xs block leading-relaxed break-all font-mono">
+    docker run -p 8080:8080 -p 8082:8082 mcr.microsoft.com/durabletask/scheduler-emulator:latest
+  </code>
+  <div class="mt-4 flex items-center gap-6">
+    <div class="flex items-center gap-2">
+      <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
+      <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Port 8080: gRPC API</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+      <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Port 8082: Dashboard</span>
+    </div>
+  </div>
+</div>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">2. Connection String</p>
+<p class="text-[11px] text-slate-500 mb-2">Add this to your <code class="text-[10px] bg-slate-100 px-1 rounded text-indigo-600 font-custom">local.settings.json</code>:</p>
+<code class="block py-3 px-4 bg-slate-50 rounded-xl border border-slate-200 text-indigo-600 font-mono text-[11px]">"DurableTaskSchedulerConnectionString": "Endpoint=http://localhost:8080;Authentication=None"</code>
+<h4 id="azure-cloud">Azure (Cloud)</h4>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">1. Provision Resource</p>
+<p class="text-[11px] text-slate-500 mb-4">Deploy a <strong>Durable Task Scheduler</strong> instance via the Azure Portal or Bicep templates.</p>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">2. Assign Permissions</p>
+<p class="text-[11px] text-slate-500 mb-4">Enable <strong>Managed Identity</strong> on your Function App and assign it the <code class="text-[10px] bg-slate-100 px-1 rounded text-indigo-600 font-custom">Durable Task Data Contributor</code> role on the DTS resource.</p>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">3. Connection String</p>
+<p class="text-[11px] text-slate-500 mb-2">Set this in your App Configuration or <code class="text-[10px] bg-slate-100 px-1 rounded text-indigo-600 font-custom">local.settings.json</code>:</p>
+<code class="block mt-2 py-2 px-3 bg-slate-100 rounded text-indigo-600 font-mono text-[10px]">"DurableTaskSchedulerConnectionString": "Endpoint=https://your-scheduler.durabletask.io;Authentication=ManagedIdentity"</code>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;div class="solid-callout solid-callout-info mt-6"></span></span>
+<span class="line"><span>  &#x3C;p class="font-bold text-indigo-900 mb-2 text-sm">🛠️ Tooling: Azure Functions Core Tools&#x3C;/p></span></span>
+<span class="line"><span>  &#x3C;p class="text-xs text-indigo-900/80 leading-relaxed"></span></span>
+<span class="line"><span>    To scaffold and run your agent host, you need the &#x3C;strong>Azure Functions Core Tools (v4.x)&#x3C;/strong>. If you don't have them yet, [follow the official installation guide](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local) for your platform.</span></span>
+<span class="line"><span>  &#x3C;/p></span></span>
+<span class="line"><span>&#x3C;/div></span></span></code></pre>
+  </div>
+</details>
+<div class="solid-callout solid-callout-info my-10">
+  <p class="font-bold text-indigo-900 mb-2 text-sm">🌐 Choosing Your Hosting Model</p>
+  <p class="text-xs text-indigo-900/80 leading-relaxed font-medium">
+    The <strong>Agent Framework</strong> leverages the Durable Task engine, giving you two primary hosting paths depending on your infrastructure needs:
+  </p>
+  <ul class="text-[11px] text-indigo-900/70 list-disc ml-4 mt-2 space-y-1">
+    <li><strong>Azure Functions (Durable Functions):</strong> What we use here. It offers deep Azure integration, built-in HTTP management, and flexible storage options.</li>
+    <li><strong>Standalone SDKs:</strong> Ideal for self-hosting on any platform (Kubernetes, IoT Edge, etc.) where you want to manage the host yourself.</li>
+  </ul>
+  <p class="text-xs text-indigo-900/80 mt-3 leading-relaxed">
+    [Learn more about choosing an orchestration framework](https://learn.microsoft.com/en-us/azure/durable-task/common/choose-orchestration-framework).
+  </p>
+</div>
+<h3 id="1-initialize-the-project"><span class="step-pill">1</span> Initialize the Project</h3>
+<p>First, create a new Azure Functions project using the <strong>Azure Functions Core Tools</strong>. We will use the <strong>Isolated Worker Model</strong>, which is the modern standard for .NET functions.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">func</span><span style="color:#9ECBFF"> init</span><span style="color:#9ECBFF"> IncidentTriage.Host</span><span style="color:#79B8FF"> --worker-runtime</span><span style="color:#9ECBFF"> dotnet-isolated</span><span style="color:#79B8FF"> --target-framework</span><span style="color:#9ECBFF"> net10.0</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> IncidentTriage.Host</span></span></code></pre>
+<h3 id="2-install-required-packages"><span class="step-pill">2</span> Install required packages</h3>
+<p>We focus on the hosting bridge and the worker extensions required for stateful execution.</p>
+<h4 id="openai-compatible-lm-studio">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.Hosting.AzureFunctions</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Azure.Functions.Worker.Extensions.DurableTask.AzureManaged</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.AI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">☁️</span>
+      <code class="text-xs font-bold text-indigo-600 break-all">Microsoft.Agents.AI.Hosting.AzureFunctions</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The hosting bridge. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">ConfigureDurableOptions</code> extension to register agents as HTTP services.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">💾</span>
+      <code class="text-xs font-bold text-indigo-600 break-all">Microsoft.Azure.Functions.Worker.Extensions.DurableTask.AzureManaged</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The worker extension that enables the Function app to talk to the Durable Task Scheduler backend.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🛠️</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Extensions.AI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">Provides the unified .NET abstractions for AI. Required for structured memory and tool metadata in hosted environments.</p>
+  </div>
+</div>
+<h4 id="azure-openai">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.Hosting.AzureFunctions</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Azure.Functions.Worker.Extensions.DurableTask.AzureManaged</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.Identity</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.AI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">☁️</span>
+      <code class="text-xs font-bold text-indigo-600 break-all">Microsoft.Agents.AI.Hosting.AzureFunctions</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The hosting bridge. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">ConfigureDurableOptions</code> extension to register agents as HTTP services.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">💾</span>
+      <code class="text-xs font-bold text-indigo-600 break-all">Microsoft.Azure.Functions.Worker.Extensions.DurableTask.AzureManaged</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The worker extension that enables the Function app to talk to the Durable Task Scheduler backend.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🛠️</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Extensions.AI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">Provides the unified .NET abstractions for AI. Required for structured memory and tool metadata in hosted environments.</p>
+  </div>
+</div>
+<h2 id="build-the-host">Build the Host</h2>
+<h3 id="1-register-your-agent"><span class="step-pill">1</span> Register your Agent</h3>
+<p>In the Azure Functions host, we register the agent logic. This automatically creates a set of HTTP endpoints to interact with the agent.</p>
+<p>Replace the contents of <code>Program.cs</code> with the following:</p>
+<h4 id="openai-compatible-lm-studio-1">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Hosting</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AzureFunctions</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Functions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Worker</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Builder</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Hosting</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Text</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Configure the Provider</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> modelName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL_NAME"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "google/gemma-4-e4b"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"dummy"</span><span style="color:#E1E4E8">), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> OpenAIClientOptions</span><span style="color:#E1E4E8"> { Endpoint </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint) })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(modelName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Initialize Agent with Memory Provider and Tools</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> operatorMemory</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OperatorMemory</span><span style="color:#E1E4E8">(chatClient.</span><span style="color:#B392F0">AsIChatClient</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> triageAgent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">            You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Summarize the incident, identify likely severity, </span></span>
+<span class="line"><span style="color:#9ECBFF">            and suggest the next investigation step.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Always address the operator by their name and use their role to tailor your response.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Keep answers concise and operational.</span></span>
+<span class="line"><span style="color:#9ECBFF">            """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetServiceStatus, </span><span style="color:#9ECBFF">"GetServiceStatus"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetOnCallEngineer, </span><span style="color:#9ECBFF">"GetOnCallEngineer"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">    AIContextProviders </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [operatorMemory]</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Register with the Function Host</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> builder</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> FunctionsApplication.</span><span style="color:#B392F0">CreateBuilder</span><span style="color:#E1E4E8">(args);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">ConfigureFunctionsWebApplication</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">ConfigureDurableOptions</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">options</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    options.Agents.</span><span style="color:#B392F0">AddAIAgent</span><span style="color:#E1E4E8">(triageAgent, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> IHost</span><span style="color:#B392F0"> app</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> builder</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">app.</span><span style="color:#B392F0">Run</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Tool Definitions (from Module 2) ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the current health status for an enterprise service."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetServiceStatus</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check, such as checkout, payments, or inventory."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> serviceName.</span><span style="color:#B392F0">ToLowerInvariant</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">switch</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "checkout"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Checkout is DEGRADED in West Europe. P95 latency is 4.8s. Payment retries are elevated."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "payments"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Payments is HEALTHY. No active regional alerts."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "inventory"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Inventory is HEALTHY. Last sync 2 minutes ago."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        _</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> has no active status record in the demo store."</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the name of the engineer currently on-call."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetOnCallEngineer</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> "Taylor Vance (@tvance)"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Memory Provider Implementation ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> OperatorMemory</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">IChatClient</span><span style="color:#B392F0"> chatClient</span><span style="color:#E1E4E8">) : </span><span style="color:#B392F0">AIContextProvider</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> readonly</span><span style="color:#B392F0"> ProviderSessionState</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">OperatorContext</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">_sessionState</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">_</span><span style="color:#F97583"> =></span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#E1E4E8">(), </span><span style="color:#F97583">nameof</span><span style="color:#E1E4E8">(OperatorMemory));</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> IReadOnlyList</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">StateKeys</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> [_sessionState.StateKey];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#B392F0"> GetContext</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(session);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#F97583"> override</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> StoreAIContextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">InvokedContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(context.Session);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> ((op.Name </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> op.Role </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> op.IncidentId </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> context.RequestMessages.</span><span style="color:#B392F0">Any</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Role </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> ChatRole.User))</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            var</span><span style="color:#B392F0"> result</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">GetResponseAsync</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">OperatorContext</span><span style="color:#E1E4E8">>(context.RequestMessages,</span></span>
+<span class="line"><span style="color:#F97583">                new</span><span style="color:#B392F0"> ChatOptions</span><span style="color:#E1E4E8"> { Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "Extract operator name, role, and incident ID if present."</span><span style="color:#E1E4E8"> }, </span><span style="color:#B392F0">cancellationToken</span><span style="color:#E1E4E8">: ct);</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.Name </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.Name;</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.Role </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.Role;</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.IncidentId </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.IncidentId;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        _sessionState.</span><span style="color:#B392F0">SaveState</span><span style="color:#E1E4E8">(context.Session, op);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIContext</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">ProvideAIContextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">InvokingContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(context.Session);</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> instructions</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringBuilder</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (op.Name </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) instructions.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"The operator is </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">, a </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Role</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">. "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (op.IncidentId </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#6A737D">            // PRIORITY: Injected facts should override conflicting conversation history</span></span>
+<span class="line"><span style="color:#E1E4E8">            instructions.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"The current incident context is </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">IncidentId</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">. (Priority: Use this ID even if history mentions a different one). "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIContext</span><span style="color:#E1E4E8">>(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> AIContext</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            Instructions </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> instructions.Length </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> ?</span><span style="color:#E1E4E8"> instructions.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "Ask for the operator's name, role, and the incident ID they are triaging."</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> OperatorContext</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">Name</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; }</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">Role</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; }</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">IncidentId</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h4 id="azure-openai-1">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Hosting</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AzureFunctions</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Functions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Worker</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Builder</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Hosting</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Identity</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Text</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Configure the Provider</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> deploymentName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_DEPLOYMENT_NAME"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> AzureOpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> DefaultAzureCredential</span><span style="color:#E1E4E8">()).</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(deploymentName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Initialize Agent with Memory Provider and Tools</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> operatorMemory</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OperatorMemory</span><span style="color:#E1E4E8">(chatClient.</span><span style="color:#B392F0">AsIChatClient</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> triageAgent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">            You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Summarize the incident, identify likely severity, </span></span>
+<span class="line"><span style="color:#9ECBFF">            and suggest the next investigation step.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Always address the operator by their name and use their role to tailor your response.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Keep answers concise and operational.</span></span>
+<span class="line"><span style="color:#9ECBFF">            """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetServiceStatus, </span><span style="color:#9ECBFF">"GetServiceStatus"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetOnCallEngineer, </span><span style="color:#9ECBFF">"GetOnCallEngineer"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">    AIContextProviders </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [operatorMemory]</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Register with the Function Host</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> builder</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> FunctionsApplication.</span><span style="color:#B392F0">CreateBuilder</span><span style="color:#E1E4E8">(args);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">ConfigureFunctionsWebApplication</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">ConfigureDurableOptions</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">options</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    options.Agents.</span><span style="color:#B392F0">AddAIAgent</span><span style="color:#E1E4E8">(triageAgent, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> IHost</span><span style="color:#B392F0"> app</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> builder</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">app.</span><span style="color:#B392F0">Run</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Tool Definitions (from Module 2) ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the current health status for an enterprise service."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetServiceStatus</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check, such as checkout, payments, or inventory."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> serviceName.</span><span style="color:#B392F0">ToLowerInvariant</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">switch</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "checkout"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Checkout is DEGRADED in West Europe. P95 latency is 4.8s. Payment retries are elevated."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "payments"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Payments is HEALTHY. No active regional alerts."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "inventory"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Inventory is HEALTHY. Last sync 2 minutes ago."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        _</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> has no active status record in the demo store."</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the name of the engineer currently on-call."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetOnCallEngineer</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> "Taylor Vance (@tvance)"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Memory Provider Implementation ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> OperatorMemory</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">IChatClient</span><span style="color:#B392F0"> chatClient</span><span style="color:#E1E4E8">) : </span><span style="color:#B392F0">AIContextProvider</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> readonly</span><span style="color:#B392F0"> ProviderSessionState</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">OperatorContext</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">_sessionState</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">_</span><span style="color:#F97583"> =></span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#E1E4E8">(), </span><span style="color:#F97583">nameof</span><span style="color:#E1E4E8">(OperatorMemory));</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> IReadOnlyList</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">StateKeys</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> [_sessionState.StateKey];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#B392F0"> GetContext</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(session);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#F97583"> override</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> StoreAIContextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">InvokedContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(context.Session);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> ((op.Name </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> op.Role </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> op.IncidentId </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> context.RequestMessages.</span><span style="color:#B392F0">Any</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Role </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> ChatRole.User))</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            var</span><span style="color:#B392F0"> result</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">GetResponseAsync</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">OperatorContext</span><span style="color:#E1E4E8">>(context.RequestMessages,</span></span>
+<span class="line"><span style="color:#F97583">                new</span><span style="color:#B392F0"> ChatOptions</span><span style="color:#E1E4E8"> { Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "Extract operator name, role, and incident ID if present."</span><span style="color:#E1E4E8"> }, </span><span style="color:#B392F0">cancellationToken</span><span style="color:#E1E4E8">: ct);</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.Name </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.Name;</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.Role </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.Role;</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.IncidentId </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.IncidentId;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        _sessionState.</span><span style="color:#B392F0">SaveState</span><span style="color:#E1E4E8">(context.Session, op);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIContext</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">ProvideAIContextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">InvokingContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(context.Session);</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> instructions</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringBuilder</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (op.Name </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) instructions.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"The operator is </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">, a </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Role</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">. "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (op.IncidentId </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#6A737D">            // PRIORITY: Injected facts should override conflicting conversation history</span></span>
+<span class="line"><span style="color:#E1E4E8">            instructions.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"The current incident context is </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">IncidentId</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">. (Priority: Use this ID even if history mentions a different one). "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIContext</span><span style="color:#E1E4E8">>(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> AIContext</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            Instructions </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> instructions.Length </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> ?</span><span style="color:#E1E4E8"> instructions.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "Ask for the operator's name, role, and the incident ID they are triaging."</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> OperatorContext</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">Name</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; }</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">Role</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; }</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">IncidentId</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<div class="solid-callout solid-callout-warning my-8">
+  <p class="font-bold text-amber-900 mb-2 text-sm">⚠️ Configuration Reminder</p>
+  <p class="text-xs text-amber-900/80 leading-relaxed">
+    Ensure your <code>local.settings.json</code> contains the <code>AZURE_OPENAI_ENDPOINT</code> and <code>AZURE_OPENAI_DEPLOYMENT_NAME</code> variables, as well as the <code>DurableTaskSchedulerConnectionString</code> required for the host to start.
+  </p>
+</div>
+<h2 id="try-it">Try it</h2>
+<p>Experiment with how the Agent behaves when exposed via a stateful API.</p>
+<h4 id="-api-call">📟 API Call</h4>
+<h3 id="first-interaction-start-a-thread">First Interaction: Start a Thread</h3>
+<p>Once your host is running, you can talk to Jordan’s assistant via any HTTP client. This first call initializes a new conversation thread.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -X</span><span style="color:#9ECBFF"> POST</span><span style="color:#9ECBFF"> http://localhost:7071/api/agents/TriageAgent/run</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -H</span><span style="color:#9ECBFF"> "Content-Type: text/plain"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -d</span><span style="color:#9ECBFF"> "My name is Jordan. There is a latency spike in the checkout service!"</span></span></code></pre>
+<p><strong>The Response:</strong> The agent returns the triage summary and a unique thread ID in the headers.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="http"><code><span class="line"><span style="color:#F97583">HTTP</span><span style="color:#E1E4E8">/</span><span style="color:#79B8FF">1.1</span><span style="color:#79B8FF"> 200</span><span style="color:#9ECBFF"> OK</span></span>
+<span class="line"><span style="color:#85E89D">Content-Type</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> text/plain</span></span>
+<span class="line"><span style="color:#85E89D">x-ms-thread-id</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> 7886412a-6d34-4c71-9ea6-c87a80e5fcd9</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Hello Jordan. I've noted the latency spike in Checkout. </span></span>
+<span class="line"><span style="color:#E1E4E8">Checking the service status now...</span></span></code></pre>
+<h4 id="-state-persistence">💾 State Persistence</h4>
+<h3 id="continue-the-conversation">Continue the Conversation</h3>
+<p>Because we are using <strong>Durable Task</strong>, the agent remembers the context of the thread. To continue the same conversation, include the <code>thread_id</code> in the query string.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Use the ID returned in the x-ms-thread-id header</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -X</span><span style="color:#9ECBFF"> POST</span><span style="color:#9ECBFF"> "http://localhost:7071/api/agents/TriageAgent/run?thread_id=7886412a-6d34-4c71-9ea6-c87a80e5fcd9"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -H</span><span style="color:#9ECBFF"> "Content-Type: text/plain"</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">  -d</span><span style="color:#9ECBFF"> "Who is the on-call engineer for this service?"</span></span></code></pre>
+<p><strong>The Goal:</strong> Even if you restart the server, the agent will remember that you are <strong>Jordan</strong> and you were discussing the <strong>checkout</strong> service, because the state is persisted in the DTS backend.</p>
+<h4 id="️-crash-proof">🛡️ Crash Proof</h4>
+<h3 id="survives-system-failures">Survives System Failures</h3>
+<p>Because the state is managed by the <strong>Durable Task Scheduler</strong>, your agent is “crash proof.” The framework checkpoints the conversation state at every turn.</p>
+<ol>
+<li>Start a conversation and get a <code>thread_id</code>.</li>
+<li><strong>Crash the app</strong> (press <code>Ctrl+C</code> in the terminal).</li>
+<li><strong>Restart the app</strong> and immediately send a follow-up request using the same <code>thread_id</code>.</li>
+</ol>
+<p><strong>The Goal:</strong> The agent resumes exactly where it left off. Even if the server dies mid-execution, the Durable Task backend ensures the “brain” state and conversation history are safely recovered, making Jordan’s assistant resilient enough for production.</p>
+<h2 id="summary--next-steps">Summary &#x26; Next Steps</h2>
+<p>Congratulations! You’ve completed the <strong>Agent Essentials</strong> path. Jordan Miller now has a production-ready assistant that can reason, act, and remember—all hosted as a scalable service.</p>
+<p><strong>What’s next?</strong>
+While a single agent is powerful, real-world complexity often requires multiple components working together. In the <strong><a href="/post/agent-framework/academy/advanced-orchestration/beyond-agents/">Advanced Orchestration</a></strong> journey, you’ll learn how to move beyond single-turn reasoning and build robust <strong>Compound AI Systems</strong> using Workflows and Orchestrators.</p>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/agent-essentials/">#agent-essentials</a><a href="/tags/hosting/">#hosting</a><a href="/tags/durable-agents/">#durable-agents</a><a href="/tags/azure-functions/">#azure-functions</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fhost-your-agent%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Expose%20Your%20Agent%20via%20API&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fhost-your-agent%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fhost-your-agent%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/agent-essentials/host-your-agent/";
+const title = "Expose Your Agent via API";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/host-your-agent/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

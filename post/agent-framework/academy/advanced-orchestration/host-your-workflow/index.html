@@ -1,0 +1,636 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Expose Your Workflow via API | Ankit Sarkar</title><meta name="description" content="Expose Jordan's multi-step triage workflow through Azure Functions to receive external alerts."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/host-your-workflow/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Expose Your Workflow via API | Ankit Sarkar"><meta property="og:description" content="Expose Jordan's multi-step triage workflow through Azure Functions to receive external alerts."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/host-your-workflow/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Expose Your Workflow via API | Ankit Sarkar"><meta name="twitter:description" content="Expose Jordan's multi-step triage workflow through Azure Functions to receive external alerts."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Expose Your Workflow via API</h1> <p>Expose Jordan&#39;s multi-step triage workflow through Azure Functions to receive external alerts.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/advanced-orchestration/">Advanced Orchestration</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#system-anatomy">System Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-environment">Setup your environment</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#build-the-host">Build the Host</a> <div class="toc-sublinks"> <a href="#1-initialize-the-project">1 Initialize the Project</a><a href="#2-implement-the-hosted-workflow">2 Implement the Hosted Workflow</a><a href="#3-start-the-service">3 Start the Service</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it-invoke-the-service">Try it: Invoke the Service</a> <div class="toc-sublinks"> <a href="#wait-and-see">“Wait and See”</a><a href="#trigger-and-poll">“Trigger and Poll”</a><a href="#triage-different-payloads">Triage Different Payloads</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary">Summary</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Advanced Orchestration series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Advanced Orchestration</h2> <p>Build compound AI systems with workflows, state, checkpoints, and hosting.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/agent-framework/academy/advanced-orchestration/beyond-agents/">Beyond Agents: Compound AI Systems</a> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/agent-framework/academy/advanced-orchestration/orchestrate-workflows/">Orchestrate Multi-Step Workflows</a> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/agent-framework/academy/advanced-orchestration/state-and-checkpoints/">State &amp; Checkpoints</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">04</span> <span class="series-nav-current"> <span>Expose Your Workflow via API</span> <strong>This post</strong> </span> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/host-your-workflow/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>Jordan Miller’s incident triage assistant now has all the core building blocks: a defined <strong>Persona</strong>, a reasoning <strong>Brain</strong>, external <strong>Tools</strong>, persistent <strong>Memory</strong>, and a structured <strong>Workflow</strong>. The final step is to take this compound system out of the terminal and make it reachable by other systems.</p>
+<p>In this final module of the <strong>Advanced Orchestration</strong> path, we will host the entire workflow as a <strong>Service</strong> using Azure Functions and Durable Agents. This transforms Jordan’s local orchestration into a scalable API endpoint that can be invoked by monitoring systems, Slack bots, or automated incident triggers.</p>
+<h2 id="system-anatomy">System Anatomy</h2>
+<p>We have reached the final pillar: <strong>Hosting</strong>. This is the bridge that connects your compound AI system to the rest of the enterprise.</p>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 my-10">
+  <!-- Workflows (Mastered) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">🔄</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Workflows</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Graph execution.</p>
+  </div>
+  <!-- Executors (Mastered) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">⚙️</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Executors</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Processing units.</p>
+  </div>
+  <!-- Edges (Mastered) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">🔀</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Edges</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Message routing.</p>
+  </div>
+  <!-- Events (Mastered) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">📊</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Events</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Observability.</p>
+  </div>
+  <!-- State (Mastered) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">💾</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">State</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Resiliency.</p>
+  </div>
+  <!-- Hosting (Active) -->
+  <div class="p-4 rounded-xl bg-white border-2 border-indigo-500 shadow-md relative overflow-hidden transition-all hover:-translate-y-1">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-indigo-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-lg mb-3 border border-indigo-100">☁️</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Hosting</div>
+    <p class="text-[10px] leading-relaxed text-slate-600 font-medium">Service boundary.</p>
+  </div>
+</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">graph TD</span></span>
+<span class="line"><span style="color:#E1E4E8">          subgraph API [The Service Boundary]</span></span>
+<span class="line"><span style="color:#E1E4E8">              direction TB</span></span>
+<span class="line"><span style="color:#E1E4E8">              Client[External Client]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Trigger[HTTP Trigger]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Workflow["Workflow (IncidentTriage)"]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">              Client --> Trigger</span></span>
+<span class="line"><span style="color:#E1E4E8">              Trigger --> Workflow</span></span>
+<span class="line"><span style="color:#E1E4E8">          end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">          subgraph Core [Execution Engine]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Agent[TriageAgent]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Executors[Logic Executors]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">              Workflow --> Agent</span></span>
+<span class="line"><span style="color:#E1E4E8">              Workflow --> Executors</span></span>
+<span class="line"><span style="color:#E1E4E8">          end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">          style API fill:#fff,stroke:#6366f1,stroke-width:2px,stroke-dasharray: 5 5</span></span>
+<span class="line"><span style="color:#E1E4E8">          style Workflow fill:#eef2ff,stroke:#4f46e5,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">          style Core fill:#f8fafc,stroke:#64748b,stroke-dasharray: 2 2</span></span></code></pre>
+<div class="premium-gradient agent-mermaid-note">
+<h4 class="text-indigo-950 font-black text-lg tracking-tight mb-2">The "Workflow-as-a-Service" Architecture</h4>
+      <p class="text-sm leading-relaxed text-indigo-900/70">
+        Most enterprise assistants don't live in a console window. They live behind <strong>HTTP APIs</strong>. By hosting Jordan's <strong>Triage Workflow</strong> in Azure Functions, we create a clear service boundary. 
+      </p>
+      <ul class="mt-4 space-y-2 text-xs text-indigo-900/60 list-none p-0">
+        <li class="flex items-center gap-2">✅ <strong>Accessibility</strong>: Any internal system can now "ask" for triage via standard JSON/HTTP.</li>
+        <li class="flex items-center gap-2">✅ <strong>Scalability</strong>: Azure Functions handle the heavy lifting of scaling the agent host.</li>
+        <li class="flex items-center gap-2">✅ <strong>Persistence</strong>: Leveraging the Durable backend ensures that workflow progress and agent memory are automatically preserved.</li>
+      </ul>
+</div>
+<h2 id="setup-your-environment">Setup your environment</h2>
+<p>Hosting a workflow as a service requires the Azure Functions Core Tools and a Durable Task backend.</p>
+<div class="solid-callout solid-callout-info mb-8">
+  <p class="font-bold text-indigo-900 mb-3 text-base">📋 Pre-flight Checklist</p>
+  <ul class="space-y-2.5 m-0 p-0 list-none text-sm text-indigo-900/80">
+    <li class="flex items-center gap-2">🛠️ <strong>Functions Core Tools</strong>: Ensure <code>func</code> is available in your terminal.</li>
+    <li class="flex items-center gap-2">📦 <strong>Hosting Extension</strong>: We use <code>Microsoft.Agents.AI.Hosting.AzureFunctions</code>.</li>
+    <li class="flex items-center gap-2">💾 <strong>Storage Backend</strong>: A Durable Task Scheduler (DTS) must be running.</li>
+  </ul>
+</div>
+<details class="premium-details my-8">
+  <summary class="premium-summary">
+    <div class="flex items-center gap-3 mb-1">
+      <span class="px-2 py-0.5 bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-md">Prerequisite</span>
+      <span class="summary-title text-indigo-950 font-black">Infrastructure: Durable Task Scheduler (DTS)</span>
+    </div>
+    <span class="summary-subtitle text-slate-500 text-xs">Essential setup for local and cloud orchestration</span>
+  </summary>
+  <div class="premium-details-content">
+    <p class="text-sm text-slate-600 mb-6">
+      The Agent Framework uses the <strong>Durable Task Scheduler (DTS)</strong> to manage the state and coordination of your workflows.
+    </p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;div class="solid-callout solid-callout-info mb-6"></span></span>
+<span class="line"><span>  &#x3C;p class="font-bold text-indigo-900 mb-2 text-xs uppercase tracking-wider">Configuration: host.json&#x3C;/p></span></span>
+<span class="line"><span>  &#x3C;p class="text-[11px] text-indigo-900/60 mb-3">Add the following to your project's &#x3C;code>host.json&#x3C;/code> to enable the Durable Task extension:&#x3C;/p></span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "extensions"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">    "durableTask"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">      "storageProvider"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#79B8FF">        "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"azureManaged"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        "connectionStringName"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"DurableTaskSchedulerConnectionString"</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;/div></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  </span></span></code></pre>
+<h4 id="local-emulator-docker">Local Emulator (Docker)</h4>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">1. Start the Emulator</p>
+<div class="bg-slate-900 rounded-xl p-4 mb-6 border border-slate-800 shadow-inner group relative overflow-hidden">
+  <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+    <div class="flex gap-1.5">
+      <div class="w-2 h-2 rounded-full bg-red-500/40"></div>
+      <div class="w-2 h-2 rounded-full bg-amber-500/40"></div>
+      <div class="w-2 h-2 rounded-full bg-emerald-500/40"></div>
+    </div>
+    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">DTS Emulator</span>
+  </div>
+  <code class="text-indigo-300 text-xs block leading-relaxed break-all font-mono">
+    docker run -p 8080:8080 -p 8082:8082 mcr.microsoft.com/durabletask/scheduler-emulator:latest
+  </code>
+  <div class="mt-4 flex items-center gap-6">
+    <div class="flex items-center gap-2">
+      <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
+      <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Port 8080: gRPC API</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+      <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Port 8082: Dashboard</span>
+    </div>
+  </div>
+</div>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">2. Connection String</p>
+<p class="text-[11px] text-slate-500 mb-2">Add this to your <code class="text-[10px] bg-slate-100 px-1 rounded text-indigo-600 font-custom">local.settings.json</code>:</p>
+<code class="block py-3 px-4 bg-slate-50 rounded-xl border border-slate-200 text-indigo-600 font-mono text-[11px]">"DurableTaskSchedulerConnectionString": "Endpoint=http://localhost:8080;Authentication=None"</code>
+<h4 id="azure-cloud">Azure (Cloud)</h4>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">1. Provision Resource</p>
+<p class="text-[11px] text-slate-500 mb-4">Deploy a <strong>Durable Task Scheduler</strong> instance via the Azure Portal or Bicep templates.</p>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">2. Assign Permissions</p>
+<p class="text-[11px] text-slate-500 mb-4">Enable <strong>Managed Identity</strong> on your Function App and assign it the <code class="text-[10px] bg-slate-100 px-1 rounded text-indigo-600 font-custom">Durable Task Data Contributor</code> role on the DTS resource.</p>
+<p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">3. Connection String</p>
+<p class="text-[11px] text-slate-500 mb-2">Set this in your App Configuration or <code class="text-[10px] bg-slate-100 px-1 rounded text-indigo-600 font-custom">local.settings.json</code>:</p>
+<code class="block mt-2 py-2 px-3 bg-slate-100 rounded text-indigo-600 font-mono text-[10px]">"DurableTaskSchedulerConnectionString": "Endpoint=https://your-scheduler.durabletask.io;Authentication=ManagedIdentity"</code>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;div class="solid-callout solid-callout-info mt-6"></span></span>
+<span class="line"><span>  &#x3C;p class="font-bold text-indigo-900 mb-2 text-sm">🛠️ Tooling: Azure Functions Core Tools&#x3C;/p></span></span>
+<span class="line"><span>  &#x3C;p class="text-xs text-indigo-900/80 leading-relaxed"></span></span>
+<span class="line"><span>    To scaffold and run your workflow host, you need the &#x3C;strong>Azure Functions Core Tools (v4.x)&#x3C;/strong>. If you don't have them yet, [follow the official installation guide](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local) for your platform.</span></span>
+<span class="line"><span>  &#x3C;/p></span></span>
+<span class="line"><span>&#x3C;/div></span></span></code></pre>
+  </div>
+</details>
+<div class="solid-callout solid-callout-info my-10">
+  <p class="font-bold text-indigo-900 mb-2 text-sm">🌐 Choosing Your Hosting Model</p>
+  <p class="text-xs text-indigo-900/80 leading-relaxed font-medium">
+    The <strong>Agent Framework</strong> leverages the Durable Task engine, giving you two primary hosting paths depending on your infrastructure needs:
+  </p>
+  <ul class="text-[11px] text-indigo-900/70 list-disc ml-4 mt-2 space-y-1">
+    <li><strong>Azure Functions (Durable Functions):</strong> What we use here. It offers deep Azure integration, built-in HTTP management, and flexible storage options.</li>
+    <li><strong>Standalone SDKs:</strong> Ideal for self-hosting on any platform (Kubernetes, IoT Edge, etc.) where you want to manage the host yourself.</li>
+  </ul>
+  <p class="text-xs text-indigo-900/80 mt-3 leading-relaxed">
+    [Learn more about choosing an orchestration framework](https://learn.microsoft.com/en-us/azure/durable-task/common/choose-orchestration-framework).
+  </p>
+</div>
+<h2 id="build-the-host">Build the Host</h2>
+<p>To host our workflow, we use the <strong>Microsoft Agent Framework Hosting</strong> extension. We are exposing the <strong>entire multi-step Workflow</strong> we built previously as a reachable API.</p>
+<h3 id="1-initialize-the-project"><span class="step-pill">1</span> Initialize the Project</h3>
+<p>First, create a new Azure Functions project using the <strong>Azure Functions Core Tools</strong>. We will use the <strong>Isolated Worker Model</strong>, which is the modern standard for .NET functions.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">func</span><span style="color:#9ECBFF"> init</span><span style="color:#9ECBFF"> IncidentTriageWorkflow.Host</span><span style="color:#79B8FF"> --worker-runtime</span><span style="color:#9ECBFF"> dotnet-isolated</span><span style="color:#79B8FF"> --target-framework</span><span style="color:#9ECBFF"> net10.0</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> IncidentTriageWorkflow.Host</span></span></code></pre>
+<h4 id="openai-compatible-lm-studio">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.Hosting.AzureFunctions</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.Workflows</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Azure.Functions.Worker.Extensions.DurableTask.AzureManaged</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">☁️</span>
+      <code class="text-xs font-bold text-indigo-600 break-all">Microsoft.Agents.AI.Hosting.AzureFunctions</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The hosting bridge. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">ConfigureDurableOptions</code> extension to register agents and workflows as HTTP services.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔄</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.Workflows</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The core orchestration engine. Required for building multi-step assembly lines like Jordan's incident triage.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">💾</span>
+      <code class="text-xs font-bold text-indigo-600 break-all">Microsoft.Azure.Functions.Worker.Extensions.DurableTask.AzureManaged</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The worker extension that enables the Function app to talk to the Durable Task Scheduler backend.</p>
+  </div>
+</div>
+<h4 id="azure-openai">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.Hosting.AzureFunctions</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.Workflows</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Azure.Functions.Worker.Extensions.DurableTask.AzureManaged</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.Identity</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">☁️</span>
+      <code class="text-xs font-bold text-indigo-600 break-all">Microsoft.Agents.AI.Hosting.AzureFunctions</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The hosting bridge. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">ConfigureDurableOptions</code> extension to register agents and workflows as HTTP services.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔄</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.Workflows</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The core orchestration engine. Required for building multi-step assembly lines like Jordan's incident triage.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">💾</span>
+      <code class="text-xs font-bold text-indigo-600 break-all">Microsoft.Azure.Functions.Worker.Extensions.DurableTask.AzureManaged</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The worker extension that enables the Function app to talk to the Durable Task Scheduler backend.</p>
+  </div>
+</div>
+<h3 id="2-implement-the-hosted-workflow"><span class="step-pill">2</span> Implement the Hosted Workflow</h3>
+<p>Replace the contents of <code>Program.cs</code> with the following code.</p>
+<h4 id="openai-compatible-lm-studio-1">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Hosting</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AzureFunctions</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Workflows</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Functions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Worker</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Builder</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Hosting</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ChatMessage</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Setup Jordan's Brain</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> modelName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL_NAME"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "google/gemma-4-e4b"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"dummy"</span><span style="color:#E1E4E8">), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> OpenAIClientOptions</span><span style="color:#E1E4E8"> { Endpoint </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint) })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(modelName);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> triageAgent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">            You are Jordan's on-call assistant. Analyze telemetry and classify incident priority.</span></span>
+<span class="line"><span style="color:#9ECBFF">            """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(AssessIncidentPriority, </span><span style="color:#F97583">nameof</span><span style="color:#E1E4E8">(AssessIncidentPriority))]</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Build the Assembly Line (Workflow)</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> fetchTelemetry</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageAdapter</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TriageAdapterExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageSync</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TriageSyncExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> escalationEngine</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> EscalationExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageAgentExecutor</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> triageAgent.</span><span style="color:#B392F0">BindAsExecutor</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> AIAgentHostOptions</span><span style="color:#E1E4E8"> { ForwardIncomingMessages </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">WorkflowBuilder</span><span style="color:#B392F0"> builder</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(fetchTelemetry);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">WithName</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"IncidentTriage"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(fetchTelemetry, triageAdapter);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAdapter, triageAgentExecutor);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAgentExecutor, triageSync);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageSync, escalationEngine);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> workflow</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> builder.</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Start the Functions Host</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> IHost</span><span style="color:#B392F0"> app</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> FunctionsApplication</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">CreateBuilder</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">args</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">ConfigureFunctionsWebApplication</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">ConfigureDurableOptions</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">options</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#B392F0">        options</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Workflows</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AddWorkflow</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">workflow</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">exposeStatusEndpoint</span><span style="color:#E1E4E8">: </span><span style="color:#B392F0">true</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">app.</span><span style="color:#B392F0">Run</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Logic &#x26; Executors ---</span></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Classifies incident priority from service telemetry."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> AssessIncidentPriority</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">double</span><span style="color:#B392F0"> errorRatePercent</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">double</span><span style="color:#B392F0"> latencyMs</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> "PRIORITY: P0"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"FetchTelemetry"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> service</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"[TELEMETRY] Latency: 450ms"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">SendsMessage</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">typeof</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">))]</span></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TriageAdapterExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"TriageAdapter"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> context.</span><span style="color:#B392F0">SendMessageAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatMessage</span><span style="color:#E1E4E8">(ChatRole.User, message), ct);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TriageSyncExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"TriageSync"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> report</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(report.</span><span style="color:#B392F0">Trim</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> EscalationExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"EscalationEngine"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> report</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ALARM: Paging SRE Team."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h4 id="azure-openai-1">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Hosting</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AzureFunctions</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Functions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Worker</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Builder</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Hosting</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Identity</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ChatMessage</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Setup Jordan's Brain</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> deploymentName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_DEPLOYMENT_NAME"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> AzureOpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> DefaultAzureCredential</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(deploymentName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> triageAgent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">            You are Jordan's on-call assistant. Analyze telemetry and classify incident priority.</span></span>
+<span class="line"><span style="color:#9ECBFF">            """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(AssessIncidentPriority, </span><span style="color:#F97583">nameof</span><span style="color:#E1E4E8">(AssessIncidentPriority))]</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Build the Assembly Line (Workflow)</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> fetchTelemetry</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageAdapter</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TriageAdapterExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageSync</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TriageSyncExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> escalationEngine</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> EscalationExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageAgentExecutor</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> triageAgent.</span><span style="color:#B392F0">BindAsExecutor</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> AIAgentHostOptions</span><span style="color:#E1E4E8"> { ForwardIncomingMessages </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">WorkflowBuilder</span><span style="color:#B392F0"> builder</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(fetchTelemetry);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">WithName</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"IncidentTriage"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(fetchTelemetry, triageAdapter);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAdapter, triageAgentExecutor);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAgentExecutor, triageSync);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageSync, escalationEngine);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> workflow</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> builder.</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Start the Functions Host</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> IHost</span><span style="color:#B392F0"> app</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> FunctionsApplication</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">CreateBuilder</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">args</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">ConfigureFunctionsWebApplication</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">ConfigureDurableOptions</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">options</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#B392F0">        options</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Workflows</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AddWorkflow</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">workflow</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">exposeStatusEndpoint</span><span style="color:#E1E4E8">: </span><span style="color:#B392F0">true</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">app.</span><span style="color:#B392F0">Run</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Logic &#x26; Executors ---</span></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Classifies incident priority from service telemetry."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> AssessIncidentPriority</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">double</span><span style="color:#B392F0"> errorRatePercent</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">double</span><span style="color:#B392F0"> latencyMs</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> "PRIORITY: P0"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"FetchTelemetry"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> service</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"[TELEMETRY] Latency: 450ms"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">SendsMessage</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">typeof</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">))]</span></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TriageAdapterExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"TriageAdapter"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> context.</span><span style="color:#B392F0">SendMessageAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatMessage</span><span style="color:#E1E4E8">(ChatRole.User, message), ct);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TriageSyncExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"TriageSync"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> report</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(report.</span><span style="color:#B392F0">Trim</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> EscalationExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"EscalationEngine"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> report</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ALARM: Paging SRE Team."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<div class="solid-callout solid-callout-warning my-8">
+  <p class="font-bold text-amber-900 mb-2 text-sm">⚠️ Configuration Reminder</p>
+  <p class="text-xs text-amber-900/80 leading-relaxed">
+    Ensure your <code>local.settings.json</code> contains the <code>AZURE_OPENAI_ENDPOINT</code> and <code>AZURE_OPENAI_DEPLOYMENT_NAME</code> variables, as well as the <code>DurableTaskSchedulerConnectionString</code> required for the host to start.
+  </p>
+</div>
+<div class="solid-callout solid-callout-info my-8">
+  <p class="font-bold text-indigo-900 mb-2 text-base">🛡️ Hosted Workflow Turn Handling</p>
+  <p class="text-sm text-indigo-900/80 leading-relaxed m-0">
+    In the in-process workflow from the previous module, <code>TriageAdapter</code> sends both a <code>ChatMessage</code> and a <code>TurnToken</code>. In this hosted Durable Functions workflow, send only the <code>ChatMessage</code>. The Durable host routes each emitted message across the workflow boundary, so sending a <code>TurnToken</code> here can schedule a second agent invocation with <code>{"emitEvents":true}</code> as ordinary user input.
+  </p>
+</div>
+<h3 id="3-start-the-service"><span class="step-pill">3</span> Start the Service</h3>
+<p>In your terminal, start the local Azure Functions runtime:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">func</span><span style="color:#9ECBFF"> start</span></span></code></pre>
+<p>Once the host is initialized, you will see a list of functions that have been automatically registered by the Agent Framework. These are grouped into <strong>Public API Endpoints</strong> and <strong>Internal Durable Machinery</strong>.</p>
+<div class="api-header">
+  <span class="api-header-icon">📡</span>
+  <h4>External API Surface</h4>
+</div>
+These are the routes you will call from external systems.
+<div class="function-group">
+  <div class="function-group-header">
+    <span>🌐</span> Public Endpoints
+  </div>
+  <div class="function-item">
+    <div class="function-route">
+      <span class="function-method">POST</span>
+      <span class="function-name">http-IncidentTriage</span>
+    </div>
+    <div class="function-url">/api/workflows/IncidentTriage/run</div>
+    <div class="function-description">The entry point to trigger the triage workflow. Accepts incident details as a text payload.</div>
+  </div>
+  <div class="function-item">
+    <div class="function-route">
+      <span class="function-method" style="background: var(--color-teal-600)">GET</span>
+      <span class="function-name">http-IncidentTriage-status</span>
+    </div>
+    <div class="function-url">/api/workflows/IncidentTriage/status/{runId}</div>
+    <div class="function-description">Built-in endpoint to check the progress or final result of a specific workflow run.</div>
+  </div>
+</div>
+<div class="api-header">
+  <span class="api-header-icon">⚙️</span>
+  <h4>Internal Durable Machinery</h4>
+</div>
+These are the underlying triggers that manage the state and execution of the workflow graph. You generally don't call these directly.
+<div class="function-group">
+  <div class="function-group-header">
+    <span>⚙️</span> Durable Triggers
+  </div>
+  <div class="function-item">
+    <div class="function-route">
+      <span class="function-name">dafx-IncidentTriage</span>
+    </div>
+    <div class="function-description"><strong>Orchestration</strong>: Manages the sequence of steps and state of the triage pipeline.</div>
+  </div>
+  <div class="function-item">
+    <div class="function-route">
+      <span class="function-name">dafx-[ExecutorName]</span>
+    </div>
+    <div class="function-description"><strong>Activity</strong>: Individual task runners like <code>FetchTelemetry</code>, <code>TriageSync</code>, and <code>EscalationEngine</code>.</div>
+  </div>
+  <div class="function-item">
+    <div class="function-route">
+      <span class="function-name">dafx-TriageAgent</span>
+    </div>
+    <div class="function-description"><strong>Entity</strong>: The stateful brain of the assistant, maintaining Jordan's persona and context.</div>
+  </div>
+</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">graph LR</span></span>
+<span class="line"><span style="color:#E1E4E8">      Sys[External System] -->|POST run route| WorkflowHttp[http IncidentTriage]</span></span>
+<span class="line"><span style="color:#E1E4E8">      Sys -->|GET status route| StatusHttp[http IncidentTriage status]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">      WorkflowHttp --> Orchestration[dafx IncidentTriage orchestration]</span></span>
+<span class="line"><span style="color:#E1E4E8">      StatusHttp --> Orchestration</span></span>
+<span class="line"><span style="color:#E1E4E8">      Orchestration --> Activities[Fetch Adapter Sync Escalation]</span></span>
+<span class="line"><span style="color:#E1E4E8">      Activities --> TriageEntity[dafx TriageAgent entity]</span></span>
+<span class="line"><span style="color:#E1E4E8">      TriageEntity --> Activities</span></span>
+<span class="line"><span style="color:#E1E4E8">      Activities --> Result[Triage result]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">      style Sys fill:#f8fafc,stroke:#64748b,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">      style WorkflowHttp fill:#fff7ed,stroke:#f97316,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">      style StatusHttp fill:#fff7ed,stroke:#f97316,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">      style Orchestration fill:#f9f9ff,stroke:#6366f1,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">      style Activities fill:#f8fafc,stroke:#64748b,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">      style TriageEntity fill:#eef2ff,stroke:#4f46e5,stroke-width:3px</span></span>
+<span class="line"><span style="color:#E1E4E8">      style Result fill:#ecfdf5,stroke:#22c55e,stroke-width:2px</span></span></code></pre>
+<div class="agent-diagram-caption">
+<p class="text-xs text-slate-400 mt-6 italic">The Service Architecture: A public HTTP surface backed by a Durable orchestration that coordinates multiple activities and a stateful Agent entity.</p>
+</div>
+<h2 id="try-it-invoke-the-service">Try it: Invoke the Service</h2>
+<p>With the service running, you can now trigger the entire triage process from any HTTP client (like PowerShell, Postman, or a monitoring system).</p>
+<p>The Agent Framework provides two primary ways to interact with your hosted workflows:</p>
+<h4 id="-synchronous-wait">⚡ Synchronous (Wait)</h4>
+<h3 id="wait-and-see">“Wait and See”</h3>
+<p>Force the connection to stay open until the workflow completes. This is the simplest way to test the full pipeline and see the final result immediately.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#79B8FF">Invoke-RestMethod</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">Method Post </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Uri </span><span style="color:#9ECBFF">"http://localhost:7071/api/workflows/IncidentTriage/run"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Headers </span><span style="color:#F97583">@</span><span style="color:#E1E4E8">{ </span></span>
+<span class="line"><span style="color:#9ECBFF">    "Content-Type"</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "text/plain"</span><span style="color:#E1E4E8">; </span></span>
+<span class="line"><span style="color:#9ECBFF">    "x-ms-wait-for-response"</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "true"</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#E1E4E8">  } </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Body </span><span style="color:#9ECBFF">"checkout failures in production"</span></span></code></pre>
+<p><strong>The Goal:</strong> Observe the terminal hang for a few seconds as the agent reasons, followed by the direct string response: <code>ALARM: Paging SRE Team.</code></p>
+<h4 id="-asynchronous-poll">⏳ Asynchronous (Poll)</h4>
+<h3 id="trigger-and-poll">“Trigger and Poll”</h3>
+<p>Immediately receive a <strong>Run ID</strong> and check progress later. This is the recommended pattern for production systems and long-running workflows.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#6A737D"># 1. Trigger the workflow (returns a Run ID)</span></span>
+<span class="line"><span style="color:#E1E4E8">$run </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Invoke-RestMethod</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">Method Post </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Uri </span><span style="color:#9ECBFF">"http://localhost:7071/api/workflows/IncidentTriage/run"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Body </span><span style="color:#9ECBFF">"checkout failures in production"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$id </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $run.runId</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 2. Poll the status endpoint</span></span>
+<span class="line"><span style="color:#79B8FF">Invoke-RestMethod</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">Method Get </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Uri </span><span style="color:#9ECBFF">"http://localhost:7071/api/workflows/IncidentTriage/status/</span><span style="color:#E1E4E8">$id</span><span style="color:#9ECBFF">"</span></span></code></pre>
+<p><strong>The Goal:</strong> See the <code>status</code> field move from <code>Running</code> to <code>Completed</code>. The JSON response provides the full audit trail of the orchestration.</p>
+<h4 id="-logic-test">🎯 Logic Test</h4>
+<h3 id="triage-different-payloads">Triage Different Payloads</h3>
+<p>Verify that the agent’s reasoning remains grounded by providing a “Healthy” scenario through the API.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#79B8FF">Invoke-RestMethod</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">Method Post </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Uri </span><span style="color:#9ECBFF">"http://localhost:7071/api/workflows/IncidentTriage/run"</span><span style="color:#F97583"> `</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Headers </span><span style="color:#F97583">@</span><span style="color:#E1E4E8">{ </span><span style="color:#9ECBFF">"x-ms-wait-for-response"</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "true"</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">`</span></span>
+<span class="line"><span style="color:#F97583">  -</span><span style="color:#E1E4E8">Body </span><span style="color:#9ECBFF">"The payment service is 100% healthy"</span></span></code></pre>
+<p><strong>The Goal:</strong> Even though you are invoking via HTTP, the underlying <strong>Triage Workflow</strong> still runs. The agent will analyze your text, see no issues, and return <code>TICKET: Logged for triage.</code></p>
+<h2 id="summary">Summary</h2>
+<p>Congratulations! You’ve completed the <strong>Advanced Orchestration</strong> path. Jordan Miller now has a fully autonomous, production-grade compound AI system that scales to meet the demands of any enterprise.</p>
+<p>By mastering <strong>Executors</strong>, <strong>Workflows</strong>, and <strong>Hosting</strong>, you’ve moved beyond simple chat to building the next generation of AI-driven operational infrastructure.</p>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/advanced-orchestration/">#advanced-orchestration</a><a href="/tags/hosting/">#hosting</a><a href="/tags/agents/">#agents</a><a href="/tags/durable-functions/">#durable-functions</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Fhost-your-workflow%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Expose%20Your%20Workflow%20via%20API&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Fhost-your-workflow%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Fhost-your-workflow%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/advanced-orchestration/host-your-workflow/";
+const title = "Expose Your Workflow via API";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/advanced-orchestration/host-your-workflow/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

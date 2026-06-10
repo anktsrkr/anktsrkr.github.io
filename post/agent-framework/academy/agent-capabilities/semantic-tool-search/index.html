@@ -1,0 +1,1161 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Scale to Thousands of Tools with Semantic Search | Ankit Sarkar</title><meta name="description" content="Implement local semantic search using ONNX Runtime and FusionCache to dynamically load tools on demand, overcoming LLM context limits."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/agent-capabilities/semantic-tool-search/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Scale to Thousands of Tools with Semantic Search | Ankit Sarkar"><meta property="og:description" content="Implement local semantic search using ONNX Runtime and FusionCache to dynamically load tools on demand, overcoming LLM context limits."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/agent-capabilities/semantic-tool-search/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Scale to Thousands of Tools with Semantic Search | Ankit Sarkar"><meta name="twitter:description" content="Implement local semantic search using ONNX Runtime and FusionCache to dynamically load tools on demand, overcoming LLM context limits."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Scale to Thousands of Tools with Semantic Search</h1> <p>Implement local semantic search using ONNX Runtime and FusionCache to dynamically load tools on demand, overcoming LLM context limits.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/agent-capabilities/">Agent Capabilities</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#agent-anatomy">Agent Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#core-concepts-explained">Core Concepts Explained</a> <div class="toc-sublinks"> <a href="#1-what-are-vector-embeddings">1. What are Vector Embeddings?</a><a href="#2-tokenization-translating-words-to-numbers">2. Tokenization: Translating Words to Numbers</a><a href="#3-onnx-runtime-on-device-intelligence">3. ONNX Runtime: On-Device Intelligence</a><a href="#4-caching--snapshots-why-we-need-them">4. Caching &amp; Snapshots (Why we need them)</a><a href="#5-rich-parameter-extraction-structured-metadata-pattern">5. Rich Parameter Extraction (Structured Metadata Pattern)</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-environment">Setup your environment</a> <div class="toc-sublinks"> <a href="#1-install-required-packages">1 Install required packages</a><a href="#2-prepare-the-local-embedding-model">2 Prepare the local embedding model</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#architecture-flow">Architecture Flow</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#caching-strategy-embeddingcachecs">Caching Strategy: EmbeddingCache.cs</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#application-implementation-programcs">Application Implementation: Program.cs</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#deep-dive-critical-implementations">Deep Dive: Critical Implementations</a> <div class="toc-sublinks"> <a href="#1-rich-tool-descriptions-structured-metadata-pattern">1. Rich Tool Descriptions (Structured Metadata Pattern)</a><a href="#2-ortvalue-vs-namedonnxvalue">2. OrtValue vs. NamedOnnxValue</a><a href="#3-dynamic-thresholding-drop-off-check">3. Dynamic Thresholding (Drop-off Check)</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it">Try it</a> <div class="toc-sublinks"> <a href="#discover-multiple-tools">Discover Multiple Tools</a><a href="#observe-caching--restart-speeds">Observe Caching &amp; Restart Speeds</a><a href="#rename-or-replace-a-tool">Rename or Replace a Tool</a><a href="#expected-execution-output">Expected Execution Output</a><a href="#detailed-flow-walkthrough">Detailed Flow Walkthrough</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary">Summary</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Agent Capabilities series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Agent Capabilities</h2> <p>Explore advanced Microsoft Agent Framework capabilities and tool patterns.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">01</span> <span class="series-nav-current"> <span>Scale to Thousands of Tools with Semantic Search</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/agent-framework/academy/agent-capabilities/scrapegraphai-research-agent/">Parse Job Postings into Hiring Briefs with ScrapeGraphAI</a> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/agent-capabilities/semantic-tool-search/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>When you start building AI agents, you might begin by giving them three or four tools—like a weather calculator, a clock, and a search engine. But what happens when your agent needs to choose from dozens, hundreds, or even thousands of tools in an enterprise system?</p>
+<p>If you try to feed every tool definition into the agent’s prompt at the same time, you will quickly hit a wall. Feeding too many tools into the prompt:</p>
+<ol>
+<li><strong>Wastes valuable tokens</strong>: You pay for sending unused tool descriptions on every single turn.</li>
+<li><strong>Increases latency</strong>: The LLM takes longer to process the prompt.</li>
+<li><strong>Confuses the agent</strong>: Models can suffer from the “lost in the middle” problem, where they overlook tools listed in the middle of a massive prompt.</li>
+</ol>
+<p>To solve this, we can implement <strong>Dynamic Semantic Tool Search</strong> (often called “RAG for Tools”). Instead of giving the agent every tool upfront, we give it a single “meta-tool” called <code>SearchTools</code>. When the agent needs a capability it doesn’t currently have, it calls this search function, finds the most relevant tools locally using a fast embedding database, loads them dynamically, and then continues its execution.</p>
+<div class="solid-callout solid-callout-info my-6">
+  <p class="font-bold text-indigo-900 mb-2 text-sm">💡 Key Pattern: Tool Retrieval (Tool RAG)</p>
+  <p class="text-xs text-indigo-900/80 leading-relaxed">
+    This pattern aligns with modern AI engineering practices often referred to as <strong>Tool Retrieval (Tool RAG)</strong> or <strong>Dynamic Tool Selection</strong>. In large-scale agentic systems, dynamic tool selection mitigates prompt bloat, latency, and model confusion by scoping active tools to the minimum set required for the immediate task.
+  </p>
+</div>
+<p>In this tutorial, we will build a complete .NET console application that implements local tokenization, semantic search using on-device machine learning models, and high-performance caching.</p>
+<h2 id="agent-anatomy">Agent Anatomy</h2>
+<p>In this architecture, we extend a standard agent with a local discovery capability. The system is split into three main components:</p>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 my-10">
+  <!-- The Base Agent -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-60 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🤖</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">1. Base Agent</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">The agent's core brain, system instructions, and execution session. Initially, it is only aware of the search meta-tool.</p>
+  </div>
+  <!-- Local Embedding Engine -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-emerald-500 shadow-xl shadow-emerald-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in animate-delay-1">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-emerald-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Local</div>
+    <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-xl mb-4 border border-emerald-100">📉</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">2. Local Embedding Engine</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium">An on-device BERT Tokenizer and ONNX model that translate natural language text into numeric vectors (embeddings) instantly.</p>
+  </div>
+  <!-- Discovery System -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in animate-delay-2">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Active</div>
+    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-xl mb-4 border border-indigo-100">🔍</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">3. Discovery Meta-Tool</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium">The <code>SearchTools</code> function that calculates similarities, filters relevant options, and registers them directly into the active session.</p>
+  </div>
+</div>
+<div class="premium-gradient border border-indigo-100 rounded-3xl p-8 my-12 shadow-sm relative overflow-hidden animate-fade-in animate-delay-4">
+  <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl"></div>
+  <div class="flex gap-5 relative z-10">
+    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </div>
+    <div>
+      <h4 class="text-indigo-950 font-black text-lg tracking-tight mb-2">Why Local Embeddings &#x26; Caching?</h4>
+      <p class="text-sm leading-relaxed text-indigo-900/70 max-w-2xl">
+        Running a small model like <strong>MiniLM</strong> locally via <strong>ONNX Runtime</strong> is fast, private, and free. However, running inference on every turn can still impact performance. By pairing local ONNX models with a high-performance <strong>FusionCache</strong> L1/L2 cache layer, we eliminate redundant computation, instantly recovering embeddings on app restarts.
+      </p>
+    </div>
+  </div>
+</div>
+<h2 id="core-concepts-explained">Core Concepts Explained</h2>
+<p>Before writing code, let’s understand the core building blocks. If you are new to AI development, these concepts might seem complex, but they can be broken down using simple everyday analogies.</p>
+<h3 id="1-what-are-vector-embeddings">1. What are Vector Embeddings?</h3>
+<p>In computing, we store text as strings (letters and symbols). But machines are bad at comparing the <em>meanings</em> of strings. For example, a keyword search for “temp” won’t find a tool called <code>GetWeather</code> because the letters don’t match.</p>
+<p>An <strong>embedding</strong> is a way of translating text into a list of numbers (a vector) that represents its meaning.</p>
+<ul>
+<li><strong>The Analogy</strong>: Imagine a giant map of ideas. “Seattle weather” and “rain forecast” would be pinned next to each other on this map because they are closely related. “Stock price of Apple” would be pinned in a completely different neighborhood.</li>
+<li><strong>Vector Space</strong>: If we measure the distance between two pins on our map, we can tell how similar they are. In machine learning, we use a 384-dimensional map (meaning each coordinate has 384 numbers).</li>
+<li><strong>Similarity Math</strong>: We compare two vectors using a <strong>Dot Product</strong>. When our vectors are normalized (scaled to a length of 1), the dot product gives us a score between <code>-1.0</code> and <code>1.0</code>. A score close to <code>1.0</code> means the concepts are nearly identical in meaning.</li>
+</ul>
+<h3 id="2-tokenization-translating-words-to-numbers">2. Tokenization: Translating Words to Numbers</h3>
+<p>Before a neural network can turn a sentence into an embedding, it must break the sentence down into pieces it understands. This is called <strong>tokenization</strong>.</p>
+<ul>
+<li><strong>WordPiece Tokenization</strong>: Rather than breaking text by space or character, we break it into common subwords. For instance, the word “unhelpful” might be broken into the tokens <code>un</code> and <code>helpful</code>. This prevents the model from failing when it encounters a word it hasn’t seen before.</li>
+<li><strong>Case Sensitivity</strong>: Uncased models ignore capitalization. In our setup, we specify <code>LowerCaseBeforeTokenization = true</code> so that “Seattle”, “SEATTLE”, and “seattle” are tokenized exactly the same way.</li>
+<li><strong>Special Tokens</strong>: Models like BERT require structural markers. We add <code>[CLS]</code> (Classification) at the start of every sentence (which the model uses to summarize the meaning of the entire sentence) and <code>[SEP]</code> (Separator) at the end.</li>
+</ul>
+<h3 id="3-onnx-runtime-on-device-intelligence">3. ONNX Runtime: On-Device Intelligence</h3>
+<p>Running AI models usually requires calling an API key over the internet. This is slow, costs money per request, and sends potentially sensitive tool schemas to a third-party server.</p>
+<p><strong>ONNX Runtime</strong> is a high-performance engine that runs machine learning models directly on your machine’s CPU. By exporting a small model like <code>all-MiniLM-L6-v2</code> (about 80MB) to the ONNX format, we can compute embeddings locally in less than 5 milliseconds with zero cost and complete privacy.</p>
+<h3 id="4-caching--snapshots-why-we-need-them">4. Caching &#x26; Snapshots (Why we need them)</h3>
+<p>Even though local ONNX inference is fast, running a neural network on every chat turn consumes CPU cycles and introduces latency. To build a production-grade system, we use <strong>FusionCache</strong>:</p>
+<ul>
+<li><strong>L1/L2 Cache</strong>: We store query embeddings in memory (L1) for 30 minutes. If the user repeats a query, we skip the ONNX model entirely.</li>
+<li><strong>Cache Stampede Protection</strong>: If 50 requests hit our application at the exact same millisecond, stampede protection ensures only <em>one</em> thread runs the ONNX inference, while the other 49 wait for that single result and share it.</li>
+<li><strong>Snapshotting</strong>: We precompute the embeddings for all tools in our catalog on startup and save the resulting dictionary as a single blob. On application restart, we load this snapshot from cache. We also compare the keys of the snapshot with our actual catalog. If you rename or replace a tool in code, the system detects it, invalidates the stale cache, and re-computes only the affected embeddings.</li>
+</ul>
+<h3 id="5-rich-parameter-extraction-structured-metadata-pattern">5. Rich Parameter Extraction (Structured Metadata Pattern)</h3>
+<p>If you only embed the tool’s name (e.g., <code>GetWeather</code>), the embedding engine doesn’t know what parameters the tool requires. If a user asks “Convert 70 degrees”, it might not match a weather tool.</p>
+<p>We follow the <strong>Structured Metadata Pattern</strong> by generating a rich text summary of each tool from its JSON schema:</p>
+<ol>
+<li>Tool Name</li>
+<li>Tool Description</li>
+<li>Detailed parameter names, types, and descriptions.</li>
+</ol>
+<p>For example, a tool is embedded as:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="text"><code><span class="line"><span>Tool: GetWeather</span></span>
+<span class="line"><span>Description: Get the current weather for a city.</span></span>
+<span class="line"><span>Parameters: city (string): The city name.</span></span></code></pre>
+<p>This gives the local embedding model a rich semantic signal, making similarity matching extremely accurate.</p>
+<hr>
+<h2 id="setup-your-environment">Setup your environment</h2>
+<p>This tutorial requires NuGet packages for the .NET Agent Framework, local tokenization, ONNX Runtime, and FusionCache.</p>
+<h3 id="1-install-required-packages"><span class="step-pill">1</span> Install required packages</h3>
+<p>Run the following commands in your project directory:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span><span style="color:#79B8FF"> --version</span><span style="color:#79B8FF"> 1.5.0</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.AI.OpenAI</span><span style="color:#79B8FF"> --version</span><span style="color:#79B8FF"> 10.5.2</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.ML.Tokenizers</span><span style="color:#79B8FF"> --version</span><span style="color:#9ECBFF"> 3.0.0-preview.26160.2</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.ML.OnnxRuntime</span><span style="color:#79B8FF"> --version</span><span style="color:#79B8FF"> 1.26.0</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> ZiggyCreatures.FusionCache</span><span style="color:#79B8FF"> --version</span><span style="color:#79B8FF"> 2.6.0</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> ZiggyCreatures.FusionCache.Serialization.SystemTextJson</span><span style="color:#79B8FF"> --version</span><span style="color:#79B8FF"> 2.6.0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Optional: Add these if you want Redis L2 caching and backplane sync in production</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.Caching.StackExchangeRedis</span><span style="color:#79B8FF"> --version</span><span style="color:#79B8FF"> 10.0.7</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis</span><span style="color:#79B8FF"> --version</span><span style="color:#79B8FF"> 2.6.0</span></span></code></pre>
+<h3 id="2-prepare-the-local-embedding-model"><span class="step-pill">2</span> Prepare the local embedding model</h3>
+<p>We will use the <a href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2">all-MiniLM-L6-v2</a> model. It requires two files:</p>
+<ol>
+<li><code>model.onnx</code> - The compiled ONNX neural network model.</li>
+<li><code>vocab.txt</code> - The plain WordPiece vocabulary file.</li>
+</ol>
+<div class="solid-callout solid-callout-warning my-6">
+  <p class="font-bold text-amber-900 mb-2 text-sm">⚠️ Vocabulary File Requirement</p>
+  <p class="text-xs text-amber-900/80 leading-relaxed">
+    Do NOT supply <code>tokenizer.json</code> to the <code>BertTokenizer</code>. <code>BertTokenizer.Create</code> expects a plain WordPiece line-delimited vocabulary file (<code>vocab.txt</code>). Passing HuggingFace config JSONs will cause tokenization to fail.
+  </p>
+</div>
+<p>Create a directory named <code>Models/</code> in the root of your application, place <code>model.onnx</code> and <code>vocab.txt</code> inside it, and verify that they are configured to copy to your output folder in your <code>.csproj</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="xml"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">ItemGroup</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">None</span><span style="color:#B392F0"> Update</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"Models\model.onnx"</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">CopyToOutputDirectory</span><span style="color:#E1E4E8">>Always&#x3C;/</span><span style="color:#85E89D">CopyToOutputDirectory</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">None</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">None</span><span style="color:#B392F0"> Update</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"Models\vocab.txt"</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">CopyToOutputDirectory</span><span style="color:#E1E4E8">>Always&#x3C;/</span><span style="color:#85E89D">CopyToOutputDirectory</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">None</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">ItemGroup</span><span style="color:#E1E4E8">></span></span></code></pre>
+<hr>
+<h2 id="architecture-flow">Architecture Flow</h2>
+<p>The discovery engine allows the agent to start with only the <code>SearchTools</code> meta-tool registered. When a user asks a question, the agent dynamically requests and loads matching capabilities.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">sequenceDiagram</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant User</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Agent as 🎭 Agent Session</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Search as 🔍 SearchTools Meta-Tool</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Cache as ⚡ Embedding Cache</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant ONNX as 📉 ONNX Runtime Model</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant GetWeather as 🌦️ GetWeather Tool</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    User->>Agent: "What's the weather in Seattle?"</span></span>
+<span class="line"><span style="color:#E1E4E8">    Note over Agent: Initial toolset only contains SearchTools.</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Search: "SearchTools(query: 'weather for a city')"</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    Search->>Cache: "GetQueryEmbedding('weather for a city')"</span></span>
+<span class="line"><span style="color:#E1E4E8">    alt Cache Miss</span></span>
+<span class="line"><span style="color:#E1E4E8">        Cache->>ONNX: "Tokenize &#x26; Inference (OrtValue)"</span></span>
+<span class="line"><span style="color:#E1E4E8">        ONNX-->>Cache: "384-dim Float Vector"</span></span>
+<span class="line"><span style="color:#E1E4E8">    end</span></span>
+<span class="line"><span style="color:#E1E4E8">    Cache-->>Search: "Query Vector"</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    Note over Search: Calculates Cosine Similarity with cached catalog.</span></span>
+<span class="line"><span style="color:#E1E4E8">    Note over Search: Filters candidates with tight score drop-off.</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    Search->>Agent: "Add AIFunction 'GetWeather' to current session"</span></span>
+<span class="line"><span style="color:#E1E4E8">    Search-->>Agent: "Loaded: GetWeather (0.892)"</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Agent: "Re-evaluates available tools"</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>GetWeather: "GetWeather(city: 'Seattle')"</span></span>
+<span class="line"><span style="color:#E1E4E8">    GetWeather-->>Agent: "Seattle: 55°F, cloudy."</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent-->>User: "It's 55°F and cloudy in Seattle."</span></span></code></pre>
+<hr>
+<h2 id="caching-strategy-embeddingcachecs">Caching Strategy: <code>EmbeddingCache.cs</code></h2>
+<p>First, let’s write our caching infrastructure. The cache handles two separate types of values:</p>
+<ul>
+<li><strong>Tool Embeddings</strong>: Cached <strong>forever</strong> on L1 and L2 because tool definitions change very rarely. They are grouped under a <code>"tool-embeddings"</code> tag so we can invalidate the entire set if needed, and saved as a collective snapshot dictionary to skip all ONNX generation on app start.</li>
+<li><strong>Query Embeddings</strong>: Cached for a shorter duration (30 mins in L1, 24 hours in L2). They are configured with a <strong>fail-safe</strong> of 4 hours (returning a stale embedding if ONNX is temporarily busy or throws) and soft/hard timeouts.</li>
+</ul>
+<p>Create a file named <code>EmbeddingCache.cs</code> and paste the following code:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">DependencyInjection</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ZiggyCreatures</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Caching</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Fusion</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ZiggyCreatures</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Caching</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Fusion</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Serialization</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">SystemTextJson</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">namespace</span><span style="color:#B392F0"> SemanticToolSearch</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Caching</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> CacheKeys</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> ToolEmbedding</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> name</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> $"tool-emb:</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> QueryEmbedding</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> q</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> $"query-emb:</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">q</span><span style="color:#9ECBFF">.</span><span style="color:#B392F0">ToLowerInvariant</span><span style="color:#9ECBFF">().</span><span style="color:#B392F0">Trim</span><span style="color:#9ECBFF">()}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#F97583"> const</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> ToolSnapshot</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "tool-emb-snapshot"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> CacheTags</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#F97583"> const</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> Tools</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "tool-embeddings"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> CacheServiceExtensions</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#6A737D">        // Single-node registration (In-memory L1 cache only)</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#F97583"> static</span><span style="color:#B392F0"> IServiceCollection</span><span style="color:#B392F0"> AddEmbeddingCache</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">this</span><span style="color:#B392F0"> IServiceCollection</span><span style="color:#B392F0"> services</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            services</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">AddFusionCache</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">WithDefaultEntryOptions</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BuildDefaults</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">WithSerializer</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> FusionCacheSystemTextJsonSerializer</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">            services.</span><span style="color:#B392F0">AddSingleton</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">EmbeddingCacheService</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> services;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Multi-node registration (Memory L1 + Redis L2 + Backplane Notifications)</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#F97583"> static</span><span style="color:#B392F0"> IServiceCollection</span><span style="color:#B392F0"> AddEmbeddingCacheWithRedis</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#F97583">            this</span><span style="color:#B392F0"> IServiceCollection</span><span style="color:#B392F0"> services</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#B392F0"> redisConn</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            services.</span><span style="color:#B392F0">AddStackExchangeRedisCache</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">o</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> o.Configuration </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> redisConn);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">            services</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">AddFusionCache</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">WithDefaultEntryOptions</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">BuildDefaults</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">WithSerializer</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> FusionCacheSystemTextJsonSerializer</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">WithRegisteredDistributedCache</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">WithStackExchangeRedisBackplane</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">o</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> o.Configuration </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> redisConn);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">            services.</span><span style="color:#B392F0">AddSingleton</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">EmbeddingCacheService</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> services;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        private</span><span style="color:#F97583"> static</span><span style="color:#B392F0"> FusionCacheEntryOptions</span><span style="color:#B392F0"> BuildDefaults</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#F97583">            new</span><span style="color:#B392F0"> FusionCacheEntryOptions</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">SetFailSafe</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">, TimeSpan.</span><span style="color:#B392F0">FromHours</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">), TimeSpan.</span><span style="color:#B392F0">FromSeconds</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">30</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">                .</span><span style="color:#B392F0">SetFactoryTimeouts</span><span style="color:#E1E4E8">(TimeSpan.</span><span style="color:#B392F0">FromMilliseconds</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">200</span><span style="color:#E1E4E8">), TimeSpan.</span><span style="color:#B392F0">FromSeconds</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> EmbeddingCacheService</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">IFusionCache</span><span style="color:#B392F0"> cache</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#6A737D">        // Tool embeddings — cached indefinitely, tagged for bulk invalidation</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]> </span><span style="color:#B392F0">GetOrComputeToolEmbeddingAsync</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#F97583">            string</span><span style="color:#B392F0"> toolName</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">            Func</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">CancellationToken</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">Task</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]>> </span><span style="color:#B392F0">factory</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">            CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#E1E4E8">            cache.</span><span style="color:#B392F0">GetOrSetAsync</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]>(</span></span>
+<span class="line"><span style="color:#E1E4E8">                CacheKeys.</span><span style="color:#B392F0">ToolEmbedding</span><span style="color:#E1E4E8">(toolName), factory,</span></span>
+<span class="line"><span style="color:#B392F0">                opt</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> opt.</span><span style="color:#B392F0">SetDuration</span><span style="color:#E1E4E8">(TimeSpan.MaxValue), </span><span style="color:#B392F0">tags</span><span style="color:#E1E4E8">: [CacheTags.Tools],</span></span>
+<span class="line"><span style="color:#E1E4E8">                ct)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Query embeddings — 30m L1 / 24h L2, fail-safe + factory timeouts</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]> </span><span style="color:#B392F0">GetOrComputeQueryEmbeddingAsync</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#F97583">            string</span><span style="color:#B392F0"> query</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">            Func</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">CancellationToken</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">Task</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]>> </span><span style="color:#B392F0">factory</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">            CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#E1E4E8">            cache.</span><span style="color:#B392F0">GetOrSetAsync</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]>(</span></span>
+<span class="line"><span style="color:#E1E4E8">                CacheKeys.</span><span style="color:#B392F0">QueryEmbedding</span><span style="color:#E1E4E8">(query), factory,</span></span>
+<span class="line"><span style="color:#B392F0">                opt</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> opt</span></span>
+<span class="line"><span style="color:#E1E4E8">                    .</span><span style="color:#B392F0">SetDuration</span><span style="color:#E1E4E8">(TimeSpan.</span><span style="color:#B392F0">FromMinutes</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">30</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">                    .</span><span style="color:#B392F0">SetDistributedCacheDuration</span><span style="color:#E1E4E8">(TimeSpan.</span><span style="color:#B392F0">FromHours</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">24</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">                    .</span><span style="color:#B392F0">SetFailSafe</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">, TimeSpan.</span><span style="color:#B392F0">FromHours</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">                    .</span><span style="color:#B392F0">SetFactoryTimeouts</span><span style="color:#E1E4E8">(TimeSpan.</span><span style="color:#B392F0">FromMilliseconds</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">200</span><span style="color:#E1E4E8">), TimeSpan.</span><span style="color:#B392F0">FromSeconds</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"><span style="color:#E1E4E8">                ct)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Invalidate all tool embeddings at once if your code catalog changes</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> InvalidateAllToolEmbeddingsAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"♻️  Invalidating all tool embeddings…"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> cache.</span><span style="color:#B392F0">RemoveByTagAsync</span><span style="color:#E1E4E8">(CacheTags.Tools, </span><span style="color:#B392F0">token</span><span style="color:#E1E4E8">: ct);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Load a snapshot containing the precomputed embeddings for the entire catalog</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> Task</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">Dictionary</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]>?> </span><span style="color:#B392F0">LoadSnapshotAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            var</span><span style="color:#B392F0"> r</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> cache.</span><span style="color:#B392F0">TryGetAsync</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">Dictionary</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]>>(CacheKeys.ToolSnapshot, </span><span style="color:#B392F0">token</span><span style="color:#E1E4E8">: ct);</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> r.HasValue </span><span style="color:#F97583">?</span><span style="color:#E1E4E8"> r.Value </span><span style="color:#F97583">:</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Save a snapshot of computed tool embeddings to prevent startup ONNX model calls</span></span>
+<span class="line"><span style="color:#F97583">        public</span><span style="color:#B392F0"> Task</span><span style="color:#B392F0"> SaveSnapshotAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">Dictionary</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]> </span><span style="color:#B392F0">snapshot</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"💾 Saving tool embedding snapshot (</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">snapshot</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Count</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> tools)…"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> cache.</span><span style="color:#B392F0">SetAsync</span><span style="color:#E1E4E8">(CacheKeys.ToolSnapshot, snapshot,</span></span>
+<span class="line"><span style="color:#B392F0">                opt</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> opt.</span><span style="color:#B392F0">SetDuration</span><span style="color:#E1E4E8">(TimeSpan.MaxValue).</span><span style="color:#B392F0">SetDistributedCacheDuration</span><span style="color:#E1E4E8">(TimeSpan.MaxValue),</span></span>
+<span class="line"><span style="color:#E1E4E8">                ct).</span><span style="color:#B392F0">AsTask</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="application-implementation-programcs">Application Implementation: <code>Program.cs</code></h2>
+<p>Next, we write the main logic. This file configures the local ONNX model, registers the tools, loads or builds the tool embeddings snapshot, and exposes the <code>SearchTools</code> meta-tool to the agent.</p>
+<p>Create or update <code>Program.cs</code> with the following code:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">DependencyInjection</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ML</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">OnnxRuntime</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ML</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Tokenizers</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Responses</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> SemanticToolSearch</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Caching</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Text</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Text</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Json</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── DI Container Initialization ──────────────────────────────────────────────</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> services</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ServiceCollection</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// In-memory single-node caching. Change to AddEmbeddingCacheWithRedis for production clusters.</span></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">AddEmbeddingCache</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> sp</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> services.</span><span style="color:#B392F0">BuildServiceProvider</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> embeddingCache</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> sp.</span><span style="color:#B392F0">GetRequiredService</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">EmbeddingCacheService</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── Tokenizer &#x26; ONNX Session Configuration ───────────────────────────────────</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> modelPath</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "Models/model.onnx"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> vocabPath</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "Models/vocab.txt"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> int</span><span style="color:#B392F0"> maxTokens</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 128</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> int</span><span style="color:#B392F0"> hiddenDim</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 384</span><span style="color:#E1E4E8">; </span><span style="color:#6A737D">// MiniLM-L6-v2 outputs a 384-dimensional vector</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"⏳ Loading tokenizer and ONNX model…"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Create synchronous BertTokenizer and provide explicit BertOptions.</span></span>
+<span class="line"><span style="color:#6A737D">// Setting LowerCaseBeforeTokenization = true is crucial for uncased models.</span></span>
+<span class="line"><span style="color:#6A737D">// Without this, case mismatches yield vastly different embeddings.</span></span>
+<span class="line"><span style="color:#B392F0">BertTokenizer</span><span style="color:#B392F0"> tokenizer</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> BertTokenizer.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(vocabPath, </span><span style="color:#F97583">new</span><span style="color:#B392F0"> BertOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    LowerCaseBeforeTokenization </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ClassificationToken </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "[CLS]"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    SeparatorToken </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "[SEP]"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    PaddingToken </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "[PAD]"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    UnknownToken </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "[UNK]"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    MaskingToken </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "[MASK]"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// InferenceSession wraps unmanaged native resources and should be disposed when completed.</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> InferenceSession</span><span style="color:#B392F0"> onnxSession</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> new</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">modelPath</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"✅ Ready.</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── Tool Catalog ──────────────────────────────────────────────────────────────</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> toolCatalog</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> List</span><span style="color:#E1E4E8">&#x3C;(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> Description</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">AIFunction</span><span style="color:#B392F0"> Tool</span><span style="color:#E1E4E8">)></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    (</span><span style="color:#9ECBFF">"Get current weather temperature humidity wind for a city"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">     AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">         [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Get the current weather for a city."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#E1E4E8">         (</span><span style="color:#F97583">string</span><span style="color:#B392F0"> city</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> city.</span><span style="color:#B392F0">ToUpperInvariant</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">switch</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">             "SEATTLE"</span><span style="color:#F97583">  =></span><span style="color:#9ECBFF"> "Seattle: 55°F, cloudy."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">             "NEW YORK"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "New York: 72°F, sunny."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">             "LONDON"</span><span style="color:#F97583">   =></span><span style="color:#9ECBFF"> "London: 48°F, foggy."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">             _</span><span style="color:#F97583">          =></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">city</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: no data."</span></span>
+<span class="line"><span style="color:#E1E4E8">         }, </span><span style="color:#B392F0">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"GetWeather"</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    (</span><span style="color:#9ECBFF">"Get current local time timezone for a city"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">     AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">         [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Get the current local time for a city."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#E1E4E8">         (</span><span style="color:#F97583">string</span><span style="color:#B392F0"> city</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> city.</span><span style="color:#B392F0">ToUpperInvariant</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">switch</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">             "SEATTLE"</span><span style="color:#F97583">  =></span><span style="color:#9ECBFF"> "Seattle: 9:00 AM PST"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">             "NEW YORK"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "New York: 12:00 PM EST"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">             "LONDON"</span><span style="color:#F97583">   =></span><span style="color:#9ECBFF"> "London: 5:00 PM GMT"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">             _</span><span style="color:#F97583">          =></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">city</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: no data."</span></span>
+<span class="line"><span style="color:#E1E4E8">         }, </span><span style="color:#B392F0">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"GetTime"</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    (</span><span style="color:#9ECBFF">"Convert temperature Fahrenheit to Celsius"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">     AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">         [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Convert a temperature from Fahrenheit to Celsius."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#E1E4E8">         (</span><span style="color:#F97583">double</span><span style="color:#B392F0"> f</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">f</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">°F = </span><span style="color:#9ECBFF">{(</span><span style="color:#E1E4E8">f</span><span style="color:#F97583"> -</span><span style="color:#79B8FF"> 32</span><span style="color:#9ECBFF">) </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 5</span><span style="color:#F97583"> /</span><span style="color:#79B8FF"> 9</span><span style="color:#F97583">:</span><span style="color:#E1E4E8">F1</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">°C"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">         name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"ConvertFahrenheitToCelsius"</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    (</span><span style="color:#9ECBFF">"Get stock price market data ticker symbol"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">     AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">         [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Get the current stock price for a ticker symbol."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#E1E4E8">         (</span><span style="color:#F97583">string</span><span style="color:#B392F0"> ticker</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">ticker</span><span style="color:#9ECBFF">.</span><span style="color:#B392F0">ToUpper</span><span style="color:#9ECBFF">()}</span><span style="color:#9ECBFF">: $142.50 (+1.2%)"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">         name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"GetStockPrice"</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    (</span><span style="color:#9ECBFF">"Convert currency exchange rate foreign money"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">     AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">         [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Convert an amount between currencies."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#E1E4E8">         (</span><span style="color:#F97583">double</span><span style="color:#B392F0"> amount</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#B392F0"> from</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#B392F0"> to</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">amount</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> {</span><span style="color:#E1E4E8">from</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> = </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">amount</span><span style="color:#F97583"> *</span><span style="color:#79B8FF"> 0.92</span><span style="color:#F97583">:</span><span style="color:#E1E4E8">F2</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> {</span><span style="color:#E1E4E8">to</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">         name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"ConvertCurrency"</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── Rich Embedding Text Builder (Structured Metadata Pattern) ─────────────────</span></span>
+<span class="line"><span style="color:#6A737D">// Combines Tool Name + Description + Parameter metadata from JsonSchema</span></span>
+<span class="line"><span style="color:#6A737D">// to enrich semantic retrieval.</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> ToolToEmbeddingText</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">AIFunction</span><span style="color:#B392F0"> tool</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#B392F0"> parts</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> List</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> { </span><span style="color:#9ECBFF">$"Tool: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">tool</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8"> };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (tool.Description </span><span style="color:#F97583">is</span><span style="color:#E1E4E8"> { Length: </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8"> } </span><span style="color:#B392F0">desc</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        parts.</span><span style="color:#B392F0">Add</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"Description: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">desc</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#B392F0"> schema</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> tool.JsonSchema;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (schema.</span><span style="color:#B392F0">TryGetProperty</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"properties"</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">out</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> propsProp</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">        &#x26;&#x26;</span><span style="color:#E1E4E8"> propsProp.ValueKind </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> JsonValueKind.Object)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> paramParts</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> List</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> prop</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> propsProp.</span><span style="color:#B392F0">EnumerateObject</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            string</span><span style="color:#B392F0"> paramName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> prop.Name;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">            string</span><span style="color:#B392F0"> paramType</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> prop.Value.</span><span style="color:#B392F0">TryGetProperty</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"type"</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">out</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> typeProp</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">                ?</span><span style="color:#E1E4E8"> typeProp.ValueKind </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> JsonValueKind.String</span></span>
+<span class="line"><span style="color:#F97583">                    ?</span><span style="color:#E1E4E8"> typeProp.</span><span style="color:#B392F0">GetString</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "object"</span></span>
+<span class="line"><span style="color:#F97583">                    :</span><span style="color:#9ECBFF"> "object"</span></span>
+<span class="line"><span style="color:#F97583">                :</span><span style="color:#9ECBFF"> "object"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">            string</span><span style="color:#B392F0"> paramDesc</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> prop.Value.</span><span style="color:#B392F0">TryGetProperty</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"description"</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">out</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> pdProp</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">                               &#x26;&#x26;</span><span style="color:#E1E4E8"> pdProp.</span><span style="color:#B392F0">GetString</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">is</span><span style="color:#E1E4E8"> { Length: </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8"> } </span><span style="color:#B392F0">pd</span></span>
+<span class="line"><span style="color:#F97583">                ?</span><span style="color:#E1E4E8"> pd</span></span>
+<span class="line"><span style="color:#F97583">                :</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">.Empty;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">            paramParts.</span><span style="color:#B392F0">Add</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrEmpty</span><span style="color:#E1E4E8">(paramDesc)</span></span>
+<span class="line"><span style="color:#F97583">                ?</span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">paramName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> (</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">paramType</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">)"</span></span>
+<span class="line"><span style="color:#F97583">                :</span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">paramName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> (</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">paramType</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">): </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">paramDesc</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (paramParts.Count </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            parts.</span><span style="color:#B392F0">Add</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Parameters: "</span><span style="color:#F97583"> +</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">", "</span><span style="color:#E1E4E8">, paramParts));</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">, parts);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── Warm-up Phase: Restore Snapshot or Compute Embeddings ─────────────────────</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"⏳ Warming tool embeddings…"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> snapshot</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> embeddingCache.</span><span style="color:#B392F0">LoadSnapshotAsync</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">float</span><span style="color:#E1E4E8">[][] </span><span style="color:#B392F0">toolEmbeddings</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#F97583"> float</span><span style="color:#E1E4E8">[toolCatalog.Count][];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Validate snapshot exists AND contains exact keys for every catalog tool</span></span>
+<span class="line"><span style="color:#6A737D">// (Renaming or replacing a tool will trigger recalculation)</span></span>
+<span class="line"><span style="color:#F97583">bool</span><span style="color:#B392F0"> snapshotValid</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> snapshot </span><span style="color:#F97583">is</span><span style="color:#F97583"> not</span><span style="color:#79B8FF"> null</span></span>
+<span class="line"><span style="color:#F97583">    &#x26;&#x26;</span><span style="color:#E1E4E8"> toolCatalog.</span><span style="color:#B392F0">All</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">t</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> snapshot.</span><span style="color:#B392F0">ContainsKey</span><span style="color:#E1E4E8">(t.Tool.Name));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (snapshotValid)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    toolEmbeddings </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> toolCatalog.</span><span style="color:#B392F0">Select</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">t</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> snapshot</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">[t.Tool.Name]).</span><span style="color:#B392F0">ToArray</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"✅ Restored </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">snapshot</span><span style="color:#F97583">!</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Count</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> embeddings from cache (no ONNX calls).</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#F97583">else</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#B392F0"> newSnapshot</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Dictionary</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[]>();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#B392F0"> i</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> toolCatalog.Count; i</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">_</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">tool</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> toolCatalog[i];</span></span>
+<span class="line"><span style="color:#F97583">        int</span><span style="color:#B392F0"> idx</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> i;</span></span>
+<span class="line"><span style="color:#F97583">        string</span><span style="color:#B392F0"> embText</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> ToolToEmbeddingText</span><span style="color:#E1E4E8">(tool);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        toolEmbeddings[idx] </span><span style="color:#F97583">=</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> embeddingCache.</span><span style="color:#B392F0">GetOrComputeToolEmbeddingAsync</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">            tool.Name,</span></span>
+<span class="line"><span style="color:#B392F0">            ct</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> Task.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">Embed</span><span style="color:#E1E4E8">(embText)));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        newSnapshot[tool.Name] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> toolEmbeddings[idx];</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    await</span><span style="color:#E1E4E8"> embeddingCache.</span><span style="color:#B392F0">SaveSnapshotAsync</span><span style="color:#E1E4E8">(newSnapshot);</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"✅ Computed and cached </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">toolCatalog</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Count</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> tool embeddings.</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── The SearchTools Meta-Function ─────────────────────────────────────────────</span></span>
+<span class="line"><span style="color:#B392F0">AIFunction</span><span style="color:#B392F0"> searchToolsFunction</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#9ECBFF">        "Search for tools matching a task using semantic similarity. "</span><span style="color:#F97583"> +</span></span>
+<span class="line"><span style="color:#9ECBFF">        "Call when you need a capability not yet in your tool set."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#B392F0">async</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Natural language description of the capability you need."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">    string</span><span style="color:#E1E4E8"> query,</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Number of tools to return (default 3)."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">    int</span><span style="color:#E1E4E8"> topK </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 3</span></span>
+<span class="line"><span style="color:#E1E4E8">    ) =</span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#6A737D">        // Extract the runtime context before any await boundary to flow AsyncLocals correctly</span></span>
+<span class="line"><span style="color:#E1E4E8">        var context </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> FunctionInvokingChatClient.CurrentContext</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#F97583"> throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> InvalidOperationException</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"No FunctionInvocationContext."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        var tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> context.Options</span><span style="color:#F97583">?</span><span style="color:#E1E4E8">.Tools</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#F97583"> throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> InvalidOperationException</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ChatOptions.Tools unavailable."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        var userMessage </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> context.Messages</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">LastOrDefault</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Role </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> ChatRole.User)</span></span>
+<span class="line"><span style="color:#F97583">            ?</span><span style="color:#E1E4E8">.Text </span><span style="color:#F97583">??</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">.Empty;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Fetch query embeddings (using cache)</span></span>
+<span class="line"><span style="color:#F97583">        float</span><span style="color:#E1E4E8">[] userEmb </span><span style="color:#F97583">=</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> embeddingCache.</span><span style="color:#B392F0">GetOrComputeQueryEmbeddingAsync</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">            userMessage,</span></span>
+<span class="line"><span style="color:#B392F0">            ct</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> Task.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">Embed</span><span style="color:#E1E4E8">(userMessage)));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        float</span><span style="color:#E1E4E8">[] modelEmb </span><span style="color:#F97583">=</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> embeddingCache.</span><span style="color:#B392F0">GetOrComputeQueryEmbeddingAsync</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">            query,</span></span>
+<span class="line"><span style="color:#B392F0">            ct</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> Task.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">Embed</span><span style="color:#E1E4E8">(query)));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Combine the user query and model's search intent</span></span>
+<span class="line"><span style="color:#F97583">        float</span><span style="color:#E1E4E8"> userWeight </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0.4f</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">        float</span><span style="color:#E1E4E8"> modelWeight </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0.6f</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        float</span><span style="color:#E1E4E8">[] combinedEmb </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#F97583"> float</span><span style="color:#E1E4E8">[hiddenDim];</span></span>
+<span class="line"><span style="color:#B392F0">        for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> hiddenDim; i</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            combinedEmb[i] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> (userEmb[i] </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> userWeight) </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> (modelEmb[i] </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> modelWeight);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Normalize combined embedding to prepare for dot product similarity</span></span>
+<span class="line"><span style="color:#F97583">        float</span><span style="color:#E1E4E8"> combinedNorm </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> MathF.</span><span style="color:#B392F0">Sqrt</span><span style="color:#E1E4E8">(combinedEmb.</span><span style="color:#B392F0">Sum</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">x</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> x </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> x));</span></span>
+<span class="line"><span style="color:#B392F0">        if</span><span style="color:#E1E4E8"> (combinedNorm </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#B392F0">            for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> hiddenDim; i</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">) combinedEmb[i] </span><span style="color:#F97583">/=</span><span style="color:#E1E4E8"> combinedNorm;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Perform semantic matching</span></span>
+<span class="line"><span style="color:#E1E4E8">        var scores </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> toolEmbeddings</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Select</span><span style="color:#E1E4E8">((</span><span style="color:#B392F0">emb</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">i</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> (i, </span><span style="color:#B392F0">Score</span><span style="color:#E1E4E8">: </span><span style="color:#B392F0">DotProduct</span><span style="color:#E1E4E8">(emb, combinedEmb)))</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">OrderByDescending</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">x</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> x.Score)</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Take</span><span style="color:#E1E4E8">(topK </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">ToList</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // Dynamically compute tool loading threshold.</span></span>
+<span class="line"><span style="color:#6A737D">        // We only load tools with scores very close to the top match.</span></span>
+<span class="line"><span style="color:#F97583">        float</span><span style="color:#E1E4E8"> topScore </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> scores[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">].Score;</span></span>
+<span class="line"><span style="color:#E1E4E8">        var ranked </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> scores</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Take</span><span style="color:#E1E4E8">(topK)</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Where</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">x</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> x.Score </span><span style="color:#F97583">>=</span><span style="color:#E1E4E8"> topScore </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 0.92f</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        var added </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> List</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#B392F0">        foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">var</span><span style="color:#E1E4E8"> (i, score) </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> ranked)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            var candidate </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> toolCatalog[i].Tool;</span></span>
+<span class="line"><span style="color:#B392F0">            if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">tools.</span><span style="color:#B392F0">OfType</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIFunction</span><span style="color:#E1E4E8">>().</span><span style="color:#B392F0">Any</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">t</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> t.Name </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> candidate.Name))</span></span>
+<span class="line"><span style="color:#E1E4E8">            {</span></span>
+<span class="line"><span style="color:#E1E4E8">                tools.</span><span style="color:#B392F0">Add</span><span style="color:#E1E4E8">(candidate);</span></span>
+<span class="line"><span style="color:#E1E4E8">                added.</span><span style="color:#B392F0">Add</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">candidate</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> (</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">score</span><span style="color:#F97583">:</span><span style="color:#E1E4E8">F3</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">)"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ConsoleColor.Magenta;</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"  [SemanticSearch] '</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">userMessage</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">' → </span><span style="color:#9ECBFF">{</span><span style="color:#F97583">string</span><span style="color:#9ECBFF">.</span><span style="color:#B392F0">Join</span><span style="color:#9ECBFF">(</span><span style="color:#9ECBFF">", "</span><span style="color:#9ECBFF">, </span><span style="color:#E1E4E8">added</span><span style="color:#9ECBFF">)}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        return added.Count </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> ?</span><span style="color:#9ECBFF"> $"Loaded: </span><span style="color:#9ECBFF">{</span><span style="color:#F97583">string</span><span style="color:#9ECBFF">.</span><span style="color:#B392F0">Join</span><span style="color:#9ECBFF">(</span><span style="color:#9ECBFF">", "</span><span style="color:#9ECBFF">, </span><span style="color:#E1E4E8">added</span><span style="color:#9ECBFF">)}</span><span style="color:#9ECBFF">"</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> "No new tools found."</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#B392F0">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"SearchTools"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── Agent Creation &#x26; Setup ───────────────────────────────────────────────────</span></span>
+<span class="line"><span style="color:#6A737D">// Setup agent instructions and provide only the SearchTools function initially.</span></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"your-api-key"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#F97583">    new</span><span style="color:#B392F0"> OpenAIClientOptions</span><span style="color:#E1E4E8"> { Endpoint </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"http://127.0.0.1:10531/v1"</span><span style="color:#E1E4E8">) })</span></span>
+<span class="line"><span style="color:#E1E4E8">.</span><span style="color:#B392F0">GetResponsesClient</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">clientFactory</span><span style="color:#E1E4E8">: </span><span style="color:#B392F0">chatClient</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> chatClient</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">AsBuilder</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Use</span><span style="color:#E1E4E8">(LogMiddleware, LogStreamingMiddleware)</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">ConfigureOptions</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">o</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">            {</span></span>
+<span class="line"><span style="color:#E1E4E8">                o.Reasoning </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">                {</span></span>
+<span class="line"><span style="color:#E1E4E8">                    Effort </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ReasoningEffort.Medium,</span></span>
+<span class="line"><span style="color:#E1E4E8">                    Output </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ReasoningOutput.Full,</span></span>
+<span class="line"><span style="color:#E1E4E8">                };</span></span>
+<span class="line"><span style="color:#E1E4E8">            })</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#B392F0">             tools</span><span style="color:#E1E4E8">: [searchToolsFunction],</span></span>
+<span class="line"><span style="color:#B392F0">             model</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"gpt-5.5"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">             instructions</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">@"You are a helpful assistant. You start with limited tools.</span></span>
+<span class="line"><span style="color:#9ECBFF">                             When you need functionality that you don't currently have, call SearchTools with a description</span></span>
+<span class="line"><span style="color:#9ECBFF">                             of what you need. After new tools are loaded, use them to answer the user's question."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── Run Chat Session ──────────────────────────────────────────────────────────</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"=== Semantic Dynamic Tool Search — FusionCache Edition ===</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">CreateSessionAsync</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">string</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">prompts</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#9ECBFF">    "What's the weather in Seattle and London?"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "What time is it in New York?"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "Convert those temperatures to Celsius."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "What's the AAPL stock price?"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "Convert 500 USD to EUR."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> prompt</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> prompts)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ConsoleColor.Green;</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"[User] "</span><span style="color:#E1E4E8">); Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(prompt);</span></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#B392F0"> reasoningToken</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringBuilder</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#B392F0"> responseToken</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringBuilder</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">AgentResponseUpdate</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(prompt, session))</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#B392F0">        foreach</span><span style="color:#E1E4E8"> (AIContent item </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> update.Contents)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            switch</span><span style="color:#E1E4E8"> (item)</span></span>
+<span class="line"><span style="color:#E1E4E8">            {</span></span>
+<span class="line"><span style="color:#F97583">                case</span><span style="color:#B392F0"> FunctionCallContent</span><span style="color:#B392F0"> fc</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                    Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ConsoleColor.Yellow;</span></span>
+<span class="line"><span style="color:#E1E4E8">                    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"  [Tool Call] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">fc</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">(</span><span style="color:#9ECBFF">{</span><span style="color:#B392F0">FormatArgs</span><span style="color:#9ECBFF">(</span><span style="color:#E1E4E8">fc</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Arguments</span><span style="color:#9ECBFF">)}</span><span style="color:#9ECBFF">)"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">                    Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">(); </span></span>
+<span class="line"><span style="color:#F97583">                    break</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">                case</span><span style="color:#B392F0"> FunctionResultContent</span><span style="color:#B392F0"> fr</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                    Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ConsoleColor.DarkYellow;</span></span>
+<span class="line"><span style="color:#6A737D">                    // Use CallId to uniquely log function calls matching agent conventions</span></span>
+<span class="line"><span style="color:#E1E4E8">                    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"  [Tool Result] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">fr</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">CallId</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> => </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">fr</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Result</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">                    Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">(); </span></span>
+<span class="line"><span style="color:#F97583">                    break</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">                case</span><span style="color:#B392F0"> TextReasoningContent</span><span style="color:#B392F0"> reasoningContent</span><span style="color:#F97583"> when</span><span style="color:#F97583"> !</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrEmpty</span><span style="color:#E1E4E8">(reasoningContent.Text):</span></span>
+<span class="line"><span style="color:#E1E4E8">                    reasoningToken.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(reasoningContent.Text);</span></span>
+<span class="line"><span style="color:#F97583">                    break</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">                case</span><span style="color:#B392F0"> TextContent</span><span style="color:#B392F0"> textContent</span><span style="color:#F97583"> when</span><span style="color:#F97583"> !</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrEmpty</span><span style="color:#E1E4E8">(textContent.Text):</span></span>
+<span class="line"><span style="color:#E1E4E8">                    responseToken.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(textContent.Text);</span></span>
+<span class="line"><span style="color:#F97583">                    break</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ConsoleColor.DarkBlue;</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"[Agent Reasoning] "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(reasoningToken.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ConsoleColor.Cyan;</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"[Agent Response] "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(responseToken.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">Trim</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// ── Embed Helper (ONNX Inference &#x26; Mean Pooling) ──────────────────────────────</span></span>
+<span class="line"><span style="color:#F97583">float</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">Embed</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> text</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#6A737D">    // Encode text using the BERT tokenizer. Max length truncation protects tensor shape.</span></span>
+<span class="line"><span style="color:#B392F0">    IReadOnlyList</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">int</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">ids</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> tokenizer.</span><span style="color:#B392F0">EncodeToIds</span><span style="color:#E1E4E8">(text, maxTokens, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">out</span><span style="color:#E1E4E8"> _, </span><span style="color:#F97583">out</span><span style="color:#E1E4E8"> _);</span></span>
+<span class="line"><span style="color:#F97583">    int</span><span style="color:#B392F0"> seqLen</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> ids.Count;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    long</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">inputIds</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#F97583"> long</span><span style="color:#E1E4E8">[seqLen];</span></span>
+<span class="line"><span style="color:#F97583">    long</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">attnMask</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#F97583"> long</span><span style="color:#E1E4E8">[seqLen];</span></span>
+<span class="line"><span style="color:#F97583">    long</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">typeIds</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#F97583"> long</span><span style="color:#E1E4E8">[seqLen];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#B392F0"> i</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> seqLen; i</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        inputIds[i] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ids[i];</span></span>
+<span class="line"><span style="color:#E1E4E8">        attnMask[i] </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    long</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">shape</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, seqLen];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Build OrtValues (ensuring all are cleanly disposed to prevent native leaks)</span></span>
+<span class="line"><span style="color:#F97583">    using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> inputIdsValue</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> OrtValue.</span><span style="color:#B392F0">CreateTensorValueFromMemory</span><span style="color:#E1E4E8">(inputIds, shape);</span></span>
+<span class="line"><span style="color:#F97583">    using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> attnMaskValue</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> OrtValue.</span><span style="color:#B392F0">CreateTensorValueFromMemory</span><span style="color:#E1E4E8">(attnMask, shape);</span></span>
+<span class="line"><span style="color:#F97583">    using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> typeIdsValue</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> OrtValue.</span><span style="color:#B392F0">CreateTensorValueFromMemory</span><span style="color:#E1E4E8">(typeIds, shape);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#B392F0"> inputs</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Dictionary</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">OrtValue</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"input_ids"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> inputIdsValue,</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"attention_mask"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> attnMaskValue,</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"token_type_ids"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> typeIdsValue,</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> runOptions</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> RunOptions</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">    using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> outputs</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> onnxSession.</span><span style="color:#B392F0">Run</span><span style="color:#E1E4E8">(runOptions, inputs, onnxSession.OutputNames);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // 1. Check for pre-pooled output (e.g. named "sentence_embedding")</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (outputs.Count </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 1</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> onnxSession.OutputNames[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">==</span><span style="color:#9ECBFF"> "sentence_embedding"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        int</span><span style="color:#B392F0"> pooledIdx</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> onnxSession.OutputNames.</span><span style="color:#B392F0">ToList</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">IndexOf</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"sentence_embedding"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (pooledIdx </span><span style="color:#F97583">==</span><span style="color:#F97583"> -</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) pooledIdx </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> outputs[pooledIdx].</span><span style="color:#B392F0">GetTensorDataAsSpan</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">>().</span><span style="color:#B392F0">ToArray</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // 2. Manual Mean Pooling (required for raw transformer outputs)</span></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#B392F0"> tokenEmbs</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> outputs[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">].</span><span style="color:#B392F0">GetTensorDataAsSpan</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#B392F0"> result</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#F97583"> float</span><span style="color:#E1E4E8">[hiddenDim];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#B392F0"> t</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; t </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> seqLen; t</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> offset</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> t </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> hiddenDim;</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#B392F0"> d</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; d </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> hiddenDim; d</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            result[d] </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> tokenEmbs[offset </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> d];</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#B392F0"> d</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; d </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> hiddenDim; d</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        result[d] </span><span style="color:#F97583">/=</span><span style="color:#E1E4E8"> seqLen;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // L2 normalization makes dot product equivalent to cosine similarity</span></span>
+<span class="line"><span style="color:#F97583">    float</span><span style="color:#B392F0"> norm</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> MathF.</span><span style="color:#B392F0">Sqrt</span><span style="color:#E1E4E8">(result.</span><span style="color:#B392F0">Sum</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">x</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> x </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> x));</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (norm </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#B392F0"> d</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; d </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> hiddenDim; d</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            result[d] </span><span style="color:#F97583">/=</span><span style="color:#E1E4E8"> norm;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> result;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">float</span><span style="color:#B392F0"> DotProduct</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">a</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">float</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">b</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{ </span></span>
+<span class="line"><span style="color:#F97583">    double</span><span style="color:#B392F0"> s</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; </span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#B392F0"> i</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> a.Length; i</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">) s </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> a[i] </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> b[i]; </span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">float</span><span style="color:#E1E4E8">)s; </span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">string</span><span style="color:#B392F0"> FormatArgs</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">IDictionary</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">object</span><span style="color:#E1E4E8">?>? </span><span style="color:#B392F0">a</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#E1E4E8">    a </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ?</span><span style="color:#9ECBFF"> ""</span><span style="color:#F97583"> :</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">", "</span><span style="color:#E1E4E8">, a.</span><span style="color:#B392F0">Select</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">x</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#9ECBFF">        $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">x</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Key</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">JsonSerializer</span><span style="color:#9ECBFF">.</span><span style="color:#B392F0">Serialize</span><span style="color:#9ECBFF">(</span><span style="color:#E1E4E8">x</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Value</span><span style="color:#9ECBFF">)}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">async</span><span style="color:#B392F0"> Task</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ChatResponse</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">LogMiddleware</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    IEnumerable</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">m</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">ChatOptions</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">o</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IChatClient</span><span style="color:#B392F0"> next</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{ </span></span>
+<span class="line"><span style="color:#B392F0">    LogTools</span><span style="color:#E1E4E8">(o); </span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> next.</span><span style="color:#B392F0">GetResponseAsync</span><span style="color:#E1E4E8">(m, o, ct); </span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">async</span><span style="color:#B392F0"> IAsyncEnumerable</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ChatResponseUpdate</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">LogStreamingMiddleware</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    IEnumerable</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">m</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">ChatOptions</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">o</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IChatClient</span><span style="color:#B392F0"> next</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Runtime</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">CompilerServices</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">EnumeratorCancellation</span><span style="color:#E1E4E8">] </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{ </span></span>
+<span class="line"><span style="color:#B392F0">    LogTools</span><span style="color:#E1E4E8">(o); </span></span>
+<span class="line"><span style="color:#F97583">    await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> u</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> next.</span><span style="color:#B392F0">GetStreamingResponseAsync</span><span style="color:#E1E4E8">(m, o, ct)) yield return u; </span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">void</span><span style="color:#B392F0"> LogTools</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">ChatOptions</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">o</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ConsoleColor.DarkGray;</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"  [Middleware] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">o</span><span style="color:#F97583">?</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Tools</span><span style="color:#F97583">?</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Count</span><span style="color:#F97583"> ??</span><span style="color:#79B8FF"> 0</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> tool(s): "</span><span style="color:#F97583"> +</span></span>
+<span class="line"><span style="color:#F97583">                      string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">", "</span><span style="color:#E1E4E8">, o</span><span style="color:#F97583">?</span><span style="color:#E1E4E8">.Tools</span><span style="color:#F97583">?</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">OfType</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIFunction</span><span style="color:#E1E4E8">>().</span><span style="color:#B392F0">Select</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">t</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> t.Name) </span><span style="color:#F97583">??</span><span style="color:#E1E4E8"> []));</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="deep-dive-critical-implementations">Deep Dive: Critical Implementations</h2>
+<p>Let’s dissect the core patterns that make this dynamic tool search reliable and performant.</p>
+<h3 id="1-rich-tool-descriptions-structured-metadata-pattern">1. Rich Tool Descriptions (Structured Metadata Pattern)</h3>
+<p>If we only embed a general description like <code>"Get weather"</code>, we miss important semantic signals related to parameters. The <code>ToolToEmbeddingText</code> helper parses the tool’s JSON Schema (<code>tool.JsonSchema</code>) to extract descriptions, parameter names, and types:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#6A737D">// Generates:</span></span>
+<span class="line"><span style="color:#6A737D">// Tool: GetWeather</span></span>
+<span class="line"><span style="color:#6A737D">// Description: Get the current weather for a city.</span></span>
+<span class="line"><span style="color:#6A737D">// Parameters: city (string): The city name.</span></span></code></pre>
+<p>This ensures that queries like <em>“find a tool that accepts a city name parameter”</em> map strongly to the correct functions.</p>
+<h3 id="2-ortvalue-vs-namedonnxvalue">2. OrtValue vs. NamedOnnxValue</h3>
+<p>In older versions of ONNX Runtime, inputs were mapped using <code>NamedOnnxValue.CreateFromTensor</code>. In modern releases, this path is deprecated because it copies tensors repeatedly and does not handle native resources cleanly.</p>
+<p>By switching to <code>OrtValue</code>, we create tensor memory buffers that map directly to .NET arrays without overhead. The <code>using</code> syntax guarantees native memory is freed immediately after inference.</p>
+<h3 id="3-dynamic-thresholding-drop-off-check">3. Dynamic Thresholding (Drop-off Check)</h3>
+<p>Instead of strictly picking <code>topK</code> matches, we calculate a score threshold relative to the highest-scoring candidate:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">float</span><span style="color:#B392F0"> topScore</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> scores[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">].Score;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> ranked</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> scores</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">Take</span><span style="color:#E1E4E8">(topK)</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">Where</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">x</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> x.Score </span><span style="color:#F97583">>=</span><span style="color:#E1E4E8"> topScore </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 0.92f</span><span style="color:#E1E4E8">); </span><span style="color:#6A737D">// Load only high-confidence matches</span></span></code></pre>
+<p>If the best match has a score of <code>0.85</code>, we discard any matches scoring below <code>0.78</code> (<code>0.85 * 0.92</code>). This prevents loading irrelevant tools when no matching functions are found in the catalog.</p>
+<hr>
+<h2 id="try-it">Try it</h2>
+<p>Verify how the agent responds to different prompts and handles caching logic.</p>
+<h4 id="-multi-discovery">🎯 Multi-Discovery</h4>
+<h3 id="discover-multiple-tools">Discover Multiple Tools</h3>
+<p>Ask: <em>“What’s the weather in Seattle and London?”</em></p>
+<p><strong>Result:</strong> The agent will identify the need for weather data, call <code>SearchTools</code>, and dynamically add <code>GetWeather</code> to its session. It will call <code>GetWeather</code> twice to retrieve data for both cities in a single turn.</p>
+<h4 id="-caching--warm-up">⚡ Caching &#x26; Warm-up</h4>
+<h3 id="observe-caching--restart-speeds">Observe Caching &#x26; Restart Speeds</h3>
+<p>Run the application. The first run computes all embeddings and saves a snapshot file. Stop and restart the app.</p>
+<p><strong>Result:</strong> The second time, the catalog warms up instantly with <strong>0 ONNX model calls</strong> because it restores the embeddings from the <code>EmbeddingCache</code> snapshot. Subsequent query searches are resolved in sub-milliseconds due to L1 memory caching.</p>
+<h4 id="️-dynamic-invalidation">🏗️ Dynamic Invalidation</h4>
+<h3 id="rename-or-replace-a-tool">Rename or Replace a Tool</h3>
+<p>Rename the <code>"GetWeather"</code> tool name to <code>"RetrieveWeather"</code> in the catalog code and restart.</p>
+<p><strong>Result:</strong> The key-set verification detects a mismatch against the cached snapshot, invalidates the stale entries, re-computes the embeddings, and updates the cache safely.</p>
+<h3 id="expected-execution-output">Expected Execution Output</h3>
+<p>When you run the console application, you will see a session log demonstrating the agent’s reasoning, dynamic tool discovery, and tool execution flow:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="text"><code><span class="line"><span>⏳ Loading tokenizer and ONNX model…</span></span>
+<span class="line"><span>✅ Ready.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>⏳ Warming tool embeddings…</span></span>
+<span class="line"><span>💾 Saving tool embedding snapshot (5 tools)…</span></span>
+<span class="line"><span>✅ Computed and cached 5 tool embeddings.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>=== Semantic Dynamic Tool Search — FusionCache edition ===</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[User] What's the weather in Seattle and London?</span></span>
+<span class="line"><span>  [Middleware] 1 tool(s): SearchTools</span></span>
+<span class="line"><span>  [Tool Call] SearchTools(query: "get current weather for city locations", topK: 3)</span></span>
+<span class="line"><span>  [SemanticSearch] 'What's the weather in Seattle and London?' → GetWeather (0.735)</span></span>
+<span class="line"><span>  [Tool Result] call_o3hUScZal4KSrrlqV9HgU7PA => Loaded: GetWeather (0.735)</span></span>
+<span class="line"><span>  [Middleware] 2 tool(s): SearchTools, GetWeather</span></span>
+<span class="line"><span>  [Tool Call] GetWeather(city: "Seattle")</span></span>
+<span class="line"><span>  [Tool Call] GetWeather(city: "London")</span></span>
+<span class="line"><span>  [Tool Result] call_w4CkU2LSOWyn0jmGnnGQ0aKx => Seattle: 55°F, cloudy.</span></span>
+<span class="line"><span>  [Tool Result] call_MggsAnzdMjCwFNfCQHcvEb3h => London: 48°F, foggy.</span></span>
+<span class="line"><span>  [Middleware] 2 tool(s): SearchTools, GetWeather</span></span>
+<span class="line"><span>[Agent Reasoning]</span></span>
+<span class="line"><span>[Agent Response] Seattle: 55°F, cloudy.</span></span>
+<span class="line"><span>London: 48°F, foggy.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[User] What time is it in New York?</span></span>
+<span class="line"><span>  [Middleware] 1 tool(s): SearchTools</span></span>
+<span class="line"><span>  [Tool Call] SearchTools(query: "get current local time in a city or timezone", topK: 3)</span></span>
+<span class="line"><span>  [SemanticSearch] 'What time is it in New York?' → GetTime (0.720)</span></span>
+<span class="line"><span>  [Tool Result] call_ahHk9IV2gQdMqMNrvtOoq49M => Loaded: GetTime (0.720)</span></span>
+<span class="line"><span>  [Middleware] 2 tool(s): SearchTools, GetTime</span></span>
+<span class="line"><span>  [Tool Call] GetTime(city: "New York")</span></span>
+<span class="line"><span>  [Tool Result] call_gfKjy94NWRaxGTommtGSDmP2 => New York: 12:00 PM EST</span></span>
+<span class="line"><span>  [Middleware] 2 tool(s): SearchTools, GetTime</span></span>
+<span class="line"><span>[Agent Reasoning] **Searching for current time**</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>I need to find a way to get the current time, but it looks like I only have access to tools that allow me to search or check the weather. I think using a search tool is the best option here since the current time isn't tied to weather data. It's a bit tricky with limited tools, but I'll figure this out and get my answer!</span></span>
+<span class="line"><span>[Agent Response] It’s 12:00 PM EST in New York.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[User] Convert those temperatures to Celsius.</span></span>
+<span class="line"><span>  [Middleware] 1 tool(s): SearchTools</span></span>
+<span class="line"><span>[Agent Reasoning] **Converting temperatures**</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>I need to refer to previous temperatures: Seattle at 55°F and London at 48°F. To convert these to Celsius, I’ll use the formula (F-32)*5/9. For Seattle, 55°F turns into about 12.8°C, which I can round to 13°C. For London, 48°F converts to roughly 8.9°C, which I can round to 9°C. I want to be concise with this information, delivering clear results!</span></span>
+<span class="line"><span>[Agent Response] Seattle: 55°F = **12.8°C**</span></span>
+<span class="line"><span>London: 48°F = **8.9°C**</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[User] What's the AAPL stock price?</span></span>
+<span class="line"><span>  [Middleware] 1 tool(s): SearchTools</span></span>
+<span class="line"><span>  [Tool Call] SearchTools(query: "get current stock price ticker symbol")</span></span>
+<span class="line"><span>  [SemanticSearch] 'What's the AAPL stock price?' → GetStockPrice (0.749)</span></span>
+<span class="line"><span>  [Tool Result] call_F3RDPH0vkesATYFO7OOflLE4 => Loaded: GetStockPrice (0.749)</span></span>
+<span class="line"><span>  [Middleware] 2 tool(s): SearchTools, GetStockPrice</span></span>
+<span class="line"><span>  [Tool Call] GetStockPrice(ticker: "AAPL")</span></span>
+<span class="line"><span>  [Tool Result] call_xqY0yveXw5ZlbEK1Y7790dxu => AAPL: $142.50 (+1.2%)</span></span>
+<span class="line"><span>  [Middleware] 2 tool(s): SearchTools, GetStockPrice</span></span>
+<span class="line"><span>[Agent Reasoning] **Searching for stock price**</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>I need to find the current stock price, so I'll use the appropriate tool to perform a search. It's essential to get accurate and up-to-date information. I'll be sure to specify the stock ticker and any other relevant details while making the request. It’s straightforward, but I want to ensure everything's correct so I can provide the user with the information they need promptly.</span></span>
+<span class="line"><span>[Agent Response] AAPL is currently trading at **$142.50**, up **1.2%**.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[User] Convert 500 USD to EUR.</span></span>
+<span class="line"><span>  [Middleware] 1 tool(s): SearchTools</span></span>
+<span class="line"><span>  [Tool Call] SearchTools(query: "convert currency USD to EUR current exchange rate", topK: 3)</span></span>
+<span class="line"><span>  [SemanticSearch] 'Convert 500 USD to EUR.' → ConvertCurrency (0.541)</span></span>
+<span class="line"><span>  [Tool Result] call_sXxpFRG5QKBcEktqk1Z1Un0Z => Loaded: ConvertCurrency (0.541)</span></span>
+<span class="line"><span>  [Middleware] 2 tool(s): SearchTools, ConvertCurrency</span></span>
+<span class="line"><span>  [Tool Call] ConvertCurrency(amount: 500, from: "USD", to: "EUR")</span></span>
+<span class="line"><span>  [Tool Result] call_OlzH0sdhSxp8ycM4fl0ouy0g => 500 USD = 460.00 EUR</span></span>
+<span class="line"><span>  [Middleware] 2 tool(s): SearchTools, ConvertCurrency</span></span></code></pre>
+<h3 id="detailed-flow-walkthrough">Detailed Flow Walkthrough</h3>
+<p>Here is a step-by-step breakdown of how the agent discovers and utilizes tools dynamically across the conversational flow:</p>
+<!-- ── Step 1: Initialization ── -->
+<div class="relative pl-8 pb-10 border-l-2 border-slate-200 ml-4 animate-fade-in">
+  <div class="absolute -left-[13px] top-0 w-6 h-6 rounded-full bg-slate-100 border-2 border-slate-300 flex items-center justify-center">
+    <span class="text-[10px] font-black text-slate-500">1</span>
+  </div>
+  <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+    <div class="px-5 py-3 bg-gradient-to-r from-slate-50 to-white border-b border-slate-100 flex items-center gap-3">
+      <span class="text-lg">⚙️</span>
+      <span class="font-extrabold text-slate-900 text-sm tracking-tight">Initialization &#x26; Cache Warm-up</span>
+    </div>
+    <div class="px-5 py-4 text-xs leading-relaxed text-slate-600 space-y-2">
+      <p>The local BERT tokenizer and the 384-dimensional <code>all-MiniLM-L6-v2</code> ONNX model are loaded.</p>
+      <p>On the very first startup, the application calculates embeddings for all 5 tools in the catalog and persists them to the <code>EmbeddingCache</code> snapshot. On subsequent runs, this step is skipped entirely, warming up in sub-milliseconds by restoring the dictionary from cache.</p>
+    </div>
+  </div>
+</div>
+<!-- ── Step 2: First Query (Weather) ── -->
+<div class="relative pl-8 pb-10 border-l-2 border-indigo-200 ml-4 animate-fade-in animate-delay-1">
+  <div class="absolute -left-[13px] top-0 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center shadow-md shadow-indigo-200">
+    <span class="text-[10px] font-black text-white">2</span>
+  </div>
+  <div class="rounded-2xl border-2 border-indigo-200 bg-white shadow-lg shadow-indigo-500/5 overflow-hidden">
+    <div class="px-5 py-3 bg-gradient-to-r from-indigo-50 to-white border-b border-indigo-100 flex items-center gap-3">
+      <span class="text-lg">🌦️</span>
+      <span class="font-extrabold text-indigo-950 text-sm tracking-tight">First Query — Weather</span>
+    </div>
+    <div class="divide-y divide-slate-100">
+      <!-- User Input -->
+      <div class="px-5 py-3 flex items-start gap-3">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-[10px]">💬</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-blue-500 mb-0.5">User Input</div>
+          <p class="text-sm text-slate-800 italic font-medium">"What's the weather in Seattle and London?"</p>
+        </div>
+      </div>
+      <!-- State -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-amber-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-amber-50 border border-amber-200 flex items-center justify-center text-[10px]">📋</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-amber-600 mb-0.5">State</div>
+          <p class="text-xs text-slate-600 leading-relaxed">The agent's session starts with only the <code>SearchTools</code> meta-tool registered.</p>
+        </div>
+      </div>
+      <!-- Semantic Search -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-violet-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-violet-50 border border-violet-200 flex items-center justify-center text-[10px]">🔍</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-violet-600 mb-0.5">Semantic Search</div>
+          <p class="text-xs text-slate-600 leading-relaxed mb-2">Realizing it lacks direct access to weather data, the agent invokes <code>SearchTools(query: "get current weather for city locations", topK: 3)</code>.</p>
+          <p class="text-xs text-slate-600 leading-relaxed mb-2">The local search computes similarities using dot products of the query embedding and the cached tool embeddings.</p>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-100 border border-violet-200">
+            <span class="text-[10px] font-extrabold text-violet-700">GetWeather</span>
+            <span class="text-[10px] font-mono font-bold text-violet-500">0.735</span>
+            <span class="text-[9px] text-violet-400">✓ above threshold</span>
+          </div>
+        </div>
+      </div>
+      <!-- Execution -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-emerald-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[10px]">⚡</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 mb-0.5">Execution</div>
+          <p class="text-xs text-slate-600 leading-relaxed"><code>GetWeather</code> is dynamically registered to the agent's active capabilities. The agent then calls <code>GetWeather</code> for Seattle and London in parallel and returns the final response.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ── Step 3: Second Query (Time) ── -->
+<div class="relative pl-8 pb-10 border-l-2 border-indigo-200 ml-4 animate-fade-in animate-delay-2">
+  <div class="absolute -left-[13px] top-0 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center shadow-md shadow-indigo-200">
+    <span class="text-[10px] font-black text-white">3</span>
+  </div>
+  <div class="rounded-2xl border-2 border-indigo-200 bg-white shadow-lg shadow-indigo-500/5 overflow-hidden">
+    <div class="px-5 py-3 bg-gradient-to-r from-indigo-50 to-white border-b border-indigo-100 flex items-center gap-3">
+      <span class="text-lg">🕐</span>
+      <span class="font-extrabold text-indigo-950 text-sm tracking-tight">Second Query — Time</span>
+    </div>
+    <div class="divide-y divide-slate-100">
+      <!-- User Input -->
+      <div class="px-5 py-3 flex items-start gap-3">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-[10px]">💬</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-blue-500 mb-0.5">User Input</div>
+          <p class="text-sm text-slate-800 italic font-medium">"What time is it in New York?"</p>
+        </div>
+      </div>
+      <!-- State -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-amber-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-amber-50 border border-amber-200 flex items-center justify-center text-[10px]">📋</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-amber-600 mb-0.5">State</div>
+          <p class="text-xs text-slate-600 leading-relaxed">Because active capabilities are managed dynamically per turn, the agent again defaults to its root toolset.</p>
+        </div>
+      </div>
+      <!-- Semantic Search -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-violet-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-violet-50 border border-violet-200 flex items-center justify-center text-[10px]">🔍</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-violet-600 mb-0.5">Semantic Search</div>
+          <p class="text-xs text-slate-600 leading-relaxed mb-2">Recognizing that it does not have a time tool, it calls <code>SearchTools(query: "get current local time in a city or timezone", topK: 3)</code>.</p>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-100 border border-violet-200">
+            <span class="text-[10px] font-extrabold text-violet-700">GetTime</span>
+            <span class="text-[10px] font-mono font-bold text-violet-500">0.720</span>
+            <span class="text-[9px] text-violet-400">✓ above threshold</span>
+          </div>
+        </div>
+      </div>
+      <!-- Execution -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-emerald-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[10px]">⚡</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 mb-0.5">Execution</div>
+          <p class="text-xs text-slate-600 leading-relaxed">The agent invokes <code>GetTime(city: "New York")</code> to retrieve the current local time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ── Step 4: Third Query (Calculation) ── -->
+<div class="relative pl-8 pb-10 border-l-2 border-amber-200 ml-4 animate-fade-in animate-delay-3">
+  <div class="absolute -left-[13px] top-0 w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center shadow-md shadow-amber-200">
+    <span class="text-[10px] font-black text-white">4</span>
+  </div>
+  <div class="rounded-2xl border-2 border-amber-200 bg-white shadow-lg shadow-amber-500/5 overflow-hidden">
+    <div class="px-5 py-3 bg-gradient-to-r from-amber-50 to-white border-b border-amber-100 flex items-center gap-3">
+      <span class="text-lg">🧠</span>
+      <span class="font-extrabold text-amber-950 text-sm tracking-tight">Third Query — Calculation &#x26; Reasoning</span>
+    </div>
+    <div class="divide-y divide-slate-100">
+      <!-- User Input -->
+      <div class="px-5 py-3 flex items-start gap-3">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-[10px]">💬</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-blue-500 mb-0.5">User Input</div>
+          <p class="text-sm text-slate-800 italic font-medium">"Convert those temperatures to Celsius."</p>
+        </div>
+      </div>
+      <!-- State & Reasoning -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-amber-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-amber-50 border border-amber-200 flex items-center justify-center text-[10px]">🧠</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-amber-600 mb-0.5">State &#x26; Reasoning</div>
+          <p class="text-xs text-slate-600 leading-relaxed">The agent reviews its short-term conversation context to locate the previously retrieved temperatures (Seattle: <code>55°F</code>, London: <code>48°F</code>). It reasons that no external data-fetching or utility tool is needed because it can perform the mathematical conversion <code>(F - 32) * 5/9</code> using its own reasoning capabilities.</p>
+        </div>
+      </div>
+      <!-- Execution -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-emerald-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[10px]">⚡</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 mb-0.5">Execution</div>
+          <p class="text-xs text-slate-600 leading-relaxed">It computes and outputs the conversions directly <strong>without calling any tools</strong>.</p>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 border border-amber-200 mt-1">
+            <span class="text-[10px] font-extrabold text-amber-700">No Tool Required</span>
+            <span class="text-[9px] text-amber-500">— pure reasoning</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ── Step 5: Fourth Query (Stock Price) ── -->
+<div class="relative pl-8 pb-10 border-l-2 border-indigo-200 ml-4 animate-fade-in animate-delay-4">
+  <div class="absolute -left-[13px] top-0 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center shadow-md shadow-indigo-200">
+    <span class="text-[10px] font-black text-white">5</span>
+  </div>
+  <div class="rounded-2xl border-2 border-indigo-200 bg-white shadow-lg shadow-indigo-500/5 overflow-hidden">
+    <div class="px-5 py-3 bg-gradient-to-r from-indigo-50 to-white border-b border-indigo-100 flex items-center gap-3">
+      <span class="text-lg">📈</span>
+      <span class="font-extrabold text-indigo-950 text-sm tracking-tight">Fourth Query — Stock Price</span>
+    </div>
+    <div class="divide-y divide-slate-100">
+      <!-- User Input -->
+      <div class="px-5 py-3 flex items-start gap-3">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-[10px]">💬</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-blue-500 mb-0.5">User Input</div>
+          <p class="text-sm text-slate-800 italic font-medium">"What's the AAPL stock price?"</p>
+        </div>
+      </div>
+      <!-- Semantic Search -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-violet-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-violet-50 border border-violet-200 flex items-center justify-center text-[10px]">🔍</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-violet-600 mb-0.5">Semantic Search</div>
+          <p class="text-xs text-slate-600 leading-relaxed mb-2">It queries <code>SearchTools(query: "get current stock price ticker symbol")</code>. The local search matches the request to <code>GetStockPrice</code>.</p>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-100 border border-violet-200">
+            <span class="text-[10px] font-extrabold text-violet-700">GetStockPrice</span>
+            <span class="text-[10px] font-mono font-bold text-violet-500">0.749</span>
+            <span class="text-[9px] text-violet-400">✓ above threshold</span>
+          </div>
+        </div>
+      </div>
+      <!-- Execution -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-emerald-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[10px]">⚡</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 mb-0.5">Execution</div>
+          <p class="text-xs text-slate-600 leading-relaxed">The agent calls <code>GetStockPrice(ticker: "AAPL")</code>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ── Step 6: Fifth Query (Currency Conversion) ── -->
+<div class="relative pl-8 pb-2 ml-4 animate-fade-in animate-delay-4">
+  <div class="absolute -left-[13px] top-0 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center shadow-md shadow-indigo-200">
+    <span class="text-[10px] font-black text-white">6</span>
+  </div>
+  <div class="rounded-2xl border-2 border-indigo-200 bg-white shadow-lg shadow-indigo-500/5 overflow-hidden">
+    <div class="px-5 py-3 bg-gradient-to-r from-indigo-50 to-white border-b border-indigo-100 flex items-center gap-3">
+      <span class="text-lg">💱</span>
+      <span class="font-extrabold text-indigo-950 text-sm tracking-tight">Fifth Query — Currency Conversion</span>
+    </div>
+    <div class="divide-y divide-slate-100">
+      <!-- User Input -->
+      <div class="px-5 py-3 flex items-start gap-3">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-[10px]">💬</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-blue-500 mb-0.5">User Input</div>
+          <p class="text-sm text-slate-800 italic font-medium">"Convert 500 USD to EUR."</p>
+        </div>
+      </div>
+      <!-- Semantic Search -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-violet-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-violet-50 border border-violet-200 flex items-center justify-center text-[10px]">🔍</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-violet-600 mb-0.5">Semantic Search</div>
+          <p class="text-xs text-slate-600 leading-relaxed mb-2">It calls <code>SearchTools(query: "convert currency USD to EUR current exchange rate", topK: 3)</code>.</p>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-100 border border-violet-200">
+              <span class="text-[10px] font-extrabold text-violet-700">ConvertCurrency</span>
+              <span class="text-[10px] font-mono font-bold text-violet-500">0.541</span>
+            </div>
+            <span class="text-[9px] text-slate-400">Lower score, but still the top match — passes relative threshold</span>
+          </div>
+        </div>
+      </div>
+      <!-- Execution -->
+      <div class="px-5 py-3 flex items-start gap-3 bg-emerald-50/30">
+        <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[10px]">⚡</span>
+        <div>
+          <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 mb-0.5">Execution</div>
+          <p class="text-xs text-slate-600 leading-relaxed">The tool is loaded, and the agent calls <code>ConvertCurrency(amount: 500, from: "USD", to: "EUR")</code> to output the final conversion.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<h2 id="summary">Summary</h2>
+<p>By decoupling tool discovery from execution, you’ve unlocked a pattern that scales to thousands of tools without bloating prompt context or leaking unnecessary details.</p>
+<p><strong>Key lessons from this tutorial:</strong></p>
+<ul>
+<li>How to configure synchronous <code>BertTokenizer</code> with explicit cased/uncased options.</li>
+<li>How to utilize <code>OrtValue</code> in ONNX Runtime for safe, leak-free local model execution.</li>
+<li>How to implement an L1/L2 cache and snapshot system using <strong>FusionCache</strong>.</li>
+<li>How to construct rich embeddings matching tool schemas and apply relative scoring thresholds.</li>
+</ul>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/agent-capabilities/">#agent-capabilities</a><a href="/tags/embeddings/">#embeddings</a><a href="/tags/onnx-runtime/">#onnx-runtime</a><a href="/tags/semantic-search/">#semantic-search</a><a href="/tags/rag-for-tools/">#rag-for-tools</a><a href="/tags/hybrid-query-expansion/">#hybrid-query-expansion</a><a href="/tags/high-performance-caching/">#high-performance-caching</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-capabilities%2Fsemantic-tool-search%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Scale%20to%20Thousands%20of%20Tools%20with%20Semantic%20Search&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-capabilities%2Fsemantic-tool-search%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-capabilities%2Fsemantic-tool-search%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/agent-capabilities/semantic-tool-search/";
+const title = "Scale to Thousands of Tools with Semantic Search";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/agent-capabilities/semantic-tool-search/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Beyond Agents: Compound AI Systems | Ankit Sarkar</title><meta name="description" content="Learn why professional AI engineering is shifting from monolithic agents to structured, multi-component systems."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/beyond-agents/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Beyond Agents: Compound AI Systems | Ankit Sarkar"><meta property="og:description" content="Learn why professional AI engineering is shifting from monolithic agents to structured, multi-component systems."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/beyond-agents/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Beyond Agents: Compound AI Systems | Ankit Sarkar"><meta name="twitter:description" content="Learn why professional AI engineering is shifting from monolithic agents to structured, multi-component systems."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Beyond Agents: Compound AI Systems</h1> <p>Learn why professional AI engineering is shifting from monolithic agents to structured, multi-component systems.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/advanced-orchestration/">Advanced Orchestration</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#system-anatomy">System Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#the-shift-from-models-to-systems">The Shift: From Models to Systems</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#the-safe-shell-pattern">The “Safe Shell” Pattern</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#building-the-compound-system">Building the Compound System</a> <div class="toc-sublinks"> <a href="#core-concepts">Core Concepts</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#multi-agent-patterns">Multi-Agent Patterns</a> <div class="toc-sublinks"> <a href="#1-sequential-the-assembly-line">1. Sequential (The Assembly Line)</a><a href="#2-concurrent-the-panel-of-experts">2. Concurrent (The Panel of Experts)</a><a href="#3-handoffs-the-support-desk">3. Handoffs (The Support Desk)</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary--next-steps">Summary &amp; Next Steps</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Advanced Orchestration series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Advanced Orchestration</h2> <p>Build compound AI systems with workflows, state, checkpoints, and hosting.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">01</span> <span class="series-nav-current"> <span>Beyond Agents: Compound AI Systems</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/agent-framework/academy/advanced-orchestration/orchestrate-workflows/">Orchestrate Multi-Step Workflows</a> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/agent-framework/academy/advanced-orchestration/state-and-checkpoints/">State &amp; Checkpoints</a> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/agent-framework/academy/advanced-orchestration/host-your-workflow/">Expose Your Workflow via API</a> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/beyond-agents/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>In the previous journey, you helped <strong>Jordan Miller</strong> build a powerful, stateful AI agent. It can reason, use tools, and remember conversations. However, as Jordan began deploying this assistant to handle critical production incidents, they noticed a challenge: <strong>Reliability at Scale</strong>.</p>
+<p>When an agent has complete autonomy, its path is “probabilistic.” It might choose to call a tool, or it might just explain why it thinks it doesn’t need to. In high-stakes environments, you often need <strong>Determinism</strong>—guaranteed steps that happen every time, wrapped around the AI’s “Smart Brain.”</p>
+<p>In this module, we transition from building <strong>Agents</strong> to building <strong>Compound AI Systems</strong>.</p>
+<h2 id="system-anatomy">System Anatomy</h2>
+<p>We are shifting from single-agent patterns to <strong>Compound AI Systems</strong>. In this path, we will build out the core concepts of the Agent Framework Workflows.</p>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 my-10">
+  <!-- Workflows (Active) -->
+  <div class="p-4 rounded-xl bg-white border-2 border-indigo-500 shadow-md relative overflow-hidden transition-all hover:-translate-y-1">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-indigo-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-lg mb-3 border border-indigo-100">🔄</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Workflows</div>
+    <p class="text-[10px] leading-relaxed text-slate-600 font-medium">Graph execution.</p>
+  </div>
+  <!-- Executors (Upcoming) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all relative overflow-hidden hover:grayscale-0 hover:opacity-100">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-amber-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">⚙️</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Executors</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Processing units.</p>
+  </div>
+  <!-- Edges (Upcoming) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all relative overflow-hidden hover:grayscale-0 hover:opacity-100">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-amber-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">🔀</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Edges</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Message routing.</p>
+  </div>
+  <!-- Events (Upcoming) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all relative overflow-hidden hover:grayscale-0 hover:opacity-100">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-amber-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">📊</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Events</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Observability.</p>
+  </div>
+  <!-- State (Upcoming) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all relative overflow-hidden hover:grayscale-0 hover:opacity-100">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-amber-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">💾</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">State</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Resiliency.</p>
+  </div>
+  <!-- Hosting (Upcoming) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all relative overflow-hidden hover:grayscale-0 hover:opacity-100">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-amber-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">☁️</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Hosting</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Service boundary.</p>
+  </div>
+</div>
+<h2 id="the-shift-from-models-to-systems">The Shift: From Models to Systems</h2>
+<p>Recent research (notably from <strong>Berkeley BAIR</strong>) highlights a critical shift in the industry: state-of-the-art results for complex tasks are no longer achieved by just “better models,” but by <strong>better architectures</strong>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Feature</th><th align="left">Single Agent (Probabilistic)</th><th align="left">Compound System (Deterministic)</th></tr></thead><tbody><tr><td align="left"><strong>Logic</strong></td><td align="left">Emergent / Flexible</td><td align="left">Defined / Programmatic</td></tr><tr><td align="left"><strong>Observability</strong></td><td align="left">Opaque “Thinking”</td><td align="left">Explicit “Steps”</td></tr><tr><td align="left"><strong>Reliability</strong></td><td align="left">Variable (Drift)</td><td align="left">Consistent (Guaranteed)</td></tr><tr><td align="left"><strong>Pattern</strong></td><td align="left">Single-Turn Reasoning</td><td align="left">Multi-Step Orchestration</td></tr></tbody></table>
+<h2 id="the-safe-shell-pattern">The “Safe Shell” Pattern</h2>
+<p>Jordan’s new strategy is the <strong>Hybrid AI Pattern</strong>:</p>
+<ol>
+<li><strong>The Shell (C#)</strong>: Deterministic code that handles high-stakes data fetching, security checks, and final routing.</li>
+<li><strong>The Brain (AI)</strong>: Probabilistic reasoning used only for the parts of the task that are too complex for hard-coded rules.</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">graph TD</span></span>
+<span class="line"><span style="color:#E1E4E8">          subgraph System [The Compound System]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step1[Fetch Telemetry - C#]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step2[Analyze - AI Agent]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step3[Escalate - C#]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">              Step1 --> Step2</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step2 --> Step3</span></span>
+<span class="line"><span style="color:#E1E4E8">          end</span></span>
+<span class="line"><span style="color:#E1E4E8">          style System fill:#fff,stroke:#6366f1,stroke-width:2px,stroke-dasharray: 5 5</span></span></code></pre>
+<div class="premium-gradient agent-mermaid-note">
+<h4 class="text-indigo-950 font-black text-lg mb-2">Why this matters?</h4>
+      <p class="text-sm text-indigo-900/70">
+        By wrapping the Agent in a "Safe Shell," Jordan ensures that telemetry is <strong>always</strong> fetched before the AI starts, and an alert is <strong>always</strong> logged correctly, regardless of how "creative" the AI's response might be.
+      </p>
+</div>
+<h2 id="building-the-compound-system">Building the Compound System</h2>
+<p>Jordan knew that while a single AI agent is powerful, it isn’t enough to handle a chaotic production incident alone. When Jordan proposed wrapping the agent in deterministic code to Taylor Vance, Taylor asked the critical question: <em>“If the agent isn’t controlling the flow anymore, what is? How do we orchestrate these steps without writing a massive, fragile state machine?”</em></p>
+<p>The answer is <strong>Microsoft Agent Framework Workflows</strong>. This orchestration layer allows Jordan to build an intelligent, multi-step assembly line that perfectly balances the rigid rules of incident management with the flexible reasoning of an LLM.</p>
+<p>Taylor and Jordan realized a fundamental distinction:</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+  <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm relative overflow-hidden group hover:border-indigo-300 transition-all">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+    <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-2xl mb-4 border border-slate-100">🧠</div>
+    <h4 class="text-slate-900 font-black text-lg mb-2">The Agent</h4>
+    <p class="text-sm text-slate-600 leading-relaxed">
+      Typically driven by an LLM. The steps it takes are <strong>dynamic</strong> and determined by the model based on the context and available tools.
+    </p>
+  </div>
+  <div class="p-6 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 relative overflow-hidden group hover:-translate-y-1 transition-all">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+    <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl mb-4 border border-indigo-100">🔄</div>
+    <h4 class="text-indigo-950 font-black text-lg mb-2">The Workflow</h4>
+    <p class="text-sm text-indigo-900/80 leading-relaxed">
+      A <strong>predefined sequence</strong> of operations. The explicitly defined flow grants Taylor total control over the execution path, external APIs, and human interactions.
+    </p>
+  </div>
+</div>
+<p>By leveraging the framework, Jordan can take advantage of several enterprise-grade features:</p>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-8">
+  <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group">
+    <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-xl mb-3 border border-emerald-100 group-hover:scale-110 transition-transform">🛡️</div>
+    <h4 class="text-slate-900 font-bold text-sm mb-1.5">Type Safety</h4>
+    <p class="text-xs text-slate-500 leading-relaxed">
+      Strong typing ensures messages flow correctly, providing validation that prevents runtime errors during critical incidents.
+    </p>
+  </div>
+  <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group">
+    <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-xl mb-3 border border-blue-100 group-hover:scale-110 transition-transform">🔀</div>
+    <h4 class="text-slate-900 font-bold text-sm mb-1.5">Flexible Control Flow</h4>
+    <p class="text-xs text-slate-500 leading-relaxed">
+      The graph-based architecture intuitively models complex workflows using <strong>executors</strong> and <strong>edges</strong>.
+    </p>
+  </div>
+  <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group">
+    <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-xl mb-3 border border-amber-100 group-hover:scale-110 transition-transform">🔌</div>
+    <h4 class="text-slate-900 font-bold text-sm mb-1.5">External Integration</h4>
+    <p class="text-xs text-slate-500 leading-relaxed">
+      Built-in request/response patterns enable seamless integration with Taylor's APIs and support "Human-in-the-Loop" scenarios.
+    </p>
+  </div>
+  <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group">
+    <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-xl mb-3 border border-purple-100 group-hover:scale-110 transition-transform">💾</div>
+    <h4 class="text-slate-900 font-bold text-sm mb-1.5">Checkpointing</h4>
+    <p class="text-xs text-slate-500 leading-relaxed">
+      By saving workflow states via checkpoints, long-running processes can recover and resume on the server side if interrupted.
+    </p>
+  </div>
+  <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group">
+    <div class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center text-xl mb-3 border border-rose-100 group-hover:scale-110 transition-transform">🤖</div>
+    <h4 class="text-slate-900 font-bold text-sm mb-1.5">Multi-Agent Orchestration</h4>
+    <p class="text-xs text-slate-500 leading-relaxed">
+      The framework natively supports coordinating multiple AI agents using sequential, concurrent, and hand-off patterns.
+    </p>
+  </div>
+</div>
+<h3 id="core-concepts">Core Concepts</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+  <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-transform">
+    <div class="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl border border-indigo-100">⚙️</div>
+      <h4 class="text-slate-900 font-black text-lg m-0">Executors</h4>
+    </div>
+    <p class="text-sm text-slate-600 leading-relaxed">
+      Individual processing units within a workflow. They can be AI agents or custom logic components. They receive input messages, perform specific tasks, and produce output messages.
+    </p>
+  </div>
+  <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-transform">
+    <div class="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center text-2xl border border-teal-100">🔀</div>
+      <h4 class="text-slate-900 font-black text-lg m-0">Edges</h4>
+    </div>
+    <p class="text-sm text-slate-600 leading-relaxed">
+      Define the connections between executors, determining the flow of messages. They can include conditions to control routing based on message contents.
+    </p>
+  </div>
+  <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-transform">
+    <div class="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-2xl border border-amber-100">📊</div>
+      <h4 class="text-slate-900 font-black text-lg m-0">Events</h4>
+    </div>
+    <p class="text-sm text-slate-600 leading-relaxed">
+      Provide observability into workflow execution, including lifecycle events, executor events, and custom events.
+    </p>
+  </div>
+  <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm relative overflow-hidden group hover:-translate-y-1 transition-transform">
+    <div class="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-2xl border border-rose-100">🏗️</div>
+      <div class="flex flex-col">
+        <h4 class="text-slate-900 font-black text-lg m-0 leading-tight">Builder API</h4>
+        <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">And Execution</span>
+      </div>
+    </div>
+    <p class="text-sm text-slate-600 leading-relaxed">
+      Ties executors and edges together into a directed graph, manages execution via supersteps, and supports streaming and non-streaming modes.
+    </p>
+  </div>
+</div>
+<p>Here is how Jordan translates these concepts into grounded code to build a reliable incident triage pipeline:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#6A737D">// 1. Define specialized executors (custom C# logic and AI Agents)</span></span>
+<span class="line"><span style="color:#B392F0">Executor</span><span style="color:#B392F0"> fetchTelemetry</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> triageAgent</span><span style="color:#F97583"> =</span><span style="color:#F97583"> ..</span><span style="color:#E1E4E8">.; </span><span style="color:#6A737D">// The "Smart Brain"</span></span>
+<span class="line"><span style="color:#B392F0">Executor</span><span style="color:#B392F0"> escalationEngine</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> EscalationEngineExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Tie executors and edges together into a directed graph</span></span>
+<span class="line"><span style="color:#B392F0">WorkflowBuilder</span><span style="color:#B392F0"> builder</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(fetchTelemetry);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(fetchTelemetry, triageAgent);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAgent, escalationEngine);</span></span>
+<span class="line"><span style="color:#B392F0">Workflow</span><span style="color:#B392F0"> workflow</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> builder.</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Execute the workflow with streaming observability</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> using</span><span style="color:#B392F0"> StreamingRun</span><span style="color:#B392F0"> run</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> InProcessExecution.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(workflow, </span><span style="color:#9ECBFF">"checkout failures"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">WorkflowEvent</span><span style="color:#B392F0"> evt</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> run.</span><span style="color:#B392F0">WatchStreamAsync</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#B392F0">    if</span><span style="color:#E1E4E8"> (evt </span><span style="color:#F97583">is</span><span style="color:#B392F0"> AgentResponseUpdateEvent</span><span style="color:#B392F0"> update</span><span style="color:#E1E4E8">) Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(update.Update.Text);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="multi-agent-patterns">Multi-Agent Patterns</h2>
+<p>With the <code>WorkflowBuilder</code>, you can easily codify common patterns for coordinating multiple components. Instead of one agent doing everything, you can orchestrate specialized units:</p>
+<h3 id="1-sequential-the-assembly-line">1. Sequential (The Assembly Line)</h3>
+<p>Agents or code executors pass data linearly. Good for rigid processes like “Translate → Summarize → Email.”</p>
+<h3 id="2-concurrent-the-panel-of-experts">2. Concurrent (The Panel of Experts)</h3>
+<p>Run multiple agents at once to get diverse perspectives or process data faster.</p>
+<h3 id="3-handoffs-the-support-desk">3. Handoffs (The Support Desk)</h3>
+<p>A “Router” agent determines which specialized agent is best suited for the current task.</p>
+<h2 id="summary--next-steps">Summary &#x26; Next Steps</h2>
+<p>You’ve moved from thinking about <strong>who</strong> the agent is to <strong>how</strong> the system flows. By adopting the <strong>Compound AI</strong> mindset, you’ve given Jordan the tools to build systems that are as reliable as they are intelligent.</p>
+<p>In the <strong><a href="/post/agent-framework/academy/advanced-orchestration/orchestrate-workflows/">next tutorial</a></strong>, we will build Jordan’s first professional assembly line: a multi-step <strong>Incident Triage Workflow</strong>.</p>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/advanced-orchestration/">#advanced-orchestration</a><a href="/tags/compound-ai-systems/">#compound-ai-systems</a><a href="/tags/agentic-workflows/">#agentic-workflows</a><a href="/tags/determinism-vs.-probability/">#determinism-vs.-probability</a><a href="/tags/hybrid-ai-pattern/">#hybrid-ai-pattern</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Fbeyond-agents%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Beyond%20Agents%3A%20Compound%20AI%20Systems&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Fbeyond-agents%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Fbeyond-agents%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/advanced-orchestration/beyond-agents/";
+const title = "Beyond Agents: Compound AI Systems";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/advanced-orchestration/beyond-agents/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

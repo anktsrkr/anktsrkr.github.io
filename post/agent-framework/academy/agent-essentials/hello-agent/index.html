@@ -1,0 +1,388 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Build Your First AI Agent | Ankit Sarkar</title><meta name="description" content="Initialize an incident triage agent and connect it to a large language model provider."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/agent-essentials/hello-agent/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Build Your First AI Agent | Ankit Sarkar"><meta property="og:description" content="Initialize an incident triage agent and connect it to a large language model provider."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/agent-essentials/hello-agent/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Build Your First AI Agent | Ankit Sarkar"><meta name="twitter:description" content="Initialize an incident triage agent and connect it to a large language model provider."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Build Your First AI Agent</h1> <p>Initialize an incident triage agent and connect it to a large language model provider.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/agent-essentials/">Agent Essentials</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#what-is-an-ai-agent">What is an AI Agent?</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-environment">Setup your environment</a> <div class="toc-sublinks"> <a href="#1-create-the-project">1 Create the project</a><a href="#2-install-the-agent-framework">2 Install the Agent Framework</a><a href="#3-configure-your-provider">3 Configure your provider</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#build-the-agent">Build the agent</a> <div class="toc-sublinks"> <a href="#1-initialize-the-provider-and-persona--persona--brain">1 Initialize the Provider and Persona 🎭 Persona 🧠 Brain</a><a href="#2-define-the-task">2 Define the Task</a><a href="#3-run-and-stream-the-response">3 Run and Stream the Response</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it">Try it</a> <div class="toc-sublinks"> <a href="#refine-the-format">Refine the Format</a><a href="#test-new-data">Test New Data</a><a href="#shift-the-tone">Shift the Tone</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary-and-next-steps">Summary and Next Steps</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Agent Essentials series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Agent Essentials</h2> <p>Follow the Microsoft Agent Framework essentials tutorials in order.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">01</span> <span class="series-nav-current"> <span>Build Your First AI Agent</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/agent-framework/academy/agent-essentials/add-tools/">Connect Your Agent to External Tools</a> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/agent-framework/academy/agent-essentials/multi-turn/">Maintain Context with Multi-Turn Conversations</a> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/agent-framework/academy/agent-essentials/memory/">Persist Conversations and Smart Memory</a> </li><li class="series-nav-item"> <span class="series-nav-index">05</span> <a href="/post/agent-framework/academy/agent-essentials/host-your-agent/">Expose Your Agent via API</a> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/agent-essentials/hello-agent/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>Imagine you’re <strong>Jordan Miller</strong>, a senior on-call engineer, and a flood of alerts just hit your inbox. You need an <strong>agent</strong> that can instantly summarize the chaos and suggest a severity level. This guide walks you through building that agent. Using the <strong>Microsoft Agent Framework</strong>, you’ll create a triage assistant that connects to your infrastructure alerts and provides immediate, streamed analysis to help you respond faster.</p>
+<h2 id="what-is-an-ai-agent">What is an AI Agent?</h2>
+<p>An AI Agent is more than just a chatbot. While a chatbot responds to messages, an <strong>Agent</strong> is a goal-oriented entity that uses reasoning to decide which actions to take to accomplish a task.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 my-10">
+  <!-- Persona (Active) -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-xl mb-4 border border-indigo-100">🎭</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Persona</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium">Jordan's on-call identity.</p>
+  </div>
+  <!-- Brain (Active) -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in animate-delay-1">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-xl mb-4 border border-indigo-100">🧠</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Brain</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium">Reasoning about alerts.</p>
+  </div>
+  <!-- Tools (Upcoming) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-2">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-amber-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🛠️</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Tools</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">External capabilities.</p>
+  </div>
+  <!-- Memory (Upcoming) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-3">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-slate-400 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">💾</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Memory</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">State and history.</p>
+  </div>
+  <!-- Hosting (Upcoming) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-4">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-slate-400 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">☁️</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Hosting</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Exposing as a service.</p>
+  </div>
+</div>
+<div class="premium-gradient border border-indigo-100 rounded-3xl p-8 my-12 shadow-sm relative overflow-hidden animate-fade-in animate-delay-4">
+  <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl"></div>
+  <div class="flex gap-5 relative z-10">
+    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+    </div>
+    <div>
+      <h4 class="text-indigo-950 font-black text-lg tracking-tight mb-2">The Power of Streaming</h4>
+      <p class="text-sm leading-relaxed text-indigo-900/70 max-w-2xl">
+        In a critical incident, every second counts. Traditional AI interactions wait for the entire response to be generated before showing it to you. By using <strong>Streaming</strong>, Jordan's assistant provides immediate feedback, allowing you to begin reading the analysis while the model is still "thinking" about the next steps.
+      </p>
+    </div>
+  </div>
+</div>
+<h2 id="setup-your-environment">Setup your environment</h2>
+<p>Before we write any code, let’s make sure your environment is ready.</p>
+<div class="solid-callout solid-callout-info mb-8">
+  <p class="font-bold text-indigo-900 mb-3 text-base">📋 Pre-flight Checklist</p>
+  <ul class="space-y-2.5 m-0 p-0 list-none text-sm text-indigo-900/80">
+    <li class="flex items-center gap-2">🛠️ <strong>.NET 10.0 SDK</strong> (or later) installed.</li>
+    <li class="flex items-center gap-2">🤖 <strong>AI Provider</strong>: Access to Azure OpenAI or a locally hosted OpenAI-compatible service (like Ollama/LM Studio).</li>
+    <li class="flex items-center gap-2">🔑 <strong>Authentication</strong>: An active Azure session (<code>az login</code>) or required API keys.</li>
+  </ul>
+</div>
+<h3 id="1-create-the-project"><span class="step-pill">1</span> Create the project</h3>
+<p>Open your terminal and create a new console application:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> new</span><span style="color:#9ECBFF"> console</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> IncidentTriage.HelloAgent</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> net10.0</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> IncidentTriage.HelloAgent</span></span></code></pre>
+<h3 id="2-install-the-agent-framework"><span class="step-pill">2</span> Install the Agent Framework</h3>
+<p>Next, install the core framework and the provider SDK for your chosen model.</p>
+<h4 id="openai-compatible-lm-studio">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xl">🔌</span>
+        <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">The core bridge that connects the Agent Framework to OpenAI-compatible models.</p>
+    </div>
+    <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xl">🤖</span>
+        <code class="text-xs font-bold text-indigo-600">OpenAI</code>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">The official SDK for standard OpenAI REST API interactions and streaming.</p>
+    </div>
+  </div>
+<h4 id="azure-openai">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.Identity</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xl">🔌</span>
+        <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">The core bridge that connects the Agent Framework to OpenAI-compatible models.</p>
+    </div>
+    <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xl">☁️</span>
+        <code class="text-xs font-bold text-indigo-600">Azure.AI.OpenAI</code>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">The official SDK for accessing GPT-4o and text embeddings within Azure.</p>
+    </div>
+    <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xl">🔐</span>
+        <code class="text-xs font-bold text-indigo-600">Azure.Identity</code>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">Enables secure, passwordless authentication using Azure CLI or Managed Identity.</p>
+    </div>
+  </div>
+<h3 id="3-configure-your-provider"><span class="step-pill">3</span> Configure your provider</h3>
+<p>Finally, set the environment variables for your chosen provider. In your terminal, use <code>export</code> (Bash/macOS) or <code>$env:VAR="value"</code> (PowerShell/Windows).</p>
+<h4 id="openai-compatible-lm-studio-1">OpenAI Compatible (LM Studio)</h4>
+<p><strong>Required Variables:</strong></p>
+<ul>
+<li><code>OPENAI_ENDPOINT="http://localhost:1234/v1"</code></li>
+<li><code>OPENAI_MODEL_NAME="<your-model-name>"</your-model-name></code></li>
+</ul>
+<div class="solid-callout solid-callout-info my-6">
+  <p class="font-bold text-indigo-900 mb-2 text-sm">🖥️ LM Studio Quick Start</p>
+  <ol class="space-y-1.5 m-0 p-0 list-decimal list-inside text-xs text-indigo-900/80">
+    <li>Download and open <strong>LM Studio</strong>.</li>
+    <li>Search for and download a model (e.g., <code>google/gemma-4-e4b</code>).</li>
+    <li>Go to the <strong>Local Server</strong> tab and click <strong>Start Server</strong>.</li>
+    <li>Ensure the endpoint matches: <code>http://localhost:1234/v1</code>.</li>
+  </ol>
+</div>
+<blockquote>
+<p><strong>Using Ollama?</strong> Use <code><a href="http://localhost:11434/v1">http://localhost:11434/v1</a></code> as your endpoint and ensure you have run <code>ollama pull <model></model></code> first.</p>
+</blockquote>
+<h4 id="azure-openai-1">Azure OpenAI</h4>
+<p><strong>Required Variables:</strong></p>
+<ul>
+<li><code>AZURE_OPENAI_ENDPOINT=“https://<your-resource>.openai.azure.com/”</your-resource></code></li>
+<li><code>AZURE_OPENAI_DEPLOYMENT_NAME="<your-deployment>"</your-deployment></code></li>
+</ul>
+<blockquote>
+<p><strong>Troubleshooting:</strong></p>
+<ul>
+<li>If authentication fails, ensure you are signed in (<code>az login</code>) with the correct tenant.</li>
+<li>If you receive a model not found error, confirm your deployment name is correct.</li>
+</ul>
+</blockquote>
+<h2 id="build-the-agent">Build the agent</h2>
+<p>Building an agent involves three main parts: identifying the model provider, defining the agent’s persona, and executing the task.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">sequenceDiagram</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant App as Console App</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Agent as 🎭 Persona</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Brain as 🧠 Brain</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    App->>Agent: RunAsync(incident)</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Brain: Persona + User Input</span></span>
+<span class="line"><span style="color:#E1E4E8">    Brain-->>Agent: AI Response</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent-->>App: Triage Result</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    Note over App,Brain: Streaming Flow</span></span>
+<span class="line"><span style="color:#E1E4E8">    App->>Agent: RunStreamingAsync(incident)</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Brain: Stream Request</span></span>
+<span class="line"><span style="color:#E1E4E8">    Brain-->>App: (Token-by-Token Updates)</span></span></code></pre>
+<p>This diagram illustrates the <strong>interaction flow</strong> we are about to implement. We will follow this pattern in three clear steps: configuring the agent’s persona, providing the incident data, and finally, executing the triage.</p>
+<p>Open <code>Program.cs</code> in your editor and let’s build it piece by piece.</p>
+<h3 id="1-initialize-the-provider-and-persona--persona--brain"><span class="step-pill">1</span> Initialize the Provider and Persona <span class="agent-heading-chip">🎭 Persona</span> <span class="agent-heading-chip">🧠 Brain</span></h3>
+<p>First, we set up the connection to the AI model.</p>
+<ul>
+<li><strong>The Provider:</strong> We pull endpoints and model names from environment variables to keep infrastructure details out of our source code.</li>
+<li><strong>The Persona:</strong> We use <code>instructions</code> to define the agent’s <strong>Persona</strong>. This is known as the <strong>System Prompt</strong>, and it defines how the agent should behave globally.</li>
+</ul>
+<p>Paste the initialization code for your chosen provider into <code>Program.cs</code>:</p>
+<h4 id="openai-compatible-lm-studio-2">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">  using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // 1. Pull configuration from environment (or use local defaults)</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">) </span></span>
+<span class="line"><span style="color:#F97583">      ??</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> modelName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL_NAME"</span><span style="color:#E1E4E8">) </span></span>
+<span class="line"><span style="color:#F97583">      ??</span><span style="color:#9ECBFF"> "google/gemma-4-e4b"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> apiKey</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_API_KEY"</span><span style="color:#E1E4E8">) </span></span>
+<span class="line"><span style="color:#F97583">      ??</span><span style="color:#9ECBFF"> "dummy-key"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // 2. Build the client and "imbue" the agent with a persona</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(apiKey), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> OpenAIClientOptions</span><span style="color:#E1E4E8"> { Endpoint </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint) })</span></span>
+<span class="line"><span style="color:#E1E4E8">      .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(modelName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  AIAgent</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">  {</span></span>
+<span class="line"><span style="color:#E1E4E8">      Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">      ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">      {</span></span>
+<span class="line"><span style="color:#E1E4E8">          Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">          You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">          Summarize the incident, identify likely severity, </span></span>
+<span class="line"><span style="color:#9ECBFF">          and suggest the next investigation step.</span></span>
+<span class="line"><span style="color:#9ECBFF">          Keep answers concise and operational.</span></span>
+<span class="line"><span style="color:#9ECBFF">          """</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span></code></pre>
+<h4 id="azure-openai-2">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">  using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Identity</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">  using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // 1. Pull configuration from environment</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">      ??</span><span style="color:#F97583"> throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> InvalidOperationException</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#9ECBFF">          "AZURE_OPENAI_ENDPOINT is not set."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> deploymentName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_DEPLOYMENT_NAME"</span><span style="color:#E1E4E8">) </span></span>
+<span class="line"><span style="color:#F97583">      ??</span><span style="color:#F97583"> throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> InvalidOperationException</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#9ECBFF">          "AZURE_OPENAI_DEPLOYMENT_NAME is not set."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // 2. Build the client and "imbue" the agent with a persona</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> AzureOpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> DefaultAzureCredential</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">      .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(deploymentName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">  AIAgent</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">  {</span></span>
+<span class="line"><span style="color:#E1E4E8">      Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">      ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">      {</span></span>
+<span class="line"><span style="color:#E1E4E8">          Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">          You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">          Summarize the incident, identify likely severity, </span></span>
+<span class="line"><span style="color:#9ECBFF">          and suggest the next investigation step.</span></span>
+<span class="line"><span style="color:#9ECBFF">          Keep answers concise and operational.</span></span>
+<span class="line"><span style="color:#9ECBFF">          """</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span></code></pre>
+<h3 id="2-define-the-task"><span class="step-pill">2</span> Define the Task</h3>
+<p>Next, we define the <strong>User Input</strong>. This is the specific data or query you want the agent to process—in this case, an active incident alert.</p>
+<p>Append the incident data to <code>Program.cs</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> incident</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">Checkout latency is above threshold in West Europe.</span></span>
+<span class="line"><span style="color:#9ECBFF">The alert started 12 minutes ago and customer support is reporting failed payment attempts.</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<h3 id="3-run-and-stream-the-response"><span class="step-pill">3</span> Run and Stream the Response</h3>
+<p>Finally, we engage the <strong>Brain</strong> by invoking the agent. We will run it twice: first to receive a complete response, and then again using <strong>Streaming</strong>. Streaming prints characters as they are generated by the model, providing a much more responsive experience for the user.</p>
+<p>Append the execution logic to the bottom of <code>Program.cs</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Full response:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(incident));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">Streaming response:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(incident))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(update);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span></code></pre>
+<p>With everything in place, execute the application from your terminal:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span></span></code></pre>
+<p>You will see the full response printed first, followed immediately by a second response that streams character by character as it arrives from the model service.</p>
+<h2 id="try-it">Try it</h2>
+<p>To see how the agent adapts, try modifying the variables in <code>Program.cs</code> and running the app again. Choose an experiment below to see how a small change impacts the agent’s behavior:</p>
+<h4 id="-instructions">🎯 Instructions</h4>
+<h3 id="refine-the-format">Refine the Format</h3>
+<p>Agents are highly sensitive to formatting constraints. Update the <code>instructions</code> parameter in your <code>AsAIAgent</code> builder:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#B392F0">instructions</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"""</span></span>
+<span class="line"><span style="color:#9ECBFF">You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">Summarize the incident and identify likely severity.</span></span>
+<span class="line"><span style="color:#9ECBFF">Provide your response as a concise, bulleted checklist for an on-call engineer.</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span><span style="color:#E1E4E8">,</span></span></code></pre>
+<p><strong>Result:</strong> The agent will shift from conversational prose to a structured, operational summary.</p>
+<h4 id="-scenario">📟 Scenario</h4>
+<h3 id="test-new-data">Test New Data</h3>
+<p>Verify the agent’s reasoning by swapping the <code>incident</code> string for a different failure:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> incident</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">CRITICAL: Database connection timeout in the East US region. </span></span>
+<span class="line"><span style="color:#9ECBFF">Affecting 15% of login attempts. Latency is spiking.</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<p><strong>Result:</strong> The agent will pivot its severity assessment and suggest database-specific steps like checking connection pools.</p>
+<h4 id="-persona">🎭 Persona</h4>
+<h3 id="shift-the-tone">Shift the Tone</h3>
+<p>An agent’s behavior is dictated by its persona. Change the <code>instructions</code> to a Senior SRE:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#B392F0">instructions</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"""</span></span>
+<span class="line"><span style="color:#9ECBFF">You are a senior Site Reliability Engineer (SRE). </span></span>
+<span class="line"><span style="color:#9ECBFF">Be extremely technical and focus on infrastructure-level root causes.</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span><span style="color:#E1E4E8">,</span></span></code></pre>
+<p><strong>Result:</strong> The tone shifts to “technical expert,” with next steps focusing on load balancers, logs, and system metrics.</p>
+<h2 id="summary-and-next-steps">Summary and Next Steps</h2>
+<p>You learned how to securely configure and connect an Agent Framework agent to an LLM provider, and successfully built a minimal incident triage agent that processes static prompts and streams its responses.</p>
+<p><strong>Right now, our agent is disconnected from reality.</strong> If we ask it about a specific server outage or a database error, it will guess an answer based on its general training data, because it cannot actually <em>see</em> the current status of our enterprise systems. An incident triage agent isn’t very helpful if it cannot look up real incident details.</p>
+<p>In the <strong><a href="/post/agent-framework/academy/agent-essentials/add-tools/">next tutorial</a></strong>, we will solve this by giving our agent <strong>Tools</strong>. We will create a plugin that connects to an external API, allowing our agent to fetch real-time ticket information and provide grounded, accurate triage responses.</p>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/agent-essentials/">#agent-essentials</a><a href="/tags/agents/">#agents</a><a href="/tags/prompting/">#prompting</a><a href="/tags/console-app/">#console-app</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fhello-agent%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Build%20Your%20First%20AI%20Agent&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fhello-agent%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fhello-agent%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/agent-essentials/hello-agent/";
+const title = "Build Your First AI Agent";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/hello-agent/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Orchestrate Multi-Step Workflows | Ankit Sarkar</title><meta name="description" content="Move beyond single-turn reasoning and build deterministic, observable pipelines using Executors and Edges."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/orchestrate-workflows/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Orchestrate Multi-Step Workflows | Ankit Sarkar"><meta property="og:description" content="Move beyond single-turn reasoning and build deterministic, observable pipelines using Executors and Edges."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/orchestrate-workflows/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Orchestrate Multi-Step Workflows | Ankit Sarkar"><meta name="twitter:description" content="Move beyond single-turn reasoning and build deterministic, observable pipelines using Executors and Edges."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Orchestrate Multi-Step Workflows</h1> <p>Move beyond single-turn reasoning and build deterministic, observable pipelines using Executors and Edges.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/advanced-orchestration/">Advanced Orchestration</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#system-anatomy">System Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-environment">Setup your environment</a> <div class="toc-sublinks"> <a href="#1-install-required-packages">1 Install required packages</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#build-the-workflow">Build the Workflow</a> <div class="toc-sublinks"> <a href="#1-implement-the-workflow">1 Implement the Workflow</a><a href="#2-the-chat-protocol-bridge">2 The Chat Protocol Bridge</a><a href="#3-run-and-observe-the-story">3 Run and Observe the Story</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it">Try it</a> <div class="toc-sublinks"> <a href="#modify-business-rules">Modify Business Rules</a><a href="#test-different-scenarios">Test Different Scenarios</a><a href="#change-the-tone">Change the Tone</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary--next-steps">Summary &amp; Next Steps</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Advanced Orchestration series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Advanced Orchestration</h2> <p>Build compound AI systems with workflows, state, checkpoints, and hosting.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/agent-framework/academy/advanced-orchestration/beyond-agents/">Beyond Agents: Compound AI Systems</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">02</span> <span class="series-nav-current"> <span>Orchestrate Multi-Step Workflows</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/agent-framework/academy/advanced-orchestration/state-and-checkpoints/">State &amp; Checkpoints</a> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/agent-framework/academy/advanced-orchestration/host-your-workflow/">Expose Your Workflow via API</a> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/orchestrate-workflows/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>Let’s see how <strong>Jordan Miller</strong>—who we know from the previous journey as a senior on-call engineer—uses <strong>Workflows</strong> to handle a “SEV 1” incident. Jordan knows that the first few minutes of an outage are the most critical. They likely have a mental checklist: <strong>Normalize</strong> the messy logs, <strong>Check</strong> service health, and <strong>Route</strong> the incident to the correct team. When a major outage hits at 3 AM, Jordan doesn’t want to rely on manual memory; they want the triage protocol codified.</p>
+<p>In this module, we will help Jordan take their operational expertise and codify it into a structured, observable pipeline. We will decompose the triage process into discrete units called <strong>Executors</strong> and connect them with <strong>Edges</strong>. This allows Jordan to build a hybrid system where deterministic C# code handles business rules and probabilistic AI agents handle the complex reasoning.</p>
+<h2 id="system-anatomy">System Anatomy</h2>
+<p>We are now moving from the individual “Brain” and “Memory” to the <strong>Orchestration</strong> layer. This is where you define the “Assembly Line” that coordinates how Jordan’s assistant actually works in a production environment.</p>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 my-10">
+  <!-- Workflows (Mastered) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">🔄</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Workflows</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Graph execution.</p>
+  </div>
+  <!-- Executors (Active) -->
+  <div class="p-4 rounded-xl bg-white border-2 border-indigo-500 shadow-md relative overflow-hidden transition-all hover:-translate-y-1">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-indigo-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-lg mb-3 border border-indigo-100">⚙️</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Executors</div>
+    <p class="text-[10px] leading-relaxed text-slate-600 font-medium">Processing units.</p>
+  </div>
+  <!-- Edges (Active) -->
+  <div class="p-4 rounded-xl bg-white border-2 border-indigo-500 shadow-md relative overflow-hidden transition-all hover:-translate-y-1">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-indigo-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-lg mb-3 border border-indigo-100">🔀</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Edges</div>
+    <p class="text-[10px] leading-relaxed text-slate-600 font-medium">Message routing.</p>
+  </div>
+  <!-- Events (Active) -->
+  <div class="p-4 rounded-xl bg-white border-2 border-indigo-500 shadow-md relative overflow-hidden transition-all hover:-translate-y-1">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-indigo-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-lg mb-3 border border-indigo-100">📊</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Events</div>
+    <p class="text-[10px] leading-relaxed text-slate-600 font-medium">Observability.</p>
+  </div>
+  <!-- State (Upcoming) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all relative overflow-hidden hover:grayscale-0 hover:opacity-100">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-amber-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">💾</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">State</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Resiliency.</p>
+  </div>
+  <!-- Hosting (Upcoming) -->
+  <div class="p-4 rounded-xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all relative overflow-hidden hover:grayscale-0 hover:opacity-100">
+    <div class="absolute top-0 right-0 px-1.5 py-0.5 bg-amber-500 text-[8px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mb-3 border border-slate-100">☁️</div>
+    <div class="font-bold text-slate-900 mb-0.5 text-xs">Hosting</div>
+    <p class="text-[10px] leading-relaxed text-slate-500">Service boundary.</p>
+  </div>
+</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">graph TD</span></span>
+<span class="line"><span style="color:#E1E4E8">          subgraph Shell [The Safe Shell: C# Workflow]</span></span>
+<span class="line"><span style="color:#E1E4E8">              direction TB</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step1[Fetch Telemetry]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step2[Adapter: Chat Protocol]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step3[Triage Agent]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step4[Sync: Result Parser]</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step5[Escalation Engine]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">              Step1 --> Step2</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step2 --> Step3</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step3 --> Step4</span></span>
+<span class="line"><span style="color:#E1E4E8">              Step4 --> Step5</span></span>
+<span class="line"><span style="color:#E1E4E8">          end</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">          style Shell fill:#fff,stroke:#6366f1,stroke-width:2px,stroke-dasharray: 5 5</span></span>
+<span class="line"><span style="color:#E1E4E8">          style Step3 fill:#eef2ff,stroke:#4f46e5,stroke-width:2px</span></span></code></pre>
+<div class="premium-gradient agent-mermaid-note">
+<h4 class="text-indigo-950 font-black text-lg tracking-tight mb-2">The "Hybrid AI" Pattern</h4>
+      <p class="text-sm leading-relaxed text-indigo-900/70">
+        In Jordan's world, reliability is non-negotiable. This workflow implements the <strong>Hybrid AI Pattern</strong>: a "Smart Brain" wrapped in a "Safe Shell." 
+      </p>
+      <ul class="mt-4 space-y-2 text-xs text-indigo-900/60 list-none p-0">
+        <li class="flex items-center gap-2">✅ <strong>Safety</strong>: C# handles high-stakes data fetching and final routing logic.</li>
+        <li class="flex items-center gap-2">✅ <strong>Intelligence</strong>: The AI handles the "messy" interpretation of telemetry data.</li>
+        <li class="flex items-center gap-2">✅ <strong>Protocol</strong>: We use specialized "bridge" executors to translate between deterministic types and Agentic Chat Protocol.</li>
+      </ul>
+</div>
+<h2 id="setup-your-environment">Setup your environment</h2>
+<p>If you are continuing from the previous tutorial, you can use your existing project. Otherwise, follow the steps below to initialize a new one.</p>
+<div class="solid-callout solid-callout-info mb-8">
+  <p class="font-bold text-indigo-900 mb-3 text-base">📋 Pre-flight Checklist</p>
+  <ul class="space-y-2.5 m-0 p-0 list-none text-sm text-indigo-900/80">
+    <li class="flex items-center gap-2">🛠️ <strong>.NET 10.0 SDK</strong> (or later) installed.</li>
+    <li class="flex items-center gap-2">🤖 <strong>AI Provider</strong>: Access to Azure OpenAI or a local service (Ollama/LM Studio).</li>
+    <li class="flex items-center gap-2">🔄 <strong>Workflows</strong>: We will use the <code>Microsoft.Agents.AI.Workflows</code> package for orchestration.</li>
+  </ul>
+</div>
+<h3 id="1-install-required-packages"><span class="step-pill">1</span> Install required packages</h3>
+<p>We focus on the orchestration package needed to build the assembly line.</p>
+<h4 id="openai-compatible-lm-studio">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.Workflows</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔄</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.Workflows</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The orchestration engine of the Agent Framework. It provides the base classes for <code class="text-[10px] bg-slate-100 px-1 rounded">Executor</code>, <code class="text-[10px] bg-slate-100 px-1 rounded">WorkflowBuilder</code>, and the graph-based execution runtime.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔌</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The core Agent Framework package. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">AsAIAgent</code> extension and state management abstractions.</p>
+  </div>
+</div>
+<h4 id="azure-openai">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.Workflows</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔄</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.Workflows</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The orchestration engine of the Agent Framework. It provides the base classes for <code class="text-[10px] bg-slate-100 px-1 rounded">Executor</code>, <code class="text-[10px] bg-slate-100 px-1 rounded">WorkflowBuilder</code>, and the graph-based execution runtime.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔌</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The core Agent Framework package. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">AsAIAgent</code> extension and state management abstractions.</p>
+  </div>
+</div>
+<h2 id="build-the-workflow">Build the Workflow</h2>
+<p>We are building a professional triage assembly line. This workflow doesn’t just pass strings; it <strong>extracts context</strong>, <strong>fetches telemetry</strong>, and uses an <strong>Agent</strong> to analyze the impact before triggering an <strong>escalation engine</strong>.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">graph LR</span></span>
+<span class="line"><span style="color:#E1E4E8">      Input([Raw Alert Text]) --> Fetch[Fetch Telemetry]</span></span>
+<span class="line"><span style="color:#E1E4E8">      Fetch -- "String" --> Adapter[Triage Adapter]</span></span>
+<span class="line"><span style="color:#E1E4E8">      Adapter -- "null" --> Triage[Triage Agent]</span></span>
+<span class="line"><span style="color:#E1E4E8">      Triage -- "List&#x26;lt;ChatMessage&#x26;gt;" --> Sync[Triage Sync]</span></span>
+<span class="line"><span style="color:#E1E4E8">      Sync -- "Report String" --> Escalate[Escalation Engine]</span></span>
+<span class="line"><span style="color:#E1E4E8">      Escalate --> Output([Final Decision])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">      style Fetch fill:#f9f9ff,stroke:#6366f1,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">      style Adapter fill:#fff7ed,stroke:#f97316,stroke-width:2px,stroke-dasharray: 5 5</span></span>
+<span class="line"><span style="color:#E1E4E8">      style Triage fill:#eef2ff,stroke:#4f46e5,stroke-width:3px</span></span>
+<span class="line"><span style="color:#E1E4E8">      style Sync fill:#fff7ed,stroke:#f97316,stroke-width:2px,stroke-dasharray: 5 5</span></span>
+<span class="line"><span style="color:#E1E4E8">      style Escalate fill:#f9f9ff,stroke:#6366f1,stroke-width:2px</span></span></code></pre>
+<div class="agent-diagram-caption">
+<p class="text-xs text-slate-400 mt-6 italic">The Protocol Pattern: Using Edges for structure and Chat Protocol for triggering reasoning.</p>
+</div>
+<h3 id="1-implement-the-workflow"><span class="step-pill">1</span> Implement the Workflow</h3>
+<p>Replace the contents of <code>Program.cs</code> with the code for your provider:</p>
+<h4 id="openai-compatible-lm-studio-1">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Workflows</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ChatMessage</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Setup Jordan's Agent</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> modelName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL_NAME"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "google/gemma-4-e4b"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"dummy"</span><span style="color:#E1E4E8">), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> OpenAIClientOptions</span><span style="color:#E1E4E8"> { Endpoint </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint) })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(modelName);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> triageAgent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">            You are Jordan's on-call assistant. Analyze telemetry and classify incident priority.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">            You MUST call AssessIncidentPriority before making a priority decision.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Output only the tool-supported priority and a short reason:</span></span>
+<span class="line"><span style="color:#9ECBFF">            PRIORITY: P0 or PRIORITY: P1</span></span>
+<span class="line"><span style="color:#9ECBFF">            REASON: &#x3C;one sentence></span></span>
+<span class="line"><span style="color:#9ECBFF">            """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(AssessIncidentPriority, </span><span style="color:#F97583">nameof</span><span style="color:#E1E4E8">(AssessIncidentPriority))]</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Define the Pipeline Steps</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> fetchTelemetry</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageAdapter</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TriageAdapterExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageSync</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TriageSyncExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> escalationEngine</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> EscalationExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageAgentExecutor</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> triageAgent.</span><span style="color:#B392F0">BindAsExecutor</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> AIAgentHostOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    ForwardIncomingMessages </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Build the Assembly Line</span></span>
+<span class="line"><span style="color:#B392F0">WorkflowBuilder</span><span style="color:#B392F0"> builder</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(fetchTelemetry);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(fetchTelemetry, triageAdapter);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAdapter, triageAgentExecutor);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAgentExecutor, triageSync);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageSync, escalationEngine);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> workflow</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> builder.</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 4. Run the Workflow</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> incident</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "checkout failures in production"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">ConsoleTheme.</span><span style="color:#B392F0">Jordan</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"[JORDAN] Starting triage for: '</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">incident</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">'"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> using</span><span style="color:#B392F0"> StreamingRun</span><span style="color:#B392F0"> run</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> InProcessExecution.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(workflow, incident);</span></span>
+<span class="line"><span style="color:#F97583">bool</span><span style="color:#B392F0"> wroteAgentHeader</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">WorkflowEvent</span><span style="color:#B392F0"> evt</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> run.</span><span style="color:#B392F0">WatchStreamAsync</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#B392F0">    if</span><span style="color:#E1E4E8"> (evt </span><span style="color:#F97583">is</span><span style="color:#B392F0"> AgentResponseUpdateEvent</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> &#x26;&#x26;</span><span style="color:#F97583"> !</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrEmpty</span><span style="color:#E1E4E8">(update.Update.Text))</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#B392F0">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">wroteAgentHeader)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            ConsoleTheme.</span><span style="color:#B392F0">AgentHeader</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"[</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">update</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">ExecutorId</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">] Agent response:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">            wroteAgentHeader </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">AgentChunk</span><span style="color:#E1E4E8">(update.Update.Text); </span><span style="color:#6A737D">// Stream the agent's thinking</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">    else </span><span style="color:#B392F0">if</span><span style="color:#E1E4E8"> (evt </span><span style="color:#F97583">is</span><span style="color:#B392F0"> WorkflowErrorEvent</span><span style="color:#B392F0"> error</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">[ERROR] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">error</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Exception</span><span style="color:#F97583">?</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Message</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">ConsoleTheme.</span><span style="color:#B392F0">Muted</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">[Workflow Complete]"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Custom Executors &#x26; Adapters ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Classifies incident priority from service telemetry using Jordan's deterministic triage thresholds."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> AssessIncidentPriority</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service being triaged, such as checkout, payments, or inventory."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The observed error rate percentage for the service."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">double</span><span style="color:#B392F0"> errorRatePercent</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The observed latency in milliseconds for the service."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">double</span><span style="color:#B392F0"> latencyMs</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    bool</span><span style="color:#B392F0"> isCritical</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> errorRatePercent </span><span style="color:#F97583">>=</span><span style="color:#79B8FF"> 10</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> latencyMs </span><span style="color:#F97583">>=</span><span style="color:#79B8FF"> 400</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    string</span><span style="color:#B392F0"> priority</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> isCritical </span><span style="color:#F97583">?</span><span style="color:#9ECBFF"> "P0"</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> "P1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    string</span><span style="color:#B392F0"> reason</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> isCritical</span></span>
+<span class="line"><span style="color:#F97583">        ?</span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> breaches the critical threshold: error rate </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">errorRatePercent</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">% and latency </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">latencyMs</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">ms."</span></span>
+<span class="line"><span style="color:#F97583">        :</span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> is below the critical threshold: error rate </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">errorRatePercent</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">% and latency </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">latencyMs</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">ms."</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#9ECBFF"> $"PRIORITY: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">priority</span><span style="color:#9ECBFF">}</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">REASON: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">reason</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"FetchTelemetry"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> service</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        string</span><span style="color:#B392F0"> result</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> $"[TELEMETRY] Service: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">service</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">, ErrorRate: 15%, Latency: 450ms"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Ok</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#9ECBFF">{</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Id</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: Data fetched."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(result);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">SendsMessage</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">typeof</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">))]</span></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">SendsMessage</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">typeof</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">TurnToken</span><span style="color:#E1E4E8">))]</span></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TriageAdapterExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"TriageAdapter"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Ok</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#9ECBFF">{</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Id</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: Translating to Chat Protocol..."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // 1. Manually send the Chat Protocol messages to the context</span></span>
+<span class="line"><span style="color:#F97583">        await</span><span style="color:#E1E4E8"> context.</span><span style="color:#B392F0">SendMessageAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatMessage</span><span style="color:#E1E4E8">(ChatRole.User, message), ct);</span></span>
+<span class="line"><span style="color:#F97583">        await</span><span style="color:#E1E4E8"> context.</span><span style="color:#B392F0">SendMessageAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> TurnToken</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">emitEvents</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">), ct);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // 2. Return nothing (void). </span></span>
+<span class="line"><span style="color:#6A737D">        // The agent is triggered by the TurnToken, not by a returned value.</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TriageSyncExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">List</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">>, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"TriageSync"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">List</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">messages</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#6A737D">        // Extract only the Assistant's response to keep the report clean</span></span>
+<span class="line"><span style="color:#F97583">        string</span><span style="color:#B392F0"> report</span><span style="color:#F97583"> =</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">, messages</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Where</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Role </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> ChatRole.Assistant)</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Select</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Text </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> ""</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Trim</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Ok</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#9ECBFF">{</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Id</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: Prepared priority report for escalation."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(report);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> EscalationExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"EscalationEngine"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> report</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        string</span><span style="color:#B392F0"> decision</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> report.</span><span style="color:#B392F0">Contains</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"P0"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">?</span><span style="color:#9ECBFF"> "ALARM: Paging SRE Team."</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> "TICKET: Logged for triage."</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Decision</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"[FINAL DECISION] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">decision</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">isAlarm</span><span style="color:#E1E4E8">: decision.</span><span style="color:#B392F0">StartsWith</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ALARM"</span><span style="color:#E1E4E8">, StringComparison.Ordinal));</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(decision);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> static</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> ConsoleTheme</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Jordan</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, ConsoleColor.Cyan);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Ok</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"[OK] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">message</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">, ConsoleColor.Green);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> AgentHeader</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, ConsoleColor.Magenta);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> AgentChunk</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> text</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> Write</span><span style="color:#E1E4E8">(text, ConsoleColor.DarkYellow);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Decision</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">bool</span><span style="color:#B392F0"> isAlarm</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, isAlarm </span><span style="color:#F97583">?</span><span style="color:#E1E4E8"> ConsoleColor.Red </span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> ConsoleColor.Green);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, ConsoleColor.Red);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Muted</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, ConsoleColor.DarkGray);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">ConsoleColor</span><span style="color:#B392F0"> color</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> color;</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(message);</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Write</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">ConsoleColor</span><span style="color:#B392F0"> color</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> color;</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(message);</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h4 id="azure-openai-1">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Workflows</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Identity</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ChatMessage</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Setup Jordan's Agent</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> deploymentName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_DEPLOYMENT_NAME"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> AzureOpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> DefaultAzureCredential</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(deploymentName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> triageAgent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">            You are Jordan's on-call assistant. Analyze telemetry and classify incident priority.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">            You MUST call AssessIncidentPriority before making a priority decision.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Output only the tool-supported priority and a short reason:</span></span>
+<span class="line"><span style="color:#9ECBFF">            PRIORITY: P0 or PRIORITY: P1</span></span>
+<span class="line"><span style="color:#9ECBFF">            REASON: &#x3C;one sentence></span></span>
+<span class="line"><span style="color:#9ECBFF">            """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(AssessIncidentPriority, </span><span style="color:#F97583">nameof</span><span style="color:#E1E4E8">(AssessIncidentPriority))]</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Define the Pipeline Steps</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> fetchTelemetry</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageAdapter</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TriageAdapterExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageSync</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TriageSyncExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> escalationEngine</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> EscalationExecutor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> triageAgentExecutor</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> triageAgent.</span><span style="color:#B392F0">BindAsExecutor</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> AIAgentHostOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    ForwardIncomingMessages </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Build the Assembly Line</span></span>
+<span class="line"><span style="color:#B392F0">WorkflowBuilder</span><span style="color:#B392F0"> builder</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(fetchTelemetry);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(fetchTelemetry, triageAdapter);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAdapter, triageAgentExecutor);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageAgentExecutor, triageSync);</span></span>
+<span class="line"><span style="color:#E1E4E8">builder.</span><span style="color:#B392F0">AddEdge</span><span style="color:#E1E4E8">(triageSync, escalationEngine);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> workflow</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> builder.</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 4. Run the Workflow</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> incident</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "checkout failures in production"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">ConsoleTheme.</span><span style="color:#B392F0">Jordan</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"[JORDAN] Starting triage for: '</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">incident</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">'"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> using</span><span style="color:#B392F0"> StreamingRun</span><span style="color:#B392F0"> run</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> InProcessExecution.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(workflow, incident);</span></span>
+<span class="line"><span style="color:#F97583">bool</span><span style="color:#B392F0"> wroteAgentHeader</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">WorkflowEvent</span><span style="color:#B392F0"> evt</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> run.</span><span style="color:#B392F0">WatchStreamAsync</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#B392F0">    if</span><span style="color:#E1E4E8"> (evt </span><span style="color:#F97583">is</span><span style="color:#B392F0"> AgentResponseUpdateEvent</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> &#x26;&#x26;</span><span style="color:#F97583"> !</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrEmpty</span><span style="color:#E1E4E8">(update.Update.Text))</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#B392F0">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">wroteAgentHeader)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#E1E4E8">            ConsoleTheme.</span><span style="color:#B392F0">AgentHeader</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"[</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">update</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">ExecutorId</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">] Agent response:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">            wroteAgentHeader </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">AgentChunk</span><span style="color:#E1E4E8">(update.Update.Text);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">    else </span><span style="color:#B392F0">if</span><span style="color:#E1E4E8"> (evt </span><span style="color:#F97583">is</span><span style="color:#B392F0"> WorkflowErrorEvent</span><span style="color:#B392F0"> error</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">[ERROR] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">error</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Exception</span><span style="color:#F97583">?</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Message</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">ConsoleTheme.</span><span style="color:#B392F0">Muted</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">[Workflow Complete]"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Custom Executors &#x26; Adapters ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Classifies incident priority from service telemetry using Jordan's deterministic triage thresholds."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> AssessIncidentPriority</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service being triaged, such as checkout, payments, or inventory."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The observed error rate percentage for the service."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">double</span><span style="color:#B392F0"> errorRatePercent</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The observed latency in milliseconds for the service."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">double</span><span style="color:#B392F0"> latencyMs</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    bool</span><span style="color:#B392F0"> isCritical</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> errorRatePercent </span><span style="color:#F97583">>=</span><span style="color:#79B8FF"> 10</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> latencyMs </span><span style="color:#F97583">>=</span><span style="color:#79B8FF"> 400</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    string</span><span style="color:#B392F0"> priority</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> isCritical </span><span style="color:#F97583">?</span><span style="color:#9ECBFF"> "P0"</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> "P1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    string</span><span style="color:#B392F0"> reason</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> isCritical</span></span>
+<span class="line"><span style="color:#F97583">        ?</span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> breaches the critical threshold: error rate </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">errorRatePercent</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">% and latency </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">latencyMs</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">ms."</span></span>
+<span class="line"><span style="color:#F97583">        :</span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> is below the critical threshold: error rate </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">errorRatePercent</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">% and latency </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">latencyMs</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">ms."</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#9ECBFF"> $"PRIORITY: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">priority</span><span style="color:#9ECBFF">}</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">REASON: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">reason</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> FetchTelemetryExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"FetchTelemetry"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> service</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        string</span><span style="color:#B392F0"> result</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> $"[TELEMETRY] Service: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">service</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">, ErrorRate: 15%, Latency: 450ms"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Ok</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#9ECBFF">{</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Id</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: Data fetched."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(result);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">SendsMessage</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">typeof</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">))]</span></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">SendsMessage</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">typeof</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">TurnToken</span><span style="color:#E1E4E8">))]</span></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TriageAdapterExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"TriageAdapter"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Ok</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#9ECBFF">{</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Id</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: Translating to Chat Protocol..."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // 1. Manually send the Chat Protocol messages to the context</span></span>
+<span class="line"><span style="color:#F97583">        await</span><span style="color:#E1E4E8"> context.</span><span style="color:#B392F0">SendMessageAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatMessage</span><span style="color:#E1E4E8">(ChatRole.User, message), ct);</span></span>
+<span class="line"><span style="color:#F97583">        await</span><span style="color:#E1E4E8"> context.</span><span style="color:#B392F0">SendMessageAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> TurnToken</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">emitEvents</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">), ct);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">        // 2. Return nothing (void). </span></span>
+<span class="line"><span style="color:#6A737D">        // The agent is triggered by the TurnToken, not by a returned value.</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> TriageSyncExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">List</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">>, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"TriageSync"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">List</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ChatMessage</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">messages</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#6A737D">        // Extract only the Assistant's response to keep the report clean</span></span>
+<span class="line"><span style="color:#F97583">        string</span><span style="color:#B392F0"> report</span><span style="color:#F97583"> =</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">, messages</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Where</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Role </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> ChatRole.Assistant)</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Select</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Text </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> ""</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">Trim</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Ok</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#9ECBFF">{</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Id</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: Prepared priority report for escalation."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(report);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> EscalationExecutor</span><span style="color:#E1E4E8">() : </span><span style="color:#B392F0">Executor</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">>(</span><span style="color:#9ECBFF">"EscalationEngine"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> report</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        string</span><span style="color:#B392F0"> decision</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> report.</span><span style="color:#B392F0">Contains</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"P0"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">?</span><span style="color:#9ECBFF"> "ALARM: Paging SRE Team."</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> "TICKET: Logged for triage."</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        ConsoleTheme.</span><span style="color:#B392F0">Decision</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"[FINAL DECISION] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">decision</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">isAlarm</span><span style="color:#E1E4E8">: decision.</span><span style="color:#B392F0">StartsWith</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ALARM"</span><span style="color:#E1E4E8">, StringComparison.Ordinal));</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(decision);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> static</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> ConsoleTheme</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Jordan</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, ConsoleColor.Cyan);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Ok</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"[OK] </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">message</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">, ConsoleColor.Green);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> AgentHeader</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, ConsoleColor.Magenta);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> AgentChunk</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> text</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> Write</span><span style="color:#E1E4E8">(text, ConsoleColor.DarkYellow);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Decision</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">bool</span><span style="color:#B392F0"> isAlarm</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, isAlarm </span><span style="color:#F97583">?</span><span style="color:#E1E4E8"> ConsoleColor.Red </span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> ConsoleColor.Green);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, ConsoleColor.Red);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Muted</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(message, ConsoleColor.DarkGray);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">ConsoleColor</span><span style="color:#B392F0"> color</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> color;</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(message);</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> Write</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> message</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">ConsoleColor</span><span style="color:#B392F0"> color</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.ForegroundColor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> color;</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(message);</span></span>
+<span class="line"><span style="color:#E1E4E8">        Console.</span><span style="color:#B392F0">ResetColor</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="2-the-chat-protocol-bridge"><span class="step-pill">2</span> The Chat Protocol Bridge</h3>
+<p>AI Agents don’t just process strings; they reason over a conversation history. The <strong>TriageAdapter</strong> bridges this gap:</p>
+<ol>
+<li><strong>ChatMessage</strong>: It converts the raw telemetry string into a <code>ChatMessage</code> with a <code>User</code> role.</li>
+<li><strong>TurnToken</strong>: It sends a signal telling the Agent “The input is complete, please start reasoning.”</li>
+</ol>
+<p>By returning <strong>void</strong> (nothing) from the adapter while manually sending the messages, we ensure the Agent logic is triggered by the official protocol signals instead of by a returned value.</p>
+<p>The agent also receives a deterministic tool: <code>AssessIncidentPriority</code>. Instead of guessing whether telemetry is critical, Jordan’s Agent must call the tool and base its <code>PRIORITY: P0</code> or <code>PRIORITY: P1</code> output on Jordan’s operational thresholds.</p>
+<p>The agent is also bound with <code>ForwardIncomingMessages = false</code>. This matters because an Agent executor can otherwise forward the incoming user message downstream before it sends the assistant response. Without this setting, <code>TriageSync</code> would see two separate <code>List<chatmessage></chatmessage></code> deliveries: first the forwarded user message, then the assistant response. For this workflow, the sync step should parse only Jordan’s assistant report.</p>
+<div class="solid-callout solid-callout-info my-8">
+  <p class="font-bold text-indigo-900 mb-2 text-base">🛡️ Protocol Validation with [SendsMessage]</p>
+  <p class="text-sm text-indigo-900/80 leading-relaxed m-0">
+    The <code>[SendsMessage]</code> attribute isn't just for documentation. It enables <strong>Protocol Validation</strong>. By declaring that <code>TriageAdapter</code> sends <code>ChatMessage</code> and <code>TurnToken</code>, the <code>WorkflowBuilder</code> can verify that your graph is correctly connected before you even hit "Run."
+  </p>
+</div>
+<h3 id="3-run-and-observe-the-story"><span class="step-pill">3</span> Run and Observe the Story</h3>
+<p>Execute the app:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span></span></code></pre>
+<p><strong>Understanding the Execution Pipeline:</strong></p>
+<ol>
+<li><strong>Deterministic Preparation</strong>: We begin by fetching telemetry using standard C# code. This ensures the data is clean and structured before the AI ever sees it.</li>
+<li><strong>The Protocol Bridge</strong>: The <code>TriageAdapter</code> translates our C# string into the <code>ChatMessage</code> format and signals the Agent to begin.</li>
+<li><strong>Tool-Grounded Investigation</strong>: Jordan’s Agent receives the message, calls <code>AssessIncidentPriority</code>, and bases its priority on deterministic telemetry thresholds. Because we used <code>RunStreamingAsync</code>, you can see the agent’s response stream in the terminal in real-time.</li>
+<li><strong>The Sync</strong>: Since the Agent outputs a conversational list (<code>List<chatmessage></chatmessage></code>), the <code>TriageSync</code> executor extracts the core report so the final <code>EscalationEngine</code> can make a deterministic decision.</li>
+<li><strong>Deterministic Escalation</strong>: The final decision is handled by a <strong>Safe Shell</strong>. Based on the Agent’s priority rating, this engine pages the team for “P0” incidents.</li>
+</ol>
+<h2 id="try-it">Try it</h2>
+<p>Experiment with the “Safe Shell” by modifying the deterministic rules and telemetry that guide the workflow.</p>
+<h4 id="-threshold-tweak">🎯 Threshold Tweak</h4>
+<h3 id="modify-business-rules">Modify Business Rules</h3>
+<p>In a real-world scenario, “Critical” thresholds might change. Update the <code>AssessIncidentPriority</code> method in <code>Program.cs</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#6A737D">// Change the latency threshold to be more sensitive (from 400 to 200)</span></span>
+<span class="line"><span style="color:#F97583">bool</span><span style="color:#B392F0"> isCritical</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> errorRatePercent </span><span style="color:#F97583">>=</span><span style="color:#79B8FF"> 10</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> latencyMs </span><span style="color:#F97583">>=</span><span style="color:#79B8FF"> 200</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<p><strong>Result:</strong> The agent will now classify lower-latency incidents as <code>P0</code>, and the <code>EscalationEngine</code> will trigger an ALARM for issues that were previously just tickets.</p>
+<h4 id="-telemetry-shift">📟 Telemetry Shift</h4>
+<h3 id="test-different-scenarios">Test Different Scenarios</h3>
+<p>Swap the mocked telemetry data in <code>FetchTelemetryExecutor</code> to see how the assembly line handles a “Healthy” result:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">HandleAsync</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#B392F0"> service</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">IWorkflowContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#F97583"> =</span><span style="color:#F97583"> default</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#6A737D">    // Simulate a healthy service</span></span>
+<span class="line"><span style="color:#F97583">    string</span><span style="color:#B392F0"> result</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> $"[TELEMETRY] Service: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">service</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">, ErrorRate: 0.5%, Latency: 45ms"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    ConsoleTheme.</span><span style="color:#B392F0">Ok</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#9ECBFF">{</span><span style="color:#79B8FF">this</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Id</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: Data fetched."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> ValueTask.</span><span style="color:#B392F0">FromResult</span><span style="color:#E1E4E8">(result);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>Result:</strong> The agent will see the healthy stats, the tool will return <code>PRIORITY: P1</code>, and the <code>EscalationEngine</code> will log a TICKET instead of paging the team.</p>
+<h4 id="-agent-persona">🎭 Agent Persona</h4>
+<h3 id="change-the-tone">Change the Tone</h3>
+<p>Even in a deterministic workflow, you can adjust the agent’s “thinking.” Update the <code>Instructions</code> in your <code>triageAgent</code> setup:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#E1E4E8">Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">    You are a highly Technical Lead Responder. </span></span>
+<span class="line"><span style="color:#9ECBFF">    Focus heavily on the infrastructure implications of the telemetry.</span></span>
+<span class="line"><span style="color:#9ECBFF">    Keep your REASON technical and brief.</span></span>
+<span class="line"><span style="color:#9ECBFF">    """</span><span style="color:#E1E4E8">,</span></span></code></pre>
+<p><strong>Result:</strong> While the final decision (P0/P1) remains deterministic because of the tool call, the technical summary provided by the agent will shift in tone and detail.</p>
+<h2 id="summary--next-steps">Summary &#x26; Next Steps</h2>
+<p>You’ve now helped <strong>Jordan</strong> move from building a “Chatty Agent” to building a <strong>Reliable Process</strong>. By using Workflows, Jordan has ensured that their on-call triage protocol is followed exactly as defined, every time.</p>
+<ul>
+<li><strong>Executors</strong>: Jordan’s automated “Runbook” steps (C# or AI).</li>
+<li><strong>Edges</strong>: The “Pipes” that move data through the triage pipeline.</li>
+<li><strong>Events</strong>: The “Logs” that give Jordan 100% observability into what happened during the incident.</li>
+</ul>
+<p>In the <strong><a href="/post/agent-framework/academy/advanced-orchestration/state-and-checkpoints/">next tutorial</a></strong>, we will ensure Jordan’s triage assembly line is resilient to failures by implementing <strong>Shared State</strong> and <strong>Checkpoints</strong>.</p>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/advanced-orchestration/">#advanced-orchestration</a><a href="/tags/workflows/">#workflows</a><a href="/tags/executors/">#executors</a><a href="/tags/edges/">#edges</a><a href="/tags/hybrid-orchestration/">#hybrid-orchestration</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Forchestrate-workflows%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Orchestrate%20Multi-Step%20Workflows&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Forchestrate-workflows%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fadvanced-orchestration%2Forchestrate-workflows%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/advanced-orchestration/orchestrate-workflows/";
+const title = "Orchestrate Multi-Step Workflows";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/advanced-orchestration/orchestrate-workflows/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

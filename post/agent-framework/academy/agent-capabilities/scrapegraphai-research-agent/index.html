@@ -1,0 +1,718 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Parse Job Postings into Hiring Briefs with ScrapeGraphAI | Ankit Sarkar</title><meta name="description" content="Build a .NET agent that reads public job postings and turns them into structured role briefs with requirements, signals, and next steps."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/agent-capabilities/scrapegraphai-research-agent/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Parse Job Postings into Hiring Briefs with ScrapeGraphAI | Ankit Sarkar"><meta property="og:description" content="Build a .NET agent that reads public job postings and turns them into structured role briefs with requirements, signals, and next steps."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/agent-capabilities/scrapegraphai-research-agent/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Parse Job Postings into Hiring Briefs with ScrapeGraphAI | Ankit Sarkar"><meta name="twitter:description" content="Build a .NET agent that reads public job postings and turns them into structured role briefs with requirements, signals, and next steps."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-07T08:01:22.205Z">07 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Parse Job Postings into Hiring Briefs with ScrapeGraphAI</h1> <p>Build a .NET agent that reads public job postings and turns them into structured role briefs with requirements, signals, and next steps.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/agent-capabilities/">Agent Capabilities</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#agent-anatomy">Agent Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-environment">Setup your environment</a> <div class="toc-sublinks"> <a href="#1-create-the-project">1 Create the project</a><a href="#2-install-packages">2 Install packages</a><a href="#3-configure-credentials">3 Configure credentials</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#build-the-job-parser">Build the job parser</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#choose-the-tool">Choose the tool</a> <div class="toc-sublinks"> <a href="#1-implement-the-agent-and-tools--persona-️-tools">1 Implement the Agent and Tools 🎭 Persona 🛠️ Tools</a><a href="#2-run-a-dry-registration-check">2 Run a dry registration check</a><a href="#3-run-the-agent">3 Run the agent</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it">Try it</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#guardrails-for-job-page-agents">Guardrails for job-page agents</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#what-to-build-next">What to build next</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#summary">Summary</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Agent Capabilities series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Agent Capabilities</h2> <p>Explore advanced Microsoft Agent Framework capabilities and tool patterns.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/agent-framework/academy/agent-capabilities/semantic-tool-search/">Scale to Thousands of Tools with Semantic Search</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">02</span> <span class="series-nav-current"> <span>Parse Job Postings into Hiring Briefs with ScrapeGraphAI</span> <strong>This post</strong> </span> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/agent-capabilities/scrapegraphai-research-agent/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>Hiring pages are packed with useful information, but they are rarely shaped for quick decisions. A recruiter wants intake notes. A candidate wants preparation guidance. A hiring manager wants a quick check on role scope, seniority, and required skills. Everyone is looking at the same public job posting, but each person needs it turned into a practical brief.</p>
+<p>In this tutorial, you will build a <strong>Job Page Parser</strong> with <strong>Microsoft Agent Framework</strong> and <strong>ScrapeGraphAI.AgentFramework</strong>. The agent takes a public job posting URL, reads or extracts the important role facts, and returns a concise hiring brief with a source URL.</p>
+<p>The workflow is intentionally simple:</p>
+<ol>
+<li>Provide a public job posting URL.</li>
+<li>Choose direct extraction or page reading.</li>
+<li>Preserve missing or uncertain fields.</li>
+<li>Return a brief a person can act on.</li>
+</ol>
+<h2 id="agent-anatomy">Agent Anatomy</h2>
+<p>An extraction agent still needs a persona and a brain, but the most important capability is the bridge from a messy public page to structured role facts.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 my-10">
+  <!-- Persona (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🎭</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Persona</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">A concise hiring analyst.</p>
+  </div>
+  <!-- Brain (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-1">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🧠</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Brain</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Reasoning about role fit.</p>
+  </div>
+  <!-- Extractor (Active) -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in animate-delay-2">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-xl mb-4 border border-indigo-100">🧾</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Extractor</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium"><code>extract_from_page</code> pulls role facts.</p>
+  </div>
+  <!-- Reader (Active) -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in animate-delay-3">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-xl mb-4 border border-indigo-100">📖</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Reader</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium"><code>scrape_page</code> returns page text.</p>
+  </div>
+  <!-- Brief (Result) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-4">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-amber-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Result</div>
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">📌</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Brief</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Role summary and next steps.</p>
+  </div>
+</div>
+<div class="premium-gradient border border-indigo-100 rounded-3xl p-8 my-12 shadow-sm relative overflow-hidden animate-fade-in animate-delay-4">
+  <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl"></div>
+  <div class="flex gap-5 relative z-10">
+    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+    </div>
+    <div>
+      <h4 class="text-indigo-950 font-black text-lg tracking-tight mb-2">From Page Content to Business Action</h4>
+      <p class="text-sm leading-relaxed text-indigo-900/70 max-w-2xl">
+        A job posting is not just text. It contains requirements, seniority signals, team priorities, and hidden hints about the hiring process. <code>extract_from_page</code> is best when you need fields. <code>scrape_page</code> is best when you want the agent to read the page and write a more flexible brief.
+      </p>
+    </div>
+  </div>
+</div>
+<h2 id="setup-your-environment">Setup your environment</h2>
+<p>Create a console app and install the packages that connect Agent Framework, OpenAI-compatible chat, and ScrapeGraphAI tools.</p>
+<div class="solid-callout solid-callout-info mb-8">
+  <p class="font-bold text-indigo-900 mb-3 text-base">📋 Pre-flight Checklist</p>
+  <ul class="space-y-2.5 m-0 p-0 list-none text-sm text-indigo-900/80">
+    <li class="flex items-center gap-2">🛠️ <strong>.NET 10.0 SDK</strong> (or later) installed.</li>
+    <li class="flex items-center gap-2">🤖 <strong>AI Provider</strong>: An OpenAI-compatible endpoint such as LM Studio, Ollama, OpenAI, or a compatible hosted service.</li>
+    <li class="flex items-center gap-2">🔑 <strong>ScrapeGraphAI</strong>: A valid <code>SGAI_API_KEY</code> for web scraping and extraction.</li>
+    <li class="flex items-center gap-2">🌐 <strong>Job URL</strong>: A public job posting page you are allowed to access.</li>
+  </ul>
+</div>
+<h3 id="1-create-the-project"><span class="step-pill">1</span> Create the project</h3>
+<p>Open your terminal and create a new console application:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> new</span><span style="color:#9ECBFF"> console</span><span style="color:#79B8FF"> -n</span><span style="color:#9ECBFF"> ScrapeGraphAI.JobPageParser</span><span style="color:#79B8FF"> -f</span><span style="color:#9ECBFF"> net10.0</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> ScrapeGraphAI.JobPageParser</span></span></code></pre>
+<h3 id="2-install-packages"><span class="step-pill">2</span> Install packages</h3>
+<p>Install the ScrapeGraphAI Agent Framework integration, the OpenAI-compatible Agent Framework bridge, and the supporting configuration packages.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> ScrapeGraphAI.AgentFramework</span><span style="color:#79B8FF"> --version</span><span style="color:#79B8FF"> 1.0.0</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.Configuration</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.DependencyInjection</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.Logging.Console</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🛠️</span>
+      <code class="text-xs font-bold text-indigo-600">ScrapeGraphAI.AgentFramework</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">Registers ScrapeGraphAI web, scrape, extract, crawl, monitor, history, health, and credit tools as Agent Framework <code>AITool</code> instances.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔌</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">Provides the Agent Framework OpenAI integration and the <code>AsAIAgent</code> extension used to build the agent.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🤖</span>
+      <code class="text-xs font-bold text-indigo-600">OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">Creates an OpenAI-compatible chat client. This works with local endpoints such as LM Studio as well as hosted compatible services.</p>
+  </div>
+</div>
+<h3 id="3-configure-credentials"><span class="step-pill">3</span> Configure credentials</h3>
+<p>Before setting environment variables, get your ScrapeGraphAI API key from the dashboard.</p>
+<div class="solid-callout solid-callout-info my-6">
+  <p class="font-bold text-indigo-900 mb-2 text-sm">Get your ScrapeGraphAI API key</p>
+  <ol class="space-y-1.5 m-0 p-0 list-decimal list-inside text-xs text-indigo-900/80">
+    <li>Sign in to the <a href="https://scrapegraphai.com/" target="_blank" rel="noreferrer">ScrapeGraphAI dashboard</a>.</li>
+    <li>Open <strong>Settings</strong>.</li>
+    <li>Copy the API key from the <strong>API Key</strong> section.</li>
+    <li>Store it in an environment variable named <code>SGAI_API_KEY</code>.</li>
+  </ol>
+  <p class="text-xs text-indigo-900/70 leading-relaxed mt-3">
+    The official docs describe the same flow in <a href="https://docs.scrapegraphai.com/knowledge-base/account/api-keys" target="_blank" rel="noreferrer">Managing your API keys</a>. Keep the key server-side, never commit it to source control, and rotate it from Settings if it is exposed.
+  </p>
+</div>
+<p>Set the ScrapeGraphAI key and your OpenAI-compatible chat endpoint.</p>
+<h4 id="powershell">PowerShell</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#E1E4E8">$</span><span style="color:#79B8FF">env:</span><span style="color:#E1E4E8">SGAI_API_KEY </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "&#x3C;your-scrapegraphai-api-key>"</span></span>
+<span class="line"><span style="color:#E1E4E8">$</span><span style="color:#79B8FF">env:</span><span style="color:#E1E4E8">OPENAI_BASE_URL </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span></span>
+<span class="line"><span style="color:#E1E4E8">$</span><span style="color:#79B8FF">env:</span><span style="color:#E1E4E8">OPENAI_MODEL </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "&#x3C;your-tool-capable-model>"</span></span>
+<span class="line"><span style="color:#E1E4E8">$</span><span style="color:#79B8FF">env:</span><span style="color:#E1E4E8">OPENAI_API_KEY </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "lm-studio"</span></span></code></pre>
+<h4 id="bash">Bash</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> SGAI_API_KEY</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"&#x3C;your-scrapegraphai-api-key>"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> OPENAI_BASE_URL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"http://localhost:1234/v1"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> OPENAI_MODEL</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"&#x3C;your-tool-capable-model>"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> OPENAI_API_KEY</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"lm-studio"</span></span></code></pre>
+<p>For LM Studio, the API key can be a placeholder. For a hosted OpenAI-compatible endpoint, use the real API key required by that provider.</p>
+<h2 id="build-the-job-parser">Build the job parser</h2>
+<p>The agent starts with one ScrapeGraphAI tool at a time. Use the tabs below to choose the behavior you want to teach.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">sequenceDiagram</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant User</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Agent as Job Parser Agent</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Extract as extract_from_page</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Scrape as scrape_page</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Brief as Hiring Brief</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    User->>Agent: Analyze a public job posting URL</span></span>
+<span class="line"><span style="color:#E1E4E8">    alt Direct structured extraction</span></span>
+<span class="line"><span style="color:#E1E4E8">        Agent->>Extract: Extract role facts from the URL</span></span>
+<span class="line"><span style="color:#E1E4E8">        Extract-->>Agent: Structured job details</span></span>
+<span class="line"><span style="color:#E1E4E8">    else Page reading</span></span>
+<span class="line"><span style="color:#E1E4E8">        Agent->>Scrape: Fetch the posting as markdown</span></span>
+<span class="line"><span style="color:#E1E4E8">        Scrape-->>Agent: Page content</span></span>
+<span class="line"><span style="color:#E1E4E8">    end</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Brief: Create concise brief with missing fields</span></span>
+<span class="line"><span style="color:#E1E4E8">    Brief-->>User: Role summary, skills, signals, and next steps</span></span></code></pre>
+<h2 id="choose-the-tool">Choose the tool</h2>
+<p>ScrapeGraphAI charges different credit amounts depending on the service and format you call. For this tutorial’s two job-posting paths, the important baseline is:</p>
+<ul>
+<li><code>scrape_page</code> with markdown output: <strong>1 credit</strong> for a basic page scrape.</li>
+<li><code>extract_from_page</code>: <strong>5 credits</strong> for structured data extraction.</li>
+</ul>
+<p>See the official <a href="https://docs.scrapegraphai.com/knowledge-base/account/pricing">ScrapeGraphAI pricing page</a> and <a href="https://docs.scrapegraphai.com/services/scrape">Scrape service pricing</a> for the latest credit table before running high-volume workflows.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+  <div class="p-5 rounded-2xl border-2 border-indigo-200 bg-white shadow-sm">
+    <div class="font-bold text-indigo-950 mb-1 text-sm">Use <code>extract_from_page</code> when...</div>
+    <p class="text-xs text-slate-600 leading-relaxed">You know the fields you want: role title, company, skills, responsibilities, seniority, work mode, and unclear fields. It costs more because ScrapeGraphAI performs structured extraction, but it is the better default for repeatable business workflows.</p>
+  </div>
+  <div class="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="font-bold text-slate-900 mb-1 text-sm">Use <code>scrape_page</code> when...</div>
+    <p class="text-xs text-slate-600 leading-relaxed">You want the page content first: markdown, summaries, links, or a more exploratory brief where the agent decides what matters from the posting text. Markdown scraping is cheaper, but the model must infer the structure from the returned content.</p>
+  </div>
+</div>
+<h3 id="1-implement-the-agent-and-tools--persona-️-tools"><span class="step-pill">1</span> Implement the Agent and Tools <span class="agent-heading-chip">🎭 Persona</span> <span class="agent-heading-chip">🛠️ Tools</span></h3>
+<p>Replace the contents of <code>Program.cs</code> with one of these complete programs:</p>
+<h4 id="extractfrompage">ExtractFromPage</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Configuration</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">DependencyInjection</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Logging</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ScrapeGraphAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ScrapeGraphAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AgentFramework</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> DefaultJobUrl</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "https://example.com/careers/software-engineer"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> runAgent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> args.</span><span style="color:#B392F0">Contains</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--run"</span><span style="color:#E1E4E8">, StringComparer.OrdinalIgnoreCase);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> jobUrl</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> GetOption</span><span style="color:#E1E4E8">(args, </span><span style="color:#9ECBFF">"--url"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#E1E4E8"> DefaultJobUrl;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> prompt</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> GetOption</span><span style="color:#E1E4E8">(args, </span><span style="color:#9ECBFF">"--prompt"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> $"""</span></span>
+<span class="line"><span style="color:#9ECBFF">Analyze this job posting: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">jobUrl</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">.</span></span>
+<span class="line"><span style="color:#9ECBFF">Extract the role title, company, location, work mode, seniority, required skills,</span></span>
+<span class="line"><span style="color:#9ECBFF">preferred skills, responsibilities, hiring signals, and candidate preparation notes.</span></span>
+<span class="line"><span style="color:#9ECBFF">Return a concise brief with source URL.</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> GetOption</span><span style="color:#E1E4E8">(args, </span><span style="color:#9ECBFF">"--endpoint"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    ??</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_BASE_URL"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    ??</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"LMSTUDIO_BASE_URL"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    ??</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> configuration</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ConfigurationBuilder</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">AddInMemoryCollection</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Dictionary</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">?></span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"OpenAI:ApiKey"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_API_KEY"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "lm-studio"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"OpenAI:Model"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> GetOption</span><span style="color:#E1E4E8">(args, </span><span style="color:#9ECBFF">"--model"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"LMSTUDIO_MODEL"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#9ECBFF"> "google/gemma-4-e4b"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"OpenAI:Endpoint"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> endpoint,</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"ScrapeGraphAI:ApiKey"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"SGAI_API_KEY"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#E1E4E8"> (runAgent </span><span style="color:#F97583">?</span><span style="color:#B392F0"> null</span><span style="color:#E1E4E8"> : </span><span style="color:#9ECBFF">"sgai-placeholder"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> openAiApiKey</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> configuration[</span><span style="color:#9ECBFF">"OpenAI:ApiKey"</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> model</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> configuration[</span><span style="color:#9ECBFF">"OpenAI:Model"</span><span style="color:#E1E4E8">]</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> openAiEndpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> configuration[</span><span style="color:#9ECBFF">"OpenAI:Endpoint"</span><span style="color:#E1E4E8">]</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> scrapeGraphApiKey</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> configuration[</span><span style="color:#9ECBFF">"ScrapeGraphAI:ApiKey"</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> cancellation</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> CancellationTokenSource</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.CancelKeyPress </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">_</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">eventArgs</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    eventArgs.Cancel </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    cancellation.</span><span style="color:#B392F0">Cancel</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> services</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ServiceCollection</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">Configure</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ScrapeGraphOptions</span><span style="color:#E1E4E8">>(configuration.</span><span style="color:#B392F0">GetSection</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ScrapeGraphAI"</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">AddLogging</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">logging</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    logging.</span><span style="color:#B392F0">AddSimpleConsole</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">options</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> options.SingleLine </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    logging.</span><span style="color:#B392F0">SetMinimumLevel</span><span style="color:#E1E4E8">(LogLevel.Warning);</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">AddScrapeGraphAI</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">ConfigureHttpClient</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">client</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        client.Timeout </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> TimeSpan.</span><span style="color:#B392F0">FromSeconds</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">90</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">AddScrapeGraphAgentTools</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">options</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    options.MaxResultCharacters </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 12_000</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    options.IncludedTools </span><span style="color:#F97583">=</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span></span>
+<span class="line"><span style="color:#E1E4E8">        ScrapeGraphAgentToolNames.ExtractFromPage</span></span>
+<span class="line"><span style="color:#E1E4E8">    ];</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> provider</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> services.</span><span style="color:#B392F0">BuildServiceProvider</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> loggerFactory</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> provider.</span><span style="color:#B392F0">GetRequiredService</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ILoggerFactory</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> scrapeGraphTools</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> provider.</span><span style="color:#B392F0">GetRequiredService</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ScrapeGraphAgentTools</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> aiTools</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> scrapeGraphTools</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">AsAITools</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">        ScrapeGraphAgentToolNames.ExtractFromPage)</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">ToArray</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ScrapeGraphAI job page parser"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"Model: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">model</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"OpenAI-compatible endpoint: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">openAiEndpoint</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"Job URL: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">jobUrl</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Registered tools:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">AITool</span><span style="color:#B392F0"> tool</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> aiTools)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"- </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">tool</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">tool</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Description</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">runAgent)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"No API calls were made. Add --run after setting SGAI_API_KEY and starting your model endpoint."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrWhiteSpace</span><span style="color:#E1E4E8">(openAiApiKey))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.Error.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Set OPENAI_API_KEY before running with --run, or use a local endpoint placeholder such as lm-studio."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrWhiteSpace</span><span style="color:#E1E4E8">(scrapeGraphApiKey))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.Error.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Set SGAI_API_KEY before running with --run."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">Uri.</span><span style="color:#B392F0">TryCreate</span><span style="color:#E1E4E8">(openAiEndpoint, UriKind.Absolute, </span><span style="color:#F97583">out</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> endpointUri</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.Error.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"Invalid OpenAI-compatible endpoint: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">openAiEndpoint</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ChatClient</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    model,</span></span>
+<span class="line"><span style="color:#F97583">    new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(openAiApiKey),</span></span>
+<span class="line"><span style="color:#F97583">    new</span><span style="color:#B392F0"> OpenAIClientOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Endpoint </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> endpointUri</span></span>
+<span class="line"><span style="color:#E1E4E8">    });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"JobPageParser"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">    instructions</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"""</span></span>
+<span class="line"><span style="color:#9ECBFF">        You are a concise hiring analyst.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">        For job posting analysis:</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Use extract_from_page before answering.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Prefer structured extraction for role facts from the URL.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Preserve uncertainty when a field is missing or unclear.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Do not invent company details, compensation, seniority, or work mode.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Return a practical brief, not a generic summary.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Include the source URL.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - End with one recommended next action.</span></span>
+<span class="line"><span style="color:#9ECBFF">        """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">    tools</span><span style="color:#E1E4E8">: aiTools,</span></span>
+<span class="line"><span style="color:#B392F0">    clientFactory</span><span style="color:#E1E4E8">: </span><span style="color:#B392F0">innerClient</span><span style="color:#F97583"> =></span><span style="color:#F97583"> new</span><span style="color:#B392F0"> FunctionInvokingChatClient</span><span style="color:#E1E4E8">(innerClient, loggerFactory, provider)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        MaximumIterationsPerRequest </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 10</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#B392F0">    loggerFactory</span><span style="color:#E1E4E8">: loggerFactory,</span></span>
+<span class="line"><span style="color:#B392F0">    services</span><span style="color:#E1E4E8">: provider);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Prompt:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(prompt);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Response:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> response</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(prompt, </span><span style="color:#B392F0">cancellationToken</span><span style="color:#E1E4E8">: cancellation.Token).</span><span style="color:#B392F0">ConfigureAwait</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(response.Text);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">return</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">GetOption</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">args</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#B392F0"> name</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> i</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> args.Length; i</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Equals</span><span style="color:#E1E4E8">(args[i], name, StringComparison.OrdinalIgnoreCase) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#F97583"> &#x3C;</span><span style="color:#E1E4E8"> args.Length)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> args[i </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> prefix</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> name </span><span style="color:#F97583">+</span><span style="color:#9ECBFF"> "="</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (args[i].</span><span style="color:#B392F0">StartsWith</span><span style="color:#E1E4E8">(prefix, StringComparison.OrdinalIgnoreCase))</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> args[i][prefix.Length</span><span style="color:#F97583">..</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h4 id="scrapepage">ScrapePage</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Configuration</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">DependencyInjection</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Logging</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ScrapeGraphAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> ScrapeGraphAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AgentFramework</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> DefaultJobUrl</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "https://example.com/careers/software-engineer"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> runAgent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> args.</span><span style="color:#B392F0">Contains</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--run"</span><span style="color:#E1E4E8">, StringComparer.OrdinalIgnoreCase);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> jobUrl</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> GetOption</span><span style="color:#E1E4E8">(args, </span><span style="color:#9ECBFF">"--url"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#E1E4E8"> DefaultJobUrl;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> prompt</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> GetOption</span><span style="color:#E1E4E8">(args, </span><span style="color:#9ECBFF">"--prompt"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> $"""</span></span>
+<span class="line"><span style="color:#9ECBFF">Analyze this job posting: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">jobUrl</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">.</span></span>
+<span class="line"><span style="color:#9ECBFF">Read the page, identify the role title, company, location, work mode, seniority,</span></span>
+<span class="line"><span style="color:#9ECBFF">required skills, preferred skills, responsibilities, hiring signals, and candidate preparation notes.</span></span>
+<span class="line"><span style="color:#9ECBFF">Return a concise brief with source URL.</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> GetOption</span><span style="color:#E1E4E8">(args, </span><span style="color:#9ECBFF">"--endpoint"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    ??</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_BASE_URL"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    ??</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"LMSTUDIO_BASE_URL"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    ??</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> configuration</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ConfigurationBuilder</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">AddInMemoryCollection</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Dictionary</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#E1E4E8">?></span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"OpenAI:ApiKey"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_API_KEY"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "lm-studio"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"OpenAI:Model"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> GetOption</span><span style="color:#E1E4E8">(args, </span><span style="color:#9ECBFF">"--model"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"LMSTUDIO_MODEL"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#9ECBFF"> "google/gemma-4-e4b"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"OpenAI:Endpoint"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> endpoint,</span></span>
+<span class="line"><span style="color:#E1E4E8">        [</span><span style="color:#9ECBFF">"ScrapeGraphAI:ApiKey"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"SGAI_API_KEY"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            ??</span><span style="color:#E1E4E8"> (runAgent </span><span style="color:#F97583">?</span><span style="color:#B392F0"> null</span><span style="color:#E1E4E8"> : </span><span style="color:#9ECBFF">"sgai-placeholder"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">Build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> openAiApiKey</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> configuration[</span><span style="color:#9ECBFF">"OpenAI:ApiKey"</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> model</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> configuration[</span><span style="color:#9ECBFF">"OpenAI:Model"</span><span style="color:#E1E4E8">]</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> openAiEndpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> configuration[</span><span style="color:#9ECBFF">"OpenAI:Endpoint"</span><span style="color:#E1E4E8">]</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> scrapeGraphApiKey</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> configuration[</span><span style="color:#9ECBFF">"ScrapeGraphAI:ApiKey"</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> cancellation</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> CancellationTokenSource</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.CancelKeyPress </span><span style="color:#F97583">+=</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">_</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">eventArgs</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    eventArgs.Cancel </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    cancellation.</span><span style="color:#B392F0">Cancel</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> services</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ServiceCollection</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">Configure</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ScrapeGraphOptions</span><span style="color:#E1E4E8">>(configuration.</span><span style="color:#B392F0">GetSection</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ScrapeGraphAI"</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">AddLogging</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">logging</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    logging.</span><span style="color:#B392F0">AddSimpleConsole</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">options</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> options.SingleLine </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    logging.</span><span style="color:#B392F0">SetMinimumLevel</span><span style="color:#E1E4E8">(LogLevel.Warning);</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">AddScrapeGraphAI</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">ConfigureHttpClient</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">client</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        client.Timeout </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> TimeSpan.</span><span style="color:#B392F0">FromSeconds</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">90</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">services.</span><span style="color:#B392F0">AddScrapeGraphAgentTools</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">options</span><span style="color:#F97583"> =></span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    options.DefaultFormat </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ScrapeFormatType.Markdown;</span></span>
+<span class="line"><span style="color:#E1E4E8">    options.MaxResultCharacters </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 12_000</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    options.IncludedTools </span><span style="color:#F97583">=</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span></span>
+<span class="line"><span style="color:#E1E4E8">        ScrapeGraphAgentToolNames.ScrapePage</span></span>
+<span class="line"><span style="color:#E1E4E8">    ];</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> using</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> provider</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> services.</span><span style="color:#B392F0">BuildServiceProvider</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> loggerFactory</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> provider.</span><span style="color:#B392F0">GetRequiredService</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ILoggerFactory</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> scrapeGraphTools</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> provider.</span><span style="color:#B392F0">GetRequiredService</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">ScrapeGraphAgentTools</span><span style="color:#E1E4E8">>();</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> aiTools</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> scrapeGraphTools</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">AsAITools</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">        ScrapeGraphAgentToolNames.ScrapePage)</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">ToArray</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"ScrapeGraphAI job page parser"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"Model: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">model</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"OpenAI-compatible endpoint: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">openAiEndpoint</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"Job URL: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">jobUrl</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Registered tools:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#B392F0">AITool</span><span style="color:#B392F0"> tool</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> aiTools)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"- </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">tool</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">tool</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Description</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">runAgent)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"No API calls were made. Add --run after setting SGAI_API_KEY and starting your model endpoint."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrWhiteSpace</span><span style="color:#E1E4E8">(openAiApiKey))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.Error.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Set OPENAI_API_KEY before running with --run, or use a local endpoint placeholder such as lm-studio."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IsNullOrWhiteSpace</span><span style="color:#E1E4E8">(scrapeGraphApiKey))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.Error.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Set SGAI_API_KEY before running with --run."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">Uri.</span><span style="color:#B392F0">TryCreate</span><span style="color:#E1E4E8">(openAiEndpoint, UriKind.Absolute, </span><span style="color:#F97583">out</span><span style="color:#F97583"> var</span><span style="color:#B392F0"> endpointUri</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.Error.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"Invalid OpenAI-compatible endpoint: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">openAiEndpoint</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ChatClient</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    model,</span></span>
+<span class="line"><span style="color:#F97583">    new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(openAiApiKey),</span></span>
+<span class="line"><span style="color:#F97583">    new</span><span style="color:#B392F0"> OpenAIClientOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Endpoint </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> endpointUri</span></span>
+<span class="line"><span style="color:#E1E4E8">    });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#B392F0">    name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"JobPageParser"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">    instructions</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"""</span></span>
+<span class="line"><span style="color:#9ECBFF">        You are a concise hiring analyst.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">        For job posting analysis:</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Use scrape_page before answering.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Read the returned markdown carefully before writing the brief.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Preserve uncertainty when a field is missing or unclear.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Do not invent company details, compensation, seniority, or work mode.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Return a practical brief, not a generic summary.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - Include the source URL.</span></span>
+<span class="line"><span style="color:#9ECBFF">        - End with one recommended next action.</span></span>
+<span class="line"><span style="color:#9ECBFF">        """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#B392F0">    tools</span><span style="color:#E1E4E8">: aiTools,</span></span>
+<span class="line"><span style="color:#B392F0">    clientFactory</span><span style="color:#E1E4E8">: </span><span style="color:#B392F0">innerClient</span><span style="color:#F97583"> =></span><span style="color:#F97583"> new</span><span style="color:#B392F0"> FunctionInvokingChatClient</span><span style="color:#E1E4E8">(innerClient, loggerFactory, provider)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        MaximumIterationsPerRequest </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 10</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#B392F0">    loggerFactory</span><span style="color:#E1E4E8">: loggerFactory,</span></span>
+<span class="line"><span style="color:#B392F0">    services</span><span style="color:#E1E4E8">: provider);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Prompt:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(prompt);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Response:"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> response</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(prompt, </span><span style="color:#B392F0">cancellationToken</span><span style="color:#E1E4E8">: cancellation.Token).</span><span style="color:#B392F0">ConfigureAwait</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(response.Text);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">return</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">GetOption</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">[] </span><span style="color:#B392F0">args</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">string</span><span style="color:#B392F0"> name</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> i</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> args.Length; i</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Equals</span><span style="color:#E1E4E8">(args[i], name, StringComparison.OrdinalIgnoreCase) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#F97583"> &#x3C;</span><span style="color:#E1E4E8"> args.Length)</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> args[i </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> prefix</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> name </span><span style="color:#F97583">+</span><span style="color:#9ECBFF"> "="</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (args[i].</span><span style="color:#B392F0">StartsWith</span><span style="color:#E1E4E8">(prefix, StringComparison.OrdinalIgnoreCase))</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> args[i][prefix.Length</span><span style="color:#F97583">..</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="2-run-a-dry-registration-check"><span class="step-pill">2</span> Run a dry registration check</h3>
+<p>Run the app without <code>--run</code> first. This checks that dependency injection and tool registration work without calling ScrapeGraphAI or your model endpoint.</p>
+<div class="solid-callout solid-callout-info my-6">
+  <p class="font-bold text-indigo-900 mb-2 text-sm">Credit-safe dry run</p>
+  <p class="text-xs text-indigo-900/80 leading-relaxed">
+    Running without <code>--run</code> only prints configuration and registered tools. It does not call ScrapeGraphAI, does not call your model endpoint, and should not consume ScrapeGraphAI credits.
+  </p>
+</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span></span></code></pre>
+<p>Expected output:</p>
+<h4 id="extractfrompage-1">ExtractFromPage</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="text"><code><span class="line"><span>ScrapeGraphAI job page parser</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Model: &#x3C;your model></span></span>
+<span class="line"><span>OpenAI-compatible endpoint: http://localhost:1234/v1</span></span>
+<span class="line"><span>Job URL: https://example.com/careers/software-engineer</span></span>
+<span class="line"><span>Registered tools:</span></span>
+<span class="line"><span>- extract_from_page: Extract structured JSON from a URL, raw HTML, or markdown using a natural-language prompt.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>No API calls were made. Add --run after setting SGAI_API_KEY and starting your model endpoint.</span></span></code></pre>
+<h4 id="scrapepage-1">ScrapePage</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="text"><code><span class="line"><span>ScrapeGraphAI job page parser</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Model: &#x3C;your model></span></span>
+<span class="line"><span>OpenAI-compatible endpoint: http://localhost:1234/v1</span></span>
+<span class="line"><span>Job URL: https://example.com/careers/software-engineer</span></span>
+<span class="line"><span>Registered tools:</span></span>
+<span class="line"><span>- scrape_page: Fetch a URL and return content in markdown, HTML, links, images, summary, JSON, branding, or screenshot format.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>No API calls were made. Add --run after setting SGAI_API_KEY and starting your model endpoint.</span></span></code></pre>
+<h3 id="3-run-the-agent"><span class="step-pill">3</span> Run the agent</h3>
+<p>Once your model endpoint is running and <code>SGAI_API_KEY</code> is set, pass a real public job posting URL:</p>
+<div class="solid-callout solid-callout-warning my-6">
+  <p class="font-bold text-amber-900 mb-2 text-sm">ScrapeGraphAI credit usage</p>
+  <p class="text-xs text-amber-900/80 leading-relaxed">
+    Running with <code>--run</code> can consume ScrapeGraphAI credits because the selected tool fetches or extracts from the target page. In the default tutorial paths, markdown <code>scrape_page</code> starts at 1 credit, while <code>extract_from_page</code> starts at 5 credits. Use a small number of test URLs while developing, and avoid repeatedly running against the same page unless you are intentionally testing the live workflow.
+  </p>
+</div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> --run</span><span style="color:#79B8FF"> --url</span><span style="color:#9ECBFF"> "https://example.com/careers/software-engineer"</span></span></code></pre>
+<p>The answer will vary because the agent is working from live page content, but it should identify role facts, list missing fields, and provide a concrete next step.</p>
+<h2 id="try-it">Try it</h2>
+<p>Run these prompts with either <code>Program.cs</code> tab. Prefer <code>ExtractFromPage</code> for repeatable field extraction, and <code>ScrapePage</code> when the agent needs more room to interpret the posting text.</p>
+<h4 id="candidate-prep">Candidate prep</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> --run</span><span style="color:#79B8FF"> --url</span><span style="color:#9ECBFF"> "https://example.com/careers/software-engineer"</span><span style="color:#79B8FF"> --prompt</span><span style="color:#9ECBFF"> "Analyze this job posting for a candidate. Summarize must-have skills, likely interview topics, gaps to prepare for, and a 3-step study plan. Include the source URL."</span></span></code></pre>
+<p>Works with either approach. Use <code>ScrapePage</code> when you want a richer narrative brief; use <code>ExtractFromPage</code> when you want the prep plan grounded in specific extracted fields.</p>
+<h4 id="recruiter-intake">Recruiter intake</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> --run</span><span style="color:#79B8FF"> --url</span><span style="color:#9ECBFF"> "https://example.com/careers/software-engineer"</span><span style="color:#79B8FF"> --prompt</span><span style="color:#9ECBFF"> "Analyze this job posting for recruiter intake. Extract role title, team, location, seniority, must-have skills, nice-to-have skills, screening questions, and unclear fields. Include the source URL."</span></span></code></pre>
+<p>Best with <code>ExtractFromPage</code> because the output depends on stable fields a recruiter can reuse for sourcing, screening, or handoff notes.</p>
+<h4 id="skills-gap">Skills gap</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> --run</span><span style="color:#79B8FF"> --url</span><span style="color:#9ECBFF"> "https://example.com/careers/software-engineer"</span><span style="color:#79B8FF"> --prompt</span><span style="color:#9ECBFF"> "Analyze this job posting and create a skills gap checklist for a candidate with C# and Azure experience but limited frontend experience. Include required skills, matching strengths, gaps, and next learning steps."</span></span></code></pre>
+<p>Often better with <code>ScrapePage</code> because the agent can reason across the full posting text, but <code>ExtractFromPage</code> is useful when you want the gap analysis tied to explicit required and preferred skills.</p>
+<h4 id="interview-questions">Interview questions</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span><span style="color:#79B8FF"> --run</span><span style="color:#79B8FF"> --url</span><span style="color:#9ECBFF"> "https://example.com/careers/software-engineer"</span><span style="color:#79B8FF"> --prompt</span><span style="color:#9ECBFF"> "Analyze this job posting and generate 8 interview questions mapped to the role's required skills and responsibilities. Include the source URL."</span></span></code></pre>
+<p>Often better with <code>ScrapePage</code> because interview questions benefit from the posting’s full context, tone, and responsibilities.</p>
+<h2 id="guardrails-for-job-page-agents">Guardrails for job-page agents</h2>
+<p>Job postings often omit important details. The agent should treat missing information as missing, not as an invitation to guess.</p>
+<div class="solid-callout solid-callout-warning my-6">
+  <p class="font-bold text-amber-900 mb-2 text-sm">Do not invent hiring facts</p>
+  <p class="text-xs text-amber-900/80 leading-relaxed">
+    This tutorial intentionally registers one ScrapeGraphAI tool at a time. Whether you choose <code>extract_from_page</code> or <code>scrape_page</code>, the agent should not infer compensation, remote policy, sponsorship, seniority, or interview process unless the page provides evidence. Missing fields should be called out explicitly.
+  </p>
+</div>
+<p>The most important prompt rules are:</p>
+<ul>
+<li>Use the selected ScrapeGraphAI tool before answering.</li>
+<li>Preserve the source URL.</li>
+<li>Separate required skills from preferred skills.</li>
+<li>Mark missing or ambiguous fields.</li>
+<li>Avoid guessing compensation, work mode, or seniority.</li>
+<li>Keep the final brief short enough to use in a hiring workflow.</li>
+</ul>
+<h2 id="what-to-build-next">What to build next</h2>
+<p>This tutorial gives you a useful first job-page workflow. From here, you can grow the agent in four directions:</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+  <div class="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="font-bold text-slate-900 mb-1 text-sm">Structured Output</div>
+    <p class="text-xs text-slate-500 leading-relaxed">Add a JSON schema so the brief can feed an ATS, CRM, or spreadsheet.</p>
+  </div>
+  <div class="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="font-bold text-slate-900 mb-1 text-sm">Multi-page Career Research</div>
+    <p class="text-xs text-slate-500 leading-relaxed">Add crawl tools to inspect multiple postings from the same careers site.</p>
+  </div>
+  <div class="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="font-bold text-slate-900 mb-1 text-sm">Posting Monitor</div>
+    <p class="text-xs text-slate-500 leading-relaxed">Add monitor tools to detect when a role changes or disappears.</p>
+  </div>
+  <div class="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="font-bold text-slate-900 mb-1 text-sm">Candidate Matcher</div>
+    <p class="text-xs text-slate-500 leading-relaxed">Compare extracted role requirements with a candidate profile or resume summary.</p>
+  </div>
+</div>
+<h2 id="summary">Summary</h2>
+<p>You built a focused job-page parser that turns a public posting into a role brief. The key move was comparing two narrow tool paths before adding more capability:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="text"><code><span class="line"><span>job URL -> extract_from_page -> hiring brief</span></span>
+<span class="line"><span>job URL -> scrape_page -> hiring brief</span></span></code></pre>
+<p>That loop is simple enough to debug, useful enough for recruiters or candidates, and strong enough to become the base for structured output, monitoring, and candidate matching.</p>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/agent-capabilities/">#agent-capabilities</a><a href="/tags/web-extraction/">#web-extraction</a><a href="/tags/page-scraping/">#page-scraping</a><a href="/tags/job-parsing/">#job-parsing</a><a href="/tags/structured-data/">#structured-data</a><a href="/tags/tool-calling/">#tool-calling</a><a href="/tags/scrapegraphai/">#scrapegraphai</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-capabilities%2Fscrapegraphai-research-agent%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Parse%20Job%20Postings%20into%20Hiring%20Briefs%20with%20ScrapeGraphAI&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-capabilities%2Fscrapegraphai-research-agent%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-capabilities%2Fscrapegraphai-research-agent%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/agent-capabilities/scrapegraphai-research-agent/";
+const title = "Parse Job Postings into Hiring Briefs with ScrapeGraphAI";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/agent-capabilities/scrapegraphai-research-agent/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

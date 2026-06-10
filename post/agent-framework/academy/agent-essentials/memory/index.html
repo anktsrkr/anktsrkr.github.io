@@ -1,0 +1,593 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Persist Conversations and Smart Memory | Ankit Sarkar</title><meta name="description" content="Learn to save conversation history across restarts and implement structured memory using AIContextProviders."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/agent-essentials/memory/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Persist Conversations and Smart Memory | Ankit Sarkar"><meta property="og:description" content="Learn to save conversation history across restarts and implement structured memory using AIContextProviders."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/agent-essentials/memory/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Persist Conversations and Smart Memory | Ankit Sarkar"><meta name="twitter:description" content="Learn to save conversation history across restarts and implement structured memory using AIContextProviders."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Persist Conversations and Smart Memory</h1> <p>Learn to save conversation history across restarts and implement structured memory using AIContextProviders.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/agent-essentials/">Agent Essentials</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#agent-anatomy">Agent Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-environment">Setup your environment</a> <div class="toc-sublinks"> <a href="#1-install-required-packages">1 Install required packages</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#build-the-agent">Build the Agent</a> <div class="toc-sublinks"> <a href="#1-define-the-memory-provider--memory">1 Define the Memory Provider 💾 Memory</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it">Try it</a> <div class="toc-sublinks"> <a href="#simulate-a-recovery">Simulate a Recovery</a><a href="#direct-state-access">Direct State Access</a><a href="#manipulate-the-context">Manipulate the Context</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary--next-steps">Summary &amp; Next Steps</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Agent Essentials series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Agent Essentials</h2> <p>Follow the Microsoft Agent Framework essentials tutorials in order.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/agent-framework/academy/agent-essentials/hello-agent/">Build Your First AI Agent</a> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/agent-framework/academy/agent-essentials/add-tools/">Connect Your Agent to External Tools</a> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/agent-framework/academy/agent-essentials/multi-turn/">Maintain Context with Multi-Turn Conversations</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">04</span> <span class="series-nav-current"> <span>Persist Conversations and Smart Memory</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">05</span> <a href="/post/agent-framework/academy/agent-essentials/host-your-agent/">Expose Your Agent via API</a> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/agent-essentials/memory/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>In the previous module, <strong>Jordan Miller</strong> gave the agent a “short-term” memory using sessions. However, that memory was volatile—it only lived as long as the application was running. If Jordan restarted the console app, the agent would lose all context of the ongoing incident.</p>
+<p>In a real-world outage, investigations often span hours, multiple shifts, and handovers. This guide walks you through implementing <strong>Durable Persistence</strong> and <strong>Structured Memory</strong>. You’ll learn how to serialize an <strong>Agent Session</strong> to a file and use an <strong>AIContextProvider</strong> to extract specific facts (like the Incident ID) so that Jordan’s assistant remains smart across application restarts.</p>
+<h2 id="agent-anatomy">Agent Anatomy</h2>
+<p>We are now completing the “Memory” pillar by moving from volatile history to structured, persistable state.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 my-10">
+  <!-- Persona (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🎭</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Persona</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Jordan's on-call identity.</p>
+  </div>
+  <!-- Brain (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-1">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🧠</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Brain</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Reasoning about alerts.</p>
+  </div>
+  <!-- Tools (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-2">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🛠️</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Tools</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">External capabilities.</p>
+  </div>
+  <!-- Memory (Active) -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in animate-delay-3">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-xl mb-4 border border-indigo-100">💾</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Memory</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium">State and persistence.</p>
+  </div>
+  <!-- Hosting (Upcoming) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-4">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-slate-400 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">☁️</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Hosting</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Exposing as a service.</p>
+  </div>
+</div>
+<div class="premium-gradient border border-indigo-100 rounded-3xl p-8 my-12 shadow-sm relative overflow-hidden animate-fade-in animate-delay-4">
+  <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl"></div>
+  <div class="flex gap-5">
+    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+    </div>
+    <div>
+      <h4 class="text-indigo-950 font-black text-lg tracking-tight mb-2">Solving the Context Window</h4>
+      <p class="text-sm leading-relaxed text-indigo-900/70 max-w-2xl">
+        In the previous module, we learned that the <strong>Context Window</strong> is finite. If you rely only on <strong>Session History</strong>, your token usage grows with every message until the window overflows. <strong>Smart Memory</strong> (via <code>AIContextProvider</code>) solves this. By extracting high-value facts (like the Incident ID) into a compact, structured format, you can provide the agent with essential context that never grows out of control, even in conversations spanning hundreds of turns.
+      </p>
+    </div>
+  </div>
+</div>
+<h2 id="setup-your-environment">Setup your environment</h2>
+<p>If you are continuing from the previous tutorial, you can use your existing project. Otherwise, follow the steps below to initialize a new one.</p>
+<div class="solid-callout solid-callout-info mb-8">
+  <p class="font-bold text-indigo-900 mb-3 text-base">📋 Pre-flight Checklist</p>
+  <ul class="space-y-2.5 m-0 p-0 list-none text-sm text-indigo-900/80">
+    <li class="flex items-center gap-2">🛠️ <strong>.NET 10.0 SDK</strong> installed.</li>
+    <li class="flex items-center gap-2">🤖 <strong>AI Provider</strong>: Azure OpenAI or Local (Ollama/LM Studio).</li>
+    <li class="flex items-center gap-2">💾 <strong>Persistence</strong>: We will use <code>SerializeSessionAsync</code> to demonstrate state saving.</li>
+  </ul>
+</div>
+<h3 id="1-install-required-packages"><span class="step-pill">1</span> Install required packages</h3>
+<p>We are using the same core packages as the previous modules.</p>
+<h4 id="openai-compatible-lm-studio">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.AI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔌</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The core Agent Framework package. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">AsAIAgent</code> extension and the base classes for <code class="text-[10px] bg-slate-100 px-1 rounded">AIContextProvider</code>.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🛠️</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Extensions.AI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">Provides the unified .NET abstractions for AI. We use this to describe typed context objects for our memory providers.</p>
+  </div>
+</div>
+<h4 id="azure-openai">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.Identity</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Extensions.AI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔌</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The core Agent Framework package. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">AsAIAgent</code> extension and the base classes for <code class="text-[10px] bg-slate-100 px-1 rounded">AIContextProvider</code>.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🛠️</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Extensions.AI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">Provides the unified .NET abstractions for AI. We use this to describe typed context objects for our memory providers.</p>
+  </div>
+</div>
+<h2 id="build-the-agent">Build the Agent</h2>
+<p>In this module, you’ll evolve your triage agent to track structured operator context—like names and active incident IDs—while implementing durable session persistence to ensure it never forgets a detail, even after a system restart.</p>
+<p>Before we dive into the implementation, let’s look at the architectural flow that governs how your agent balances volatile chat history with persistent, structured memory:</p>
+<div class="flex items-center gap-3 my-12 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Memory Architecture</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="w-full bg-slate-50/50 rounded-[2rem] p-8 md:p-12 border border-slate-100/80 my-10 flex flex-col items-center transition-all hover:bg-slate-50">
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">graph TD</span></span>
+<span class="line"><span style="color:#E1E4E8">    User(["User Input"]) --> SessionHistory["Session History&#x3C;br/>(Volatile Transcript)"]</span></span>
+<span class="line"><span style="color:#E1E4E8">    SessionHistory --> ContextWindow{"LLM Context Window"}</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    Provider["AIContextProvider"]</span></span>
+<span class="line"><span style="color:#E1E4E8">    Store[("session.json")]</span></span>
+<span class="line"><span style="color:#E1E4E8">    Provider &#x3C;--> Store</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    ContextWindow -- "1. Extract Facts" --> Provider</span></span>
+<span class="line"><span style="color:#E1E4E8">    Provider -- "2. Inject Instructions" --> ContextWindow</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    ContextWindow --> Assistant(["Agent Response"])</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    style Provider fill:#f9f9ff,stroke:#6366f1,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">    style Store fill:#f9f9ff,stroke:#6366f1,stroke-width:2px</span></span>
+<span class="line"><span style="color:#E1E4E8">    style ContextWindow fill:#e0e7ff,stroke:#4338ca,stroke-width:2px,stroke-dasharray: 5 5</span></span></code></pre>
+  <p class="text-xs text-slate-400 mt-6 italic">The hybrid flow of volatile history and persistent structured state.</p>
+</div>
+<h3 id="1-define-the-memory-provider--memory"><span class="step-pill">1</span> Define the Memory Provider <span class="agent-heading-chip">💾 Memory</span></h3>
+<p>The <code>AIContextProvider</code> is the framework’s hook for custom memory. We use <code>ProviderSessionState<t></t></code> to manage the data lifecycle.</p>
+<p>Replace <code>Program.cs</code> with the following code:</p>
+<h4 id="openai-compatible-lm-studio-1">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Text</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Text</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Json</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IO</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Configure the Provider</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> modelName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL_NAME"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "google/gemma-4-e4b"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"dummy"</span><span style="color:#E1E4E8">), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> OpenAIClientOptions</span><span style="color:#E1E4E8"> { Endpoint </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint) })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(modelName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Initialize Agent with Memory Provider and Tools</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> operatorMemory</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OperatorMemory</span><span style="color:#E1E4E8">(chatClient.</span><span style="color:#B392F0">AsIChatClient</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">            You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Summarize the incident, identify likely severity, </span></span>
+<span class="line"><span style="color:#9ECBFF">            and suggest the next investigation step.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Always address the operator by their name and use their role to tailor your response.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Keep answers concise and operational.</span></span>
+<span class="line"><span style="color:#9ECBFF">            """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetServiceStatus, </span><span style="color:#9ECBFF">"GetServiceStatus"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetOnCallEngineer, </span><span style="color:#9ECBFF">"GetOnCallEngineer"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">    AIContextProviders </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [operatorMemory]</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Start a Session and Provide Context</span></span>
+<span class="line"><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">CreateSessionAsync</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 1: Setting the Incident ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"I am triaging the checkout latency incident in West Europe (INC-1042). My name is Jordan and I am the Lead Responder."</span><span style="color:#E1E4E8">, session));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 4. Persistence: Save to File (Survives Restarts)</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">--- Saving Session to Disk ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">string</span><span style="color:#B392F0"> filePath</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "session.json"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#B392F0">JsonElement</span><span style="color:#B392F0"> sessionJson</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">SerializeSessionAsync</span><span style="color:#E1E4E8">(session);</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#E1E4E8"> File.</span><span style="color:#B392F0">WriteAllTextAsync</span><span style="color:#E1E4E8">(filePath, sessionJson.</span><span style="color:#B392F0">GetRawText</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"History saved to </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">filePath</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 5. Rehydration: Load from File (Simulated Restart)</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">--- Simulating App Restart ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">string</span><span style="color:#B392F0"> savedJson</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> File.</span><span style="color:#B392F0">ReadAllTextAsync</span><span style="color:#E1E4E8">(filePath);</span></span>
+<span class="line"><span style="color:#B392F0">JsonElement</span><span style="color:#B392F0"> sessionData</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> JsonSerializer.</span><span style="color:#B392F0">Deserialize</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">JsonElement</span><span style="color:#E1E4E8">>(savedJson);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> restoredSession</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">DeserializeSessionAsync</span><span style="color:#E1E4E8">(sessionData);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 2: Recovered Context ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Remind me, which incident am I handling and what is my role?"</span><span style="color:#E1E4E8">, restoredSession));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Tool Definitions (from Module 2) ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the current health status for an enterprise service."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetServiceStatus</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check, such as checkout, payments, or inventory."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> serviceName.</span><span style="color:#B392F0">ToLowerInvariant</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">switch</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "checkout"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Checkout is DEGRADED in West Europe. P95 latency is 4.8s. Payment retries are elevated."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "payments"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Payments is HEALTHY. No active regional alerts."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "inventory"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Inventory is HEALTHY. Last sync 2 minutes ago."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        _</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> has no active status record in the demo store."</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the name of the engineer currently on-call."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetOnCallEngineer</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> "Taylor Vance (@tvance)"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Memory Provider Implementation ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> OperatorMemory</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">IChatClient</span><span style="color:#B392F0"> chatClient</span><span style="color:#E1E4E8">) : </span><span style="color:#B392F0">AIContextProvider</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> readonly</span><span style="color:#B392F0"> ProviderSessionState</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">OperatorContext</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">_sessionState</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">_</span><span style="color:#F97583"> =></span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#E1E4E8">(), </span><span style="color:#F97583">nameof</span><span style="color:#E1E4E8">(OperatorMemory));</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> IReadOnlyList</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">StateKeys</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> [_sessionState.StateKey];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#B392F0"> GetContext</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(session);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#F97583"> override</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> StoreAIContextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">InvokedContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(context.Session);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> ((op.Name </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> op.Role </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> op.IncidentId </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> context.RequestMessages.</span><span style="color:#B392F0">Any</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Role </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> ChatRole.User))</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            var</span><span style="color:#B392F0"> result</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">GetResponseAsync</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">OperatorContext</span><span style="color:#E1E4E8">>(context.RequestMessages, </span></span>
+<span class="line"><span style="color:#F97583">                new</span><span style="color:#B392F0"> ChatOptions</span><span style="color:#E1E4E8"> { Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "Extract operator name, role, and incident ID if present."</span><span style="color:#E1E4E8"> }, </span><span style="color:#B392F0">cancellationToken</span><span style="color:#E1E4E8">: ct);</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.Name </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.Name;</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.Role </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.Role;</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.IncidentId </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.IncidentId;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        _sessionState.</span><span style="color:#B392F0">SaveState</span><span style="color:#E1E4E8">(context.Session, op);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIContext</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">ProvideAIContextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">InvokingContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(context.Session);</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> instructions</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringBuilder</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (op.Name </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) instructions.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"The operator is </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">, a </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Role</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">. "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (op.IncidentId </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) </span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#6A737D">            // PRIORITY: Injected facts should override conflicting conversation history</span></span>
+<span class="line"><span style="color:#E1E4E8">            instructions.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"The current incident context is </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">IncidentId</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">. (Priority: Use this ID even if history mentions a different one). "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIContext</span><span style="color:#E1E4E8">>(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> AIContext</span><span style="color:#E1E4E8"> { </span></span>
+<span class="line"><span style="color:#E1E4E8">            Instructions </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> instructions.Length </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> ?</span><span style="color:#E1E4E8"> instructions.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "Ask for the operator's name, role, and the incident ID they are triaging."</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#E1E4E8">{ </span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">Name</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; } </span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">Role</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; } </span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">IncidentId</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h4 id="azure-openai-1">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Identity</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Text</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Text</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Json</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Extensions</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">IO</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Configure the Provider</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> deploymentName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_DEPLOYMENT_NAME"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> AzureOpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> DefaultAzureCredential</span><span style="color:#E1E4E8">()).</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(deploymentName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Initialize Agent with Memory Provider and Tools</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> operatorMemory</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OperatorMemory</span><span style="color:#E1E4E8">(chatClient.</span><span style="color:#B392F0">AsIChatClient</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">            You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Summarize the incident, identify likely severity, </span></span>
+<span class="line"><span style="color:#9ECBFF">            and suggest the next investigation step.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Always address the operator by their name and use their role to tailor your response.</span></span>
+<span class="line"><span style="color:#9ECBFF">            Keep answers concise and operational.</span></span>
+<span class="line"><span style="color:#9ECBFF">            """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetServiceStatus, </span><span style="color:#9ECBFF">"GetServiceStatus"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetOnCallEngineer, </span><span style="color:#9ECBFF">"GetOnCallEngineer"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">    AIContextProviders </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [operatorMemory]</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Start a Session and Provide Context</span></span>
+<span class="line"><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">CreateSessionAsync</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 1: Setting the Incident ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"I am triaging the checkout latency incident in West Europe (INC-1042). My name is Jordan and I am the Lead Responder."</span><span style="color:#E1E4E8">, session));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 4. Persistence: Save to File (Survives Restarts)</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">--- Saving Session to Disk ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">string</span><span style="color:#B392F0"> filePath</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "session.json"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#B392F0">JsonElement</span><span style="color:#B392F0"> sessionJson</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">SerializeSessionAsync</span><span style="color:#E1E4E8">(session);</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#E1E4E8"> File.</span><span style="color:#B392F0">WriteAllTextAsync</span><span style="color:#E1E4E8">(filePath, sessionJson.</span><span style="color:#B392F0">GetRawText</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"History saved to </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">filePath</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">."</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 5. Rehydration: Load from File (Simulated Restart)</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">--- Simulating App Restart ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">string</span><span style="color:#B392F0"> savedJson</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> File.</span><span style="color:#B392F0">ReadAllTextAsync</span><span style="color:#E1E4E8">(filePath);</span></span>
+<span class="line"><span style="color:#B392F0">JsonElement</span><span style="color:#B392F0"> sessionData</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> JsonSerializer.</span><span style="color:#B392F0">Deserialize</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">JsonElement</span><span style="color:#E1E4E8">>(savedJson);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> restoredSession</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">DeserializeSessionAsync</span><span style="color:#E1E4E8">(sessionData);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 2: Recovered Context ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Remind me, which incident am I handling and what is my role?"</span><span style="color:#E1E4E8">, restoredSession));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Tool Definitions (from Module 2) ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the current health status for an enterprise service."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetServiceStatus</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check, such as checkout, payments, or inventory."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> serviceName.</span><span style="color:#B392F0">ToLowerInvariant</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">switch</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "checkout"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Checkout is DEGRADED in West Europe. P95 latency is 4.8s. Payment retries are elevated."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "payments"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Payments is HEALTHY. No active regional alerts."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "inventory"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Inventory is HEALTHY. Last sync 2 minutes ago."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        _</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> has no active status record in the demo store."</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the name of the engineer currently on-call."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetOnCallEngineer</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> "Taylor Vance (@tvance)"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// --- Memory Provider Implementation ---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> OperatorMemory</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">IChatClient</span><span style="color:#B392F0"> chatClient</span><span style="color:#E1E4E8">) : </span><span style="color:#B392F0">AIContextProvider</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#F97583"> readonly</span><span style="color:#B392F0"> ProviderSessionState</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">OperatorContext</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">_sessionState</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">_</span><span style="color:#F97583"> =></span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#E1E4E8">(), </span><span style="color:#F97583">nameof</span><span style="color:#E1E4E8">(OperatorMemory));</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> IReadOnlyList</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">StateKeys</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> [_sessionState.StateKey];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#B392F0"> GetContext</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(session);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#F97583"> override</span><span style="color:#F97583"> async</span><span style="color:#B392F0"> ValueTask</span><span style="color:#B392F0"> StoreAIContextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">InvokedContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(context.Session);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> ((op.Name </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> op.Role </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> ||</span><span style="color:#E1E4E8"> op.IncidentId </span><span style="color:#F97583">is</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> context.RequestMessages.</span><span style="color:#B392F0">Any</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">m</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> m.Role </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> ChatRole.User))</span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#F97583">            var</span><span style="color:#B392F0"> result</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">GetResponseAsync</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">OperatorContext</span><span style="color:#E1E4E8">>(context.RequestMessages, </span></span>
+<span class="line"><span style="color:#F97583">                new</span><span style="color:#B392F0"> ChatOptions</span><span style="color:#E1E4E8"> { Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "Extract operator name, role, and incident ID if present."</span><span style="color:#E1E4E8"> }, </span><span style="color:#B392F0">cancellationToken</span><span style="color:#E1E4E8">: ct);</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.Name </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.Name;</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.Role </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.Role;</span></span>
+<span class="line"><span style="color:#E1E4E8">            op.IncidentId </span><span style="color:#F97583">??=</span><span style="color:#E1E4E8"> result.Result.IncidentId;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        _sessionState.</span><span style="color:#B392F0">SaveState</span><span style="color:#E1E4E8">(context.Session, op);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    protected</span><span style="color:#F97583"> override</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIContext</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">ProvideAIContextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">InvokingContext</span><span style="color:#B392F0"> context</span><span style="color:#E1E4E8">, </span><span style="color:#B392F0">CancellationToken</span><span style="color:#B392F0"> ct</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> _sessionState.</span><span style="color:#B392F0">GetOrInitializeState</span><span style="color:#E1E4E8">(context.Session);</span></span>
+<span class="line"><span style="color:#F97583">        var</span><span style="color:#B392F0"> instructions</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringBuilder</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (op.Name </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) instructions.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"The operator is </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">, a </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Role</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">. "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (op.IncidentId </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) </span></span>
+<span class="line"><span style="color:#E1E4E8">        {</span></span>
+<span class="line"><span style="color:#6A737D">            // PRIORITY: Injected facts should override conflicting conversation history</span></span>
+<span class="line"><span style="color:#E1E4E8">            instructions.</span><span style="color:#B392F0">Append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"The current incident context is </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">IncidentId</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">. (Priority: Use this ID even if history mentions a different one). "</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> ValueTask</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">AIContext</span><span style="color:#E1E4E8">>(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> AIContext</span><span style="color:#E1E4E8"> { </span></span>
+<span class="line"><span style="color:#E1E4E8">            Instructions </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> instructions.Length </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> ?</span><span style="color:#E1E4E8"> instructions.</span><span style="color:#B392F0">ToString</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "Ask for the operator's name, role, and the incident ID they are triaging."</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">internal</span><span style="color:#F97583"> sealed</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> OperatorContext</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#E1E4E8">{ </span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">Name</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; } </span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">Role</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; } </span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">? </span><span style="color:#B392F0">IncidentId</span><span style="color:#E1E4E8"> { </span><span style="color:#F97583">get</span><span style="color:#E1E4E8">; </span><span style="color:#F97583">set</span><span style="color:#E1E4E8">; }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<div class="premium-gradient border border-indigo-100 rounded-3xl p-8 my-12 shadow-sm relative overflow-hidden animate-fade-in animate-delay-4">
+  <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl"></div>
+  <div class="relative z-10">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      </div>
+      <div>
+        <h4 class="text-indigo-950 font-black text-lg tracking-tight">Production State Architecture</h4>
+        <p class="text-xs text-indigo-900/60 uppercase font-bold tracking-widest">Designing for Scale and Reliability</p>
+      </div>
+    </div>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;div class="grid grid-cols-1 md:grid-cols-3 gap-6"></span></span>
+<span class="line"><span>  &#x3C;!-- Redis Card --></span></span>
+<span class="line"><span>  &#x3C;div class="p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white shadow-sm hover:shadow-md transition-all"></span></span>
+<span class="line"><span>    &#x3C;div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-xl mb-4 border border-red-100">⚡&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;div class="font-bold text-slate-900 mb-1 text-sm">Hot Tier&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;div class="text-[10px] font-black text-red-600 uppercase tracking-tighter mb-3">Redis&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;p class="text-[11px] leading-relaxed text-slate-600">Sub-millisecond retrieval of active sessions. Perfect for agents requiring real-time responsiveness.&#x3C;/p></span></span>
+<span class="line"><span>  &#x3C;/div></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;!-- SQL Card --></span></span>
+<span class="line"><span>  &#x3C;div class="p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white shadow-sm hover:shadow-md transition-all"></span></span>
+<span class="line"><span>    &#x3C;div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4 border border-indigo-100">💾&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;div class="font-bold text-slate-900 mb-1 text-sm">Warm Tier&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;div class="text-[10px] font-black text-indigo-600 uppercase tracking-tighter mb-3">SQL / NoSQL&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;p class="text-[11px] leading-relaxed text-slate-600">Durable, transactional storage for complete message logs, audit trails, and long-term history.&#x3C;/p></span></span>
+<span class="line"><span>  &#x3C;/div></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  &#x3C;!-- Blob Card --></span></span>
+<span class="line"><span>  &#x3C;div class="p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white shadow-sm hover:shadow-md transition-all"></span></span>
+<span class="line"><span>    &#x3C;div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-4 border border-amber-100">☁️&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;div class="font-bold text-slate-900 mb-1 text-sm">Cold Tier&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;div class="text-[10px] font-black text-amber-600 uppercase tracking-tighter mb-3">Blob Storage&#x3C;/div></span></span>
+<span class="line"><span>    &#x3C;p class="text-[11px] leading-relaxed text-slate-600">Cost-effective storage for large session snapshots, document artifacts, and offline backups.&#x3C;/p></span></span>
+<span class="line"><span>  &#x3C;/div></span></span>
+<span class="line"><span>&#x3C;/div></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>&#x3C;div class="mt-8 pt-6 border-t border-indigo-900/5"></span></span>
+<span class="line"><span>  &#x3C;p class="text-[11px] italic text-indigo-900/50 leading-relaxed max-w-2xl"></span></span>
+<span class="line"><span>    The Agent Framework is storage-agnostic. As long as you can serialize the session state and restore it later, your agent can pick up exactly where it left off.</span></span>
+<span class="line"><span>  &#x3C;/p></span></span>
+<span class="line"><span>&#x3C;/div></span></span></code></pre>
+  </div>
+</div>
+<h2 id="try-it">Try it</h2>
+<p>Experiment with how the Agent Framework handles structured state and persistence.</p>
+<h4 id="-the-crash-test">🧪 The Crash Test</h4>
+<h3 id="simulate-a-recovery">Simulate a Recovery</h3>
+<p>To prove persistence, we will simulate a “Fresh Run” where the agent has no memory in RAM, but loads it from disk.</p>
+<p>To understand what’s happening under the hood:</p>
+<div class="flex items-center gap-3 my-12 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Persistence Lifecycle</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="w-full bg-slate-50/50 rounded-[2rem] p-8 md:p-12 border border-slate-100/80 my-10 flex flex-col items-center transition-all hover:bg-slate-50">
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">graph TD</span></span>
+<span class="line"><span style="color:#E1E4E8">    Session["Active Agent Session"] -- "SerializeSessionAsync" --> JSON["session.json (UTF-8)"]</span></span>
+<span class="line"><span style="color:#E1E4E8">    JSON -- "File.WriteAllText" --> Disk[("Local Disk")]</span></span>
+<span class="line"><span style="color:#E1E4E8">    Disk -- "File.ReadAllText" --> JSON_Reloaded["session.json"]</span></span>
+<span class="line"><span style="color:#E1E4E8">    JSON_Reloaded -- "DeserializeSessionAsync" --> RestoredSession["Restored Agent Session"]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    style Session fill:#e0e7ff,stroke:#4338ca</span></span>
+<span class="line"><span style="color:#E1E4E8">    style RestoredSession fill:#e0e7ff,stroke:#4338ca</span></span>
+<span class="line"><span style="color:#E1E4E8">    style Disk fill:#f9f9ff,stroke:#6366f1</span></span></code></pre>
+  <p class="text-xs text-slate-400 mt-6 italic">How state survives application restarts and crashes.</p>
+</div>
+<ol>
+<li>Comment out your Turn 1 code (the introduction) in your <code>Program.cs</code>.</li>
+<li>Add these lines to the end of your file:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#6A737D">// Load the state from the previous run</span></span>
+<span class="line"><span style="color:#F97583">string</span><span style="color:#B392F0"> savedJson</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> File.</span><span style="color:#B392F0">ReadAllTextAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"session.json"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#B392F0">JsonElement</span><span style="color:#B392F0"> sessionData</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> JsonSerializer.</span><span style="color:#B392F0">Deserialize</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">JsonElement</span><span style="color:#E1E4E8">>(savedJson);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> restoredSession</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">DeserializeSessionAsync</span><span style="color:#E1E4E8">(sessionData);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">--- Fresh Run: Testing Recovered Memory ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Who am I and what incident am I working on?"</span><span style="color:#E1E4E8">, restoredSession));</span></span></code></pre>
+<p><strong>The Goal:</strong> The agent will correctly identify you and the incident ID, even though this “fresh” run never heard you introduce yourself.</p>
+<h4 id="-inspect-the-mind">🔍 Inspect the Mind</h4>
+<h3 id="direct-state-access">Direct State Access</h3>
+<p>Smart Memory isn’t a black box. Your application can read the structured state directly without calling the LLM. Add this to the end of your <code>Program.cs</code>:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> op</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> operatorMemory.</span><span style="color:#B392F0">GetContext</span><span style="color:#E1E4E8">(restoredSession);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">$"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">[APP LOG]: Memory check -> Operator: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#F97583">?</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Name</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">, Role: </span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">op</span><span style="color:#F97583">?</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">Role</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span></code></pre>
+<p><strong>The Goal:</strong> Observe how the application “knows” who Jordan is because the <code>OperatorMemory</code> provider extracted that fact into a typed C# object.</p>
+<h4 id="️-manual-override">✍️ Manual Override</h4>
+<h3 id="manipulate-the-context">Manipulate the Context</h3>
+<p>Because the state is stored in a standard C# object, your application can update it programmatically. Try overriding the incident ID:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> context</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> operatorMemory.</span><span style="color:#B392F0">GetContext</span><span style="color:#E1E4E8">(restoredSession);</span></span>
+<span class="line"><span style="color:#E1E4E8">context.IncidentId </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "INC-9999 (PRIORITY OVERRIDE)"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">--- Turn 3: Manual Override ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Which incident am I handling now?"</span><span style="color:#E1E4E8">, restoredSession));</span></span></code></pre>
+<p><strong>The Goal:</strong> The agent will immediately recognize the new ID, proving that <code>AIContextProvider</code> can steer the agent even if the chat history contains conflicting information.</p>
+<div class="solid-callout solid-callout-info mt-6">
+  <p class="font-bold text-indigo-900 mb-2 text-sm">🧠 Pro-Tip: Resolving Fact Conflicts</p>
+  <p class="text-xs text-indigo-900/80 leading-relaxed">
+    If the agent sees a fact in the <strong>History</strong> (e.g., "I'm handling INC-1042") that contradicts a fact in <strong>Smart Memory</strong> (e.g., "Active Incident: INC-9999"), it might get confused. By adding "Priority" or "Source of Truth" language to your provider's instructions, you ensure your application code always has the final word.
+  </p>
+</div>
+<h2 id="summary--next-steps">Summary &#x26; Next Steps</h2>
+<p>Congratulations! You’ve graduated from basic chat history to a <strong>Durable Enterprise Agent</strong>.</p>
+<p>By combining <strong>Session Serialization</strong> and <strong>AIContextProviders</strong>, you’ve built an agent that:</p>
+<ul>
+<li><strong>Remembers</strong> across application restarts.</li>
+<li><strong>Extracts</strong> structured facts into typed C# objects.</li>
+<li><strong>Optimizes</strong> its own context window for better performance.</li>
+</ul>
+<p>In the <strong><a href="/post/agent-framework/academy/agent-essentials/host-your-agent/">next tutorial</a></strong>, we will conclude this journey by taking Jordan’s assistant out of the terminal and <strong>hosting it as a scalable service</strong>.</p>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/agent-essentials/">#agent-essentials</a><a href="/tags/session-persistence/">#session-persistence</a><a href="/tags/aicontextprovider/">#aicontextprovider</a><a href="/tags/structured-memory/">#structured-memory</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fmemory%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Persist%20Conversations%20and%20Smart%20Memory&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fmemory%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fmemory%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/agent-essentials/memory/";
+const title = "Persist Conversations and Smart Memory";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/memory/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

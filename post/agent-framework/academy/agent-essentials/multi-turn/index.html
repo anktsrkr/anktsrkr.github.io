@@ -1,0 +1,425 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Maintain Context with Multi-Turn Conversations | Ankit Sarkar</title><meta name="description" content="Implement state management using agent sessions to handle follow-up questions and preserve history."><link rel="canonical" href="https://microsoft-agent-framework.github.io/learn/agent-essentials/multi-turn/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="article"><meta property="og:title" content="Maintain Context with Multi-Turn Conversations | Ankit Sarkar"><meta property="og:description" content="Implement state management using agent sessions to handle follow-up questions and preserve history."><meta property="og:url" content="https://microsoft-agent-framework.github.io/learn/agent-essentials/multi-turn/"><meta property="og:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Maintain Context with Multi-Turn Conversations | Ankit Sarkar"><meta name="twitter:description" content="Implement state management using agent sessions to handle follow-up questions and preserve history."><meta name="twitter:image" content="https://anktsrkr.github.io/images/agent-framework/aflogo.png"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>(function(){const gaId = "G-TY8ZMTBGSM";
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    })();</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Maintain Context with Multi-Turn Conversations</h1> <p>Implement state management using agent sessions to handle follow-up questions and preserve history.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/agent-essentials/">Agent Essentials</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#agent-anatomy">Agent Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-environment">Setup your environment</a> <div class="toc-sublinks"> <a href="#1-install-required-packages">1 Install required packages</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#build-the-agent">Build the agent</a> <div class="toc-sublinks"> <a href="#1-implement-multi-turn-logic--persona--memory">1 Implement Multi-Turn Logic 🎭 Persona 💾 Memory</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it">Try it</a> <div class="toc-sublinks"> <a href="#deep-history">Deep History</a><a href="#break-the-memory">Break the Memory</a><a href="#enforce-a-protocol">Enforce a Protocol</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary-and-next-steps">Summary and Next Steps</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Agent Essentials series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Agent Essentials</h2> <p>Follow the Microsoft Agent Framework essentials tutorials in order.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/agent-framework/academy/agent-essentials/hello-agent/">Build Your First AI Agent</a> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/agent-framework/academy/agent-essentials/add-tools/">Connect Your Agent to External Tools</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">03</span> <span class="series-nav-current"> <span>Maintain Context with Multi-Turn Conversations</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/agent-framework/academy/agent-essentials/memory/">Persist Conversations and Smart Memory</a> </li><li class="series-nav-item"> <span class="series-nav-index">05</span> <a href="/post/agent-framework/academy/agent-essentials/host-your-agent/">Expose Your Agent via API</a> </li> </ol> </nav> <aside class="source-note">
+Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/agent-essentials/multi-turn/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
+</aside>  <h2 id="overview">Overview</h2>
+<p>In the previous tutorials, <strong>Jordan Miller</strong> built an agent that could use tools to check service health. However, each interaction was a “one-and-done” affair. If Jordan were to add a follow-up turn to the investigation, the agent would lose the context:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#6A737D">// Turn 1: (Already implemented in Module 2)</span></span>
+<span class="line"><span style="color:#6A737D">// await foreach (var update in agent.RunStreamingAsync(incident)) { ... }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Turn 2: (Add this follow-up)</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Who is on call for that?"</span><span style="color:#E1E4E8">)); </span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Result: "I need to know which service you are referring to in order to tell you who the on-call engineer is."</span></span></code></pre>
+<p>In a high-pressure incident, Jordan needs to be able to iterate—asking for more details or refining a search without repeating the entire history. This guide walks you through implementing <strong>Memory</strong>. You’ll use an <strong>Agent Session</strong> to preserve the conversation state, allowing Jordan’s assistant to maintain context across multiple turns.</p>
+<h2 id="agent-anatomy">Agent Anatomy</h2>
+<p>An AI Agent uses <strong>Memory</strong> to maintain a “thread” of conversation. Without it, every message is treated as the very first time the agent has ever met you.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 my-10">
+  <!-- Persona (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🎭</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Persona</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Jordan's on-call identity.</p>
+  </div>
+  <!-- Brain (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-1">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🧠</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Brain</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Reasoning about alerts.</p>
+  </div>
+  <!-- Tools (Mastered) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-2">
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">🛠️</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Tools</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">External capabilities.</p>
+  </div>
+  <!-- Memory (Active) -->
+  <div class="p-5 rounded-2xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden animate-fade-in animate-delay-3">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-indigo-500 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Building</div>
+    <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-xl mb-4 border border-indigo-100">💾</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Memory</div>
+    <p class="text-[11px] leading-relaxed text-slate-600 font-medium">State and history.</p>
+  </div>
+  <!-- Hosting (Upcoming) -->
+  <div class="p-5 rounded-2xl bg-slate-50/50 border border-slate-200/60 shadow-sm opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-100 animate-fade-in animate-delay-4">
+    <div class="absolute top-0 right-0 px-2 py-0.5 bg-slate-400 text-[9px] font-black text-white rounded-bl-lg tracking-tighter uppercase">Upcoming</div>
+    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-xl mb-4 border border-slate-100">☁️</div>
+    <div class="font-bold text-slate-900 mb-1 text-sm">Hosting</div>
+    <p class="text-[11px] leading-relaxed text-slate-500">Exposing as a service.</p>
+  </div>
+</div>
+<div class="premium-gradient border border-indigo-100 rounded-3xl p-8 my-12 shadow-sm relative overflow-hidden animate-fade-in animate-delay-4">
+  <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 rounded-full blur-3xl"></div>
+  <div class="flex gap-5">
+    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+    </div>
+    <div>
+      <h4 class="text-indigo-950 font-black text-lg tracking-tight mb-2">Understanding the Context Window</h4>
+      <p class="text-sm leading-relaxed text-indigo-900/70 max-w-2xl">
+        While the <strong>Agent Session</strong> manages history, every LLM has a finite <strong>Context Window</strong>—a physical limit on how many tokens it can process at once. As your conversation grows, the entire thread (Persona + History + Input) must fit within this window. If it overflows, the agent will begin to "forget" the earliest parts of the chat.
+      </p>
+      <div class="mt-4 flex items-center gap-2">
+        <span class="px-2 py-1 rounded bg-indigo-100 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Coming Soon</span>
+        <span class="text-[11px] text-indigo-900/50 font-medium">We'll explore <strong>Compaction</strong> and <strong>Persistence</strong> in the next module.</span>
+      </div>
+    </div>
+  </div>
+</div>
+<h2 id="setup-your-environment">Setup your environment</h2>
+<p>If you are continuing from the previous tutorial, you can use your existing project. Otherwise, follow the steps below to initialize a new one.</p>
+<div class="solid-callout solid-callout-info mb-8">
+  <p class="font-bold text-indigo-900 mb-3 text-base">📋 Pre-flight Checklist</p>
+  <ul class="space-y-2.5 m-0 p-0 list-none text-sm text-indigo-900/80">
+    <li class="flex items-center gap-2">🛠️ <strong>.NET 10.0 SDK</strong> (or later) installed.</li>
+    <li class="flex items-center gap-2">🤖 <strong>AI Provider</strong>: Access to Azure OpenAI or a local service (Ollama/LM Studio).</li>
+    <li class="flex items-center gap-2">💾 <strong>Session Management</strong>: We will use <code>ChatClientAgentSession</code> to handle history.</li>
+  </ul>
+</div>
+<h3 id="1-install-required-packages"><span class="step-pill">1</span> Install required packages</h3>
+<p>We are using the same core packages as the previous modules.</p>
+<h4 id="openai-compatible-lm-studio">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔌</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The core Agent Framework package. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">AsAIAgent</code> extension and state management abstractions.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">💾</span>
+      <code class="text-xs font-bold text-indigo-600">OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The official OpenAI client. We use this to establish the <code class="text-[10px] bg-slate-100 px-1 rounded">ChatClient</code> which the agent uses for multi-turn reasoning.</p>
+  </div>
+</div>
+<h4 id="azure-openai">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Microsoft.Agents.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> package</span><span style="color:#9ECBFF"> Azure.AI.OpenAI</span></span>
+<span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> restore</span></span></code></pre>
+<div class="flex items-center gap-3 my-6 opacity-50">
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+  <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Package Anatomy</span>
+  <div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">🔌</span>
+      <code class="text-xs font-bold text-indigo-600">Microsoft.Agents.AI.OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The core Agent Framework package. It provides the <code class="text-[10px] bg-slate-100 px-1 rounded">AsAIAgent</code> extension and state management abstractions.</p>
+  </div>
+  <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-200 hover:shadow-md transition-all">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-xl">☁️</span>
+      <code class="text-xs font-bold text-indigo-600">Azure.AI.OpenAI</code>
+    </div>
+    <p class="text-xs text-slate-500 leading-relaxed">The official Azure SDK for OpenAI. Enables high-performance, enterprise-grade connectivity to GPT models.</p>
+  </div>
+</div>
+<hr>
+<h2 id="build-the-agent">Build the agent</h2>
+<p>We will now implement a two-turn conversation. In the first turn, we tell the agent about an incident. In the second turn, we ask a follow-up without repeating any details.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="mermaid"><code><span class="line"><span style="color:#E1E4E8">sequenceDiagram</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant App as Console App</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Session as 💾 Session</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Agent as 🎭 Persona</span></span>
+<span class="line"><span style="color:#E1E4E8">    participant Brain as 🧠 Brain</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    App->>Agent: CreateSessionAsync()</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent-->>Session: New Session Object</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    Note over App,Session: Turn 1</span></span>
+<span class="line"><span style="color:#E1E4E8">    App->>Agent: RunAsync("Checkout latency in West Europe", Session)</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Brain: Persona + History (Empty) + Input</span></span>
+<span class="line"><span style="color:#E1E4E8">    Brain-->>Agent: "I see checkout is degraded..."</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Session: Store Turn 1</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent-->>App: Response 1</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    Note over App,Session: Turn 2</span></span>
+<span class="line"><span style="color:#E1E4E8">    App->>Agent: RunAsync("Who is on call for that?", Session)</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Brain: Persona + History (Turn 1) + Input</span></span>
+<span class="line"><span style="color:#E1E4E8">    Brain-->>Agent: "Taylor Vance is on call for West Europe."</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent->>Session: Store Turn 2</span></span>
+<span class="line"><span style="color:#E1E4E8">    Agent-->>App: Response 2</span></span></code></pre>
+<h3 id="1-implement-multi-turn-logic--persona--memory"><span class="step-pill">1</span> Implement Multi-Turn Logic <span class="agent-heading-chip">🎭 Persona</span> <span class="agent-heading-chip">💾 Memory</span></h3>
+<p>We use <code>agent.CreateSessionAsync()</code> to generate a state container. When we call <code>RunAsync</code> or <code>RunStreamingAsync</code>, we pass this session as a parameter. The Agent Framework automatically handles the injection of previous messages into the LLM’s context.</p>
+<p>Replace the contents of <code>Program.cs</code> with the following:</p>
+<h4 id="openai-compatible-lm-studio-1">OpenAI Compatible (LM Studio)</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ClientModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> OpenAI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Chat</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Configure the Provider</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "http://localhost:1234/v1"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> modelName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_MODEL_NAME"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">??</span><span style="color:#9ECBFF"> "google/gemma-4-e4b"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ApiKeyCredential</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"dummy"</span><span style="color:#E1E4E8">), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> OpenAIClientOptions</span><span style="color:#E1E4E8"> { Endpoint </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint) })</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(modelName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Initialize the Agent with Tools</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">        You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">        Summarize the incident, identify likely severity, </span></span>
+<span class="line"><span style="color:#9ECBFF">        and suggest the next investigation step.</span></span>
+<span class="line"><span style="color:#9ECBFF">        Always address the operator by their name and use their role to tailor your response.</span></span>
+<span class="line"><span style="color:#9ECBFF">        Keep answers concise and operational.</span></span>
+<span class="line"><span style="color:#9ECBFF">        """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetServiceStatus, </span><span style="color:#9ECBFF">"GetServiceStatus"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetOnCallEngineer, </span><span style="color:#9ECBFF">"GetOnCallEngineer"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Create the Session (Memory)</span></span>
+<span class="line"><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">CreateSessionAsync</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 4. Turn 1: Providing Context</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 1 ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> turn1</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "Checkout latency is above threshold in West Europe (4.8s)."</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(turn1, session))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(update);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 5. Turn 2: Follow-up (Relies on Memory)</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 2 ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> turn2</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "Who is on call for that?"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(turn2, session))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(update);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Tool Definitions (from Module 2)</span></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the current health status for an enterprise service."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetServiceStatus</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check, such as checkout, payments, or inventory."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> serviceName.</span><span style="color:#B392F0">ToLowerInvariant</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">switch</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "checkout"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Checkout is DEGRADED in West Europe. P95 latency is 4.8s. Payment retries are elevated."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "payments"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Payments is HEALTHY. No active regional alerts."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "inventory"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Inventory is HEALTHY. Last sync 2 minutes ago."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        _</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> has no active status record in the demo store."</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the name of the engineer currently on-call."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetOnCallEngineer</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> "Taylor Vance (@tvance)"</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<h4 id="azure-openai-1">Azure OpenAI</h4>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">OpenAI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Azure</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Identity</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> Microsoft</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Agents</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">AI</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">using</span><span style="color:#B392F0"> System</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ComponentModel</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 1. Configure the Provider</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> endpoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_ENDPOINT"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> deploymentName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Environment.</span><span style="color:#B392F0">GetEnvironmentVariable</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"AZURE_OPENAI_DEPLOYMENT_NAME"</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. Initialize the Agent with Tools</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> chatClient</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> AzureOpenAIClient</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Uri</span><span style="color:#E1E4E8">(endpoint), </span><span style="color:#F97583">new</span><span style="color:#B392F0"> DefaultAzureCredential</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">GetChatClient</span><span style="color:#E1E4E8">(deploymentName);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">AIAgent</span><span style="color:#B392F0"> agent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">AsAIAgent</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> ChatClientAgentOptions</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Name </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "TriageAgent"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ChatOptions </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#E1E4E8">        Instructions </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">        You are an enterprise incident triage assistant.</span></span>
+<span class="line"><span style="color:#9ECBFF">        Summarize the incident, identify likely severity, </span></span>
+<span class="line"><span style="color:#9ECBFF">        and suggest the next investigation step.</span></span>
+<span class="line"><span style="color:#9ECBFF">        Always address the operator by their name and use their role to tailor your response.</span></span>
+<span class="line"><span style="color:#9ECBFF">        Keep answers concise and operational.</span></span>
+<span class="line"><span style="color:#9ECBFF">        """</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        Tools </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetServiceStatus, </span><span style="color:#9ECBFF">"GetServiceStatus"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">            AIFunctionFactory.</span><span style="color:#B392F0">Create</span><span style="color:#E1E4E8">(GetOnCallEngineer, </span><span style="color:#9ECBFF">"GetOnCallEngineer"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. Create the Session (Memory)</span></span>
+<span class="line"><span style="color:#B392F0">AgentSession</span><span style="color:#B392F0"> session</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">CreateSessionAsync</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 4. Turn 1: Providing Context</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 1 ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> turn1</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "Checkout latency is above threshold in West Europe (4.8s)."</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(turn1, session))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(update);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 5. Turn 2: Follow-up (Relies on Memory)</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 2 ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> turn2</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "Who is on call for that?"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(turn2, session))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(update);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Tool Definitions (from Module 2)</span></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the current health status for an enterprise service."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetServiceStatus</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check, such as checkout, payments, or inventory."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> serviceName.</span><span style="color:#B392F0">ToLowerInvariant</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">switch</span></span>
+<span class="line"><span style="color:#E1E4E8">    {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "checkout"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Checkout is DEGRADED in West Europe. P95 latency is 4.8s. Payment retries are elevated."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "payments"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Payments is HEALTHY. No active regional alerts."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "inventory"</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> "Inventory is HEALTHY. Last sync 2 minutes ago."</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">        _</span><span style="color:#F97583"> =></span><span style="color:#9ECBFF"> $"</span><span style="color:#9ECBFF">{</span><span style="color:#E1E4E8">serviceName</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF"> has no active status record in the demo store."</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">[</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Gets the name of the engineer currently on-call."</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">static</span><span style="color:#F97583"> string</span><span style="color:#B392F0"> GetOnCallEngineer</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    [</span><span style="color:#B392F0">Description</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"The service name to check."</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">string</span><span style="color:#B392F0"> serviceName</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#9ECBFF"> "Taylor Vance (@tvance)"</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<p>With everything in place, execute the application from your terminal:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">dotnet</span><span style="color:#9ECBFF"> run</span></span></code></pre>
+<hr>
+<h2 id="try-it">Try it</h2>
+<p>Experiment with how the agent maintains (or loses) state by modifying the session usage.</p>
+<h4 id="-long-memory">🎯 Long Memory</h4>
+<h3 id="deep-history">Deep History</h3>
+<p>Add a third turn to your code that asks for a summary of the entire conversation so far.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"--- Turn 3 ---"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Summarize our discussion."</span><span style="color:#E1E4E8">, session))</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#E1E4E8">    Console.</span><span style="color:#B392F0">Write</span><span style="color:#E1E4E8">(update);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p><strong>Result:</strong> The agent will recount the specific incident details and the follow-up question you asked.</p>
+<h4 id="-session-reset">📟 Session Reset</h4>
+<h3 id="break-the-memory">Break the Memory</h3>
+<p>Try running the second turn <em>without</em> passing the <code>session</code> object:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#6A737D">// Turn 2 without session</span></span>
+<span class="line"><span style="color:#F97583">await</span><span style="color:#F97583"> foreach</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#B392F0"> update</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunStreamingAsync</span><span style="color:#E1E4E8">(turn2)) { </span><span style="color:#F97583">..</span><span style="color:#E1E4E8">. }</span></span></code></pre>
+<p><strong>Result:</strong> The agent will fail to answer the question, typically responding with something like “I don’t have information about a specific latency or region. Could you provide those details?”</p>
+<h4 id="-persona-memory">🎭 Persona Memory</h4>
+<h3 id="enforce-a-protocol">Enforce a Protocol</h3>
+<p>Memory doesn’t just store facts; it stores behavioral rules established during the conversation. Update your <code>turn1</code> variable in <code>Program.cs</code> to include a specific protocol:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#F97583">var</span><span style="color:#B392F0"> turn1</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> """</span></span>
+<span class="line"><span style="color:#9ECBFF">Checkout latency is above threshold in West Europe (4.8s).</span></span>
+<span class="line"><span style="color:#9ECBFF">Also, for any incident in West Europe, you must always include </span></span>
+<span class="line"><span style="color:#9ECBFF">a 'Directive' section at the end of your response that says 'Notify @emea-oncall'.</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<p>Then ask an unrelated follow-up about the latency in Turn 2.</p>
+<p><strong>Result:</strong> The agent will remember the protocol established in the first turn and apply it to the second, proving that the Session maintains the “evolved” persona as well as the incident data.</p>
+<h2 id="summary-and-next-steps">Summary and Next Steps</h2>
+<p>You’ve successfully implemented state management! By using <strong>Sessions</strong>, your agent can now hold intelligent, multi-turn conversations that feel natural and context-aware.</p>
+<p>While our agent now has a memory, it’s currently <strong>volatile</strong>. Because the session lives only in the <strong>application’s in-memory state</strong>, restarting the application or a system crash wipes the slate clean. In a real-world outage, an investigation might span days or involve multiple team members across different shifts.</p>
+<p>For example, if you restart your app and ask a follow-up, the memory is gone:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="csharp"><code><span class="line"><span style="color:#6A737D">// Session 1: Investigation begins...</span></span>
+<span class="line"><span style="color:#6A737D">// [App Exit]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Session 2: A new engineer joins...</span></span>
+<span class="line"><span style="color:#E1E4E8">Console.</span><span style="color:#B392F0">WriteLine</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> agent.</span><span style="color:#B392F0">RunAsync</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Give me a summary of the incident so far."</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Result: "I'm sorry, I don't have any record of an ongoing incident. Could you provide the details?"</span></span></code></pre>
+<p>In the <strong><a href="/post/agent-framework/academy/agent-essentials/memory/">next tutorial</a></strong>, we will solve this by implementing <strong>Persist Conversations and Smart Memory</strong>. We will learn how to serialize our session history and use <strong>AIContextProviders</strong> to extract structured facts that survive application restarts.</p>  <script type="module" src="/_astro/MermaidRenderer.astro_astro_type_script_index_0_lang.Bk6wlHln.js"></script> <script type="module">const i=async o=>{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(o);return}const e=document.createElement("textarea");e.value=o,e.setAttribute("readonly",""),e.style.position="fixed",e.style.top="-1000px",document.body.append(e),e.select(),Reflect.get(document,"execCommand")?.call(document,"copy"),e.remove()},l=o=>{const e=o.getAttribute("data-language");if(e)return e;const t=o.querySelector("code");return Array.from(t?.classList??[]).find(n=>n.startsWith("language-"))?.replace("language-","")??"Code"},d=o=>{const e=document.createElement("button");e.type="button",e.className="code-copy-button",e.setAttribute("aria-label","Copy code to clipboard"),e.innerHTML='<span class="code-copy-icon" aria-hidden="true"></span><span class="code-copy-label">Copy</span>';const t=e.querySelector(".code-copy-label");let a;return e.addEventListener("click",async()=>{if(!t)return;const n=o.querySelector("code")?.textContent??o.textContent??"";try{await i(n.trimEnd()),e.classList.add("code-copy-button-copied"),t.textContent="Copied",e.setAttribute("aria-label","Code copied to clipboard"),a&&window.clearTimeout(a),a=window.setTimeout(()=>{e.classList.remove("code-copy-button-copied"),t.textContent="Copy",e.setAttribute("aria-label","Copy code to clipboard")},1800)}catch(r){console.error("Unable to copy code block",r),t.textContent="Failed",e.setAttribute("aria-label","Unable to copy code")}}),e},c=()=>{document.querySelectorAll(".article-content pre:not([data-code-copy-ready])").forEach(e=>{if(e.getAttribute("data-language")==="mermaid")return;e.setAttribute("data-code-copy-ready","true");let t=e.previousElementSibling?.classList.contains("code-title")?e.previousElementSibling:null;t||(t=document.createElement("div"),t.className="code-title code-title-generated",t.textContent=l(e),e.before(t)),!t.querySelector(".code-copy-button")&&t.append(d(e))})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",c,{once:!0}):c();</script> <footer class="article-footer-tags" aria-label="Post tags"> <span class="aside-label">Tagged with</span> <div class="article-tags"> <a href="/tags/agent-framework/">#agent-framework</a><a href="/tags/agent-essentials/">#agent-essentials</a><a href="/tags/memory/">#memory</a><a href="/tags/state-management/">#state-management</a><a href="/tags/multi-turn-conversations/">#multi-turn-conversations</a> </div> </footer> <nav class="share-links" aria-label="Share this post"> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fmulti-turn%2F" target="_blank" rel="noreferrer">Facebook</a> <a href="https://twitter.com/intent/tweet?text=Maintain%20Context%20with%20Multi-Turn%20Conversations&url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fmulti-turn%2F" target="_blank" rel="noreferrer">Twitter/X</a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fanktsrkr.github.io%2Fpost%2Fagent-framework%2Facademy%2Fagent-essentials%2Fmulti-turn%2F" target="_blank" rel="noreferrer">LinkedIn</a> </nav> <section class="comments" aria-label="Comments"> <h2>Comments</h2> <div id="disqus_thread"></div> <script>(function(){const shortname = "anktsrkr-github-io";
+const identifier = "/post/agent-framework/academy/agent-essentials/multi-turn/";
+const title = "Maintain Context with Multi-Turn Conversations";
+const url = "https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/multi-turn/";
+
+    window.disqus_config = function () {
+      this.page.url = url;
+      this.page.identifier = identifier;
+      this.page.title = title;
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://' + shortname + '.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  })();</script> <noscript>Please enable JavaScript to view comments.</noscript> </section> </div> </div> </article>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
+
+  (function(w, d, s, id) {
+    if (typeof w.webpushr !== 'undefined') return;
+    w.webpushr = w.webpushr || function() {
+      (w.webpushr.q = w.webpushr.q || []).push(arguments);
+    };
+    var js = d.createElement(s);
+    var fjs = d.getElementsByTagName(s)[0];
+    js.id = id;
+    js.async = 1;
+    js.src = 'https://cdn.webpushr.com/app.min.js';
+    fjs.parentNode.appendChild(js);
+  })(window, document, 'script', 'webpushr-jssdk');
+  webpushr('setup', { key: webpushrKey });
+})();</script> <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(registration) {
+          var worker = registration.active || registration.waiting || registration.installing;
+          if (worker && worker.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
+        });
+      });
+
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          cacheNames
+            .filter(function(name) {
+              return ['assets-v1', 'content-v1', 'offline-v1', '404-v1'].includes(name);
+            })
+            .forEach(function(name) {
+              caches.delete(name);
+            });
+        });
+      }
+    });
+  }
+</script> <script id="setmore_script" type="text/javascript" src="https://my.setmore.com/webapp/js/src/others/setmore_iframe.js"></script> <a id="Setmore_button_iframe" class="legacy-setmore-button" href="https://booking.setmore.com/scheduleappointment/d3cbc8af-7bd5-44c1-874b-87c9d77d82be"> <span>#TalkWithMe</span> </a> <script>(function(){const clarityId = "ro6zx9o7jl";
+
+  (function(c, l, a, r, i, t, y) {
+    c[a] = c[a] || function() {
+      (c[a].q = c[a].q || []).push(arguments);
+    };
+    t = l.createElement(r);
+    t.async = 1;
+    t.src = 'https://www.clarity.ms/tag/' + i + '?ref=bwt';
+    y = l.getElementsByTagName(r)[0];
+    y.parentNode.insertBefore(t, y);
+  })(window, document, 'clarity', 'script', clarityId);
+})();</script> <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script> <script>(function(){const kofiUser = "ankitsarkar";
+
+  if (window.kofiWidgetOverlay) {
+    kofiWidgetOverlay.draw(kofiUser, {
+      type: 'floating-chat',
+      'floating-chat.donateButton.text': 'Support me',
+      'floating-chat.donateButton.background-color': '#ffffff',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
+  }
+})();</script> </div> </body></html>

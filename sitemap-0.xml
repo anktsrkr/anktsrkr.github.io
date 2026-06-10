@@ -40,6 +40,17 @@
   <url><loc>https://anktsrkr.github.io/2025/05/semantic-kernel-building-blocks/</loc></url>
   <url><loc>https://anktsrkr.github.io/2025/10/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/</loc></url>
   <url><loc>https://anktsrkr.github.io/2025/10/getting-started-with-lmstudio-and-agent-framework/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/add-tools/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/beyond-agents/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/hello-agent/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/host-your-agent/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/host-your-workflow/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/memory/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/multi-turn/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/orchestrate-workflows/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/scrapegraphai-research-agent/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/semantic-tool-search/</loc></url>
+  <url><loc>https://anktsrkr.github.io/2026/06/state-and-checkpoints/</loc></url>
   <url><loc>https://anktsrkr.github.io/about/</loc></url>
   <url><loc>https://anktsrkr.github.io/archives/</loc></url>
   <url><loc>https://anktsrkr.github.io/categories/</loc></url>
@@ -48,6 +59,9 @@
   <url><loc>https://anktsrkr.github.io/categories/.net-7/</loc></url>
   <url><loc>https://anktsrkr.github.io/categories/.net-8/</loc></url>
   <url><loc>https://anktsrkr.github.io/categories/.net-9/</loc></url>
+  <url><loc>https://anktsrkr.github.io/categories/advanced-orchestration/</loc></url>
+  <url><loc>https://anktsrkr.github.io/categories/agent-capabilities/</loc></url>
+  <url><loc>https://anktsrkr.github.io/categories/agent-essentials/</loc></url>
   <url><loc>https://anktsrkr.github.io/categories/agent-framework/</loc></url>
   <url><loc>https://anktsrkr.github.io/categories/ai/</loc></url>
   <url><loc>https://anktsrkr.github.io/categories/app-service-environment/</loc></url>
@@ -82,6 +96,17 @@
   <url><loc>https://anktsrkr.github.io/categories/xunit/</loc></url>
   <url><loc>https://anktsrkr.github.io/post/access-app-service-environment-hosted-webapp-from-azure-network-and-from-on-prem/</loc></url>
   <url><loc>https://anktsrkr.github.io/post/add-custom-domain-for-app-service-environment-hosted-webapp/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/advanced-orchestration/beyond-agents/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/advanced-orchestration/host-your-workflow/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/advanced-orchestration/orchestrate-workflows/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/advanced-orchestration/state-and-checkpoints/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/agent-capabilities/scrapegraphai-research-agent/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/agent-capabilities/semantic-tool-search/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/add-tools/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/hello-agent/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/host-your-agent/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/memory/</loc></url>
+  <url><loc>https://anktsrkr.github.io/post/agent-framework/academy/agent-essentials/multi-turn/</loc></url>
   <url><loc>https://anktsrkr.github.io/post/agent-framework/building-smart-agents-with-lm-studio-a-complete-walkthrough-of-the-microsoft-agent-framework-and-v1-responses-api/</loc></url>
   <url><loc>https://anktsrkr.github.io/post/agent-framework/getting-started-with-lmstudio-and-agent-framework/</loc></url>
   <url><loc>https://anktsrkr.github.io/post/connect-azure-with-your-on-prem-network-part-1/</loc></url>
@@ -122,28 +147,72 @@
   <url><loc>https://anktsrkr.github.io/tags/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/.net6/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/.net7/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/advanced-orchestration/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/agent-capabilities/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/agent-essentials/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/agent-framework/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/agentic-workflows/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/agents/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/aicontextprovider/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/app-service-environment/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/aspnetcore/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/automation/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/azure-app-services/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/azure-firewall/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/azure-functions/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/azure-private-dns-zone/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/azure-private-link/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/azure/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/azurefunctiontips/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/blazorwebassembly/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/c/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/checkpoints/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/ci-cd/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/compound-ai-systems/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/console-app/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/determinism-vs.-probability/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/durable-agents/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/durable-functions/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/edges/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/embeddings/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/executors/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/function-calling/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/fusioncache/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/genai/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/github-action/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/grounding/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/high-performance-caching/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/hosting/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/httpclientfactory/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/hybrid-ai-pattern/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/hybrid-orchestration/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/hybrid-query-expansion/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/job-parsing/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/lmstudio/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/memory/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/monads/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/multi-turn-conversations/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/networking/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/nuke/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/oauth0/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/ollama/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/onnx-runtime/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/page-scraping/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/polly/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/prompting/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/rag-for-tools/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/rehydration/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/scrapegraphai/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/semantic-search/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/session-persistence/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/shared-state/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/state-isolation/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/state-management/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/structured-data/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/structured-memory/</loc></url>
   <url><loc>https://anktsrkr.github.io/tags/testing/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/tool-calling/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/tools/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/web-extraction/</loc></url>
+  <url><loc>https://anktsrkr.github.io/tags/workflows/</loc></url>
 </urlset>
