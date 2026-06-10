@@ -335,6 +335,22 @@ const url = "https://anktsrkr.github.io/post/implementing-hub-spoke-network-topo
     js.src = 'https://cdn.webpushr.com/app.min.js';
     fjs.parentNode.appendChild(js);
   })(window, document, 'script', 'webpushr-jssdk');
+
+  window.webpushrPermissionAction = function(permissionAction) {
+    var eventAction = {
+      granted: 'Permission Accepted',
+      denied: 'Permission Denied'
+    }[permissionAction];
+
+    if (!eventAction || typeof window.gtag !== 'function') return;
+
+    window.gtag('event', 'webpushr_permission', {
+      event_category: 'Webpushr',
+      event_label: eventAction,
+      permission_action: permissionAction
+    });
+  };
+
   webpushr('setup', { key: webpushrKey });
 })();</script> <script>
   if ('serviceWorker' in navigator) {
