@@ -40,7 +40,6 @@ export async function sitemapXml(): Promise<string> {
     '/categories/',
     '/tags/',
     ...posts.map((post) => postUrlFromId(post.id)),
-    ...posts.map(legacyPostUrl),
     ...getAllTerms(posts, 'categories').map((category) => `/categories/${category.slug}/`),
     ...getAllTerms(posts, 'tags').map((tag) => `/tags/${tag.slug}/`)
   ];
