@@ -4,19 +4,48 @@
 
       var gaDebugStorageKey = 'ga_debug_mode';
       var gaDebugParam = new URLSearchParams(window.location.search).get('ga_debug');
+      var gaDebugMode = false;
+      function getGaDebugStorage() {
+        try {
+          return window.localStorage.getItem(gaDebugStorageKey);
+        } catch (_) {
+          return null;
+        }
+      }
+      function setGaDebugStorage(value) {
+        try {
+          if (value) {
+            window.localStorage.setItem(gaDebugStorageKey, value);
+          } else {
+            window.localStorage.removeItem(gaDebugStorageKey);
+          }
+        } catch (_) {
+          gaDebugMode = value === '1';
+        }
+      }
+
       if (gaDebugParam === '1') {
-        window.localStorage.setItem(gaDebugStorageKey, '1');
+        setGaDebugStorage('1');
       } else if (gaDebugParam === '0') {
-        window.localStorage.removeItem(gaDebugStorageKey);
+        setGaDebugStorage(null);
       }
 
       var gaConfig = {};
-      if (window.localStorage.getItem(gaDebugStorageKey) === '1') {
+      if (gaDebugMode || getGaDebugStorage() === '1') {
+        gaDebugMode = true;
+        window.__gaDebugMode = true;
         gaConfig.debug_mode = true;
       }
 
       window.gtag('js', new Date());
       window.gtag('config', "G-TY8ZMTBGSM", gaConfig);
+      if (gaDebugMode) {
+        window.gtag('event', 'debug_ping', {
+          debug_mode: true,
+          event_category: 'diagnostics',
+          page_location: window.location.href
+        });
+      }
     </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2020-09-12T19:30:00.000Z">12 Sept 2020</time> <span>Cloud</span> </div> <h1>Resolve Azure Internal DNS from your on prem network and Spokes vnet</h1> <p>Resolve Azure Internal DNS from your on prem network</p> <div class="article-tags"> <a href="/categories/cloud/">Cloud</a><a href="/categories/azure-architecture/">Azure architecture</a><a href="/categories/hub-spoke-topology/">Hub-Spoke Topology</a> </div> </header> <div class="article-grid"> <div class="article-content">  <nav class="series-nav" aria-label="Azure Internal DNS series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Azure Internal DNS</h2> <p>Follow the Azure private DNS and private endpoint posts in order.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">01</span> <span class="series-nav-current"> <span>Resolve Azure Internal DNS from your on prem network and Spokes vnet</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/connect-privately-to-azure-paas-resources-using-azure-private-endpoint/">Connect privately to Azure PaaS resources using Azure Private Endpoint from on-prem</a> </li> </ol> </nav>   <p>Hi Everyone!</p>
 <p>We have already implemented Hub-Spoke topology, and we are able to connect all the resources using IP from on premises network. But it is easier to use domain name instead ip directly from your virtual network. Also, If you want to use Azure Private Link, you need something which will resolve private link dns to respective ip. Other example is you have ASE v2 which comes with own domain but for your internal use you want some custom domain name which is easy to remember and also satisfy business need. So you need some service in Azure which can translate domain name to IP.</p>
 <p>Azure provides <strong>Private DNS Zones</strong> as global service which provides a reliable, secure DNS service to manage and resolve domain names in a virtual network without the need to add a custom DNS solution. By using private DNS zones, we can use our own custom domain names rather than the Azure-provided names available today.</p>

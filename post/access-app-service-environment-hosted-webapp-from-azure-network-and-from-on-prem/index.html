@@ -4,19 +4,48 @@
 
       var gaDebugStorageKey = 'ga_debug_mode';
       var gaDebugParam = new URLSearchParams(window.location.search).get('ga_debug');
+      var gaDebugMode = false;
+      function getGaDebugStorage() {
+        try {
+          return window.localStorage.getItem(gaDebugStorageKey);
+        } catch (_) {
+          return null;
+        }
+      }
+      function setGaDebugStorage(value) {
+        try {
+          if (value) {
+            window.localStorage.setItem(gaDebugStorageKey, value);
+          } else {
+            window.localStorage.removeItem(gaDebugStorageKey);
+          }
+        } catch (_) {
+          gaDebugMode = value === '1';
+        }
+      }
+
       if (gaDebugParam === '1') {
-        window.localStorage.setItem(gaDebugStorageKey, '1');
+        setGaDebugStorage('1');
       } else if (gaDebugParam === '0') {
-        window.localStorage.removeItem(gaDebugStorageKey);
+        setGaDebugStorage(null);
       }
 
       var gaConfig = {};
-      if (window.localStorage.getItem(gaDebugStorageKey) === '1') {
+      if (gaDebugMode || getGaDebugStorage() === '1') {
+        gaDebugMode = true;
+        window.__gaDebugMode = true;
         gaConfig.debug_mode = true;
       }
 
       window.gtag('js', new Date());
       window.gtag('config', "G-TY8ZMTBGSM", gaConfig);
+      if (gaDebugMode) {
+        window.gtag('event', 'debug_ping', {
+          debug_mode: true,
+          event_category: 'diagnostics',
+          page_location: window.location.href
+        });
+      }
     </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2020-09-30T19:30:00.000Z">30 Sept 2020</time> <span>Cloud</span> </div> <h1>Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</h1>  <div class="article-tags"> <a href="/categories/cloud/">Cloud</a><a href="/categories/app-service-environment/">App Service Environment</a><a href="/categories/hub-spoke-topology/">Hub-Spoke Topology</a><a href="/categories/azure-sql/">Azure SQL</a> </div> </header> <div class="article-grid"> <div class="article-content">  <nav class="series-nav" aria-label="App Service Environment series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>App Service Environment</h2> <p>Follow the App Service Environment posts from ASE setup through private networking and custom domains.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/deploy-app-service-environment-v2-in-microsoft-azure/">Deploy App Service Environment (ASE v2) in Microsoft Azure</a> </li><li class="series-nav-item"> <span class="series-nav-index">02</span> <a href="/post/create-a-webapp-in-app-service-environment/">Create a WebApp in App Service Environment</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">03</span> <span class="series-nav-current"> <span>Access App Service Environment Hosted WebApp from Azure Network and from On-Prem</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/deploy-a-webapp-with-azure-sql-in-app-service-environment-using-managed-identity-and-private-endpoint/">Deploy a WebApp with Azure Sql in App Service Environment using Managed Identity and Private endpoint</a> </li><li class="series-nav-item"> <span class="series-nav-index">05</span> <a href="/post/add-custom-domain-for-app-service-environment-hosted-webapp/">Add Custom Domain for App Service Environment Hosted WebApp</a> </li> </ol> </nav>   <p>Hi Everyone!</p>
 <p>In the <a href="/post/create-a-webapp-in-app-service-environment">previous post</a> we have deployed a webapp in the ASE, but the webapp is not accessible, more precisely we are not able to resolute the DNS name. In this post we will see how to resolute the ASE hosted webapp DNS, so let’s get started.</p>
 <p>In general, when you are deploying any PaaS services in Microsoft Azure, it comes with routeable DNS name. So, once resource is created you can access it using url. But, in case of internal App Service Environment you have to manage your own DNS. you can do it in your own DNS server or you can leverage Azure DNS private zones.</p>

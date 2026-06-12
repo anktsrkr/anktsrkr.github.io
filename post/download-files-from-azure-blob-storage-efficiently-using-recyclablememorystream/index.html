@@ -4,19 +4,48 @@
 
       var gaDebugStorageKey = 'ga_debug_mode';
       var gaDebugParam = new URLSearchParams(window.location.search).get('ga_debug');
+      var gaDebugMode = false;
+      function getGaDebugStorage() {
+        try {
+          return window.localStorage.getItem(gaDebugStorageKey);
+        } catch (_) {
+          return null;
+        }
+      }
+      function setGaDebugStorage(value) {
+        try {
+          if (value) {
+            window.localStorage.setItem(gaDebugStorageKey, value);
+          } else {
+            window.localStorage.removeItem(gaDebugStorageKey);
+          }
+        } catch (_) {
+          gaDebugMode = value === '1';
+        }
+      }
+
       if (gaDebugParam === '1') {
-        window.localStorage.setItem(gaDebugStorageKey, '1');
+        setGaDebugStorage('1');
       } else if (gaDebugParam === '0') {
-        window.localStorage.removeItem(gaDebugStorageKey);
+        setGaDebugStorage(null);
       }
 
       var gaConfig = {};
-      if (window.localStorage.getItem(gaDebugStorageKey) === '1') {
+      if (gaDebugMode || getGaDebugStorage() === '1') {
+        gaDebugMode = true;
+        window.__gaDebugMode = true;
         gaConfig.debug_mode = true;
       }
 
       window.gtag('js', new Date());
       window.gtag('config', "G-TY8ZMTBGSM", gaConfig);
+      if (gaDebugMode) {
+        window.gtag('event', 'debug_ping', {
+          debug_mode: true,
+          event_category: 'diagnostics',
+          page_location: window.location.href
+        });
+      }
     </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2023-05-24T05:00:35.000Z">24 May 2023</time> <span>Azure</span> </div> <h1>Download Files From Azure Blob Storage Efficiently Using RecyclableMemoryStream</h1>  <div class="article-tags"> <a href="/categories/azure/">Azure</a><a href="/categories/azurite/">Azurite</a><a href="/categories/.net-7/">.NET 7</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#the-problem">The Problem</a> <div class="toc-sublinks"> <a href="#what-is-gen-0-gen-1-and-gen-2">What is Gen 0, Gen 1 and Gen 2?</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#the-solution">The Solution</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#conclusion">Conclusion</a>  </div> </nav> </details>    <p>Recently, I was working on a project where we had to download multiple large files from Azure Blob Storage and process it further. When the application hits the production environment and started getting the actual files, we observed that memory consumption is getting very high. On top of that, the application was hosted in shared windows based app service plan, which was making it even worse for other applications too.</p>
 <p>After analyzing the issue, we found that the issue was with the way we were downloading the files. In this post, we will see how we can download files from Azure Blob Storage efficiently using <strong><span class="hl hl-orange">RecyclableMemoryStream</span></strong>.</p>
 <h2 id="the-problem">The Problem</h2>

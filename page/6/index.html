@@ -4,19 +4,48 @@
 
       var gaDebugStorageKey = 'ga_debug_mode';
       var gaDebugParam = new URLSearchParams(window.location.search).get('ga_debug');
+      var gaDebugMode = false;
+      function getGaDebugStorage() {
+        try {
+          return window.localStorage.getItem(gaDebugStorageKey);
+        } catch (_) {
+          return null;
+        }
+      }
+      function setGaDebugStorage(value) {
+        try {
+          if (value) {
+            window.localStorage.setItem(gaDebugStorageKey, value);
+          } else {
+            window.localStorage.removeItem(gaDebugStorageKey);
+          }
+        } catch (_) {
+          gaDebugMode = value === '1';
+        }
+      }
+
       if (gaDebugParam === '1') {
-        window.localStorage.setItem(gaDebugStorageKey, '1');
+        setGaDebugStorage('1');
       } else if (gaDebugParam === '0') {
-        window.localStorage.removeItem(gaDebugStorageKey);
+        setGaDebugStorage(null);
       }
 
       var gaConfig = {};
-      if (window.localStorage.getItem(gaDebugStorageKey) === '1') {
+      if (gaDebugMode || getGaDebugStorage() === '1') {
+        gaDebugMode = true;
+        window.__gaDebugMode = true;
         gaConfig.debug_mode = true;
       }
 
       window.gtag('js', new Date());
       window.gtag('config', "G-TY8ZMTBGSM", gaConfig);
+      if (gaDebugMode) {
+        window.gtag('event', 'debug_ping', {
+          debug_mode: true,
+          event_category: 'diagnostics',
+          page_location: window.location.href
+        });
+      }
     </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <main class="home-layout"> <section class="content-section content-section-first recent-section" aria-labelledby="recent-heading"> <div class="section-header"> <h1 id="recent-heading">Recent Posts</h1> <a href="/index.xml">RSS</a> </div> <div class="post-grid post-grid-compact"> <article class="post-card"> <a class="post-card-media" href="/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/" aria-label="Read Introducing Azure Firewall in Hub-Spoke network topology in Azure"> <img src="/images/azure.png" alt="" loading="lazy" decoding="async"> </a> <div class="post-card-body"> <div class="eyebrow"> <time datetime="2020-09-08T19:30:00.000Z">08 Sept 2020</time> <a href="/categories/cloud/">Cloud</a> </div> <h2><a href="/post/introducing-azure-firewall-in-hub-spoke-network-topology-in-azure/">Introducing Azure Firewall in Hub-Spoke network topology in Azure</a></h2> <p>Introducing Azure Firewall in Hub-Spoke network topology in Azure</p> <div class="tag-row"> <a href="/tags/azure/">#Azure</a><a href="/tags/networking/">#Networking</a><a href="/tags/azure-firewall/">#Azure Firewall</a> </div> </div> </article><article class="post-card"> <a class="post-card-media" href="/post/implementing-hub-spoke-network-topology-in-azure-part-2/" aria-label="Read Implementing Hub-Spoke network topology in Azure - Part 2"> <img src="/images/azure.png" alt="" loading="lazy" decoding="async"> </a> <div class="post-card-body"> <div class="eyebrow"> <time datetime="2020-09-07T19:30:00.000Z">07 Sept 2020</time> <a href="/categories/cloud/">Cloud</a> </div> <h2><a href="/post/implementing-hub-spoke-network-topology-in-azure-part-2/">Implementing Hub-Spoke network topology in Azure - Part 2</a></h2> <p>Implementing Hub-Spoke network topology in Azure</p> <div class="tag-row"> <a href="/tags/azure/">#Azure</a><a href="/tags/networking/">#Networking</a> </div> </div> </article><article class="post-card"> <a class="post-card-media" href="/post/implementing-hub-spoke-network-topology-in-azure-part-1/" aria-label="Read Implementing Hub-Spoke network topology in Azure - Part 1"> <img src="/images/azure.png" alt="" loading="lazy" decoding="async"> </a> <div class="post-card-body"> <div class="eyebrow"> <time datetime="2020-09-06T19:30:00.000Z">06 Sept 2020</time> <a href="/categories/cloud/">Cloud</a> </div> <h2><a href="/post/implementing-hub-spoke-network-topology-in-azure-part-1/">Implementing Hub-Spoke network topology in Azure - Part 1</a></h2> <p>Implementing Hub-Spoke network topology in Azure</p> <div class="tag-row"> <a href="/tags/azure/">#Azure</a><a href="/tags/networking/">#Networking</a> </div> </div> </article><article class="post-card"> <a class="post-card-media" href="/post/connect-azure-with-your-on-prem-network-part-2/" aria-label="Read Connect an on-premises network to a Microsoft Azure - Part 2"> <img src="/images/azure.png" alt="" loading="lazy" decoding="async"> </a> <div class="post-card-body"> <div class="eyebrow"> <time datetime="2020-09-05T19:30:00.000Z">05 Sept 2020</time> <a href="/categories/cloud/">Cloud</a> </div> <h2><a href="/post/connect-azure-with-your-on-prem-network-part-2/">Connect an on-premises network to a Microsoft Azure - Part 2</a></h2> <p>Connect an on-premises network to a Microsoft Azure</p> <div class="tag-row"> <a href="/tags/azure/">#Azure</a><a href="/tags/networking/">#Networking</a> </div> </div> </article><article class="post-card"> <a class="post-card-media" href="/post/connect-azure-with-your-on-prem-network-part-1/" aria-label="Read Connect an on-premises network to a Microsoft Azure - Part 1"> <img src="/images/azure.png" alt="" loading="lazy" decoding="async"> </a> <div class="post-card-body"> <div class="eyebrow"> <time datetime="2020-09-04T19:30:00.000Z">04 Sept 2020</time> <a href="/categories/cloud/">Cloud</a> </div> <h2><a href="/post/connect-azure-with-your-on-prem-network-part-1/">Connect an on-premises network to a Microsoft Azure - Part 1</a></h2> <p>Connect an on-premises network to a Microsoft Azure</p> <div class="tag-row"> <a href="/tags/azure/">#Azure</a><a href="/tags/networking/">#Networking</a> </div> </div> </article> </div> <nav class="pagination" aria-label="Recent post pages"><a class="pagination-link" href="/page/5/">
 Previous
 </a><div class="pagination-pages"><a class="pagination-page" href="/">1</a><a class="pagination-page" href="/page/2/">2</a><a class="pagination-page" href="/page/3/">3</a><a class="pagination-page" href="/page/4/">4</a><a class="pagination-page" href="/page/5/">5</a><a class="pagination-page pagination-page-current" href="/page/6/" aria-current="page">6</a></div><a class="pagination-link pagination-link-disabled" href="/page/7/">

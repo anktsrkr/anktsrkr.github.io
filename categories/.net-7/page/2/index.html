@@ -4,19 +4,48 @@
 
       var gaDebugStorageKey = 'ga_debug_mode';
       var gaDebugParam = new URLSearchParams(window.location.search).get('ga_debug');
+      var gaDebugMode = false;
+      function getGaDebugStorage() {
+        try {
+          return window.localStorage.getItem(gaDebugStorageKey);
+        } catch (_) {
+          return null;
+        }
+      }
+      function setGaDebugStorage(value) {
+        try {
+          if (value) {
+            window.localStorage.setItem(gaDebugStorageKey, value);
+          } else {
+            window.localStorage.removeItem(gaDebugStorageKey);
+          }
+        } catch (_) {
+          gaDebugMode = value === '1';
+        }
+      }
+
       if (gaDebugParam === '1') {
-        window.localStorage.setItem(gaDebugStorageKey, '1');
+        setGaDebugStorage('1');
       } else if (gaDebugParam === '0') {
-        window.localStorage.removeItem(gaDebugStorageKey);
+        setGaDebugStorage(null);
       }
 
       var gaConfig = {};
-      if (window.localStorage.getItem(gaDebugStorageKey) === '1') {
+      if (gaDebugMode || getGaDebugStorage() === '1') {
+        gaDebugMode = true;
+        window.__gaDebugMode = true;
         gaConfig.debug_mode = true;
       }
 
       window.gtag('js', new Date());
       window.gtag('config', "G-TY8ZMTBGSM", gaConfig);
+      if (gaDebugMode) {
+        window.gtag('event', 'debug_ping', {
+          debug_mode: true,
+          event_category: 'diagnostics',
+          page_location: window.location.href
+        });
+      }
     </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <main class="listing-layout"> <header class="page-hero"> <p class="eyebrow">Category</p> <h1 class="page-title">.NET 7</h1> <p class="page-intro">Page 2 of 2. 12 posts in this topic.</p> </header> <div class="listing-grid"> <aside class="directory-rail" aria-label="Category tools"> <div class="rail-panel"> <span class="aside-label">Reading queue</span> <strong>12 notes</strong> </div> <div class="rail-panel"> <a class="button-link" href="/categories/">All categories</a> <a class="button-link" href="/archives/">Archives</a> </div> </aside> <div class="listing-main"> <div class="post-grid post-grid-compact"> <article class="post-card"> <a class="post-card-media" href="/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/" aria-label="Read Getting started with testing for Azure Blob Storage : Unit Test with help of Moq"> <img src="/images/azstorage/banner.png" alt="" loading="lazy" decoding="async"> </a> <div class="post-card-body"> <div class="eyebrow"> <time datetime="2023-01-16T08:00:35.000Z">16 Jan 2023</time> <a href="/categories/azure/">Azure</a> </div> <h2><a href="/post/getting-started-with-testing-for-azure-blob-storage-unit-test-moq/">Getting started with testing for Azure Blob Storage : Unit Test with help of Moq</a></h2> <p>Perform unit &amp; integration tests for Azure Blob Storage: Unit Test with help of Moq</p> <div class="tag-row"> <a href="/tags/azure/">#azure</a><a href="/tags/testing/">#testing</a><a href="/tags/c/">#c#</a> </div> </div> </article><article class="post-card"> <a class="post-card-media" href="/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/" aria-label="Read Getting started with testing for Azure Blob Storage : Dependency Injection"> <img src="/images/azstorage/banner.png" alt="" loading="lazy" decoding="async"> </a> <div class="post-card-body"> <div class="eyebrow"> <time datetime="2023-01-12T05:00:35.000Z">12 Jan 2023</time> <a href="/categories/azure/">Azure</a> </div> <h2><a href="/post/getting-started-with-testing-for-azure-blob-storage-dependency-injection/">Getting started with testing for Azure Blob Storage : Dependency Injection</a></h2> <p>Perform unit &amp; integration tests for Azure Blob Storage: Dependency Injection</p> <div class="tag-row"> <a href="/tags/azure/">#azure</a><a href="/tags/testing/">#testing</a><a href="/tags/c/">#c#</a> </div> </div> </article><article class="post-card"> <a class="post-card-media" href="/post/step-up-authentication-with-auth0-in-.net-7/" aria-label="Read Step-up authentication with Auth0 in .NET 7"> <img src="/images/stepup/small-step-up authentication.jpg" alt="" loading="lazy" decoding="async"> </a> <div class="post-card-body"> <div class="eyebrow"> <time datetime="2022-09-20T10:08:35.000Z">20 Sept 2022</time> <a href="/categories/oauth0/">OAuth0</a> </div> <h2><a href="/post/step-up-authentication-with-auth0-in-.net-7/">Step-up authentication with Auth0 in .NET 7</a></h2> <p>Step-up authentication with Auth0 in .NET 7.</p> <div class="tag-row"> <a href="/tags/oauth0/">#oauth0</a><a href="/tags/.net7/">#.net7</a><a href="/tags/c/">#c#</a><a href="/tags/aspnetcore/">#aspnetcore</a> </div> </div> </article> </div> <nav class="pagination" aria-label=".NET 7 pages"><a class="pagination-link" href="/categories/.net-7/">
 Previous
 </a><div class="pagination-pages"><a class="pagination-page" href="/categories/.net-7/">1</a><a class="pagination-page pagination-page-current" href="/categories/.net-7/page/2/" aria-current="page">2</a></div><a class="pagination-link pagination-link-disabled" href="/categories/.net-7/page/3/">

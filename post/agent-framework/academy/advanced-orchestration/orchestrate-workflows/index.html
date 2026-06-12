@@ -4,19 +4,48 @@
 
       var gaDebugStorageKey = 'ga_debug_mode';
       var gaDebugParam = new URLSearchParams(window.location.search).get('ga_debug');
+      var gaDebugMode = false;
+      function getGaDebugStorage() {
+        try {
+          return window.localStorage.getItem(gaDebugStorageKey);
+        } catch (_) {
+          return null;
+        }
+      }
+      function setGaDebugStorage(value) {
+        try {
+          if (value) {
+            window.localStorage.setItem(gaDebugStorageKey, value);
+          } else {
+            window.localStorage.removeItem(gaDebugStorageKey);
+          }
+        } catch (_) {
+          gaDebugMode = value === '1';
+        }
+      }
+
       if (gaDebugParam === '1') {
-        window.localStorage.setItem(gaDebugStorageKey, '1');
+        setGaDebugStorage('1');
       } else if (gaDebugParam === '0') {
-        window.localStorage.removeItem(gaDebugStorageKey);
+        setGaDebugStorage(null);
       }
 
       var gaConfig = {};
-      if (window.localStorage.getItem(gaDebugStorageKey) === '1') {
+      if (gaDebugMode || getGaDebugStorage() === '1') {
+        gaDebugMode = true;
+        window.__gaDebugMode = true;
         gaConfig.debug_mode = true;
       }
 
       window.gtag('js', new Date());
       window.gtag('config', "G-TY8ZMTBGSM", gaConfig);
+      if (gaDebugMode) {
+        window.gtag('event', 'debug_ping', {
+          debug_mode: true,
+          event_category: 'diagnostics',
+          page_location: window.location.href
+        });
+      }
     </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <article class="article-shell"> <header class="article-hero"> <div class="article-kicker"> <time datetime="2026-06-06T21:19:08.642Z">06 Jun 2026</time> <span>Agent Framework</span> </div> <h1>Orchestrate Multi-Step Workflows</h1> <p>Move beyond single-turn reasoning and build deterministic, observable pipelines using Executors and Edges.</p> <div class="article-tags"> <a href="/categories/agent-framework/">Agent Framework</a><a href="/categories/ai/">AI</a><a href="/categories/advanced-orchestration/">Advanced Orchestration</a> </div> </header> <div class="article-grid"> <div class="article-content"> <details class="toc-inline"> <summary>On this page</summary> <nav class="toc-sections" aria-label="Table of contents"> <div class="toc-section"> <a class="toc-section-link" href="#overview">Overview</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#system-anatomy">System Anatomy</a>  </div><div class="toc-section"> <a class="toc-section-link" href="#setup-your-environment">Setup your environment</a> <div class="toc-sublinks"> <a href="#1-install-required-packages">1 Install required packages</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#build-the-workflow">Build the Workflow</a> <div class="toc-sublinks"> <a href="#1-implement-the-workflow">1 Implement the Workflow</a><a href="#2-the-chat-protocol-bridge">2 The Chat Protocol Bridge</a><a href="#3-run-and-observe-the-story">3 Run and Observe the Story</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#try-it">Try it</a> <div class="toc-sublinks"> <a href="#modify-business-rules">Modify Business Rules</a><a href="#test-different-scenarios">Test Different Scenarios</a><a href="#change-the-tone">Change the Tone</a> </div> </div><div class="toc-section"> <a class="toc-section-link" href="#summary--next-steps">Summary &amp; Next Steps</a>  </div> </nav> </details> <nav class="series-nav" aria-label="Advanced Orchestration series"> <div class="series-nav-header"> <span class="series-nav-kicker">Series</span> <h2>Advanced Orchestration</h2> <p>Build compound AI systems with workflows, state, checkpoints, and hosting.</p> </div> <ol class="series-nav-list"> <li class="series-nav-item"> <span class="series-nav-index">01</span> <a href="/post/agent-framework/academy/advanced-orchestration/beyond-agents/">Beyond Agents: Compound AI Systems</a> </li><li class="series-nav-item series-nav-item-current"> <span class="series-nav-index">02</span> <span class="series-nav-current"> <span>Orchestrate Multi-Step Workflows</span> <strong>This post</strong> </span> </li><li class="series-nav-item"> <span class="series-nav-index">03</span> <a href="/post/agent-framework/academy/advanced-orchestration/state-and-checkpoints/">State &amp; Checkpoints</a> </li><li class="series-nav-item"> <span class="series-nav-index">04</span> <a href="/post/agent-framework/academy/advanced-orchestration/host-your-workflow/">Expose Your Workflow via API</a> </li> </ol> </nav> <aside class="source-note">
 Originally published on  <a href="https://microsoft-agent-framework.github.io/learn/advanced-orchestration/orchestrate-workflows/" rel="noopener noreferrer"> Microsoft Agent Framework Tutorial Blog </a>.
 </aside>  <h2 id="overview">Overview</h2>
