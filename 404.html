@@ -1,8 +1,22 @@
 <!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Not Found | Ankit Sarkar</title><meta name="description" content="The requested page was not found"><link rel="canonical" href="https://anktsrkr.github.io/404/"><link rel="alternate" type="application/rss+xml" title="Ankit Sarkar | .NET Enthusiast | Azure Cloud Practitioner" href="/index.xml"><link rel="manifest" href="/manifest.json"><link rel="icon" href="/appicons/favicon-196x196.png"><meta property="og:type" content="website"><meta property="og:title" content="Not Found | Ankit Sarkar"><meta property="og:description" content="The requested page was not found"><meta property="og:url" content="https://anktsrkr.github.io/404/"><meta property="og:image" content="https://anktsrkr.github.io/images/cover.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ankt_srkr"><meta name="twitter:title" content="Not Found | Ankit Sarkar"><meta name="twitter:description" content="The requested page was not found"><meta name="twitter:image" content="https://anktsrkr.github.io/images/cover.jpg"><script async src="https://www.googletagmanager.com/gtag/js?id=G-TY8ZMTBGSM"></script><script>
       window.dataLayer = window.dataLayer || [];
       window.gtag = window.gtag || function gtag(){window.dataLayer.push(arguments);}
+
+      var gaDebugStorageKey = 'ga_debug_mode';
+      var gaDebugParam = new URLSearchParams(window.location.search).get('ga_debug');
+      if (gaDebugParam === '1') {
+        window.localStorage.setItem(gaDebugStorageKey, '1');
+      } else if (gaDebugParam === '0') {
+        window.localStorage.removeItem(gaDebugStorageKey);
+      }
+
+      var gaConfig = {};
+      if (window.localStorage.getItem(gaDebugStorageKey) === '1') {
+        gaConfig.debug_mode = true;
+      }
+
       window.gtag('js', new Date());
-      window.gtag('config', "G-TY8ZMTBGSM");
+      window.gtag('config', "G-TY8ZMTBGSM", gaConfig);
     </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2534759648571863" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/_slug_.CCqEAf7B.css"></head> <body> <header class="site-header"> <div class="site-header-inner"> <a class="brand" href="/" aria-label="Ankit Sarkar home"> <span class="brand-mark">AS</span> <span> <strong>Ankit Sarkar</strong> <small>.NET / Azure / AI Notes</small> </span> </a> <nav class="primary-nav" aria-label="Primary navigation"> <a href="/">Home</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a href="/archives/">Archives</a><a href="/about/">About</a> </nav> </div> </header> <div class="page-shell">  <main class="article-shell"> <header class="article-hero"> <p class="eyebrow">404</p> <h1 class="page-title">Page not found</h1> <p class="page-intro">The note you are looking for may have moved during the Astro migration.</p> </header> <p><a class="term-pill" href="/">Back to home</a></p> </main>  <footer class="site-footer"> <p>Living notes on .NET, Azure, cloud architecture, and applied AI.</p> <nav aria-label="Social links"> <a href="https://github.com/anktsrkr">GitHub</a> <a href="https://www.linkedin.com/in/sarkaran/">LinkedIn</a> <a href="https://twitter.com/ankt_srkr">Twitter/X</a> <a href="/index.xml">RSS</a> </nav> </footer> <script>(function(){const webpushrKey = "BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0";
 
   (function(w, d, s, id) {
