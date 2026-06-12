@@ -10,7 +10,6 @@ seriesOrder: 4
 thumbnailImage: /images/agent-framework/aflogo.png
 thumbnailImagePosition: left
 shareImage: /images/agent-framework/aflogo.png
-canonicalUrl: 'https://microsoft-agent-framework.github.io/learn/agent-essentials/memory/'
 sourceUrl: 'https://microsoft-agent-framework.github.io/learn/agent-essentials/memory/'
 sourceCodeUrl: 'https://github.com/microsoft-agent-framework/microsoft-agent-framework.github.io/blob/main/src/content/tutorials/agent-essentials/04-memory.mdx'
 sourceName: Microsoft Agent Framework Tutorial Blog

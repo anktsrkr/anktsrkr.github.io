@@ -10,7 +10,6 @@ seriesOrder: 3
 thumbnailImage: /images/agent-framework/aflogo.png
 thumbnailImagePosition: left
 shareImage: /images/agent-framework/aflogo.png
-canonicalUrl: 'https://microsoft-agent-framework.github.io/learn/advanced-orchestration/state-and-checkpoints/'
 sourceUrl: 'https://microsoft-agent-framework.github.io/learn/advanced-orchestration/state-and-checkpoints/'
 sourceCodeUrl: 'https://github.com/microsoft-agent-framework/microsoft-agent-framework.github.io/blob/main/src/content/tutorials/advanced-orchestration/03-state-and-checkpoints.mdx'
 sourceName: Microsoft Agent Framework Tutorial Blog

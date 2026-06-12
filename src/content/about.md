@@ -39,12 +39,6 @@ I currently work within a large UK retail technology landscape across CRM, OMS, 
 
 The work involves architecture discussions, technical assessments, service/API design, reliability improvements and engineering guidance across distributed teams. A recurring theme is keeping critical retail journeys stable while moving platforms toward cleaner interfaces and more maintainable service patterns.
 
-## Logistics And Traceability Platforms
-
-Earlier work includes logistics and consolidation platforms supporting day-to-day workflows, transactional processing, external integrations and traceability.
-
-That experience gave me direct exposure to systems where small design decisions can affect support teams, operational visibility and the ability to keep the business moving while the platform is being modernised.
-
 ## Legacy Modernisation And Cloud Migration
 
 I have worked on legacy retail applications and integration services where the goal was to move from on-premise hosting toward cloud-based platforms while improving maintainability and reducing long-term support risk.
