@@ -22,6 +22,14 @@ const canonicalUrl = new URL(canonical, site.url).toString();
 const socialImage = new URL(getShareImage(image), site.url).toString();
 const gaId = site.googleAnalyticsId;
 const adsenseClient = site.adsenseClient;
+const googleAnalyticsScript = gaId
+  ? `
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function gtag(){window.dataLayer.push(arguments);}
+      window.gtag('js', new Date());
+      window.gtag('config', ${JSON.stringify(gaId)});
+    `
+  : '';
 ---
 
 <meta charset="utf-8" />
@@ -46,12 +54,7 @@ const adsenseClient = site.adsenseClient;
 {gaId && (
   <>
     <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
-    <script is:inline define:vars={{ gaId }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', gaId);
-    </script>
+    <script is:inline set:html={googleAnalyticsScript}></script>
   </>
 )}
 {adsenseClient && (
