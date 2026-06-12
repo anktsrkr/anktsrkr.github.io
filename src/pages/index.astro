@@ -14,7 +14,12 @@ const pagination = paginateItems(posts, 1, PAGE_SIZE);
 
 <BaseLayout title={site.fullTitle} description={site.description} canonical="/">
   <main class="home-layout">
-    <section class="content-section content-section-first" aria-labelledby="featured-heading">
+    <header class="page-hero home-hero">
+      <h1 class="page-title">Architecting .NET, Azure & AI</h1>
+      <p class="page-intro">Technical deep-dives, architectural notes, and hands-on guides for modern cloud engineering.</p>
+    </header>
+
+    <section class="content-section" aria-labelledby="featured-heading">
       <div class="section-header">
         <h2 id="featured-heading">Featured Posts</h2>
         <a href="/archives/">All posts</a>
