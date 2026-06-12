@@ -10,7 +10,6 @@ seriesOrder: 4
 thumbnailImage: /images/agent-framework/aflogo.png
 thumbnailImagePosition: left
 shareImage: /images/agent-framework/aflogo.png
-canonicalUrl: 'https://microsoft-agent-framework.github.io/learn/advanced-orchestration/host-your-workflow/'
 sourceUrl: 'https://microsoft-agent-framework.github.io/learn/advanced-orchestration/host-your-workflow/'
 sourceCodeUrl: 'https://github.com/microsoft-agent-framework/microsoft-agent-framework.github.io/blob/main/src/content/tutorials/advanced-orchestration/04-host-your-workflow.mdx'
 sourceName: Microsoft Agent Framework Tutorial Blog

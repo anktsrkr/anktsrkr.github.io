@@ -10,7 +10,6 @@ seriesOrder: 1
 thumbnailImage: /images/agent-framework/aflogo.png
 thumbnailImagePosition: left
 shareImage: /images/agent-framework/aflogo.png
-canonicalUrl: 'https://microsoft-agent-framework.github.io/learn/advanced-orchestration/beyond-agents/'
 sourceUrl: 'https://microsoft-agent-framework.github.io/learn/advanced-orchestration/beyond-agents/'
 sourceCodeUrl: 'https://github.com/microsoft-agent-framework/microsoft-agent-framework.github.io/blob/main/src/content/tutorials/advanced-orchestration/01-beyond-agents.mdx'
 sourceName: Microsoft Agent Framework Tutorial Blog

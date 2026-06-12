@@ -10,7 +10,6 @@ seriesOrder: 5
 thumbnailImage: /images/agent-framework/aflogo.png
 thumbnailImagePosition: left
 shareImage: /images/agent-framework/aflogo.png
-canonicalUrl: 'https://microsoft-agent-framework.github.io/learn/agent-essentials/host-your-agent/'
 sourceUrl: 'https://microsoft-agent-framework.github.io/learn/agent-essentials/host-your-agent/'
 sourceCodeUrl: 'https://github.com/microsoft-agent-framework/microsoft-agent-framework.github.io/blob/main/src/content/tutorials/agent-essentials/05-host-your-agent.mdx'
 sourceName: Microsoft Agent Framework Tutorial Blog
