@@ -7,7 +7,7 @@ export const site = {
   email: 'ankt.srkr@gmail.com',
   location: 'Leeds',
   disqusShortname: 'anktsrkr-github-io',
-  googleAnalyticsId: import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-TY8ZMTBGSM',
+  googleAnalyticsId: import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-QWH7JJ1H6Q',
   adsenseClient: import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-2534759648571863',
   webpushrKey: 'BEW0OG9D298JEOxVSTObrPp5nebohoFilULY8fRTJ4T-B8KfYk3G9nUAjtbqrX73vsvtkjGXfZNfsLWFz0xNew0',
   clarityId: 'ro6zx9o7jl',
